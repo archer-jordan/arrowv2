@@ -12,7 +12,7 @@ const NavItemContainer = styled(Link)`
   color: ${p => (p.active ? p.theme.colors.support1 : '#fff')};
   text-align: center;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px !important;
   text-decoration: none;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
@@ -54,69 +54,72 @@ const MobileCol = styled(Col)`
 
 const AppNav = ({pathname}) => {
   return (
-    <AppNavContainer>
-      <Row
-        style={{
-          height: 62,
-          margin: 'auto',
-          width: 1150,
-          maxWidth: '100%',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        {' '}
-        <Col xs={6}>
-          <CompanyName>Company Name</CompanyName>
-        </Col>
-        <MobileCol xs={6}>
-          <Row style={{width: '100%'}}>
-            {' '}
-            <Col xs={2} />
-            <Col xs={2}>
-              <NavItem
-                to={`/reports`}
-                active={pathname && pathname.includes('/reports')}
-              >
-                REPORTS
-              </NavItem>
-            </Col>
-            <Col xs={2}>
-              <NavItem
-                to={`/account`}
-                active={pathname && pathname.includes('/account')}
-              >
-                ACCOUNT
-              </NavItem>
-            </Col>
-            <Col xs={2}>
-              <NavItem
-                to={`/employees`}
-                active={pathname && pathname.includes('/employees')}
-              >
-                EMPLOYEES
-              </NavItem>
-            </Col>
-            <Col xs={2} style={{textAlign: 'center'}}>
-              <NavItem
-                to={`/users`}
-                active={pathname && pathname.includes('/users')}
-              >
-                USERS
-              </NavItem>
-            </Col>
-            <Col xs={2}>
-              <NavItem
-                to={`/support`}
-                active={pathname && pathname.includes('/support')}
-              >
-                SUPPORT
-              </NavItem>
-            </Col>
-          </Row>
-        </MobileCol>
-      </Row>
-    </AppNavContainer>
+    <React.Fragment>
+      <AppNavContainer>
+        <Row
+          style={{
+            height: 62,
+            margin: 'auto',
+            width: 1150,
+            maxWidth: '100%',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          {' '}
+          <Col xs={6}>
+            <CompanyName>Company Name</CompanyName>
+          </Col>
+          <MobileCol xs={6}>
+            <Row style={{width: '100%'}}>
+              {' '}
+              <Col xs={2} />
+              <Col xs={2}>
+                <NavItem
+                  to={`/reports`}
+                  active={pathname && pathname.includes('/reports')}
+                >
+                  REPORTS
+                </NavItem>
+              </Col>
+              <Col xs={2}>
+                <NavItem
+                  to={`/account`}
+                  active={pathname && pathname.includes('/account')}
+                >
+                  ACCOUNT
+                </NavItem>
+              </Col>
+              <Col xs={2}>
+                <NavItem
+                  to={`/employees`}
+                  active={pathname && pathname.includes('/employees')}
+                >
+                  EMPLOYEES
+                </NavItem>
+              </Col>
+              <Col xs={2} style={{textAlign: 'center'}}>
+                <NavItem
+                  to={`/users`}
+                  active={pathname && pathname.includes('/users')}
+                >
+                  USERS
+                </NavItem>
+              </Col>
+              <Col xs={2}>
+                <NavItem
+                  to={`/support`}
+                  active={pathname && pathname.includes('/support')}
+                >
+                  SUPPORT
+                </NavItem>
+              </Col>
+            </Row>
+          </MobileCol>
+        </Row>
+        {/* */}
+      </AppNavContainer>
+    </React.Fragment>
   );
 };
 

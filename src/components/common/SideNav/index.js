@@ -7,21 +7,29 @@ const SideNavItemContainer = styled.div`
   color: ${p => (p.active ? '#fff' : '#1371A3')};
   border-radius: 25px;
   min-width: 10px;
-  height: 30px;
+  height: 38px;
   display: inline-flex;
   align-items: center;
-  padding: 5px;
+  padding: 16px;
   padding-left: 16px;
   padding-right: 16px;
   justify-content: flex-start;
+
   cursor: pointer;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
 `;
 
+const NavText = styled.p`
+  font-size: 18px;
+  margin: 0px;
+`;
+
 const SideNavItem = ({label, active, onClick}) => (
   <div onClick={onClick}>
-    <SideNavItemContainer active={active}>{label}</SideNavItemContainer>
+    <SideNavItemContainer active={active}>
+      <NavText>{label}</NavText>
+    </SideNavItemContainer>
   </div>
 );
 

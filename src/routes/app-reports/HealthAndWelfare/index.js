@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Row, Col} from 'react-styled-flexboxgrid';
 
 const TopContainer = styled.div`
-  height: 85px;
+  height: 125px;
   width: 100%;
   background: #e5eff5;
   max-width: 100%;
@@ -13,16 +13,13 @@ const TopContainer = styled.div`
   display: flex;
   align-items: center;
   @media only screen and (max-width: 414px) {
-    height: 185px;
+    height: 245px;
   }
 `;
 
 const BigValue = styled.div`
   font-size: 48px;
   color: #0f466a;
-  @media only screen and (max-width: 414px) {
-    margin-top: 16px;
-  }
 `;
 
 const BigLabel = styled.div`
@@ -40,7 +37,7 @@ const MOCK_DATA = [
 
 const PieChartPlaceholder = styled.div`
   width: 200px;
-  height: 200px;
+  height: 180px;
   max-width: 100%;
   max-height: 100%;
   border-radius: 50%;
@@ -51,13 +48,11 @@ const PieChartPlaceholder = styled.div`
 const ValueItemContainer = styled.div`
   border-bottom: 1px solid #efefef;
   padding: 8px;
-  width: 270px;
+  width: 290px;
   margin-bottom: 8px;
 `;
 
-const ValueItemLabel = styled(BigLabel)`
-  margin-bottom: 8px;
-`;
+const ValueItemLabel = styled(BigLabel)``;
 
 const ValueItemValue = styled(BigValue)`
   font-size: 28px;
@@ -103,15 +98,15 @@ class HealthAndWelfare extends React.PureComponent {
         <TopContainer>
           <Row style={{width: '100%'}}>
             {' '}
-            <Col xs={12} md={4}>
+            <Col sm={12} md={4}>
               <BigValue>18,577</BigValue>
               <BigLabel>Total Hours</BigLabel>
             </Col>
-            <Col xs={12} md={4}>
+            <Col sm={12} md={4}>
               <BigValue>$108,589.71</BigValue>
               <BigLabel>TOTAL FRINGE*</BigLabel>
             </Col>
-            <Col xs={12} md={4} />
+            <Col sm={12} md={4} />
           </Row>
         </TopContainer>
         <Row>

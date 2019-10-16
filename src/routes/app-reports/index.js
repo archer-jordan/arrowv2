@@ -5,12 +5,15 @@ import moment from 'moment';
 import {Row, Col} from 'react-styled-flexboxgrid';
 // COMPONENTS
 import Breadcrumb from 'components/common/Breadcrumb';
+import DatePicker from 'components/inputs/DatePicker';
 import HealthAndWelfare from './HealthAndWelfare';
 import Eligibility from './Eligibility';
 import Retirement from './Retirement';
 import Benefits from './Benefits';
 import DownloadXL from './DownloadXL';
 import SideNav from 'components/common/SideNav';
+
+const {MonthPicker} = DatePicker;
 
 const DateText = styled.div`
   color: #1371a3;
@@ -36,6 +39,9 @@ const ChangeDate = styled.button`
 `;
 
 class AppReports extends React.PureComponent {
+  state = {
+    editDate: false,
+  };
   onParamChange = newValues => {
     let oldParams = queryString.parse(this.props.location.search);
     let newParams = {
@@ -45,9 +51,9 @@ class AppReports extends React.PureComponent {
     let newString = queryString.stringify(newParams);
     this.props.history.push(`?${newString}`);
   };
-  componentWillMount() {
+  checkParams = () => {
     let oldParams = queryString.parse(this.props.location.search);
-    if (!oldParams.tab) {
+    if (!oldParams.tab && oldParams.tab !== 'null') {
       let month = moment()
         .format('MMMM')
         .toLowerCase();
@@ -56,7 +62,10 @@ class AppReports extends React.PureComponent {
         .toLowerCase();
       return this.onParamChange({month, year, tab: 'health'});
     }
-    if (!oldParams.month) {
+    if (
+      (!oldParams.year && oldParams.year !== 'null') ||
+      (!oldParams.month && oldParams.month !== 'null')
+    ) {
       let month = moment()
         .format('MMMM')
         .toLowerCase();
@@ -65,6 +74,9 @@ class AppReports extends React.PureComponent {
         .toLowerCase();
       return this.onParamChange({month, year});
     }
+  };
+  componentWillMount() {
+    this.checkParams();
   }
   getTab = tab => {
     switch (tab) {
@@ -137,21 +149,36 @@ class AppReports extends React.PureComponent {
     return (
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
-        <Row style={{marginTop: 16}}>
+        <Row>
           <Col xs={12} md={8} />
           <Col xs={12} md={4}>
             {' '}
-            <div style={{marginBottom: 32}}>
+            <div style={{marginBottom: 24}}>
               <DateText>
                 {month && month.toUpperCase()} {year && year}
               </DateText>
-              <ChangeDate>Change Month</ChangeDate>
+              <ChangeDate
+                onClick={() => this.setState({editDate: !this.state.editDate})}
+              >
+                Change Month
+              </ChangeDate>
+              <div style={{opacity: 0}}>
+                <MonthPicker
+                  open={this.state.editDate}
+                  onChange={value =>
+                    this.onParamChange({
+                      month: value.format('MMMM'),
+                      year: value.format('YYYY'),
+                    })
+                  }
+                />
+              </div>
             </div>
           </Col>
           <Col xs={12} md={4}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={9} md={8}>
+          <Col xs={12} md={8}>
             {' '}
             <div>
               {(() => {
