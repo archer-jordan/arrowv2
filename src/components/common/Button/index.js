@@ -19,15 +19,12 @@ const getBackgroundColor = ({grey, disabled, secondary, theme, danger}) => {
   return '#ed3245';
 };
 
-const getTextColor = ({danger, grey, disabled, secondary, theme}) => {
+const getTextColor = ({danger, disabled, secondary, theme}) => {
   if (disabled) {
-    return theme.colors.neutral5;
+    return theme.colors.neutral4;
   }
   if (danger) {
     return theme.colors.red3;
-  }
-  if (grey) {
-    return theme.colors.neutral4;
   }
   if (secondary) {
     return theme.colors.primary1;
@@ -35,21 +32,12 @@ const getTextColor = ({danger, grey, disabled, secondary, theme}) => {
   return '#fff';
 };
 
-const getHoverBackgroundColor = ({
-  grey,
-  disabled,
-  secondary,
-  theme,
-  danger,
-}) => {
+const getHoverBackgroundColor = ({disabled, secondary, theme, danger}) => {
   if (disabled) {
-    return theme.colors.neutral8;
+    return theme.colors.neutral5;
   }
   if (danger) {
     return theme.colors.red9;
-  }
-  if (grey) {
-    return theme.colors.neutral9;
   }
   if (secondary) {
     return theme.colors.primary9;
