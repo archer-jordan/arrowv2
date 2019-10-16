@@ -153,7 +153,7 @@ class AppReports extends React.PureComponent {
           <Col xs={12} md={8} />
           <Col xs={12} md={4}>
             {' '}
-            <div style={{marginBottom: 24}}>
+            <div style={{marginBottom: 0}}>
               <DateText>
                 {month && month.toUpperCase()} {year && year}
               </DateText>
