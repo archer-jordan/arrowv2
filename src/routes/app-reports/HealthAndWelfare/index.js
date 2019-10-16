@@ -1,34 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Row, Col} from 'react-styled-flexboxgrid';
-
-const TopContainer = styled.div`
-  height: 125px;
-  width: 100%;
-  background: #e5eff5;
-  max-width: 100%;
-  border-radius: 15px;
-  padding: 16px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  @media only screen and (max-width: 414px) {
-    height: 245px;
-  }
-`;
-
-const BigValue = styled.div`
-  font-size: 48px;
-  color: #0f466a;
-`;
-
-const BigLabel = styled.div`
-  font-size: 12px;
-  color: #1371a3;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-`;
+import BigValue from 'components/text/BigValue';
+import BigLabel from 'components/text/BigLabel';
+import TopContainer from 'components/common/TopContainer';
 
 const MOCK_DATA = [
   {value: 9940220, label: 'TOTAL HEALTH & WELFARE'},
