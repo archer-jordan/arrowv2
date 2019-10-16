@@ -1,6 +1,7 @@
 import React from 'react';
 import queryString from 'query-string';
 import styled from 'styled-components';
+import moment from 'moment';
 import {Row, Col} from 'react-styled-flexboxgrid';
 // COMPONENTS
 import Breadcrumb from 'components/common/Breadcrumb';
@@ -9,7 +10,7 @@ import Eligibility from './Eligibility';
 import Retirement from './Retirement';
 import Benefits from './Benefits';
 import DownloadXL from './DownloadXL';
-import SideNav from './SideNav';
+import SideNav from 'components/common/SideNav';
 
 const DateText = styled.div`
   color: #1371a3;
@@ -17,12 +18,21 @@ const DateText = styled.div`
   font-size: 40px;
 `;
 
-const ChangeDate = styled.div`
+const ChangeDate = styled.button`
   color: ${p => p.theme.colors.support1};
   text-align: right;
   font-size: 16px;
-  text-decoration: underline;
   cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-top: 8px;
+  text-decoration: underline;
+  background: transparent;
+  border: 0px;
+  padding: 0px;
+  &:focus {
+    outline: 0;
+  }
 `;
 
 class AppReports extends React.PureComponent {
@@ -38,7 +48,22 @@ class AppReports extends React.PureComponent {
   componentWillMount() {
     let oldParams = queryString.parse(this.props.location.search);
     if (!oldParams.tab) {
-      this.props.history.push(`/reports?tab=health`);
+      let month = moment()
+        .format('MMMM')
+        .toLowerCase();
+      let year = moment()
+        .format('YYYY')
+        .toLowerCase();
+      return this.onParamChange({month, year, tab: 'health'});
+    }
+    if (!oldParams.month) {
+      let month = moment()
+        .format('MMMM')
+        .toLowerCase();
+      let year = moment()
+        .format('YYYY')
+        .toLowerCase();
+      return this.onParamChange({month, year});
     }
   }
   getTab = tab => {
@@ -47,9 +72,59 @@ class AppReports extends React.PureComponent {
         return 'Health & Welfare';
       case 'eligibility':
         return 'Eligibility';
+      case 'benefits':
+        return 'Benefits';
+      case 'retirement':
+        return 'Retirement';
+      case 'download':
+        return 'Download XL';
       default:
         return null;
     }
+  };
+  getNavItems = () => {
+    return [
+      {
+        label: 'Health & Welfare',
+        activeValue: 'health',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'health',
+          }),
+      },
+      {
+        label: 'Eligibility',
+        activeValue: 'eligibility',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'eligibility',
+          }),
+      },
+      {
+        label: 'Benefits',
+        activeValue: 'benefits',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'benefits',
+          }),
+      },
+      {
+        label: 'Retirement',
+        activeValue: 'retirement',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'retirement',
+          }),
+      },
+      {
+        label: 'Download XL',
+        activeValue: 'download',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'download',
+          }),
+      },
+    ];
   };
   render() {
     const {location, history} = this.props;
@@ -57,7 +132,7 @@ class AppReports extends React.PureComponent {
       history,
       location,
     };
-    const {tab} = queryString.parse(location.search);
+    const {tab, month, year} = queryString.parse(location.search);
 
     return (
       <div style={{padding: 8}}>
@@ -67,14 +142,16 @@ class AppReports extends React.PureComponent {
           <Col xs={12} md={4}>
             {' '}
             <div style={{marginBottom: 32}}>
-              <DateText>JANUARY 2019</DateText>
+              <DateText>
+                {month && month.toUpperCase()} {year && year}
+              </DateText>
               <ChangeDate>Change Month</ChangeDate>
             </div>
           </Col>
-          <Col xs={12} md={3}>
-            <SideNav onParamChange={this.onParamChange} tab={tab} />
+          <Col xs={12} md={4}>
+            <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={9}>
+          <Col xs={9} md={8}>
             {' '}
             <div>
               {(() => {
