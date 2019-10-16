@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
+import message from 'components/common/message';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.svg';
 
@@ -39,6 +40,17 @@ const TextButton = styled.button`
 `;
 
 class AuthLogin extends React.PureComponent {
+  state = {
+    loading: false,
+  };
+  onSubmit = () => {
+    this.setState({loading: true});
+    setTimeout(() => {
+      this.setState({loading: false});
+      this.props.history.push('/reports');
+      message.success('Welcome back!');
+    }, 2000);
+  };
   render() {
     return (
       <Background>
@@ -53,7 +65,13 @@ class AuthLogin extends React.PureComponent {
               <FormItem>
                 <TextInput label="Password" type="password" />
               </FormItem>
-              <Button style={{width: 100}}>login</Button>
+              <Button
+                onClick={this.onSubmit}
+                style={{width: 100}}
+                disabled={this.state.loading}
+              >
+                {this.state.loading ? '...' : 'login'}
+              </Button>
               <FormItem>
                 <TextButton
                   onClick={() => this.props.history.push(`/forgot-password`)}
