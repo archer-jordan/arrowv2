@@ -1,13 +1,13 @@
 // TOP LEVEL IMPORTS
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 
 // EXPORTED COMPONENT
 // ==============================
 const PublicRoute = props => {
   const {
     currentUser,
-    redirectOnAuth=true,
+    redirectOnAuth = true,
     showHeader,
     showFooter,
     component: Component,
@@ -18,7 +18,7 @@ const PublicRoute = props => {
   } = props;
 
   if (currentUser && currentUser.id && redirectOnAuth) {
-    return <Redirect to="/app/home" />;
+    return <Redirect to="/reports" />;
   }
 
   return (
@@ -42,7 +42,7 @@ const PublicRoute = props => {
 // PROPS
 // ==============================
 PublicRoute.defaultProps = {
-  redirectOnAuth: true
+  redirectOnAuth: true,
 };
 
 // EXPORT

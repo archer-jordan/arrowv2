@@ -63,7 +63,7 @@ class AppReports extends React.PureComponent {
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
         <Row style={{marginTop: 16}}>
-          <Col xs={12} md={8}></Col>
+          <Col xs={12} md={8} />
           <Col xs={12} md={4}>
             {' '}
             <div style={{marginBottom: 32}}>
