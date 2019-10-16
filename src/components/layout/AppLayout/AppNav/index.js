@@ -1,17 +1,19 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
-import {Row, Col} from 'react-styled-flexboxgrid';
+import {Row} from 'react-styled-flexboxgrid';
 
 const AppNavContainer = styled.div`
   background: #0f3557;
   font-family: ${p => p.theme.fontFamily};
+  border-bottom: 1px solid #efefef;
 `;
 
 const NavItemContainer = styled(Link)`
   color: ${p => (p.active ? p.theme.colors.support1 : '#fff')};
   text-align: center;
   cursor: pointer;
+  letter-spacing: 1px;
   font-size: 16px !important;
   text-decoration: none;
   transition: color 0.3s ease, background-color 0.3s ease,
@@ -28,25 +30,26 @@ const CompanyName = styled.div`
   text-transform: uppercase;
 `;
 
-// const ActiveBar = styled.div`
-//   height: 6px;
-//   /* width: 70px; */
-//   position: relative;
-//   bottom: -18px;
-//   background: ${p => (p.active ? p.theme.colors.support1 : 'transparent')};
-// `;
+const ActiveBar = styled.div`
+  height: 6px;
+  width: 100%;
+  position: relative;
+  bottom: -16px;
+  background: ${p => (p.active ? p.theme.colors.support1 : 'transparent')};
+`;
 
 const NavItem = ({children, active, to}) => (
   <div>
     <NavItemContainer active={active} to={to}>
       {children}
     </NavItemContainer>
-    {/* <ActiveBar active={active} /> */}
+    <ActiveBar active={active} />
   </div>
 );
 
-const MobileCol = styled(Col)`
-  display: inherit !important;
+const MobileCol = styled.div`
+  display: inline-flex !important;
+  margin-left: 24px;
   @media only screen and (max-width: 414px) {
     display: none !important;
   }
@@ -67,55 +70,57 @@ const AppNav = ({pathname}) => {
           }}
         >
           {' '}
-          <Col xs={6}>
+          <div style={{flex: 1}}>
             <CompanyName>Company Name</CompanyName>
-          </Col>
-          <MobileCol xs={6}>
-            <Row style={{width: '100%'}}>
-              {' '}
-              <Col xs={2} />
-              <Col xs={2}>
-                <NavItem
-                  to={`/reports`}
-                  active={pathname && pathname.includes('/reports')}
-                >
-                  REPORTS
-                </NavItem>
-              </Col>
-              <Col xs={2}>
-                <NavItem
-                  to={`/account`}
-                  active={pathname && pathname.includes('/account')}
-                >
-                  ACCOUNT
-                </NavItem>
-              </Col>
-              <Col xs={2}>
-                <NavItem
-                  to={`/employees`}
-                  active={pathname && pathname.includes('/employees')}
-                >
-                  EMPLOYEES
-                </NavItem>
-              </Col>
-              <Col xs={2} style={{textAlign: 'center'}}>
-                <NavItem
-                  to={`/users`}
-                  active={pathname && pathname.includes('/users')}
-                >
-                  USERS
-                </NavItem>
-              </Col>
-              <Col xs={2}>
-                <NavItem
-                  to={`/support`}
-                  active={pathname && pathname.includes('/support')}
-                >
-                  SUPPORT
-                </NavItem>
-              </Col>
-            </Row>
-          </MobileCol>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              display: 'flex',
+            }}
+          >
+            <MobileCol>
+              <NavItem
+                to={`/reports`}
+                active={pathname && pathname.includes('/reports')}
+              >
+                REPORTS
+              </NavItem>
+            </MobileCol>
+            <MobileCol>
+              <NavItem
+                to={`/account`}
+                active={pathname && pathname.includes('/account')}
+              >
+                ACCOUNT
+              </NavItem>
+            </MobileCol>
+            <MobileCol>
+              <NavItem
+                to={`/employees`}
+                active={pathname && pathname.includes('/employees')}
+              >
+                EMPLOYEES
+              </NavItem>
+            </MobileCol>
+            <MobileCol>
+              <NavItem
+                to={`/users`}
+                active={pathname && pathname.includes('/users')}
+              >
+                USERS
+              </NavItem>
+            </MobileCol>
+            <MobileCol>
+              <NavItem
+                to={`/support`}
+                active={pathname && pathname.includes('/support')}
+              >
+                SUPPORT
+              </NavItem>
+            </MobileCol>
+          </div>
         </Row>
         {/* */}
       </AppNavContainer>
@@ -124,3 +129,36 @@ const AppNav = ({pathname}) => {
 };
 
 export default AppNav;
+
+// <Row style={{width: '100%'}}>
+//   {' '}
+//   <Col xs={2} />
+//   <Col xs={2}>
+//     <NavItem to={`/reports`} active={pathname && pathname.includes('/reports')}>
+//       REPORTS
+//     </NavItem>
+//   </Col>
+//   <Col xs={2}>
+//     <NavItem to={`/account`} active={pathname && pathname.includes('/account')}>
+//       ACCOUNT
+//     </NavItem>
+//   </Col>
+//   <Col xs={2}>
+//     <NavItem
+//       to={`/employees`}
+//       active={pathname && pathname.includes('/employees')}
+//     >
+//       EMPLOYEES
+//     </NavItem>
+//   </Col>
+//   <Col xs={2} style={{textAlign: 'center'}}>
+//     <NavItem to={`/users`} active={pathname && pathname.includes('/users')}>
+//       USERS
+//     </NavItem>
+//   </Col>
+//   <Col xs={2}>
+//     <NavItem to={`/support`} active={pathname && pathname.includes('/support')}>
+//       SUPPORT
+//     </NavItem>
+//   </Col>
+// </Row>;

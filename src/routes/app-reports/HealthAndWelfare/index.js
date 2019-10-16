@@ -27,7 +27,7 @@ const BigLabel = styled.div`
   color: #1371a3;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 const MOCK_DATA = [
