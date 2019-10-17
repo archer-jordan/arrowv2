@@ -44,6 +44,7 @@ const SideNav = ({items, tab}) => {
     <Container>
       {items.map(item => (
         <SideNavItem
+          key={item.label}
           label={item.label}
           active={tab === item.activeValue}
           onClick={item.onClick}
