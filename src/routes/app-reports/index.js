@@ -156,6 +156,7 @@ class AppReports extends React.PureComponent {
     };
     const {tab, month, year} = queryString.parse(location.search);
 
+    console.log(month && moment(`${month} ${year}`, 'MMMM YYYY'));
     return (
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
@@ -178,6 +179,7 @@ class AppReports extends React.PureComponent {
                 <div style={{opacity: 0, position: 'absolute', right: 0}}>
                   <MonthPicker
                     open={this.state.editDate}
+                    value={month && moment(`${month} ${year}`, 'MMMM YYYY')}
                     onChange={value =>
                       this.onParamChange({
                         month: value.format('MMMM'),
