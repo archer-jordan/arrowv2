@@ -29,6 +29,7 @@ const Title = styled.div`
   font-size: 14px;
   text-transform: uppercase;
   font-weight: 400;
+  height: 40px;
   letter-spacing: 1px;
   color: #1371a3;
 `;

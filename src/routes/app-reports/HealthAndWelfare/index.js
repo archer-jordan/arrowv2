@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Row, Col} from 'react-styled-flexboxgrid';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
 import TopContainer from 'components/common/TopContainer';
@@ -27,7 +28,9 @@ const ValueItemContainer = styled.div`
   margin-bottom: 8px;
 `;
 
-const ValueItemLabel = styled(BigLabel)``;
+const ValueItemLabel = styled(BigLabel)`
+  margin-bottom: 0px;
+`;
 
 const ValueItemValue = styled(BigValue)`
   font-size: 28px;
@@ -38,7 +41,7 @@ const ValueItem = ({label, value, color}) => (
   <ValueItemContainer>
     {' '}
     <Row style={{display: 'flex', alignItems: 'center'}}>
-      <Col xs={2}>
+      <Col xs={3}>
         {' '}
         <div
           style={{
@@ -46,11 +49,11 @@ const ValueItem = ({label, value, color}) => (
             width: 25,
             borderRadius: '50%',
             background: color,
-            marginTop: 32,
+            marginTop: 20,
           }}
         />
       </Col>
-      <Col xs={10}>
+      <Col xs={21}>
         {' '}
         <ValueItemLabel>{label}</ValueItemLabel>
         <ValueItemValue>
@@ -73,25 +76,25 @@ class HealthAndWelfare extends React.PureComponent {
         <TopContainer>
           <Row style={{width: '100%'}}>
             {' '}
-            <Col sm={12} md={4}>
+            <Col xs={24} md={9} lg={7}>
               <BigValue>18,577</BigValue>
               <BigLabel>Total Hours</BigLabel>
             </Col>
-            <Col sm={12} md={4}>
+            <Col xs={24} md={8} lg={8}>
               <BigValue>$108,589.71</BigValue>
               <BigLabel>TOTAL FRINGE*</BigLabel>
             </Col>
-            <Col sm={12} md={4} />
+            <Col xs={24} md={7} lg={9} />
           </Row>
         </TopContainer>
         <Row>
           {' '}
-          <Col xs={12} md={8}>
+          <Col xs={24} md={16}>
             {MOCK_DATA.map((item, i) => (
               <ValueItem key={item.label} {...item} color={CHART_COLORS[i]} />
             ))}
           </Col>
-          <Col xs={12} md={4}>
+          <Col xs={24} md={8}>
             <PieChartPlaceholder />
           </Col>
         </Row>

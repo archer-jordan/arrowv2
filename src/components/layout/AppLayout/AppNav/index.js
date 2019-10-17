@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
-import {Row} from 'react-styled-flexboxgrid';
 
 const AppNavContainer = styled.div`
   background: #0f3557;
@@ -59,7 +58,7 @@ const AppNav = ({pathname}) => {
   return (
     <React.Fragment>
       <AppNavContainer>
-        <Row
+        <div
           style={{
             height: 62,
             margin: 'auto',
@@ -121,7 +120,7 @@ const AppNav = ({pathname}) => {
               </NavItem>
             </MobileCol>
           </div>
-        </Row>
+        </div>
         {/* */}
       </AppNavContainer>
     </React.Fragment>

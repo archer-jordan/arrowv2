@@ -1,6 +1,7 @@
 import React from 'react';
 import queryString from 'query-string';
-import {Row, Col} from 'react-styled-flexboxgrid';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 // COMPONENTS
 import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
@@ -73,10 +74,10 @@ class AppAccount extends React.PureComponent {
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
         <Row style={{marginTop: 120}}>
-          <Col xs={12} md={4}>
+          <Col xs={24} md={8}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={9} md={8}>
+          <Col xs={18} md={16}>
             {' '}
             <div>
               {(() => {
