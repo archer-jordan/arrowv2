@@ -2,8 +2,9 @@ import React from 'react';
 import queryString from 'query-string';
 import styled from 'styled-components';
 import moment from 'moment';
-import {Row, Col} from 'react-styled-flexboxgrid';
 // COMPONENTS
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 import Breadcrumb from 'components/common/Breadcrumb';
 import DatePicker from 'components/inputs/DatePicker';
 import HealthAndWelfare from './HealthAndWelfare';
@@ -28,7 +29,6 @@ const ChangeDate = styled.button`
   cursor: pointer;
   display: block;
   margin-left: auto;
-  margin-top: 8px;
   text-decoration: underline;
   background: transparent;
   border: 0px;
@@ -150,8 +150,8 @@ class AppReports extends React.PureComponent {
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
         <Row>
-          <Col xs={12} md={8} />
-          <Col xs={12} md={4}>
+          <Col xs={24} md={16} />
+          <Col xs={24}>
             {' '}
             <div style={{marginBottom: 0}}>
               <DateText>
@@ -175,10 +175,10 @@ class AppReports extends React.PureComponent {
               </div>
             </div>
           </Col>
-          <Col xs={12} md={4}>
+          <Col xs={24} md={8}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={12} md={8}>
+          <Col xs={24} md={16}>
             {' '}
             <div>
               {(() => {

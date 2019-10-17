@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {withRouter} from 'react-router-dom';
 import queryString from 'query-string';
 import styled from 'styled-components';
-import {Row, Col} from 'react-styled-flexboxgrid';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.svg';
 import hamburgerSVG from 'lib/media/hamburger-menu.svg';
@@ -76,17 +77,17 @@ const Header = ({history, location}) => {
         }}
       >
         {' '}
-        <Col xs={3}>
+        <Col xs={6}>
           <img src={logoWhiteSVG} alt="logo-white" height="40" />
         </Col>
-        <Col xs={6}></Col>
-        <MobileCol xs={3} style={{textAlign: 'right'}}>
+        <Col xs={12}></Col>
+        <MobileCol xs={6} style={{textAlign: 'right'}}>
           <Username>
             logged-in as Al Burr <SignoutBtn>sign-out</SignoutBtn>
           </Username>
         </MobileCol>
-        <ShowMobileCol xs={1} />
-        <ShowMobileCol xs={2} style={{textAlign: 'right'}}>
+        <ShowMobileCol xs={2} />
+        <ShowMobileCol xs={4} style={{textAlign: 'right'}}>
           <img onClick={() => setVisible(true)} src={hamburgerSVG} alt="menu" />{' '}
           <Drawer onClose={() => setVisible(false)} visible={visisble}>
             <DrawerContent
