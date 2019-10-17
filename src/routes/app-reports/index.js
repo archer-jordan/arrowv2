@@ -22,6 +22,16 @@ const DateText = styled.div`
   font-size: 40px;
 `;
 
+const DatePickerBackground = styled.div`
+  position: fixed;
+  background: transparent;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+`;
+
 const ChangeDate = styled.button`
   color: ${p => p.theme.colors.support1};
   text-align: right;
@@ -153,25 +163,29 @@ class AppReports extends React.PureComponent {
           <Col xs={24} md={16} />
           <Col xs={24}>
             {' '}
-            <div style={{marginBottom: 0}}>
+            <div style={{marginBottom: 16}}>
               <DateText>
                 {month && month.toUpperCase()} {year && year}
               </DateText>
-              <ChangeDate
-                onClick={() => this.setState({editDate: !this.state.editDate})}
-              >
-                Change Month
-              </ChangeDate>
-              <div style={{opacity: 0}}>
-                <MonthPicker
-                  open={this.state.editDate}
-                  onChange={value =>
-                    this.onParamChange({
-                      month: value.format('MMMM'),
-                      year: value.format('YYYY'),
-                    })
+              <div style={{position: 'relative'}}>
+                <ChangeDate
+                  onClick={() =>
+                    this.setState({editDate: !this.state.editDate})
                   }
-                />
+                >
+                  Change Month
+                </ChangeDate>
+                <div style={{opacity: 0, position: 'absolute', right: 0}}>
+                  <MonthPicker
+                    open={this.state.editDate}
+                    onChange={value =>
+                      this.onParamChange({
+                        month: value.format('MMMM'),
+                        year: value.format('YYYY'),
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
           </Col>
@@ -200,6 +214,11 @@ class AppReports extends React.PureComponent {
             </div>
           </Col>
         </Row>
+        {this.state.editDate && (
+          <DatePickerBackground
+            onClick={() => this.setState({editDate: false})}
+          />
+        )}
       </div>
     );
   }
