@@ -71,7 +71,7 @@ const Header = ({history, location}) => {
           height: 80,
           margin: 'auto',
           width: 1150,
-          maxWidth: '100%',
+          maxWidth: '95%',
           display: 'flex',
           alignItems: 'center',
         }}
