@@ -22,6 +22,16 @@ const DateText = styled.div`
   font-size: 40px;
 `;
 
+const DatePickerBackground = styled.div`
+  position: fixed;
+  background: transparent;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+`;
+
 const ChangeDate = styled.button`
   color: ${p => p.theme.colors.support1};
   text-align: right;
@@ -204,6 +214,11 @@ class AppReports extends React.PureComponent {
             </div>
           </Col>
         </Row>
+        {this.state.editDate && (
+          <DatePickerBackground
+            onClick={() => this.setState({editDate: false})}
+          />
+        )}
       </div>
     );
   }
