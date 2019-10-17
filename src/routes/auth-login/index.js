@@ -6,10 +6,10 @@ import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.svg';
+import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 
 const FormContainer = styled.div`
-  width: 300px;
+  width: 250px;
   margin: auto;
   max-width: 100%;
   padding-top: 96px;
@@ -23,7 +23,7 @@ const Background = styled.div`
 const Logo = styled.img`
   display: block;
   margin: auto;
-  height: 75px;
+  width: 250px;
   margin-bottom: 40px;
 `;
 
@@ -60,10 +60,10 @@ class AuthLogin extends React.PureComponent {
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
               <FormItem>
-                <TextInput label="Email" />
+                <TextInput label="email address" />
               </FormItem>
               <FormItem>
-                <TextInput label="Password" type="password" />
+                <TextInput label="password" type="password" />
               </FormItem>
               <Button
                 onClick={this.onSubmit}

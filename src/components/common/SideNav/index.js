@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const SideNavItemContainer = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 8px;
   background: ${p => (p.active ? '#145d92' : 'inherit')};
   color: ${p => (p.active ? '#fff' : '#1371A3')};
   border-radius: 25px;
@@ -14,7 +14,6 @@ const SideNavItemContainer = styled.div`
   padding-left: 16px;
   padding-right: 16px;
   justify-content: flex-start;
-
   cursor: pointer;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;

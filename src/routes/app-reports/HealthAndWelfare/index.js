@@ -86,7 +86,10 @@ class HealthAndWelfare extends React.PureComponent {
             </Col>
             <Col xs={24} md={7} lg={9} />
           </Row>
-        </TopContainer>
+        </TopContainer>{' '}
+        <p style={{textAlign: 'right'}}>
+          *Including H&W, VHS & Administrative Costs
+        </p>
         <Row>
           {' '}
           <Col xs={24} md={16}>

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.svg';
+import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import hamburgerSVG from 'lib/media/hamburger-menu.svg';
 import DrawerContent from './DrawerContent';
 import Drawer from 'antd/lib/drawer';
