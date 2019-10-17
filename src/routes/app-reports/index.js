@@ -153,25 +153,29 @@ class AppReports extends React.PureComponent {
           <Col xs={24} md={16} />
           <Col xs={24}>
             {' '}
-            <div style={{marginBottom: 0}}>
+            <div style={{marginBottom: 16}}>
               <DateText>
                 {month && month.toUpperCase()} {year && year}
               </DateText>
-              <ChangeDate
-                onClick={() => this.setState({editDate: !this.state.editDate})}
-              >
-                Change Month
-              </ChangeDate>
-              <div style={{opacity: 0}}>
-                <MonthPicker
-                  open={this.state.editDate}
-                  onChange={value =>
-                    this.onParamChange({
-                      month: value.format('MMMM'),
-                      year: value.format('YYYY'),
-                    })
+              <div style={{position: 'relative'}}>
+                <ChangeDate
+                  onClick={() =>
+                    this.setState({editDate: !this.state.editDate})
                   }
-                />
+                >
+                  Change Month
+                </ChangeDate>
+                <div style={{opacity: 0, position: 'absolute', right: 0}}>
+                  <MonthPicker
+                    open={this.state.editDate}
+                    onChange={value =>
+                      this.onParamChange({
+                        month: value.format('MMMM'),
+                        year: value.format('YYYY'),
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
           </Col>
