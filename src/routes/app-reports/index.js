@@ -156,7 +156,6 @@ class AppReports extends React.PureComponent {
     };
     const {tab, month, year} = queryString.parse(location.search);
 
-    console.log(month && moment(`${month} ${year}`, 'MMMM YYYY'));
     return (
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
@@ -191,10 +190,10 @@ class AppReports extends React.PureComponent {
               </div>
             </div>
           </Col>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={6}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={24} md={16}>
+          <Col xs={24} md={18}>
             {' '}
             <div>
               {(() => {

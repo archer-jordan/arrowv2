@@ -5,6 +5,9 @@ import Col from 'components/common/Col';
 // COMPONENTS
 import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
+import Plan from './Plan';
+import Profile from './Profile';
+import Password from './Password';
 
 class AppAccount extends React.PureComponent {
   onParamChange = newValues => {
@@ -72,20 +75,22 @@ class AppAccount extends React.PureComponent {
 
     return (
       <div style={{padding: 8}}>
-        <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
+        <Breadcrumb crumbs={['Account', this.getTab(tab)]} />
         <Row style={{marginTop: 120}}>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={6}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={18} md={16}>
+          <Col xs={18} md={18}>
             {' '}
             <div>
               {(() => {
                 switch (tab) {
                   case 'profile':
-                    return <div {...sharedProps} />;
+                    return <Profile {...sharedProps} />;
                   case 'plan':
-                    return <div {...sharedProps} />;
+                    return <Plan {...sharedProps} />;
+                  case 'password':
+                    return <Password {...sharedProps} />;
                   default:
                     return <div {...sharedProps} />;
                 }

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.svg';
+import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import hamburgerSVG from 'lib/media/hamburger-menu.svg';
 import DrawerContent from './DrawerContent';
 import Drawer from 'antd/lib/drawer';
@@ -71,7 +71,7 @@ const Header = ({history, location}) => {
           height: 80,
           margin: 'auto',
           width: 1150,
-          maxWidth: '100%',
+          maxWidth: '95%',
           display: 'flex',
           alignItems: 'center',
         }}
@@ -83,7 +83,8 @@ const Header = ({history, location}) => {
         <Col xs={12}></Col>
         <MobileCol xs={6} style={{textAlign: 'right'}}>
           <Username>
-            logged-in as Al Burr <SignoutBtn>sign-out</SignoutBtn>
+            logged-in as <strong>Al Burr</strong>{' '}
+            <SignoutBtn>sign-out</SignoutBtn>
           </Username>
         </MobileCol>
         <ShowMobileCol xs={2} />

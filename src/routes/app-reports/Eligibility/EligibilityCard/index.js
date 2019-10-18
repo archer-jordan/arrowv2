@@ -23,6 +23,9 @@ const Value = styled.div`
   font-size: 32px;
   font-weight: 700;
   color: #0f466a;
+  height: 32px;
+  line-height: 32px;
+  margin-top: 8px;
 `;
 
 const Title = styled.div`
@@ -35,11 +38,12 @@ const Title = styled.div`
 `;
 
 const Type = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   text-transform: uppercase;
   font-weight: 400;
   letter-spacing: 1px;
   color: #0f466a;
+  margin-top: 0px;
 `;
 
 class EligibilityCard extends React.PureComponent {

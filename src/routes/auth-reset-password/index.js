@@ -5,7 +5,7 @@ import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.svg';
+import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 
 const FormContainer = styled.div`
   width: 300px;

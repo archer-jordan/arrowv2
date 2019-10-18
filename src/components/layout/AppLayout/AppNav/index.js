@@ -49,6 +49,12 @@ const NavItem = ({children, active, to}) => (
 const MobileCol = styled.div`
   display: inline-flex !important;
   margin-left: 24px;
+`;
+
+const RightContainer = styled.div`
+  flex: 1;
+  justify-content: flex-end;
+  display: flex;
   @media only screen and (max-width: 414px) {
     display: none !important;
   }
@@ -63,7 +69,7 @@ const AppNav = ({pathname}) => {
             height: 62,
             margin: 'auto',
             width: 1150,
-            maxWidth: '100%',
+            maxWidth: '95%',
             display: 'flex',
             alignItems: 'center',
           }}
@@ -72,13 +78,7 @@ const AppNav = ({pathname}) => {
           <div style={{flex: 1}}>
             <CompanyName>Company Name</CompanyName>
           </div>
-          <div
-            style={{
-              flex: 1,
-              justifyContent: 'flex-end',
-              display: 'flex',
-            }}
-          >
+          <RightContainer>
             <MobileCol>
               <NavItem
                 to={`/reports`}
@@ -119,7 +119,7 @@ const AppNav = ({pathname}) => {
                 SUPPORT
               </NavItem>
             </MobileCol>
-          </div>
+          </RightContainer>
         </div>
         {/* */}
       </AppNavContainer>

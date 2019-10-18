@@ -5,7 +5,7 @@ const BigLabel = styled.div`
   color: #1371a3;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-top: 4px;
 `;
 
 export default BigLabel;

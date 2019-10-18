@@ -42,7 +42,7 @@ class Benefits extends React.PureComponent {
     return (
       <div>
         <div>
-          <TopContainer style={{marginBottom: 0}}>
+          <TopContainer>
             <div>
               {' '}
               <BigValue>$6,993.42</BigValue>
