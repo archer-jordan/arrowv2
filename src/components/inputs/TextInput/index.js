@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   .group {
     position: relative;
-    margin-bottom: 45px;
+    margin-bottom: 32px;
   }
 
   input {
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     width: 246px;
     border: none;
     border-radius: 0px;
-    color: #fff;
+    color: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
     max-width: 100%;
     border-bottom: 2px solid #8cb3cd;
   }
@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   input:valid ~ label {
     top: -20px;
     font-size: 14px;
-    color: #fff;
+    color: ${p => (p.dark ? p.theme.colors.primary2 : '#fff')};
   }
 
   /* BOTTOM BARS ================================= */
@@ -59,7 +59,7 @@ const Wrapper = styled.div`
     bottom: 0px;
     max-width: 100%;
     position: absolute;
-    background: #fff;
+    background: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
     transition: 0.2s ease all;
     -moz-transition: 0.2s ease all;
     -webkit-transition: 0.2s ease all;
@@ -158,8 +158,8 @@ const Wrapper = styled.div`
   }
 `;
 
-const Input = ({type, label}) => (
-  <Wrapper>
+const Input = ({type, label, dark}) => (
+  <Wrapper dark={dark}>
     <div className="group">
       <input type={type || 'text'} required />
       {/* <span className="highlight"></span> */}

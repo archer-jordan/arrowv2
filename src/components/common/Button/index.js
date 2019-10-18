@@ -51,7 +51,7 @@ const ButtonContainer = styled.button`
     if (p.style.width) return p.style.width;
     return '100%';
   }};
-  height: 36px;
+  height: 40px;
   border-radius: 35px;
   background-color: ${props => getBackgroundColor(props)};
   border: 0px;

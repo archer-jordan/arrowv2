@@ -190,10 +190,10 @@ class AppReports extends React.PureComponent {
               </div>
             </div>
           </Col>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={6}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
-          <Col xs={24} md={16}>
+          <Col xs={24} md={18}>
             {' '}
             <div>
               {(() => {

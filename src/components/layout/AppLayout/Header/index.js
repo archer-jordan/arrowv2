@@ -83,7 +83,8 @@ const Header = ({history, location}) => {
         <Col xs={12}></Col>
         <MobileCol xs={6} style={{textAlign: 'right'}}>
           <Username>
-            logged-in as Al Burr <SignoutBtn>sign-out</SignoutBtn>
+            logged-in as <strong>Al Burr</strong>{' '}
+            <SignoutBtn>sign-out</SignoutBtn>
           </Username>
         </MobileCol>
         <ShowMobileCol xs={2} />
