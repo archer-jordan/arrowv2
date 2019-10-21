@@ -8,10 +8,10 @@ import FormItem from 'components/common/FormItem';
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 
 const FormContainer = styled.div`
-  width: 300px;
+  width: 250px;
   margin: auto;
   max-width: 100%;
-  margin-top: 80px;
+  padding-top: 96px;
 `;
 
 const Background = styled.div`

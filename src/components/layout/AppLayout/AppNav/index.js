@@ -69,7 +69,7 @@ const AppNav = ({pathname}) => {
             height: 62,
             margin: 'auto',
             width: 1150,
-            maxWidth: '95%',
+            maxWidth: '90%',
             display: 'flex',
             alignItems: 'center',
           }}

@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import PieChart from 'components/common/PieChart';
 
 const PieChartPlaceholder = styled.div`
   margin: auto;
-  width: 100px;
-  height: 100px;
-  max-width: 100%;
+  width: 150px;
+  height: 150px;
+  /* max-width: 100%;
   max-height: 100%;
   border-radius: 50%;
   background: #1371a3;
-  margin-top: 8px;
+  margin-top: 8px; */
 `;
 
 const Container = styled.div`
@@ -52,9 +53,9 @@ class EligibilityCard extends React.PureComponent {
       <Container noBorder={this.props.noBorder}>
         {' '}
         <Title>{this.props.card.title}</Title>
-        <div>
-          <PieChartPlaceholder />
-        </div>{' '}
+        <PieChartPlaceholder>
+          <PieChart />
+        </PieChartPlaceholder>{' '}
         <Value>{this.props.card.value}</Value>
         <Type>{this.props.card.type}</Type>
       </Container>

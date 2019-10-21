@@ -17,6 +17,7 @@ import AppUsersRoute from 'routes/app-users';
 import AppEmployeesRoute from 'routes/app-employees';
 import AppAccountRoute from 'routes/app-account';
 import AppSupportRoute from 'routes/app-support';
+import AppEmployeesDetailRoute from 'routes/app-employees-detail';
 
 // EXPORTED COMPONENT
 // ========================================
@@ -35,12 +36,6 @@ class AppRoutes extends React.Component {
           <PublicRoute
             exact
             layout={AppLayout}
-            path="/reports"
-            component={AppReportsRoute}
-          />
-          <PublicRoute
-            exact
-            layout={AppLayout}
             path="/users"
             component={AppUsersRoute}
           />
@@ -49,6 +44,12 @@ class AppRoutes extends React.Component {
             layout={AppLayout}
             path="/employees"
             component={AppEmployeesRoute}
+          />
+          <PublicRoute
+            exact
+            layout={AppLayout}
+            path="/employees/:id"
+            component={AppEmployeesDetailRoute}
           />
           <PublicRoute
             exact
