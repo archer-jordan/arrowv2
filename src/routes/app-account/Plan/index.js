@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 
 const HeaderBlock = styled.div`
   background: #e5eff5;
@@ -21,6 +23,9 @@ const BlockContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  @media only screen and (max-width: 414px) {
+    height: 65px;
+  }
 `;
 
 const PlanTitle = styled.div`
@@ -36,12 +41,14 @@ const CsvLink = styled.a`
 
 const PlanBlock = ({name = 'NAME', link = 'LINK'}) => (
   <BlockContainer>
-    <div style={{flex: 1}}>
-      <PlanTitle>{name}</PlanTitle>
-    </div>
-    <div style={{flex: 1}}>
-      <CsvLink>download csv</CsvLink>
-    </div>
+    <Row style={{width: '100%'}}>
+      <Col xs={24} md={12}>
+        <PlanTitle>{name}</PlanTitle>
+      </Col>
+      <Col xs={24} md={12}>
+        <CsvLink>download csv</CsvLink>
+      </Col>
+    </Row>
   </BlockContainer>
 );
 
