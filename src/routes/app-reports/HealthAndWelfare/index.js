@@ -70,6 +70,18 @@ const ValueItem = ({label, value, color}) => (
 
 const CHART_COLORS = ['#8CB3CD', '#0F3557', '#145D92', '#5A89AB'];
 
+const MobileWrapper = styled.div`
+  @media only screen and (max-width: 414px) {
+    margin-top: 24px;
+  }
+`;
+
+const Caption = styled.p`
+  @media only screen and (max-width: 414px) {
+    margin-bottom: 32px;
+  }
+`;
+
 class HealthAndWelfare extends React.PureComponent {
   render() {
     return (
@@ -82,15 +94,17 @@ class HealthAndWelfare extends React.PureComponent {
               <BigLabel>Total Hours</BigLabel>
             </Col>
             <Col xs={24} md={8} lg={8}>
-              <BigValue>$108,589.71</BigValue>
-              <BigLabel>TOTAL FRINGE*</BigLabel>
+              <MobileWrapper>
+                <BigValue>$108,589.71</BigValue>
+                <BigLabel>TOTAL FRINGE*</BigLabel>
+              </MobileWrapper>
             </Col>
             <Col xs={24} md={7} lg={9} />
           </Row>
         </TopContainer>{' '}
-        <p style={{textAlign: 'right'}}>
+        <Caption style={{textAlign: 'right'}}>
           *Including H&W, VHS & Administrative Costs
-        </p>
+        </Caption>
         <Row align="top">
           {' '}
           <Col xs={24} md={16}>
