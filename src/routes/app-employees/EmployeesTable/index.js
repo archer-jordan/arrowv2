@@ -36,13 +36,14 @@ const columns = [
     dataIndex: 'hireDate',
     key: 'hireDate',
     width: 100,
+    render: record => moment(record.hireDate).format('M/D/YY'),
   },
 ];
 
 class EmployeesTable extends React.PureComponent {
   render() {
     return (
-      <div style={{marginTop: 56}}>
+      <div>
         <Table
           dataSource={dataSource}
           columns={columns}
