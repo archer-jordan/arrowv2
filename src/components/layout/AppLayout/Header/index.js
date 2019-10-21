@@ -71,7 +71,7 @@ const Header = ({history, location}) => {
           height: 80,
           margin: 'auto',
           width: 1150,
-          maxWidth: '95%',
+          maxWidth: '90%',
           display: 'flex',
           alignItems: 'center',
         }}
@@ -87,8 +87,8 @@ const Header = ({history, location}) => {
             <SignoutBtn>sign-out</SignoutBtn>
           </Username>
         </MobileCol>
-        <ShowMobileCol xs={2} />
-        <ShowMobileCol xs={4} style={{textAlign: 'right'}}>
+        <ShowMobileCol xs={4} />
+        <ShowMobileCol xs={2} style={{textAlign: 'right'}}>
           <img onClick={() => setVisible(true)} src={hamburgerSVG} alt="menu" />{' '}
           <Drawer onClose={() => setVisible(false)} visible={visisble}>
             <DrawerContent

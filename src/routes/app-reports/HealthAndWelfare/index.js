@@ -5,6 +5,7 @@ import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
 import TopContainer from 'components/common/TopContainer';
+import PieChart from 'components/common/PieChart';
 
 const MOCK_DATA = [
   {value: 9940220, label: 'TOTAL HEALTH & WELFARE'},
@@ -12,13 +13,13 @@ const MOCK_DATA = [
 ];
 
 const PieChartPlaceholder = styled.div`
-  width: 200px;
-  height: 180px;
-  max-width: 100%;
+  width: 300px;
+  height: 300px;
+  /* max-width: 100%;
   max-height: 100%;
   border-radius: 50%;
   background: #1371a3;
-  margin-top: 16px;
+  margin-top: 16px; */
 `;
 
 const ValueItemContainer = styled.div`
@@ -90,7 +91,7 @@ class HealthAndWelfare extends React.PureComponent {
         <p style={{textAlign: 'right'}}>
           *Including H&W, VHS & Administrative Costs
         </p>
-        <Row>
+        <Row align="top">
           {' '}
           <Col xs={24} md={16}>
             {MOCK_DATA.map((item, i) => (
@@ -98,7 +99,9 @@ class HealthAndWelfare extends React.PureComponent {
             ))}
           </Col>
           <Col xs={24} md={8}>
-            <PieChartPlaceholder />
+            <PieChartPlaceholder>
+              <PieChart />
+            </PieChartPlaceholder>
           </Col>
         </Row>
       </div>

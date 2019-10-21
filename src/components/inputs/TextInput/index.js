@@ -11,7 +11,7 @@ const Wrapper = styled.div`
     font-size: 18px;
     padding: 10px 10px 10px 5px;
     display: block;
-    width: 246px;
+    width: ${p => (p.width ? p.width : '246px')};
     border: none;
     border-radius: 0px;
     color: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
@@ -49,7 +49,7 @@ const Wrapper = styled.div`
   .bar {
     position: relative;
     display: block;
-    width: 246px;
+    width: ${p => (p.width ? p.width : '246px')};
   }
   .bar:before,
   .bar:after {
@@ -158,10 +158,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const Input = ({type, label, dark}) => (
-  <Wrapper dark={dark}>
+const Input = ({type, label, dark, width}) => (
+  <Wrapper dark={dark} width={width}>
     <div className="group">
-      <input type={type || 'text'} required />
+      <input type={type || 'text'} required width={width} />
       {/* <span className="highlight"></span> */}
       <span className="bar"></span>
       <label>{label}</label>

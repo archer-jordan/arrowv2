@@ -17,7 +17,7 @@ const columns = [
     title: 'ID',
     dataIndex: 'key',
     key: 'key',
-    width: 100,
+    width: 25,
   },
   {
     title: 'Last Name',
@@ -43,7 +43,20 @@ class EmployeesTable extends React.PureComponent {
   render() {
     return (
       <div style={{marginTop: 56}}>
-        <Table dataSource={dataSource} columns={columns} />
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: event =>
+                this.props.history.push(`/employees/${record.id}`), // click row
+              onDoubleClick: event => {}, // double click row
+              onContextMenu: event => {}, // right button click row
+              onMouseEnter: event => {}, // mouse enter row
+              onMouseLeave: event => {}, // mouse leave row
+            };
+          }}
+        />
       </div>
     );
   }

@@ -8,7 +8,7 @@ import AppNav from './AppNav';
 const Container = styled.div`
   margin: auto;
   width: 1150px;
-  max-width: 100%;
+  max-width: 90%;
   padding-top: 16px;
 `;
 
