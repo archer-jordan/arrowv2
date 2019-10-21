@@ -12,18 +12,6 @@ const FormContainer = styled.div`
   max-width: 100%;
 `;
 
-const TextButton = styled.button`
-  color: #8cb3cd;
-  font-size: 16px;
-  padding: 0px;
-  background: transparent;
-  border: 0px;
-  cursor: pointer;
-  &:focus {
-    outline: 0;
-  }
-`;
-
 class Password extends React.PureComponent {
   state = {
     loading: false,

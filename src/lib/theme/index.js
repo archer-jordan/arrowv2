@@ -16,9 +16,9 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-overflow-scrolling: touch;
   }
 
-  a {
+  /* a {
     color: #f2495c !important;
-  }
+  } */
 
   #root {
     height: 100%;

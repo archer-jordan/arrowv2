@@ -4,7 +4,6 @@ import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
-import BigLabel from 'components/text/BigLabel';
 
 const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
