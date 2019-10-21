@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 // COMPONENTS
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
@@ -46,6 +47,12 @@ const MOCK_DATA = [
   },
 ];
 
+const MobileWrapper = styled.div`
+  @media only screen and (max-width: 414px) {
+    margin-top: 24px;
+  }
+`;
+
 class Eligibility extends React.PureComponent {
   render() {
     return (
@@ -59,8 +66,10 @@ class Eligibility extends React.PureComponent {
               <BigLabel>Total Employees</BigLabel>{' '}
             </Col>
             <Col xs={24} md={8} lg={8}>
-              <BigValue>400</BigValue>
-              <BigLabel>Active this month</BigLabel>{' '}
+              <MobileWrapper>
+                <BigValue>400</BigValue>
+                <BigLabel>Active this month</BigLabel>{' '}
+              </MobileWrapper>
             </Col>
             <Col xs={24} md={7} lg={9} />
           </Row>

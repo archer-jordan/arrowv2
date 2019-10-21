@@ -10,6 +10,27 @@ const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
   height: 32px;
   line-height: 32px;
+  @media only screen and (max-width: 414px) {
+    display: none;
+  }
+`;
+
+const MobileHeadline = styled(BigValue)`
+  font-size: 24px;
+  height: 32px;
+  line-height: 32px;
+  display: none;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  @media only screen and (max-width: 414px) {
+    display: inherit;
+  }
+`;
+
+const MobileTopContainer = styled(TopContainer)`
+  @media only screen and (max-width: 414px) {
+    display: none;
+  }
 `;
 
 const Label = styled(BigValue)`
@@ -35,32 +56,47 @@ const DataItem = ({label = 'First Name', value = 'John'}) => (
   </Row>
 );
 
+const RowContainer = styled(Row)`
+  width: 100%;
+  padding: 24px;
+  min-height: 500px;
+  @media only screen and (max-width: 414px) {
+    padding: 0px;
+  }
+`;
+
 class Profile extends React.PureComponent {
   render() {
     return (
       <div>
-        <TopContainer>
+        <MobileTopContainer>
           <Row style={{width: '100%'}}>
-            <Col xs={12}>
+            <Col xs={24} sm={12}>
               <ColumnHeadline>Contact information</ColumnHeadline>
             </Col>
-            <Col xs={12}>
+            <Col xs={24} sm={12}>
               <ColumnHeadline>Company information</ColumnHeadline>
             </Col>
           </Row>
-        </TopContainer>
-        <Row style={{width: '100%', padding: 24, minHeight: 500}}>
-          <Col xs={10}>
+        </MobileTopContainer>
+        <RowContainer>
+          <Col xs={24} sm={10}>
+            <MobileHeadline>Contact information</MobileHeadline>
             <DataItem label="First Name" value="John" />
             <DataItem label="Last Name" value="Johnson" />
             <DataItem label="Role or Title" value="President" />{' '}
             <DataItem label="Email" value="john@company.com" />
             <DataItem label="Phone" value="555.555.5555" />
           </Col>{' '}
-          <Col xs={2} style={{display: 'flex', justifyContent: 'center'}}>
+          <Col
+            xs={0}
+            sm={2}
+            style={{display: 'flex', justifyContent: 'center'}}
+          >
             <div style={{width: 2, height: 200, background: '#efefef'}} />
           </Col>
-          <Col xs={10}>
+          <Col xs={24} sm={10}>
+            <MobileHeadline>Company information</MobileHeadline>
             <DataItem label="Name" value="Narcors Inc" />
             <DataItem label="Address" value="123 Market St" />
             <DataItem label="City" value="Portsmouth" />
@@ -69,7 +105,7 @@ class Profile extends React.PureComponent {
             <DataItem label="Company Type" value="LLC" />
             <DataItem label="EIN #" value="12-555555" />
           </Col>
-        </Row>
+        </RowContainer>
       </div>
     );
   }

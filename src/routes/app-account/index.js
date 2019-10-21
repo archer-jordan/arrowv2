@@ -76,7 +76,7 @@ class AppAccount extends React.PureComponent {
     return (
       <div style={{padding: 8}}>
         <Breadcrumb crumbs={['Account', this.getTab(tab)]} />
-        <Row style={{marginTop: 120}}>
+        <Row style={{marginTop: 80}}>
           <Col xs={24} md={6}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>

@@ -18,6 +18,12 @@ const ValueItemValue = styled(BigValue)`
   letter-spacing: 1.5px;
 `;
 
+const Caption = styled.p`
+  @media only screen and (max-width: 414px) {
+    margin-bottom: 32px;
+  }
+`;
+
 const MOCK_DATA = [
   {label: 'Limited Medical', value: 9940220},
   {label: 'Teledoc', value: 940220},
@@ -49,9 +55,9 @@ class Benefits extends React.PureComponent {
               <BigLabel>TOTAL FRINGE BENEFITS SPEND*</BigLabel>
             </div>
           </TopContainer>
-          <p style={{textAlign: 'right'}}>
+          <Caption style={{textAlign: 'right'}}>
             *Including H&W, VHS & Administrative Costs
-          </p>
+          </Caption>
         </div>
         <div style={{paddingLeft: 24}}>
           {MOCK_DATA.map(item => {
