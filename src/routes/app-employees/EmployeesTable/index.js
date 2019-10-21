@@ -5,6 +5,7 @@ import moment from 'moment';
 
 const dataSource = [
   {
+    id: '1',
     key: '1',
     firtName: 'Anthony',
     lastName: 'Anthony',

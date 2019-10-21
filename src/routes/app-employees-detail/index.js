@@ -9,6 +9,7 @@ import Col from 'components/common/Col';
 import DatePicker from 'components/inputs/DatePicker';
 import SideNav from 'components/common/SideNav';
 import Benefits from './Benefits';
+import Financials from './Financials';
 
 const {MonthPicker} = DatePicker;
 
@@ -171,8 +172,8 @@ class AppEmployeesDetail extends React.PureComponent {
             <div>
               {(() => {
                 switch (tab) {
-                  case 'retirement':
-                    return <div {...sharedProps} />;
+                  case 'financials':
+                    return <Financials {...sharedProps} />;
                   case 'benefits':
                     return <Benefits {...sharedProps} />;
                   case 'account':
