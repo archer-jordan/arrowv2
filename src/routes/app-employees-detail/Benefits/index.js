@@ -4,6 +4,8 @@ import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
+// lib
+import checkSVG from 'lib/media/check-circle.svg';
 
 const BenefitRow = () => (
   <Row
@@ -11,13 +13,15 @@ const BenefitRow = () => (
     style={{height: 100, marginTop: 24, borderBottom: '1px solid #efefef'}}
   >
     <Col xs={6}>
-      <BigLabel>BigLabel</BigLabel>
+      <BigLabel>40</BigLabel>
     </Col>
     <Col xs={12}>
-      <BigLabel>BigLabel</BigLabel>
+      <BigLabel>TELEDOC</BigLabel>
     </Col>
     <Col xs={6}>
-      <BigLabel>BigLabel</BigLabel>
+      <BigLabel>
+        <img src={checkSVG} alt="check-circle" height="32" weight="32" />
+      </BigLabel>
     </Col>
   </Row>
 );
@@ -53,10 +57,22 @@ class Benefits extends React.PureComponent {
           </TopContainer>
         </div>{' '}
         <Row gutter={16} style={{marginTop: 16}}>
-          <Col xs={4}>JANUARY HOURS</Col>
-          <Col xs={5}>REQUIRED HOURS</Col>
-          <Col xs={10}>BENEFIT TYPE</Col>
-          <Col xs={5}>FEBRUARY ELIGIBILITY</Col>
+          <Col xs={4}>
+            JANUARY <br />
+            HOURS
+          </Col>
+          <Col xs={5}>
+            REQUIRED <br />
+            HOURS
+          </Col>
+          <Col xs={10}>
+            BENEFIT
+            <br /> TYPE
+          </Col>
+          <Col xs={5}>
+            FEBRUARY <br />
+            ELIGIBILITY
+          </Col>
         </Row>
         <Row gutter={16} style={{marginTop: 16}}>
           <Col xs={4}>
