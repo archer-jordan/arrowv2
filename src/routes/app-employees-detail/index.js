@@ -10,6 +10,7 @@ import DatePicker from 'components/inputs/DatePicker';
 import SideNav from 'components/common/SideNav';
 import Benefits from './Benefits';
 import Financials from './Financials';
+import Account from './Account';
 
 const {MonthPicker} = DatePicker;
 
@@ -177,7 +178,7 @@ class AppEmployeesDetail extends React.PureComponent {
                   case 'benefits':
                     return <Benefits {...sharedProps} />;
                   case 'account':
-                    return <div {...sharedProps} />;
+                    return <Account {...sharedProps} />;
                   case 'password':
                     return <div {...sharedProps} />;
                   default:

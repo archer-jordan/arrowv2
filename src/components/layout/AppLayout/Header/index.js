@@ -10,6 +10,9 @@ import hamburgerSVG from 'lib/media/hamburger-menu.svg';
 import DrawerContent from './DrawerContent';
 import Drawer from 'antd/lib/drawer';
 import 'antd/lib/drawer/style/css';
+// APOLLO
+import AuthHelpers from 'lib/helpers/AuthHelpers';
+import ApolloClient from 'ApolloClient/index.js';
 
 const HeaderContainer = styled.div`
   background: #145d92;
@@ -51,7 +54,7 @@ const ShowMobileCol = styled(Col)`
   }
 `;
 
-const Header = ({history, location}) => {
+const Header = ({history, location, currentUser}) => {
   const [visisble, setVisible] = useState(false);
   const {tab} = queryString.parse(location.search);
   const onUrlChange = (baseUrl, newValues) => {
@@ -63,6 +66,12 @@ const Header = ({history, location}) => {
     let newString = queryString.stringify(newParams);
     history.push(`/${baseUrl}?${newString}`);
     setVisible(false);
+  };
+
+  const onLogout = async () => {
+    await AuthHelpers.signOut(currentUser.id);
+    await ApolloClient.resetStore();
+    return history.push('/');
   };
   return (
     <HeaderContainer>
@@ -83,8 +92,8 @@ const Header = ({history, location}) => {
         <Col xs={12}></Col>
         <MobileCol xs={6} style={{textAlign: 'right'}}>
           <Username>
-            logged-in as <strong>Al Burr</strong>{' '}
-            <SignoutBtn>sign-out</SignoutBtn>
+            logged-in as <strong>{currentUser.email}</strong>{' '}
+            <SignoutBtn onClick={onLogout}>sign-out</SignoutBtn>
           </Username>
         </MobileCol>
         <ShowMobileCol xs={4} />

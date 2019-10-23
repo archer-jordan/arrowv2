@@ -7,6 +7,10 @@ import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import AuthHelpers from 'lib/helpers/AuthHelpers';
+import ErrorHelpers from 'lib/helpers/ErrorHelpers';
+// APOLLO
+import ApolloClient from 'ApolloClient/index.js';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -43,14 +47,32 @@ class AuthLogin extends React.PureComponent {
   state = {
     loading: false,
   };
-  onSubmit = () => {
+  onSubmit = async () => {
     this.setState({loading: true});
-    setTimeout(() => {
-      this.setState({loading: false});
-      this.props.history.push('/reports');
-      message.success('Welcome back!');
-    }, 2000);
+    try {
+      await AuthHelpers.handleLogin({
+        email: this.state.email,
+        password: this.state.password,
+      });
+    } catch (err) {
+      let errMessage = err.message.replace('GraphQL', '');
+      if (err && err.message.includes('Incorrect password [403]')) {
+        errMessage = 'You have entered an invalid username or password';
+      }
+      return this.setState({
+        loading: false,
+        errors: [ErrorHelpers.cleanErrorString(errMessage)],
+      });
+    }
+    await ApolloClient.resetStore();
+    setTimeout(() => this.props.history.push('/reports'), 1000);
   };
+
+  onSuccessfulLogin = ({access_token, refresh_token}) => {
+    this.setState({loading: false});
+    setTimeout(() => window.location.reload(), 800);
+  };
+
   render() {
     return (
       <Background>
@@ -60,10 +82,17 @@ class AuthLogin extends React.PureComponent {
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
               <FormItem>
-                <TextInput label="email address" />
+                <TextInput
+                  label="email address"
+                  onChange={e => this.setState({email: e.target.value})}
+                />
               </FormItem>
               <FormItem>
-                <TextInput label="password" type="password" />
+                <TextInput
+                  label="password"
+                  type="password"
+                  onChange={e => this.setState({password: e.target.value})}
+                />
               </FormItem>
               <Button
                 onClick={this.onSubmit}

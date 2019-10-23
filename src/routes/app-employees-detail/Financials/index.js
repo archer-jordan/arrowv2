@@ -78,7 +78,7 @@ class Financials extends React.PureComponent {
     return (
       <div style={{paddingBottom: 90}}>
         <div>
-          <TopContainer style={{justifyContent: 'flex-end', marginBottom: 32}}>
+          <TopContainer style={{justifyContent: 'flex-end'}}>
             <div>
               {' '}
               <BigValue style={{textAlign: 'right'}}>Anthony Comito</BigValue>

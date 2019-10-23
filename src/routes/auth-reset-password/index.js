@@ -4,8 +4,13 @@ import styled from 'styled-components';
 import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
+import message from 'components/common/message';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+// APOLLO
+import resetPassword from 'ApolloClient/Mutations/resetPassword';
+import {graphql} from 'react-apollo';
+import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -39,6 +44,27 @@ const TextButton = styled.button`
 `;
 
 class AuthResetPassword extends React.PureComponent {
+  onSubmit = async () => {
+    try {
+      let res = await this.props.resetPassword({
+        variables: {
+          newPassword: this.state.password,
+          token: this.props.match.params.token,
+        },
+      });
+      message.success('Password reset. Logging you in...');
+      console.log(res);
+      let {accessToken, refreshToken} = res.data.resetPassword.tokens;
+
+      console.log(accessToken);
+      console.log(refreshToken);
+      window.localStorage.setItem('growlab_access_token', accessToken);
+      window.localStorage.setItem('growlab_refresh_token', refreshToken);
+      window.location.reload();
+    } catch (err) {
+      ErrorHelpers.handleError(err);
+    }
+  };
   render() {
     return (
       <Background>
@@ -47,12 +73,22 @@ class AuthResetPassword extends React.PureComponent {
           <Logo src={logoWhiteSVG} alt="logo" />
           <div>
             <FormItem>
-              <TextInput label="New Password" type="password" />
+              <TextInput
+                label="New Password"
+                type="password"
+                onChange={e => this.setState({password: e.target.value})}
+              />
             </FormItem>
             <FormItem>
-              <TextInput label="Confirm New Password" type="password" />
+              <TextInput
+                label="Confirm New Password"
+                type="password"
+                onChange={e => this.setState({password: e.target.value})}
+              />
             </FormItem>
-            <Button style={{width: 150}}>Reset password</Button>
+            <Button onClick={this.onSubmit} style={{width: 150}}>
+              Reset password
+            </Button>
             <FormItem>
               <TextButton
                 onClick={() => this.props.history.push(`/forgot-password`)}
@@ -67,4 +103,6 @@ class AuthResetPassword extends React.PureComponent {
   }
 }
 
-export default AuthResetPassword;
+export default graphql(resetPassword, {name: 'resetPassword'})(
+  AuthResetPassword
+);

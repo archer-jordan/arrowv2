@@ -158,10 +158,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const Input = ({type, label, dark, width}) => (
+const Input = ({type, label, dark, width, onChange}) => (
   <Wrapper dark={dark} width={width}>
     <div className="group">
-      <input type={type || 'text'} required width={width} />
+      <input type={type || 'text'} required width={width} onChange={onChange} />
       {/* <span className="highlight"></span> */}
       <span className="bar"></span>
       <label>{label}</label>
