@@ -26,8 +26,12 @@ import AppUsersRoute from 'routes/app-users';
 import AppEmployeesRoute from 'routes/app-employees';
 import AppAccountRoute from 'routes/app-account';
 import AppSupportRoute from 'routes/app-support';
-import AdminHome from 'routes/admin-home';
+import AdminCustomers from 'routes/admin-customers';
+import AdminVendors from 'routes/admin-vendors';
+import AdminUsers from 'routes/admin-users';
 import AppEmployeesDetailRoute from 'routes/app-employees-detail';
+import AdminCustomerDetail from 'routes/admin-customers-detail';
+
 const compose = require('lodash/flowRight');
 
 // EXPORTED COMPONENT
@@ -106,7 +110,35 @@ class AppRoutes extends React.Component {
             layout={AdminLayout}
             path="/admin"
             currentUser={currentUser}
-            component={AdminHome}
+            component={AdminCustomers}
+          />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
+            path="/admin/users"
+            currentUser={currentUser}
+            component={AdminUsers}
+          />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
+            path="/admin/vendors"
+            currentUser={currentUser}
+            component={AdminVendors}
+          />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
+            path="/admin/customers"
+            currentUser={currentUser}
+            component={AdminCustomers}
+          />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
+            path="/admin/customers/:id"
+            currentUser={currentUser}
+            component={AdminCustomerDetail}
           />
           <PublicRoute
             exact

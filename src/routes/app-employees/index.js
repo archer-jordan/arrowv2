@@ -20,11 +20,11 @@ class AppEmployees extends React.PureComponent {
           </Col>
           <Col xs={3}>
             {' '}
-            <Button style={{width: 90}}>Search</Button>
+            <Button style={{width: 90}}>search</Button>
           </Col>
           <Col xs={3}>
             <Button secondary style={{width: 100}}>
-              Download
+              download
             </Button>
           </Col>
         </Row>

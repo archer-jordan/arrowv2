@@ -81,42 +81,26 @@ const AppNav = ({pathname}) => {
           <RightContainer>
             <MobileCol>
               <NavItem
-                to={`/reports`}
-                active={pathname && pathname.includes('/reports')}
+                to={`/admin/customers`}
+                active={pathname && pathname.includes('/customers')}
               >
-                REPORTS
+                CUSTOMERS
               </NavItem>
             </MobileCol>
             <MobileCol>
               <NavItem
-                to={`/account`}
-                active={pathname && pathname.includes('/account')}
+                to={`/admin/vendors`}
+                active={pathname && pathname.includes('/vendors')}
               >
-                ACCOUNT
+                VENDORS
               </NavItem>
             </MobileCol>
             <MobileCol>
               <NavItem
-                to={`/employees`}
-                active={pathname && pathname.includes('/employees')}
-              >
-                EMPLOYEES
-              </NavItem>
-            </MobileCol>
-            <MobileCol>
-              <NavItem
-                to={`/users`}
+                to={`/admin/users`}
                 active={pathname && pathname.includes('/users')}
               >
                 USERS
-              </NavItem>
-            </MobileCol>
-            <MobileCol>
-              <NavItem
-                to={`/support`}
-                active={pathname && pathname.includes('/support')}
-              >
-                SUPPORT
               </NavItem>
             </MobileCol>
           </RightContainer>
@@ -128,36 +112,3 @@ const AppNav = ({pathname}) => {
 };
 
 export default AppNav;
-
-// <Row style={{width: '100%'}}>
-//   {' '}
-//   <Col xs={2} />
-//   <Col xs={2}>
-//     <NavItem to={`/reports`} active={pathname && pathname.includes('/reports')}>
-//       REPORTS
-//     </NavItem>
-//   </Col>
-//   <Col xs={2}>
-//     <NavItem to={`/account`} active={pathname && pathname.includes('/account')}>
-//       ACCOUNT
-//     </NavItem>
-//   </Col>
-//   <Col xs={2}>
-//     <NavItem
-//       to={`/employees`}
-//       active={pathname && pathname.includes('/employees')}
-//     >
-//       EMPLOYEES
-//     </NavItem>
-//   </Col>
-//   <Col xs={2} style={{textAlign: 'center'}}>
-//     <NavItem to={`/users`} active={pathname && pathname.includes('/users')}>
-//       USERS
-//     </NavItem>
-//   </Col>
-//   <Col xs={2}>
-//     <NavItem to={`/support`} active={pathname && pathname.includes('/support')}>
-//       SUPPORT
-//     </NavItem>
-//   </Col>
-// </Row>;

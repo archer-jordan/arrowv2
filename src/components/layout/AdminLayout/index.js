@@ -1,19 +1,27 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import styled from 'styled-components';
+// COMPONENTS
+import Header from './Header';
+import AppNav from './AppNav';
 
-// STYLE-COMPONENTS
-// ===================================
-const AdminLayout = styled.div`
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
-  background-color: ${p => (p.backgroundColor ? p.backgroundColor : null)};
+const Container = styled.div`
+  margin: auto;
+  width: 1150px;
+  max-width: 90%;
+  padding-top: 16px;
 `;
 
-// EXPORT
-// ===================================
-export default ({children, backgroundColor}) => (
-  <AdminLayout id="admin-layout" backgroundColor={backgroundColor}>
-    {children}
-  </AdminLayout>
-);
+class AdminLayout extends React.PureComponent {
+  render() {
+    return (
+      <div>
+        <Header currentUser={this.props.currentUser} />
+        <AppNav pathname={this.props.location.pathname} />{' '}
+        <Container>{this.props.children}</Container>
+      </div>
+    );
+  }
+}
+
+export default withRouter(AdminLayout);

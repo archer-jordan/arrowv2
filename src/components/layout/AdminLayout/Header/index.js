@@ -7,7 +7,7 @@ import Col from 'components/common/Col';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import hamburgerSVG from 'lib/media/hamburger-menu.svg';
-import DrawerContent from './DrawerContent';
+// import DrawerContent from './DrawerContent';
 import Drawer from 'antd/lib/drawer';
 import 'antd/lib/drawer/style/css';
 // APOLLO
@@ -100,12 +100,12 @@ const Header = ({history, location, currentUser}) => {
         <ShowMobileCol xs={2} style={{textAlign: 'right'}}>
           <img onClick={() => setVisible(true)} src={hamburgerSVG} alt="menu" />{' '}
           <Drawer onClose={() => setVisible(false)} visible={visisble}>
-            <DrawerContent
+            {/* <DrawerContent
               activeTab={tab}
               pathname={location.pathname}
               setVisible={setVisible}
               onUrlChange={onUrlChange}
-            />
+            /> */}
           </Drawer>
         </ShowMobileCol>
       </Row>{' '}
