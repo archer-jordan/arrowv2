@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
@@ -7,20 +8,34 @@ import BigLabel from 'components/text/BigLabel';
 // lib
 import checkSVG from 'lib/media/check-circle.svg';
 
+const BenefitType = styled(BigLabel)`
+  font-weight: 500;
+  font-size: 28px;
+  color: #0f466a;
+`;
+
+const RequiredHours = styled(BigLabel)`
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 40px;
+  margin-top: 0px;
+`;
+
 const BenefitRow = () => (
   <Row
     gutter={16}
-    style={{height: 100, marginTop: 24, borderBottom: '1px solid #efefef'}}
+    style={{height: 80, marginTop: 24, borderBottom: '1px solid #efefef'}}
   >
-    <Col xs={6}>
-      <BigLabel>40</BigLabel>
-    </Col>
     <Col xs={12}>
-      <BigLabel>TELEDOC</BigLabel>
+      <BenefitType>TELEDOC</BenefitType>
     </Col>
+    <Col xs={6}>
+      <RequiredHours>40</RequiredHours>
+    </Col>
+
     <Col xs={6}>
       <BigLabel>
-        <img src={checkSVG} alt="check-circle" height="32" weight="32" />
+        <img src={checkSVG} alt="check-circle" height="56" weight="56" />
       </BigLabel>
     </Col>
   </Row>
@@ -41,6 +56,12 @@ const MOCK_DATA = [
   },
 ];
 
+const ColumnTitle = styled.div`
+  font-weight: 500;
+  line-height: 16px;
+  color: #0f466a;
+`;
+
 class Benefits extends React.PureComponent {
   render() {
     return (
@@ -50,28 +71,39 @@ class Benefits extends React.PureComponent {
             <div>
               {' '}
               <BigValue style={{textAlign: 'right'}}>Anthony Comito</BigValue>
-              <BigLabel style={{textAlign: 'right'}}>
+              <BigLabel style={{textAlign: 'right', textTransform: 'none'}}>
                 christianlonglastname@yahoo.com
               </BigLabel>
             </div>
           </TopContainer>
         </div>{' '}
-        <Row gutter={16} style={{marginTop: 16}}>
+        <Row gutter={16} style={{marginTop: 16, marginBottom: 24}}>
           <Col xs={4}>
-            JANUARY <br />
-            HOURS
-          </Col>
-          <Col xs={5}>
-            REQUIRED <br />
-            HOURS
+            <ColumnTitle style={{marginLeft: 8}}>
+              {this.props.month.toUpperCase()} <br />
+              HOURS
+            </ColumnTitle>
           </Col>
           <Col xs={10}>
-            BENEFIT
-            <br /> TYPE
+            <ColumnTitle>
+              {' '}
+              BENEFIT
+              <br /> TYPE{' '}
+            </ColumnTitle>
           </Col>
           <Col xs={5}>
-            FEBRUARY <br />
-            ELIGIBILITY
+            <ColumnTitle>
+              {' '}
+              REQUIRED <br />
+              HOURS{' '}
+            </ColumnTitle>
+          </Col>
+
+          <Col xs={5}>
+            <ColumnTitle>
+              FEBRUARY <br />
+              ELIGIBILITY{' '}
+            </ColumnTitle>
           </Col>
         </Row>
         <Row gutter={16} style={{marginTop: 16}}>

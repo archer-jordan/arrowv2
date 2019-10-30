@@ -9,7 +9,7 @@ const AppNavContainer = styled.div`
 `;
 
 const NavItemContainer = styled(Link)`
-  color: ${p => (p.active ? p.theme.colors.support1 : '#fff')};
+  color: ${p => (p.active ? p.theme.colors.support1 : '#fff')} !important;
   text-align: center;
   cursor: pointer;
   letter-spacing: 1px;
@@ -18,7 +18,7 @@ const NavItemContainer = styled(Link)`
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
   &:hover {
-    color: ${p => p.theme.colors.support4};
+    color: ${p => p.theme.colors.support4} !important;
   }
 `;
 

@@ -50,35 +50,67 @@ const ColorCircle = styled.div`
   background: ${p => (p.color ? p.color : 'red')};
 `;
 
-const FinancialRow = ({item}) => (
-  <Row
-    gutter={16}
-    align="center"
-    style={{height: 100, marginTop: 24, borderBottom: '1px solid #efefef'}}
-  >
-    <Col xs={12}>
-      <BigLabel>{item.title}</BigLabel>
-      <BigValue>
-        {(item.amount / 100).toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        })}
-      </BigValue>
-    </Col>
-    <Col xs={12}>
-      <BigLabel>
+const FinancialRow = ({item}) => {
+  return (
+    <div
+      style={{
+        height: 100,
+        marginBottom: 24,
+        borderBottom: '1px solid #efefef',
+        position: 'relative',
+        width: 350,
+        maxWidth: '100%',
+      }}
+    >
+      <div style={{display: 'inline-block'}}>
+        <BigLabel>{item.title}</BigLabel>
+        <BigValue style={{fontSize: 40}}>
+          {(item.amount / 100).toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </BigValue>
+      </div>
+      <div style={{display: 'inline-block', marginLeft: 16}}>
         <ColorCircle color={item.color} />
-      </BigLabel>
-    </Col>
-  </Row>
-);
+      </div>
+      {/* <div style={{position: 'absolute', right: 50, bottom: 50}}>
+        <ColorCircle color={item.color} />
+      </div> */}
+    </div>
+  );
+  // return (
+  //   <Row
+  //     gutter={16}
+  //     align="center"
+  //     style={{height: 100, marginTop: 24, borderBottom: '1px solid #efefef'}}
+  //   >
+  //     <Col xs={12}>
+  //       {' '}
+  //       <div style={{position: 'relative'}}>
+  //         <BigLabel>{item.title}</BigLabel>
+  //         <BigValue style={{fontSize: 40}}>
+  //           {(item.amount / 100).toLocaleString('en-US', {
+  //             style: 'currency',
+  //             currency: 'USD',
+  //           })}
+  //         </BigValue>
+  //         <div style={{position: 'absolute', right: 50, bottom: 15}}>
+  //           <ColorCircle color={item.color} />
+  //         </div>
+  //       </div>
+  //     </Col>
+  //     <Col xs={12}></Col>
+  //   </Row>
+  // );
+};
 
 class Financials extends React.PureComponent {
   render() {
     return (
       <div style={{paddingBottom: 90}}>
         <div>
-          <TopContainer style={{justifyContent: 'flex-end', marginBottom: 32}}>
+          <TopContainer style={{justifyContent: 'flex-end'}}>
             <div>
               {' '}
               <BigValue style={{textAlign: 'right'}}>Anthony Comito</BigValue>
@@ -87,7 +119,7 @@ class Financials extends React.PureComponent {
               </BigLabel>
             </div>
           </TopContainer>
-          <Row gutter={16}>
+          <Row gutter={16} style={{marginTop: 30}}>
             <Col xs={16}>
               {' '}
               {MOCK_DATA.map(item => (

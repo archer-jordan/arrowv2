@@ -13,34 +13,46 @@ const getBackgroundColor = ({grey, disabled, secondary, theme, danger}) => {
     return theme.colors.neutral10;
   }
   if (secondary) {
-    return theme.colors.primary10;
+    return 'transparent';
   }
 
   return '#ed3245';
 };
 
-const getTextColor = ({danger, disabled, secondary, theme}) => {
+const getTextColor = ({grey, danger, disabled, secondary, theme}) => {
   if (disabled) {
     return theme.colors.neutral4;
   }
   if (danger) {
     return theme.colors.red3;
   }
+  if (grey) {
+    return theme.colors.neutral4;
+  }
   if (secondary) {
-    return theme.colors.primary1;
+    return '#bc2837';
   }
   return '#fff';
 };
 
-const getHoverBackgroundColor = ({disabled, secondary, theme, danger}) => {
+const getHoverBackgroundColor = ({
+  grey,
+  disabled,
+  secondary,
+  theme,
+  danger,
+}) => {
   if (disabled) {
     return theme.colors.neutral5;
   }
   if (danger) {
     return theme.colors.red9;
   }
+  if (grey) {
+    return theme.colors.neutral9;
+  }
   if (secondary) {
-    return theme.colors.primary9;
+    return 'transparent';
   }
   return '#bc2837';
 };
@@ -58,6 +70,7 @@ const ButtonContainer = styled.button`
   line-height: 40px;
   /* text-transform: uppercase; */
   letter-spacing: 0.025em;
+  border: ${p => (p.secondary ? '2px solid #bc2837' : null)};
   align-items: center;
   /* box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); */
   transition: color 0.3s ease, background-color 0.3s ease,

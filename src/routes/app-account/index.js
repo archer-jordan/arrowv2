@@ -48,7 +48,7 @@ class AppAccount extends React.PureComponent {
           }),
       },
       {
-        label: 'Plan',
+        label: 'Plan Information',
         activeValue: 'plan',
         onClick: () =>
           this.onParamChange({
