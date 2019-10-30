@@ -124,11 +124,13 @@ class AppEmployeesDetail extends React.PureComponent {
   };
   render() {
     const {location, history} = this.props;
+
+    const {tab, month, year} = queryString.parse(location.search);
     const sharedProps = {
       history,
       location,
+      month,
     };
-    const {tab, month, year} = queryString.parse(location.search);
     return (
       <div>
         <div>
