@@ -45,6 +45,22 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
+
+  .ant-popover-buttons {
+    .ant-btn:hover, .ant-btn:focus {
+      color: ${theme.colors.primary1}  !important;
+      background-color: #fff;
+      border-color: ${theme.colors.primary1} !important;
+    }
+    .ant-btn.ant-btn-primary.ant-btn-sm{
+      background: ${theme.colors.primary1} !important;
+      border-color: ${theme.colors.primary1} !important;
+      color: #fff !important;
+    }
+  }
+
+
+
   /* TABLE STYLES OVERWRITING ANTD TABLE DEFAULT STYLES */
 
   th {
@@ -62,6 +78,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-table-row {
     cursor: pointer;
   }
+
+
 
 
   .ant-table-thead > tr > th {

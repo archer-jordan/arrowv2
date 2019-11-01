@@ -6,6 +6,21 @@ export default gql`
   query customerById($id: ID!) {
     customerById(id: $id) {
       ...customerFragment
+      contacts {
+        id
+        firstName
+        lastName
+        title
+        phone
+        email
+      }
+      users {
+        id
+        firstName
+        lastName
+        email
+        roles
+      }
     }
   }
   ${customerFragment}
