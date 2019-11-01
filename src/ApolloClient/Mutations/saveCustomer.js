@@ -6,6 +6,14 @@ export default gql`
   mutation saveCustomer($id: ID, $params: CustomerParams) {
     saveCustomer(id: $id, params: $params) {
       ...customerFragment
+      contacts {
+        id
+        firstName
+        lastName
+        title
+        phone
+        email
+      }
     }
   }
   ${customerFragment}

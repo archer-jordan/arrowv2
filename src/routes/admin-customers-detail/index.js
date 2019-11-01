@@ -3,13 +3,18 @@ import queryString from 'query-string';
 import {Link} from 'react-router-dom';
 // COMPONENTS
 import Row from 'components/common/Row';
+import message from 'components/common/message';
 import Col from 'components/common/Col';
 import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
 import Profile from './Profile';
+import Contacts from './Contacts';
+import Status from './Status';
+import Users from './Users';
 // APOLLO
-import {Query} from 'react-apollo';
+import {Query, graphql} from 'react-apollo';
 import customerByIdQuery from 'ApolloClient/Queries/customerById';
+import saveCustomer from 'ApolloClient/Mutations/saveCustomer';
 
 class AdminCustomerDetail extends React.PureComponent {
   state = {
@@ -133,12 +138,23 @@ class AdminCustomerDetail extends React.PureComponent {
       },
     ];
   };
+  onSaveChanges = async newValues => {
+    try {
+      this.props.saveCustomer({
+        variables: {
+          id: this.props.match.params.id,
+          params: {
+            ...newValues,
+          },
+        },
+      });
+      message.success('Customer saved!');
+    } catch (err) {
+      console.log(err);
+    }
+  };
   render() {
     const {location, history} = this.props;
-    const sharedProps = {
-      history,
-      location,
-    };
     const {tab} = queryString.parse(location.search);
 
     return (
@@ -150,8 +166,14 @@ class AdminCustomerDetail extends React.PureComponent {
           {({loading, data, error}) => {
             if (loading) return 'loading...';
             if (error) return 'error...';
-            console.log(data);
             const customer = data.customerById;
+            const sharedProps = {
+              history,
+              location,
+              customer,
+              saving: this.state.saving,
+              onSaveChanges: this.onSaveChanges,
+            };
             return (
               <React.Fragment>
                 <Breadcrumb
@@ -174,12 +196,12 @@ class AdminCustomerDetail extends React.PureComponent {
                             return <Profile {...sharedProps} />;
                           case 'benefits':
                             return <div {...sharedProps} />;
-                          case 'download':
-                            return <div {...sharedProps} />;
-                          case 'eligibility':
-                            return <div {...sharedProps} />;
-                          case 'health':
-                            return <div {...sharedProps} />;
+                          case 'users':
+                            return <Users {...sharedProps} />;
+                          case 'status':
+                            return <Status {...sharedProps} />;
+                          case 'contacts':
+                            return <Contacts {...sharedProps} />;
                           default:
                             return <div {...sharedProps} />;
                         }
@@ -196,4 +218,6 @@ class AdminCustomerDetail extends React.PureComponent {
   }
 }
 
-export default AdminCustomerDetail;
+export default graphql(saveCustomer, {name: 'saveCustomer'})(
+  AdminCustomerDetail
+);

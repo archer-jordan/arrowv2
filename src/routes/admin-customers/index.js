@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 // APOLLO
 import {Query, graphql} from 'react-apollo';
 import saveCustomer from 'ApolloClient/Mutations/saveCustomer';
@@ -8,7 +7,9 @@ import customersQuery from 'ApolloClient/Queries/customers';
 import CustomerForm from 'components/forms/CustomerForm';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
+import message from 'components/common/message';
 import Button from 'components/common/Button';
+import CustomersTable from './CustomersTable';
 
 class AdminHome extends React.PureComponent {
   state = {
@@ -20,18 +21,19 @@ class AdminHome extends React.PureComponent {
       this.setState({
         loading: true,
       });
-      await this.props.saveCustomer({
+      let res = await this.props.saveCustomer({
         variables: {
           params: {
             ...values,
           },
         },
       });
-
       this.setState({
         addNew: false,
         loading: false,
       });
+      message.success('New customer created!');
+      this.props.history.push(`/admin/customers/${res.data.saveCustomer.id}`);
     } catch (err) {
       console.log(err);
     }
@@ -43,12 +45,13 @@ class AdminHome extends React.PureComponent {
           onSubmit={this.onCreateCustomer}
           loading={this.state.loading}
           onCancel={() => this.setState({addNew: false})}
+          buttonText="Create Customer"
         />
       );
     }
     return (
       <div>
-        <Row style={{height: 100}}>
+        <Row style={{marginBottom: 24}}>
           {' '}
           <Col xs={16}></Col>
           <Col xs={4}></Col>
@@ -63,13 +66,12 @@ class AdminHome extends React.PureComponent {
             if (loading) return 'loading';
             if (error) return 'error';
             if (data.customers.count === 0) return 'No customers';
-            return data.customers.customers.map(customer => (
-              <div key={customer.id}>
-                <Link to={`/admin/customers/${customer.id}`}>
-                  {customer.id}
-                </Link>
-              </div>
-            ));
+            return (
+              <CustomersTable
+                history={this.props.history}
+                dataSource={data.customers.customers}
+              />
+            );
           }}
         </Query>
       </div>
