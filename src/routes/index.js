@@ -18,7 +18,6 @@ import AuthForgotPassword from 'routes/auth-forgot-password';
 import ResetPassword from 'routes/auth-reset-password';
 // APOLLO
 import {graphql} from 'react-apollo';
-
 import currentUserQuery from 'ApolloClient/Queries/currentUser';
 // APP
 import AppReportsRoute from 'routes/app-reports';
@@ -31,6 +30,8 @@ import AdminVendors from 'routes/admin-vendors';
 import AdminUsers from 'routes/admin-users';
 import AppEmployeesDetailRoute from 'routes/app-employees-detail';
 import AdminCustomerDetail from 'routes/admin-customers-detail';
+import AuthRegister from 'routes/auth-register';
+import AuthRegisterAccount from 'routes/auth-register-account';
 
 const compose = require('lodash/flowRight');
 
@@ -57,8 +58,18 @@ class AppRoutes extends React.Component {
 
     // all other errors (that are not in our white listed errors list) just print to screen for now, unless it's a white listed error
     if (errorExists) {
-      return <div />;
+      return <div>Error</div>;
     }
+
+    // if user is not a super admin and their company status is not active, show a message
+    if (
+      currentUser &&
+      !currentUser.roles.includes('superAdmin') &&
+      currentUser.companyStatus !== 'active'
+    ) {
+      return `Your company's account is ${currentUser.companyStatus}`;
+    }
+
     return (
       <Router>
         {' '}
@@ -83,6 +94,20 @@ class AppRoutes extends React.Component {
             path="/employees"
             currentUser={currentUser}
             component={AppEmployeesRoute}
+          />
+          <PublicRoute
+            exact
+            layout={PublicLayout}
+            path="/register"
+            currentUser={currentUser}
+            component={AuthRegister}
+          />
+          <PublicRoute
+            exact
+            layout={PublicLayout}
+            path="/register-account/:token"
+            currentUser={currentUser}
+            component={AuthRegisterAccount}
           />
           <ProtectedRoute
             exact

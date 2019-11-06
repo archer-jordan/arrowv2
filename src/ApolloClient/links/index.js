@@ -24,7 +24,7 @@ console.log(
 // ================================================
 // add some middleware for adding auth to headers
 export const authLink = new ApolloLink((operation, forward) => {
-  const token = window.localStorage['growlab_access_token']; // from local storage
+  const token = window.localStorage['arrow_access_token']; // from local storage
 
   operation.setContext(() => ({
     headers: {

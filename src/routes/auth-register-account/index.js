@@ -44,8 +44,14 @@ const TextButton = styled.button`
 `;
 
 class AuthResetPassword extends React.PureComponent {
+  state = {
+    loading: false,
+  };
   onSubmit = async () => {
     try {
+      this.setState({
+        loading: true,
+      });
       let res = await this.props.resetPassword({
         variables: {
           newPassword: this.state.password,
@@ -60,8 +66,14 @@ class AuthResetPassword extends React.PureComponent {
       console.log(refreshToken);
       window.localStorage.setItem('arrow_access_token', accessToken);
       window.localStorage.setItem('arrow_refresh_token', refreshToken);
+      this.setState({
+        loading: false,
+      });
       window.location.reload();
     } catch (err) {
+      this.setState({
+        loading: false,
+      });
       ErrorHelpers.handleError(err);
     }
   };
@@ -87,12 +99,10 @@ class AuthResetPassword extends React.PureComponent {
               />
             </FormItem>
             <Button onClick={this.onSubmit} style={{width: 150}}>
-              Reset password
+              {!this.state.loading ? ' Set password' : '...'}
             </Button>
             <FormItem>
-              <TextButton
-                onClick={() => this.props.history.push(`/forgot-password`)}
-              >
+              <TextButton onClick={() => this.props.history.push(`/login`)}>
                 Already have an account?
               </TextButton>
             </FormItem>
