@@ -7,6 +7,7 @@ import message from 'components/common/message';
 import Col from 'components/common/Col';
 import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
+import Loading from 'components/common/Loading';
 import Profile from './Profile';
 import Contacts from './Contacts';
 import Status from './Status';
@@ -164,7 +165,7 @@ class AdminCustomerDetail extends React.PureComponent {
           variables={{id: this.props.match.params.id}}
         >
           {({loading, data, error}) => {
-            if (loading) return 'loading...';
+            if (loading) return <Loading />;
             if (error) return 'error...';
             const customer = data.customerById;
             const sharedProps = {
@@ -183,11 +184,11 @@ class AdminCustomerDetail extends React.PureComponent {
                     this.getTab(tab),
                   ]}
                 />
-                <Row style={{marginTop: 32}}>
-                  <Col xs={24} md={6}>
+                <Row gutter={32} style={{marginTop: 32}}>
+                  <Col xs={24} md={4}>
                     <SideNav items={this.getNavItems()} tab={tab} />
                   </Col>
-                  <Col xs={24} md={18}>
+                  <Col xs={24} md={20}>
                     {' '}
                     <div>
                       {(() => {

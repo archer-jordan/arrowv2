@@ -3,14 +3,17 @@ import styled from 'styled-components';
 //COMPONENTS
 import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
+import Icon from 'components/common/Icon';
 import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+// LIB
 import AuthHelpers from 'lib/helpers/AuthHelpers';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 // APOLLO
-import ApolloClient from 'ApolloClient/index.js';
+import {graphql} from 'react-apollo';
+import registerAccount from 'ApolloClient/Mutations/registerAccount';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -27,11 +30,11 @@ const Background = styled.div`
 const Logo = styled.img`
   display: block;
   margin: auto;
-  width: 250px;
-  margin-bottom: 40px;
+  height: 75px;
+  margin-bottom: 32px;
 `;
 
-const TextButton = styled.button`
+const Text = styled.div`
   color: #8cb3cd;
   font-size: 16px;
   padding: 0px;
@@ -43,16 +46,35 @@ const TextButton = styled.button`
   }
 `;
 
-class AuthLogin extends React.PureComponent {
+// STYLED-COMPONENTS
+// ========================================
+const SuccessCard = () => (
+  <div style={{minHeight: 257, paddingTop: 200}}>
+    <div style={{textAlign: 'center'}}>
+      <Icon
+        style={{fontSize: 40, marginBottom: 10, color: '#fff'}}
+        type="check-circle"
+      />
+      <h2 style={{textAlign: 'center', margin: 0, fontSize: 18, color: '#fff'}}>
+        Please Check Your Email!
+      </h2>
+    </div>
+  </div>
+);
+
+class AuthRegister extends React.PureComponent {
   state = {
+    email: null,
+    emailSent: false,
     loading: false,
   };
   onSubmit = async () => {
     this.setState({loading: true});
     try {
-      await AuthHelpers.handleLogin({
-        email: this.state.email,
-        password: this.state.password,
+      await this.props.registerAccount({
+        variables: {
+          email: this.state.email,
+        },
       });
     } catch (err) {
       let errMessage = err.message.replace('GraphQL', '');
@@ -64,63 +86,50 @@ class AuthLogin extends React.PureComponent {
         errors: [ErrorHelpers.cleanErrorString(errMessage)],
       });
     }
-    await ApolloClient.resetStore();
-    setTimeout(() => this.props.history.push('/reports'), 1000);
+    this.setState({loading: false, emailSent: true});
   };
-
-  onSuccessfulLogin = ({access_token, refresh_token}) => {
-    this.setState({loading: false});
-    setTimeout(() => window.location.reload(), 800);
-  };
-
   render() {
     return (
       <Background>
-        <div>
+        {!this.state.emailSent ? (
           <FormContainer>
             {' '}
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
               <FormItem>
                 <TextInput
-                  label="email address"
+                  label="Email"
                   onChange={e => this.setState({email: e.target.value})}
-                />
-              </FormItem>
-              <FormItem>
-                <TextInput
-                  label="password"
-                  type="password"
-                  onChange={e => this.setState({password: e.target.value})}
                 />
               </FormItem>
               <Button
                 onClick={this.onSubmit}
-                style={{width: 100}}
                 disabled={this.state.loading}
+                style={{width: 150}}
               >
-                {this.state.loading ? '...' : 'login'}
+                Send me a link
               </Button>
               <FormItem>
-                <TextButton
-                  onClick={() => this.props.history.push(`/forgot-password`)}
-                >
-                  Forgot your password?
-                </TextButton>
+                <Text>
+                  Please provide your email address and we’ll send you a secure
+                  link to create a password and access your account.
+                </Text>
               </FormItem>
-              <FormItem>
-                <TextButton
-                  onClick={() => this.props.history.push(`/register`)}
-                >
-                  First time logging-in?
+              {/* <FormItem>
+                <TextButton onClick={() => this.props.history.push(`/login`)}>
+                  Already created your password?
                 </TextButton>
-              </FormItem>
+              </FormItem> */}
             </div>
           </FormContainer>
-        </div>
+        ) : (
+          <SuccessCard />
+        )}
       </Background>
     );
   }
 }
 
-export default AuthLogin;
+export default graphql(registerAccount, {name: 'registerAccount'})(
+  AuthRegister
+);

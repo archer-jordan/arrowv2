@@ -5,6 +5,7 @@ import saveCustomer from 'ApolloClient/Mutations/saveCustomer';
 import customersQuery from 'ApolloClient/Queries/customers';
 // COMPONENTS
 import CustomerForm from 'components/forms/CustomerForm';
+import Loading from 'components/common/Loading';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import message from 'components/common/message';
@@ -63,7 +64,7 @@ class AdminHome extends React.PureComponent {
         </Row>
         <Query query={customersQuery}>
           {({data, loading, error}) => {
-            if (loading) return 'loading';
+            if (loading) return <Loading />;
             if (error) return 'error';
             if (data.customers.count === 0) return 'No customers';
             return (

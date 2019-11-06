@@ -14,7 +14,7 @@ export default gql`
         phone
         email
       }
-      users {
+      adminUsers {
         id
         firstName
         lastName

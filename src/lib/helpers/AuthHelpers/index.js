@@ -40,11 +40,11 @@ AuthHelpers.handleLogin = ({email, password}) =>
       });
 
       window.localStorage.setItem(
-        'growlab_access_token',
+        'arrow_access_token',
         data.authenticate.tokens.accessToken
       );
       window.localStorage.setItem(
-        'growlab_refresh_token',
+        'arrow_refresh_token',
         data.authenticate.tokens.refreshToken
       );
 
@@ -86,11 +86,11 @@ AuthHelpers.handleSignup = async ({email, password, profile = {}, role}) =>
       });
 
       window.localStorage.setItem(
-        'growlab_access_token',
+        'arrow_access_token',
         data.authenticate.tokens.accessToken
       );
       window.localStorage.setItem(
-        'growlab_refresh_token',
+        'arrow_refresh_token',
         data.authenticate.tokens.refreshToken
       );
 
@@ -123,8 +123,8 @@ AuthHelpers.signOut = id =>
         mutation: logout,
       });
 
-      window.localStorage.removeItem('growlab_access_token');
-      window.localStorage.removeItem('growlab_refresh_token');
+      window.localStorage.removeItem('arrow_access_token');
+      window.localStorage.removeItem('arrow_refresh_token');
       // reset the store
       await client.resetStore();
       // let user know

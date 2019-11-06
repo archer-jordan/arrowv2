@@ -17,6 +17,7 @@
     "apollo-link-timeout": "^1.2.1",
     "babel-plugin-import": "^1.12.2",
     "customize-cra": "^0.8.0",
+    "email-validator": "^2.0.4",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "moment": "^2.24.0",

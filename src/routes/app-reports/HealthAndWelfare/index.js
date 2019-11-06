@@ -1,4 +1,5 @@
 import React from 'react';
+import numeral from 'numeral';
 import styled from 'styled-components';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
@@ -81,21 +82,30 @@ const Caption = styled.p`
     margin-bottom: 32px;
   }
 `;
-
+// month: "String"
+// totalHealthAndWelfare: "String"
+// totalVHS: "String"
+// year: "String"
 class HealthAndWelfare extends React.PureComponent {
   render() {
+    const {report} = this.props;
     return (
       <div>
         <TopContainer>
           <Row style={{width: '100%'}}>
             {' '}
             <Col xs={24} md={9} lg={7}>
-              <BigValue>18,577</BigValue>
+              <BigValue>{numeral(report.totalHours).format('0,0')}</BigValue>
               <BigLabel>Total Hours</BigLabel>
             </Col>
             <Col xs={24} md={8} lg={8}>
               <MobileWrapper>
-                <BigValue>$108,589.71</BigValue>
+                <BigValue>
+                  {(report.totalFringe / 100).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </BigValue>
                 <BigLabel>TOTAL FRINGE*</BigLabel>
               </MobileWrapper>
             </Col>

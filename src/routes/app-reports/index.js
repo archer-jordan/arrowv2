@@ -5,6 +5,7 @@ import moment from 'moment';
 // COMPONENTS
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
+import Loading from 'components/common/Loading';
 import Breadcrumb from 'components/common/Breadcrumb';
 import DatePicker from 'components/inputs/DatePicker';
 import HealthAndWelfare from './HealthAndWelfare';
@@ -13,6 +14,9 @@ import Retirement from './Retirement';
 import Benefits from './Benefits';
 import DownloadXL from './DownloadXL';
 import SideNav from 'components/common/SideNav';
+// APOLLO
+import {Query} from 'react-apollo';
+import companyReports from 'ApolloClient/Queries/companyReports';
 
 const {MonthPicker} = DatePicker;
 
@@ -150,10 +154,7 @@ class AppReports extends React.PureComponent {
   };
   render() {
     const {location, history} = this.props;
-    const sharedProps = {
-      history,
-      location,
-    };
+
     const {tab, month, year} = queryString.parse(location.search);
 
     return (
@@ -194,25 +195,44 @@ class AppReports extends React.PureComponent {
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
           <Col xs={24} md={18}>
-            {' '}
-            <div>
-              {(() => {
-                switch (tab) {
-                  case 'retirement':
-                    return <Retirement {...sharedProps} />;
-                  case 'benefits':
-                    return <Benefits {...sharedProps} />;
-                  case 'download':
-                    return <DownloadXL {...sharedProps} />;
-                  case 'eligibility':
-                    return <Eligibility {...sharedProps} />;
-                  case 'health':
-                    return <HealthAndWelfare {...sharedProps} />;
-                  default:
-                    return <HealthAndWelfare {...sharedProps} />;
-                }
-              })()}
-            </div>
+            <Query
+              query={companyReports}
+              variables={{
+                companyId: this.props.currentUser.companyId,
+                month: 'November',
+                year: '2019',
+              }}
+            >
+              {({loading, data, error}) => {
+                if (loading) return <Loading />;
+                if (error) return 'error...';
+                const sharedProps = {
+                  history,
+                  location,
+                  report: data.companyReports,
+                };
+                return (
+                  <div>
+                    {(() => {
+                      switch (tab) {
+                        case 'retirement':
+                          return <Retirement {...sharedProps} />;
+                        case 'benefits':
+                          return <Benefits {...sharedProps} />;
+                        case 'download':
+                          return <DownloadXL {...sharedProps} />;
+                        case 'eligibility':
+                          return <Eligibility {...sharedProps} />;
+                        case 'health':
+                          return <HealthAndWelfare {...sharedProps} />;
+                        default:
+                          return <HealthAndWelfare {...sharedProps} />;
+                      }
+                    })()}
+                  </div>
+                );
+              }}
+            </Query>
           </Col>
         </Row>
         {this.state.editDate && (
