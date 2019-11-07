@@ -1,29 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
-import moment from 'moment';
 import styled from 'styled-components';
-
-// const dataSource = [
-//   {
-//     id: '1',
-//     key: '1',
-//     assignedId: '123',
-//     firstName: 'Anthony',
-//     lastName: 'Comito',
-//     hireDate: moment().valueOf(),
-//   },
-// ];
 
 const Text = styled.div`
   font-weight: 600;
   color: #0f466a;
-  font-family: ${p => p.theme.fontFamily};
-`;
-
-const TextLink = styled(Link)`
-  font-weight: 600;
   font-family: ${p => p.theme.fontFamily};
 `;
 
@@ -32,7 +14,7 @@ const columns = [
     title: 'Company Name',
     dataIndex: 'id',
     key: 'id',
-    render: (text, record) => <TextLink>{record.title}</TextLink>,
+    render: (text, record) => <Text>{record.title}</Text>,
   },
   {
     title: 'ID',
