@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import {validate} from 'email-validator';
 //COMPONENTS
 import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
-import message from 'components/common/message';
+import Icon from 'components/common/Icon';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import AuthHelpers from 'lib/helpers/AuthHelpers';
-import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 // APOLLO
 import ApolloClient from 'ApolloClient/index.js';
 
@@ -43,11 +43,45 @@ const TextButton = styled.button`
   }
 `;
 
+const ErrorBlockContainer = styled.div`
+  background: ${p => p.theme.colors.red10};
+  border-left: 4px solid ${p => p.theme.colors.red4};
+  padding: 8px;
+  border-radius: 5px;
+  color: ${p => p.theme.colors.red2};
+  font-size: 13px;
+  margin-bottom: 16px;
+`;
+
+const ErrorBlock = ({errors}) => (
+  <ErrorBlockContainer>
+    <Icon type="close-circle" style={{marginRight: 4}} />
+    {errors.map(item => item)}
+  </ErrorBlockContainer>
+);
+
 class AuthLogin extends React.PureComponent {
   state = {
     loading: false,
+    errors: [],
   };
   onSubmit = async () => {
+    // reset errors
+    this.setState({errors: []});
+
+    // check that user added an email
+    if (!this.state.email) {
+      return this.setState({errors: ['Please provide an email']});
+    }
+    // check if its a valid email
+    if (!validate(this.state.email)) {
+      return this.setState({errors: ['That is not a valid email']});
+    }
+    // check that they give a password
+    if (!this.state.password) {
+      return this.setState({errors: ['Please provide a password']});
+    }
+
     this.setState({loading: true});
     try {
       await AuthHelpers.handleLogin({
@@ -59,9 +93,10 @@ class AuthLogin extends React.PureComponent {
       if (err && err.message.includes('Incorrect password [403]')) {
         errMessage = 'You have entered an invalid username or password';
       }
+      console.log(errMessage);
       return this.setState({
         loading: false,
-        errors: [ErrorHelpers.cleanErrorString(errMessage)],
+        errors: [errMessage],
       });
     }
     await ApolloClient.resetStore();
@@ -94,6 +129,11 @@ class AuthLogin extends React.PureComponent {
                   onChange={e => this.setState({password: e.target.value})}
                 />
               </FormItem>
+              {this.state.errors && this.state.errors.length > 0 && (
+                <FormItem>
+                  <ErrorBlock errors={this.state.errors} />
+                </FormItem>
+              )}
               <Button
                 onClick={this.onSubmit}
                 style={{width: 100}}

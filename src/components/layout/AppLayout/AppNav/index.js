@@ -60,7 +60,7 @@ const RightContainer = styled.div`
   }
 `;
 
-const AppNav = ({pathname}) => {
+const AppNav = ({pathname, currentUser}) => {
   return (
     <React.Fragment>
       <AppNavContainer>
@@ -76,7 +76,7 @@ const AppNav = ({pathname}) => {
         >
           {' '}
           <div style={{flex: 1}}>
-            <CompanyName>Company Name</CompanyName>
+            <CompanyName>{currentUser.company.title}</CompanyName>
           </div>
           <RightContainer>
             <MobileCol>

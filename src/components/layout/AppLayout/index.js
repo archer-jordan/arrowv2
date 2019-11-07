@@ -17,7 +17,10 @@ class AppLayout extends React.PureComponent {
     return (
       <div>
         <Header currentUser={this.props.currentUser} />
-        <AppNav pathname={this.props.location.pathname} />{' '}
+        <AppNav
+          currentUser={this.props.currentUser}
+          pathname={this.props.location.pathname}
+        />{' '}
         <Container>{this.props.children}</Container>
       </div>
     );
