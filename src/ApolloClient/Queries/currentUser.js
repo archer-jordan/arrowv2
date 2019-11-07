@@ -8,6 +8,10 @@ export default gql`
       ...userFragment
       companyId
       companyStatus
+      company {
+        id
+        title
+      }
     }
   }
   ${userFragment}
