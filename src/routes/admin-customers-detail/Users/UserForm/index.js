@@ -24,8 +24,17 @@ class UserForm extends React.PureComponent {
   state = {
     email: null,
     finalEmail: null,
+    emailExists: null,
   };
   onSave = () => {
+    if (this.state.emailExists) {
+      return null;
+    }
+    if (this.state.emailExists == null) {
+      return null;
+    }
+    console.log(this.state.emailExists);
+    return null;
     this.props.onSubmit({
       id: this.state.id,
       email: this.state.finalEmail,
@@ -84,6 +93,9 @@ class UserForm extends React.PureComponent {
               <Query
                 query={emailAlreadyExists}
                 variables={{email: this.state.finalEmail}}
+                onCompleted={data =>
+                  this.setState({emailExists: data.emailAlreadyExists.exists})
+                }
               >
                 {({data, loading, error}) => {
                   if (loading)
@@ -118,7 +130,13 @@ class UserForm extends React.PureComponent {
             <Button grey style={{width: 90}} onClick={this.props.onCancel}>
               Cancel
             </Button>
-            <Button style={{width: 140}} onClick={this.onSave}>
+            <Button
+              disabled={
+                this.state.emailExists || this.state.emailExists === null
+              }
+              style={{width: 140}}
+              onClick={this.onSave}
+            >
               Save Changes
             </Button>
           </FormItem>
