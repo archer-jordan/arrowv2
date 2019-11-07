@@ -22,15 +22,31 @@ const GreenText = styled.div`
 
 class UserForm extends React.PureComponent {
   state = {
-    email: null,
-    finalEmail: null,
+    email: this.props.email || null,
+    finalEmail: this.props.email || null,
+    firstName: this.props.firstName || null,
+    lastName: this.props.lastName || null,
+    title: this.props.title || null,
+    phone: this.props.phone || null,
+    emailExists: null,
   };
   onSave = () => {
+    if (!this.props.editing) {
+      if (this.state.emailExists) {
+        return null;
+      }
+      if (this.state.emailExists == null) {
+        return null;
+      }
+    }
+
     this.props.onSubmit({
       id: this.state.id,
       email: this.state.finalEmail,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
+      title: this.state.lastName,
+      phone: this.state.phone,
     });
   };
   handleFilter = debounce(finalEmail => {
@@ -63,10 +79,27 @@ class UserForm extends React.PureComponent {
             />
           </FormItem>{' '}
         </Col>{' '}
+        <Col xs={12}>
+          <FormItem label="Title">
+            <Input
+              value={this.state.title}
+              onChange={e => this.setState({title: e.target.value})}
+            />
+          </FormItem>{' '}
+        </Col>
+        <Col xs={12}>
+          <FormItem label="Phone">
+            <Input
+              value={this.state.phone}
+              onChange={e => this.setState({phone: e.target.value})}
+            />
+          </FormItem>{' '}
+        </Col>{' '}
         <Col xs={24}>
           <FormItem label="Email">
             <Input
               value={this.state.email}
+              disabled={this.props.editing}
               type="search"
               onChange={e => {
                 this.setState({email: e.target.value});
@@ -74,42 +107,57 @@ class UserForm extends React.PureComponent {
               }}
               //onChange={e => this.setState({email: e.target.value})}
             />
-            {this.state.finalEmail && !validate(this.state.finalEmail) && (
-              <RedText>
-                <Icon type="close-circle" style={{marginRight: 4}} />
-                Not a valid email
-              </RedText>
-            )}
-            {this.state.finalEmail && validate(this.state.finalEmail) && (
-              <Query
-                query={emailAlreadyExists}
-                variables={{email: this.state.finalEmail}}
-              >
-                {({data, loading, error}) => {
-                  if (loading)
-                    return (
-                      <div>
-                        <Icon type="loading" />
-                      </div>
-                    );
-                  if (error) return 'Error';
-                  return (
-                    <div>
-                      {!data.emailAlreadyExists.exists ? (
-                        <GreenText>
-                          <Icon type="check-circle" style={{marginRight: 4}} />
-                          Email does not exist
-                        </GreenText>
-                      ) : (
-                        <RedText>
-                          <Icon type="close-circle" style={{marginRight: 4}} />
-                          Email already exists
-                        </RedText>
-                      )}
-                    </div>
-                  );
-                }}
-              </Query>
+            {!this.props.editing && (
+              <React.Fragment>
+                {this.state.finalEmail && !validate(this.state.finalEmail) && (
+                  <RedText>
+                    <Icon type="close-circle" style={{marginRight: 4}} />
+                    Not a valid email
+                  </RedText>
+                )}
+                {this.state.finalEmail && validate(this.state.finalEmail) && (
+                  <Query
+                    query={emailAlreadyExists}
+                    variables={{email: this.state.finalEmail}}
+                    onCompleted={data =>
+                      this.setState({
+                        emailExists: data.emailAlreadyExists.exists,
+                      })
+                    }
+                  >
+                    {({data, loading, error}) => {
+                      if (loading)
+                        return (
+                          <div>
+                            <Icon type="loading" />
+                          </div>
+                        );
+                      if (error) return 'Error';
+                      return (
+                        <div>
+                          {!data.emailAlreadyExists.exists ? (
+                            <GreenText>
+                              <Icon
+                                type="check-circle"
+                                style={{marginRight: 4}}
+                              />
+                              Email does not exist
+                            </GreenText>
+                          ) : (
+                            <RedText>
+                              <Icon
+                                type="close-circle"
+                                style={{marginRight: 4}}
+                              />
+                              Email already exists
+                            </RedText>
+                          )}
+                        </div>
+                      );
+                    }}
+                  </Query>
+                )}
+              </React.Fragment>
             )}
           </FormItem>
         </Col>{' '}
@@ -118,7 +166,15 @@ class UserForm extends React.PureComponent {
             <Button grey style={{width: 90}} onClick={this.props.onCancel}>
               Cancel
             </Button>
-            <Button style={{width: 140}} onClick={this.onSave}>
+            <Button
+              disabled={
+                !this.props.editing
+                  ? this.state.emailExists || this.state.emailExists === null
+                  : false
+              }
+              style={{width: 140}}
+              onClick={this.onSave}
+            >
               Save Changes
             </Button>
           </FormItem>

@@ -5,6 +5,7 @@ import FormItem from 'components/common/FormItem';
 import Input from 'components/inputs/Input';
 import Button from 'components/common/Button';
 import Row from 'components/common/Row';
+import CompanyTypeInpput from 'components/inputs/CompanyTypeInput';
 import Col from 'components/common/Col';
 import Select from 'antd/lib/select';
 import 'antd/lib/select/style/css';
@@ -58,7 +59,7 @@ class CustomerForm extends React.PureComponent {
           </Col>
           <Col xs={12}>
             <FormItem label="Company Type">
-              <Input
+              <CompanyTypeInpput
                 value={this.state.companyType}
                 onChange={e => this.setState({companyType: e.target.value})}
               />

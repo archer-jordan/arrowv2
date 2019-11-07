@@ -43,7 +43,7 @@ const getHoverBackgroundColor = ({
   danger,
 }) => {
   if (disabled) {
-    return theme.colors.neutral5;
+    return theme.colors.neutral8;
   }
   if (danger) {
     return theme.colors.red9;
