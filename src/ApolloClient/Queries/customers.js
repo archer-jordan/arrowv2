@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 import customerFragment from 'ApolloClient/Fragments/customerFragment';
 
 export default gql`
-  query customers {
-    customers {
+  query customers($searchText: String) {
+    customers(searchText: $searchText) {
       count
       customers {
         ...customerFragment

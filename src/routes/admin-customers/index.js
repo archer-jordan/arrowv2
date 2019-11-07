@@ -7,6 +7,7 @@ import customersQuery from 'ApolloClient/Queries/customers';
 import CustomerForm from 'components/forms/CustomerForm';
 import Loading from 'components/common/Loading';
 import Row from 'components/common/Row';
+import TextInput from 'components/inputs/TextInput';
 import Col from 'components/common/Col';
 import message from 'components/common/message';
 import Button from 'components/common/Button';
@@ -16,6 +17,7 @@ class AdminHome extends React.PureComponent {
   state = {
     addNew: false,
     loading: false,
+    searchText: '',
   };
   onCreateCustomer = async values => {
     try {
@@ -51,10 +53,17 @@ class AdminHome extends React.PureComponent {
       );
     }
     return (
-      <div>
-        <Row style={{marginBottom: 24}}>
+      <div style={{width: 900, margin: 'auto', maxWidth: '100%'}}>
+        <Row style={{marginTop: 24}}>
           {' '}
-          <Col xs={16}></Col>
+          <Col xs={16}>
+            <TextInput
+              dark
+              width={'700px'}
+              onChange={e => this.setState({searchText: e.target.value})}
+              label="search by name or ID#"
+            />
+          </Col>
           <Col xs={4}></Col>
           <Col xs={4}>
             <Button onClick={() => this.setState({addNew: true})}>
@@ -62,7 +71,11 @@ class AdminHome extends React.PureComponent {
             </Button>
           </Col>
         </Row>
-        <Query query={customersQuery}>
+
+        <Query
+          query={customersQuery}
+          variables={{searchText: this.state.searchText}}
+        >
           {({data, loading, error}) => {
             if (loading) return <Loading />;
             if (error) return 'error';
