@@ -6,6 +6,7 @@ import logout from 'ApolloClient/Mutations/logout';
 import currentUser from 'ApolloClient/Queries/currentUser';
 import sendResetPasswordEmail from 'ApolloClient/Mutations/sendResetPasswordEmail';
 import signup from 'ApolloClient/Mutations/signup';
+import changePassword from 'ApolloClient/Mutations/changePassword';
 
 const AuthHelpers = {};
 
@@ -109,6 +110,24 @@ AuthHelpers.handleSignup = async ({email, password, profile = {}, role}) =>
       }, 1000);
 
       resolve(userId);
+    } catch (err) {
+      console.log(err);
+      reject(err);
+    }
+  });
+
+AuthHelpers.changePassword = ({oldPassword, newPassword}) =>
+  new Promise(async (resolve, reject) => {
+    let user;
+    try {
+      await client.mutate({
+        mutation: changePassword,
+        variables: {
+          oldPassword,
+          newPassword,
+        },
+      });
+      resolve(user);
     } catch (err) {
       console.log(err);
       reject(err);

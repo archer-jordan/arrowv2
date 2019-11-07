@@ -93,14 +93,12 @@ class AuthLogin extends React.PureComponent {
       if (err && err.message.includes('Incorrect password [403]')) {
         errMessage = 'You have entered an invalid username or password';
       }
-      console.log(errMessage);
       return this.setState({
         loading: false,
         errors: [errMessage],
       });
     }
     await ApolloClient.resetStore();
-    setTimeout(() => this.props.history.push('/reports'), 1000);
   };
 
   onSuccessfulLogin = ({access_token, refresh_token}) => {

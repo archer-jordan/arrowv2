@@ -5,6 +5,8 @@ import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
+// LIB
+import AuthHelpers from 'lib/helpers/AuthHelpers';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -14,35 +16,77 @@ const FormContainer = styled.div`
 
 class Password extends React.PureComponent {
   state = {
+    oldPassword: null,
+    newPassword: null,
+    confirmNewPassword: null,
     loading: false,
   };
-  onSubmit = () => {
+
+  onSubmit = async () => {
     this.setState({loading: true});
-    setTimeout(() => {
+
+    try {
+      await AuthHelpers.changePassword({
+        oldPassword: this.state.oldPassword,
+        newPassword: this.state.newPassword,
+      });
+    } catch (err) {
       this.setState({loading: false});
-      message.success('Your password has been reset!');
-    }, 2000);
+      console.log('err', err);
+      return message.error(err.message || 'Something went wrong');
+    }
+    message.success('New password saved!');
+    this.setState({
+      loading: false,
+      oldPassword: null,
+      newPassword: null,
+      confirmNewPassword: null,
+    });
   };
   render() {
+    let disabled =
+      !this.state.oldPassword ||
+      !this.state.newPassword ||
+      !this.state.confirmNewPassword;
     return (
       <div>
         <FormContainer>
           <div>
             <FormItem>
-              <TextInput label="current password" type="password" dark />
+              <TextInput
+                label="current password"
+                type="password"
+                onChange={e => this.setState({oldPassword: e.target.value})}
+                value={this.state.oldPassword}
+                dark
+              />
             </FormItem>
             <FormItem>
-              <TextInput label="new password" type="password" dark />
+              <TextInput
+                label="new password"
+                type="password"
+                onChange={e => this.setState({newPassword: e.target.value})}
+                value={this.state.newPassword}
+                dark
+              />
             </FormItem>
             <FormItem>
-              <TextInput label="confirm new password" type="password" dark />
+              <TextInput
+                label="confirm new password"
+                type="password"
+                onChange={e =>
+                  this.setState({confirmNewPassword: e.target.value})
+                }
+                value={this.state.confirmNewPassword}
+                dark
+              />
             </FormItem>
             <Button
               onClick={this.onSubmit}
               style={{width: 140}}
-              disabled={this.state.loading}
+              disabled={disabled || this.state.loading}
             >
-              {this.state.loading ? '...' : 'reset password'}
+              {!this.state.loading ? `reset password` : '...'}
             </Button>
           </div>
         </FormContainer>
