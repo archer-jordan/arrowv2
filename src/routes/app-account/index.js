@@ -66,10 +66,11 @@ class AppAccount extends React.PureComponent {
     ];
   };
   render() {
-    const {location, history} = this.props;
+    const {location, currentUser, history} = this.props;
     const sharedProps = {
       history,
       location,
+      currentUser,
     };
     const {tab} = queryString.parse(location.search);
 

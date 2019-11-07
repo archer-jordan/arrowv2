@@ -28,7 +28,7 @@ const columns = [
   },
   {
     title: 'Email',
-    render: (text, record) => <TextLink>{record.email}</TextLink>,
+    render: (text, record) => <Text>{record.email}</Text>,
   },
 ];
 
@@ -42,7 +42,7 @@ const MockTableHeaderBackground = styled.div`
 
 class UsersTable extends React.PureComponent {
   render() {
-    const {dataSource} = this.props;
+    const {dataSource, onClick} = this.props;
     return (
       <div style={{position: 'relative'}}>
         <MockTableHeaderBackground />
@@ -52,7 +52,7 @@ class UsersTable extends React.PureComponent {
           pagination={false}
           onRow={(record, rowIndex) => {
             return {
-              onClick: event => {}, // click row
+              onClick: event => onClick(record), // click row
               onDoubleClick: event => {}, // double click row
               onContextMenu: event => {}, // right button click row
               onMouseEnter: event => {}, // mouse enter row

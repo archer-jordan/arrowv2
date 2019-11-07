@@ -47,10 +47,24 @@ class Users extends React.PureComponent {
         />
       );
     }
+    if (this.state.selected) {
+      return (
+        <UserForm
+          onSubmit={this.onCreateUser}
+          loading={this.state.loading}
+          editing
+          {...this.state.selected}
+          onCancel={() => this.setState({selected: false})}
+        />
+      );
+    }
     return (
       <div style={{width: 600}}>
         {' '}
-        <UsersTable dataSource={this.props.customer.adminUsers} />
+        <UsersTable
+          dataSource={this.props.customer.adminUsers}
+          onClick={selected => this.setState({selected})}
+        />
         <Button
           style={{width: 120, marginBottom: 8, marginTop: 8}}
           onClick={() => this.setState({addNew: true})}

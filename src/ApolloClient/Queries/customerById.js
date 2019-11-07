@@ -20,6 +20,8 @@ export default gql`
         lastName
         email
         roles
+        title
+        phone
       }
     }
   }

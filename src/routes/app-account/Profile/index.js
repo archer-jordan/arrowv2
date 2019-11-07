@@ -4,6 +4,10 @@ import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
+import Loading from 'components/common/Loading';
+// APOLLO
+import {Query} from 'react-apollo';
+import customerById from 'ApolloClient/Queries/customerById';
 
 const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
@@ -44,7 +48,7 @@ const Value = styled(Label)`
   font-weight: 400;
 `;
 
-const DataItem = ({label = 'First Name', value = 'John'}) => (
+const DataItem = ({label = ' ', value = ''}) => (
   <Row>
     <Col xs={12}>
       <Label>{label}</Label>
@@ -66,6 +70,8 @@ const RowContainer = styled(Row)`
 
 class Profile extends React.PureComponent {
   render() {
+    const profile = this.props.currentUser;
+
     return (
       <div>
         <MobileTopContainer>
@@ -81,11 +87,11 @@ class Profile extends React.PureComponent {
         <RowContainer>
           <Col xs={24} sm={10}>
             <MobileHeadline>Contact information</MobileHeadline>
-            <DataItem label="First Name" value="John" />
-            <DataItem label="Last Name" value="Johnson" />
-            <DataItem label="Role or Title" value="President" />{' '}
-            <DataItem label="Email" value="john@company.com" />
-            <DataItem label="Phone" value="555.555.5555" />
+            <DataItem label="First Name" value={profile.firstName} />
+            <DataItem label="Last Name" value={profile.lastName} />
+            <DataItem label="Role or Title" value={profile.title} />{' '}
+            <DataItem label="Email" value={profile.email} />
+            <DataItem label="Phone" value={profile.phone} />
           </Col>{' '}
           <Col
             xs={0}
@@ -96,13 +102,31 @@ class Profile extends React.PureComponent {
           </Col>
           <Col xs={24} sm={10}>
             <MobileHeadline>Company information</MobileHeadline>
-            <DataItem label="Name" value="Narcors Inc" />
-            <DataItem label="Address" value="123 Market St" />
-            <DataItem label="City" value="Portsmouth" />
-            <DataItem label="State" value="NH" />
-            <DataItem label="Zip" value="03801" />
-            <DataItem label="Company Type" value="LLC" />
-            <DataItem label="EIN #" value="12-555555" />
+            <Query
+              query={customerById}
+              variables={{id: this.props.currentUser.companyId}}
+            >
+              {({data, error, loading}) => {
+                if (loading) return <Loading />;
+                console.log(data.customerById);
+                let customer = data.customerById;
+                return (
+                  <div>
+                    {' '}
+                    <DataItem label="Name" value={customer.title} />
+                    <DataItem label="Address" value={customer.street} />
+                    <DataItem label="City" value={customer.city} />
+                    <DataItem label="State" value={customer.state} />
+                    <DataItem label="Zip" value={customer.zip} />
+                    <DataItem
+                      label="Company Type"
+                      value={customer.companyType}
+                    />
+                    <DataItem label="EIN #" value={customer.ein} />{' '}
+                  </div>
+                );
+              }}
+            </Query>
           </Col>
         </RowContainer>
       </div>
