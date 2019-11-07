@@ -61,7 +61,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="Company Type">
               <CompanyTypeInpput
                 value={this.state.companyType}
-                onChange={e => this.setState({companyType: e.target.value})}
+                onChange={companyType => this.setState({companyType})}
               />
             </FormItem>
           </Col>
