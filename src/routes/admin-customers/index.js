@@ -5,7 +5,6 @@ import saveCustomer from 'ApolloClient/Mutations/saveCustomer';
 import customersQuery from 'ApolloClient/Queries/customers';
 // COMPONENTS
 import CustomerForm from 'components/forms/CustomerForm';
-import Loading from 'components/common/Loading';
 import Row from 'components/common/Row';
 import TextInput from 'components/inputs/TextInput';
 import Col from 'components/common/Col';
@@ -18,6 +17,8 @@ class AdminHome extends React.PureComponent {
     addNew: false,
     loading: false,
     searchText: '',
+    skip: 0,
+    current: 1,
   };
   onCreateCustomer = async values => {
     try {
@@ -80,16 +81,22 @@ class AdminHome extends React.PureComponent {
 
         <Query
           query={customersQuery}
-          variables={{searchText: this.state.searchText}}
+          variables={{searchText: this.state.searchText, skip: this.state.skip}}
         >
           {({data, loading, error}) => {
-            if (loading) return <Loading />;
             if (error) return 'error';
-            if (data.customers.count === 0) return 'No customers';
             return (
               <CustomersTable
                 history={this.props.history}
-                dataSource={data.customers.customers}
+                dataSource={!loading ? data.customers.customers : []}
+                total={!loading ? data.customers.count : null}
+                onPageChange={page =>
+                  this.setState({
+                    skip: page === 1 ? 0 : (page - 1) * 5,
+                    current: page,
+                  })
+                }
+                current={this.state.current}
               />
             );
           }}

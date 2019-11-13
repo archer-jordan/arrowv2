@@ -62,11 +62,7 @@ class AuthResetPassword extends React.PureComponent {
         },
       });
       message.success('Password reset. Logging you in...');
-      console.log(res);
       let {accessToken, refreshToken} = res.data.resetPassword.tokens;
-
-      console.log(accessToken);
-      console.log(refreshToken);
       window.localStorage.setItem('arrow_access_token', accessToken);
       window.localStorage.setItem('arrow_refresh_token', refreshToken);
       this.setState({
