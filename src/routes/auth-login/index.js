@@ -1,16 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
-import {validate} from 'email-validator';
+import React from "react";
+import styled from "styled-components";
+import { validate } from "email-validator";
 //COMPONENTS
-import TextInput from 'components/inputs/TextInput';
-import Button from 'components/common/Button';
-import FormItem from 'components/common/FormItem';
-import Icon from 'components/common/Icon';
+import TextInput from "components/inputs/TextInput";
+import Button from "components/common/Button";
+import FormItem from "components/common/FormItem";
+import ErrorBlock from "components/common/ErrorBlock";
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
-import AuthHelpers from 'lib/helpers/AuthHelpers';
+import logoWhiteSVG from "lib/media/arrow-logo-white.png";
+import AuthHelpers from "lib/helpers/AuthHelpers";
 // APOLLO
-import ApolloClient from 'ApolloClient/index.js';
+import ApolloClient from "ApolloClient/index.js";
 
 const FormContainer = styled.div`
   width: 250px;
@@ -43,66 +43,49 @@ const TextButton = styled.button`
   }
 `;
 
-const ErrorBlockContainer = styled.div`
-  background: ${p => p.theme.colors.red10};
-  border-left: 4px solid ${p => p.theme.colors.red4};
-  padding: 8px;
-  border-radius: 5px;
-  color: ${p => p.theme.colors.red2};
-  font-size: 13px;
-  margin-bottom: 16px;
-`;
-
-const ErrorBlock = ({errors}) => (
-  <ErrorBlockContainer>
-    <Icon type="close-circle" style={{marginRight: 4}} />
-    {errors.map(item => item)}
-  </ErrorBlockContainer>
-);
-
 class AuthLogin extends React.PureComponent {
   state = {
     loading: false,
-    errors: [],
+    errors: []
   };
   onSubmit = async () => {
     // reset errors
-    this.setState({errors: []});
+    this.setState({ errors: [] });
 
     // check that user added an email
     if (!this.state.email) {
-      return this.setState({errors: ['Please provide an email']});
+      return this.setState({ errors: ["Please provide an email"] });
     }
     // check if its a valid email
     if (!validate(this.state.email)) {
-      return this.setState({errors: ['That is not a valid email']});
+      return this.setState({ errors: ["That is not a valid email"] });
     }
     // check that they give a password
     if (!this.state.password) {
-      return this.setState({errors: ['Please provide a password']});
+      return this.setState({ errors: ["Please provide a password"] });
     }
 
-    this.setState({loading: true});
+    this.setState({ loading: true });
     try {
       await AuthHelpers.handleLogin({
         email: this.state.email,
-        password: this.state.password,
+        password: this.state.password
       });
     } catch (err) {
-      let errMessage = err.message.replace('GraphQL', '');
-      if (err && err.message.includes('Incorrect password [403]')) {
-        errMessage = 'You have entered an invalid username or password';
+      let errMessage = err.message.replace("GraphQL", "");
+      if (err && err.message.includes("Incorrect password [403]")) {
+        errMessage = "You have entered an invalid username or password";
       }
       return this.setState({
         loading: false,
-        errors: [errMessage],
+        errors: [errMessage]
       });
     }
     await ApolloClient.resetStore();
   };
 
-  onSuccessfulLogin = ({access_token, refresh_token}) => {
-    this.setState({loading: false});
+  onSuccessfulLogin = ({ access_token, refresh_token }) => {
+    this.setState({ loading: false });
     setTimeout(() => window.location.reload(), 800);
   };
 
@@ -111,20 +94,22 @@ class AuthLogin extends React.PureComponent {
       <Background>
         <div>
           <FormContainer>
-            {' '}
+            {" "}
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
               <FormItem>
                 <TextInput
                   label="email address"
-                  onChange={e => this.setState({email: e.target.value})}
+                  value={this.state.email}
+                  onChange={e => this.setState({ email: e.target.value })}
                 />
               </FormItem>
               <FormItem>
                 <TextInput
                   label="password"
                   type="password"
-                  onChange={e => this.setState({password: e.target.value})}
+                  value={this.state.password}
+                  onChange={e => this.setState({ password: e.target.value })}
                 />
               </FormItem>
               {this.state.errors && this.state.errors.length > 0 && (
@@ -134,10 +119,10 @@ class AuthLogin extends React.PureComponent {
               )}
               <Button
                 onClick={this.onSubmit}
-                style={{width: 100}}
+                style={{ width: 100 }}
                 disabled={this.state.loading}
               >
-                {this.state.loading ? '...' : 'login'}
+                {this.state.loading ? "..." : "login"}
               </Button>
               <FormItem>
                 <TextButton

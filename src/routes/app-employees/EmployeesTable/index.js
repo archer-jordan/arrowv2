@@ -5,17 +5,6 @@ import 'antd/lib/table/style/css';
 import moment from 'moment';
 import styled from 'styled-components';
 
-const dataSource = [
-  {
-    id: '1',
-    key: '1',
-    assignedId: '123',
-    firstName: 'Anthony',
-    lastName: 'Comito',
-    hireDate: moment().valueOf(),
-  },
-];
-
 const Text = styled.div`
   font-weight: 600;
   color: #0f466a;
@@ -51,10 +40,14 @@ const columns = [
   },
   {
     title: 'Hire Date',
-    dataIndex: 'hireDate',
-    key: 'hireDate',
     width: 100,
-    render: record => <Text>{moment(record.hireDate).format('M-D-YYYY')}</Text>,
+    render: record => (
+      <Text>
+        {record.hireDate
+          ? moment(parseInt(record.hireDate)).format('M-D-YYYY')
+          : 'N/A'}
+      </Text>
+    ),
   },
 ];
 
@@ -68,21 +61,33 @@ const MockTableHeaderBackground = styled.div`
 
 class EmployeesTable extends React.PureComponent {
   render() {
-    const {history} = this.props;
+    const {
+      history,
+      total,
+      loading,
+      current,
+      dataSource,
+      onPageChange,
+    } = this.props;
     return (
       <div style={{position: 'relative'}}>
         <MockTableHeaderBackground />
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={false}
+          pagination={{
+            pageSize: 5,
+            total,
+            current: current || 1,
+            onChange: (page, pageSize) => onPageChange(page),
+          }}
+          loading={loading}
+          onChange={(pagination, filters, sorter) =>
+            console.log(pagination, filters, sorter)
+          }
           onRow={(record, rowIndex) => {
             return {
               onClick: event => history.push(`/employees/${record.id}`), // click row
-              onDoubleClick: event => {}, // double click row
-              onContextMenu: event => {}, // right button click row
-              onMouseEnter: event => {}, // mouse enter row
-              onMouseLeave: event => {}, // mouse leave row
             };
           }}
         />{' '}

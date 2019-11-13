@@ -9,6 +9,7 @@ import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
 import Loading from 'components/common/Loading';
 import Profile from './Profile';
+import Employees from './Employees';
 import Contacts from './Contacts';
 import Status from './Status';
 import Users from './Users';
@@ -195,8 +196,8 @@ class AdminCustomerDetail extends React.PureComponent {
                         switch (tab) {
                           case 'profile':
                             return <Profile {...sharedProps} />;
-                          case 'benefits':
-                            return <div {...sharedProps} />;
+                          case 'employees':
+                            return <Employees {...sharedProps} />;
                           case 'users':
                             return <Users {...sharedProps} />;
                           case 'status':

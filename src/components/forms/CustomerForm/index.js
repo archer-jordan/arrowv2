@@ -7,10 +7,18 @@ import Button from 'components/common/Button';
 import Row from 'components/common/Row';
 import CompanyTypeInpput from 'components/inputs/CompanyTypeInput';
 import Col from 'components/common/Col';
-import Select from 'antd/lib/select';
-import 'antd/lib/select/style/css';
+import Icon from 'components/common/Icon';
+// APOLLO
+import customerIdAlreadyExists from 'ApolloClient/Queries/customerIdAlreadyExists';
+import {Query} from 'react-apollo';
 
-const {Option} = Select;
+const RedText = styled.div`
+  color: ${p => p.theme.colors.red2};
+`;
+
+const GreenText = styled.div`
+  color: #0e7817;
+`;
 
 const Container = styled.div`
   min-height: 200px;
@@ -23,6 +31,7 @@ class CustomerForm extends React.PureComponent {
   state = {
     title: this.props.title || null,
     companyType: this.props.companyType || null,
+    assignedId: this.props.assignedId || null,
     ein: this.props.ein || null,
     naics: this.props.naics || null,
     sic: this.props.sic || null,
@@ -32,9 +41,13 @@ class CustomerForm extends React.PureComponent {
     state: this.props.state || null,
   };
   onSubmit = () => {
+    if (!this.state.assignedId) {
+      return null;
+    }
     this.props.onSubmit({
       title: this.state.title,
       companyType: this.state.companyType,
+      assignedId: this.state.assignedId,
       ein: this.state.ein,
       naics: this.state.naics,
       sic: this.state.sic,
@@ -49,6 +62,70 @@ class CustomerForm extends React.PureComponent {
     return (
       <Container>
         <Row gutter={16}>
+          <Col xs={12}>
+            <FormItem label="ID">
+              <Input
+                value={this.state.assignedId}
+                onChange={e => this.setState({assignedId: e.target.value})}
+              />
+              {!this.props.editing && (
+                <React.Fragment>
+                  {this.state.assignedId && this.state.assignedId.length < 3 && (
+                    <RedText>
+                      <Icon type="close-circle" style={{marginRight: 4}} />
+                      Please input at least 3 characters
+                    </RedText>
+                  )}
+                  {this.state.assignedId && this.state.assignedId.length >= 3 && (
+                    <Query
+                      query={customerIdAlreadyExists}
+                      variables={{assignedId: this.state.assignedId}}
+                      onCompleted={data =>
+                        this.setState({
+                          emailExists: data.customerIdAlreadyExists.exists,
+                        })
+                      }
+                    >
+                      {({data, loading, error}) => {
+                        if (loading)
+                          return (
+                            <div>
+                              <Icon type="loading" />
+                            </div>
+                          );
+                        if (error) return 'Error';
+                        return (
+                          <div>
+                            {!data.customerIdAlreadyExists.exists ? (
+                              <GreenText>
+                                <Icon
+                                  type="check-circle"
+                                  style={{marginRight: 4}}
+                                />
+                                ID does not exist
+                              </GreenText>
+                            ) : (
+                              <RedText>
+                                <Icon
+                                  type="close-circle"
+                                  style={{marginRight: 4}}
+                                />
+                                ID already exists
+                              </RedText>
+                            )}
+                          </div>
+                        );
+                      }}
+                    </Query>
+                  )}
+                </React.Fragment>
+              )}
+            </FormItem>
+          </Col>{' '}
+          <Col xs={12}>
+            <div style={{height: 90}} />{' '}
+          </Col>
+          <Col xs={24} />
           <Col xs={12}>
             <FormItem label="Company Name">
               <Input

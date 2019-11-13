@@ -6,6 +6,7 @@ export default gql`
     id
     title
     ein
+    assignedId
     companyType
     naics
     sic
