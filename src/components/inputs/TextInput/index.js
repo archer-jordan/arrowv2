@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   .group {
@@ -11,10 +11,10 @@ const Wrapper = styled.div`
     font-size: 18px;
     padding: 10px 10px 10px 5px;
     display: block;
-    width: ${p => (p.width ? p.width : '246px')};
+    width: ${p => (p.width ? p.width : "246px")};
     border: none;
     border-radius: 0px;
-    color: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
+    color: ${p => (p.dark ? p.theme.colors.primary3 : "#fff")};
     max-width: 100%;
     border-bottom: 2px solid #8cb3cd;
   }
@@ -42,24 +42,24 @@ const Wrapper = styled.div`
   input:valid ~ label {
     top: -20px;
     font-size: 14px;
-    color: ${p => (p.dark ? p.theme.colors.primary2 : '#fff')};
+    color: ${p => (p.dark ? p.theme.colors.primary2 : "#fff")};
   }
 
   /* BOTTOM BARS ================================= */
   .bar {
     position: relative;
     display: block;
-    width: ${p => (p.width ? p.width : '246px')};
+    width: ${p => (p.width ? p.width : "246px")};
   }
   .bar:before,
   .bar:after {
-    content: '';
+    content: "";
     height: 3px;
     width: 0;
     bottom: 0px;
     max-width: 100%;
     position: absolute;
-    background: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
+    background: ${p => (p.dark ? p.theme.colors.primary3 : "#fff")};
     transition: 0.2s ease all;
     -moz-transition: 0.2s ease all;
     -webkit-transition: 0.2s ease all;
@@ -91,10 +91,10 @@ const Wrapper = styled.div`
   input {
     background: transparent;
   }
-  input[type='text'] {
+  input[type="text"] {
     background: transparent;
   }
-  input[type='password'] {
+  input[type="password"] {
     background: transparent;
   }
 
@@ -158,15 +158,23 @@ const Wrapper = styled.div`
   }
 `;
 
-const Input = ({type, label, dark, width, onChange}) => (
-  <Wrapper dark={dark} width={width}>
-    <div className="group">
-      <input type={type || 'text'} required width={width} onChange={onChange} />
-      {/* <span className="highlight"></span> */}
-      <span className="bar"></span>
-      <label>{label}</label>
-    </div>
-  </Wrapper>
-);
+const Input = ({ type, label, value = "", dark, width, onChange }) => {
+  return (
+    <Wrapper dark={dark} width={width}>
+      <div className="group">
+        <input
+          type={type || "text"}
+          required
+          width={width}
+          value={value}
+          onChange={onChange}
+        />
+        {/* <span className="highlight"></span> */}
+        <span className="bar"></span>
+        <label>{label}</label>
+      </div>
+    </Wrapper>
+  );
+};
 
 export default Input;

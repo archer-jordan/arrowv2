@@ -1,4 +1,5 @@
 import React from 'react';
+import {validate} from 'email-validator';
 import styled from 'styled-components';
 import Input from 'components/inputs/Input';
 import FormItem from 'components/common/FormItem';
@@ -7,6 +8,7 @@ import Col from 'components/common/Col';
 import Icon from 'components/common/Icon';
 import Popconfirm from 'components/common/Popconfirm';
 import Button from 'components/common/Button';
+import ErrorBlock from 'components/common/ErrorBlock';
 
 const RemoveBtn = styled.div`
   text-align: right;
@@ -25,8 +27,23 @@ class ContactForm extends React.PureComponent {
     lastName: this.props.contact.lastName || '',
     title: this.props.contact.title || '',
     phone: this.props.contact.phone || '',
+    errors: [],
   };
   onSave = () => {
+    this.setState({errors: []});
+    if (!this.state.email) {
+      return this.setState({errors: ['Please provide an email']});
+    }
+    if (!validate(this.state.email)) {
+      return this.setState({errors: ['Please provide a valid email']});
+    }
+    if (!this.state.firstName) {
+      return this.setState({errors: ['Please provide a first name']});
+    }
+    if (!this.state.lastName) {
+      return this.setState({errors: ['Please provide a last name']});
+    }
+
     this.props.onSaveContact({
       id: this.state.id,
       email: this.state.email,
@@ -44,7 +61,6 @@ class ContactForm extends React.PureComponent {
           marginBottom: 16,
           padding: 16,
           maxWidth: '100%',
-          border: '1px solid #efefef',
         }}
         gutter={16}
       >
@@ -102,7 +118,13 @@ class ContactForm extends React.PureComponent {
             />
           </FormItem>
         </Col>
-        <Col xs={24}>{/* <FormItem /> */}</Col>
+        <Col xs={24}>
+          {this.state.errors && this.state.errors.length > 0 && (
+            <FormItem>
+              <ErrorBlock errors={this.state.errors} />
+            </FormItem>
+          )}
+        </Col>
         <Col xs={12} />
         <Col xs={24}>
           <FormItem>

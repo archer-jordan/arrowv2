@@ -8,6 +8,7 @@ import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
+import ErrorBlock from 'components/common/ErrorBlock';
 // APOLLO
 import emailAlreadyExists from 'ApolloClient/Queries/emailAlreadyExists';
 import {Query} from 'react-apollo';
@@ -29,6 +30,7 @@ class UserForm extends React.PureComponent {
     title: this.props.title || null,
     phone: this.props.phone || null,
     emailExists: null,
+    errors: [],
   };
   onSave = () => {
     if (!this.props.editing) {
@@ -40,12 +42,22 @@ class UserForm extends React.PureComponent {
       }
     }
 
+    if (!this.state.finalEmail) {
+      return this.setState({errors: ['Please provide an email']});
+    }
+    if (!this.state.firstName) {
+      return this.setState({errors: ['Please provide a first name']});
+    }
+    if (!this.state.lastName) {
+      return this.setState({errors: ['Please provide a last name']});
+    }
+
     this.props.onSubmit({
       id: this.state.id,
       email: this.state.finalEmail,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      title: this.state.lastName,
+      title: this.state.title,
       phone: this.state.phone,
     });
   };
@@ -160,6 +172,11 @@ class UserForm extends React.PureComponent {
               </React.Fragment>
             )}
           </FormItem>
+          {this.state.errors && this.state.errors.length > 0 && (
+            <FormItem>
+              <ErrorBlock errors={this.state.errors} />
+            </FormItem>
+          )}
         </Col>{' '}
         <Col xs={24}>
           <FormItem>

@@ -47,6 +47,9 @@ class AuthResetPassword extends React.PureComponent {
   state = {
     loading: false,
   };
+  checkPassword = password => {
+    return false;
+  };
   onSubmit = async () => {
     try {
       this.setState({
@@ -59,11 +62,7 @@ class AuthResetPassword extends React.PureComponent {
         },
       });
       message.success('Password reset. Logging you in...');
-      console.log(res);
       let {accessToken, refreshToken} = res.data.resetPassword.tokens;
-
-      console.log(accessToken);
-      console.log(refreshToken);
       window.localStorage.setItem('arrow_access_token', accessToken);
       window.localStorage.setItem('arrow_refresh_token', refreshToken);
       this.setState({
@@ -88,6 +87,7 @@ class AuthResetPassword extends React.PureComponent {
               <TextInput
                 label="New Password"
                 type="password"
+                value={this.state.password}
                 onChange={e => this.setState({password: e.target.value})}
               />
             </FormItem>
@@ -95,7 +95,8 @@ class AuthResetPassword extends React.PureComponent {
               <TextInput
                 label="Confirm New Password"
                 type="password"
-                onChange={e => this.setState({password: e.target.value})}
+                value={this.state.confirmPassword}
+                onChange={e => this.setState({confirmPassword: e.target.value})}
               />
             </FormItem>
             <Button onClick={this.onSubmit} style={{width: 150}}>

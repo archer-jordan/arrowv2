@@ -11,18 +11,18 @@ const Text = styled.div`
 
 const columns = [
   {
-    title: 'Company Name',
+    title: 'ID',
     dataIndex: 'id',
     key: 'id',
-    render: (text, record) => <Text>{record.title}</Text>,
+    render: (text, record) => <Text>{record.assignedId}</Text>,
   },
   {
-    title: 'ID',
-    render: (text, record) => <Text>{record.assignedId || 'N/A'}</Text>,
+    title: 'Last Name',
+    render: (text, record) => <Text>{record.lastName || 'N/A'}</Text>,
   },
   {
-    title: 'Status',
-    render: (text, record) => <Text>{record.status}</Text>,
+    title: 'First Name',
+    render: (text, record) => <Text>{record.firstName || 'N/A'}</Text>,
   },
 ];
 
@@ -34,32 +34,19 @@ const MockTableHeaderBackground = styled.div`
   top: 0;
 `;
 
-class CustomersTable extends React.PureComponent {
+class EmployeesTable extends React.PureComponent {
   render() {
-    const {
-      history,
-      loading,
-      dataSource,
-      total,
-      current,
-      onPageChange,
-    } = this.props;
+    const {history, dataSource, onEdit} = this.props;
     return (
       <div style={{position: 'relative'}}>
         <MockTableHeaderBackground />
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={{
-            pageSize: 5,
-            total,
-            current: current || 1,
-            onChange: (page, pageSize) => onPageChange(page),
-          }}
-          loading={loading}
+          pagination={false}
           onRow={(record, rowIndex) => {
             return {
-              onClick: event => history.push(`/admin/customers/${record.id}`), // click row
+              onClick: event => onEdit(record), // history.push(`/admin/employees/${record.id}`), // click row
               onDoubleClick: event => {}, // double click row
               onContextMenu: event => {}, // right button click row
               onMouseEnter: event => {}, // mouse enter row
@@ -72,4 +59,4 @@ class CustomersTable extends React.PureComponent {
   }
 }
 
-export default CustomersTable;
+export default EmployeesTable;

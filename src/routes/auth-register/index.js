@@ -1,19 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import { validate } from "email-validator";
 //COMPONENTS
-import TextInput from 'components/inputs/TextInput';
-import Button from 'components/common/Button';
-import Icon from 'components/common/Icon';
-import FormItem from 'components/common/FormItem';
-import message from 'components/common/message';
+import TextInput from "components/inputs/TextInput";
+import Button from "components/common/Button";
+import Icon from "components/common/Icon";
+import ErrorBlock from "components/common/ErrorBlock";
+import FormItem from "components/common/FormItem";
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import logoWhiteSVG from "lib/media/arrow-logo-white.png";
 // LIB
-import AuthHelpers from 'lib/helpers/AuthHelpers';
-import ErrorHelpers from 'lib/helpers/ErrorHelpers';
+import ErrorHelpers from "lib/helpers/ErrorHelpers";
 // APOLLO
-import {graphql} from 'react-apollo';
-import registerAccount from 'ApolloClient/Mutations/registerAccount';
+import { graphql } from "react-apollo";
+import registerAccount from "ApolloClient/Mutations/registerAccount";
 
 const FormContainer = styled.div`
   width: 250px;
@@ -49,14 +49,17 @@ const Text = styled.div`
 // STYLED-COMPONENTS
 // ========================================
 const SuccessCard = () => (
-  <div style={{minHeight: 257, paddingTop: 200}}>
-    <div style={{textAlign: 'center'}}>
+  <div style={{ minHeight: 257, paddingTop: 200 }}>
+    <div style={{ textAlign: "center" }}>
       <Icon
-        style={{fontSize: 40, marginBottom: 10, color: '#fff'}}
+        style={{ fontSize: 40, marginBottom: 10, color: "#fff" }}
         type="check-circle"
       />
-      <h2 style={{textAlign: 'center', margin: 0, fontSize: 18, color: '#fff'}}>
-        Please Check Your Email!
+      <h2
+        style={{ textAlign: "center", margin: 0, fontSize: 18, color: "#fff" }}
+      >
+        if your email exists in our system, you will be sent a confirmation
+        email
       </h2>
     </div>
   </div>
@@ -67,45 +70,60 @@ class AuthRegister extends React.PureComponent {
     email: null,
     emailSent: false,
     loading: false,
+    errors: []
   };
   onSubmit = async () => {
-    this.setState({loading: true});
     try {
+      // check that user added an email
+      if (!this.state.email) {
+        return this.setState({ errors: ["Please provide an email"] });
+      }
+      // check if its a valid email
+      if (!validate(this.state.email)) {
+        return this.setState({ errors: ["That is not a valid email"] });
+      }
+      this.setState({ loading: true });
       await this.props.registerAccount({
         variables: {
-          email: this.state.email,
-        },
+          email: this.state.email
+        }
       });
+      this.setState({ loading: false, emailSent: true });
     } catch (err) {
-      let errMessage = err.message.replace('GraphQL', '');
-      if (err && err.message.includes('Incorrect password [403]')) {
-        errMessage = 'You have entered an invalid username or password';
+      let errMessage = err.message.replace("GraphQL", "");
+      if (err && err.message.includes("Incorrect password [403]")) {
+        errMessage = "You have entered an invalid username or password";
       }
       return this.setState({
         loading: false,
-        errors: [ErrorHelpers.cleanErrorString(errMessage)],
+        errors: [ErrorHelpers.cleanErrorString(errMessage)]
       });
     }
-    this.setState({loading: false, emailSent: true});
   };
   render() {
     return (
       <Background>
         {!this.state.emailSent ? (
           <FormContainer>
-            {' '}
+            {" "}
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
               <FormItem>
                 <TextInput
                   label="Email"
-                  onChange={e => this.setState({email: e.target.value})}
+                  value={this.state.email}
+                  onChange={e => this.setState({ email: e.target.value })}
                 />
               </FormItem>
+              {this.state.errors && this.state.errors.length > 0 && (
+                <FormItem>
+                  <ErrorBlock errors={this.state.errors} />
+                </FormItem>
+              )}
               <Button
                 onClick={this.onSubmit}
                 disabled={this.state.loading}
-                style={{width: 150}}
+                style={{ width: 150 }}
               >
                 Send me a link
               </Button>
@@ -130,6 +148,6 @@ class AuthRegister extends React.PureComponent {
   }
 }
 
-export default graphql(registerAccount, {name: 'registerAccount'})(
+export default graphql(registerAccount, { name: "registerAccount" })(
   AuthRegister
 );

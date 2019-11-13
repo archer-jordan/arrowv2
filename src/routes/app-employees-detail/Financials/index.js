@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
-import TopContainer from 'components/common/TopContainer';
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import BigValue from 'components/text/BigValue';
-import BigLabel from 'components/text/BigLabel';
-import PieChart from 'components/common/PieChart';
+import React from "react";
+import styled from "styled-components";
+import TopContainer from "components/common/TopContainer";
+import Row from "components/common/Row";
+import Col from "components/common/Col";
+import BigValue from "components/text/BigValue";
+import BigLabel from "components/text/BigLabel";
+import PieChart from "components/common/PieChart";
 
 const PieChartPlaceholder = styled.div`
   width: 250px;
@@ -24,54 +24,54 @@ const PieChartPlaceholder = styled.div`
 
 const MOCK_DATA = [
   {
-    id: '1',
-    color: '#8CB3CD',
-    title: 'FRINGE DOLLARS',
-    amount: 19642,
+    id: "1",
+    color: "#8CB3CD",
+    title: "FRINGE DOLLARS",
+    amount: 19642
   },
   {
-    id: '2',
-    color: '#145D92',
-    title: 'HEALTH & WELFARE',
-    amount: 12527,
+    id: "2",
+    color: "#145D92",
+    title: "HEALTH & WELFARE",
+    amount: 12527
   },
   {
-    id: '3',
-    color: '#5A89AB',
-    title: 'RETIREMENT',
-    amount: 5740,
-  },
+    id: "3",
+    color: "#5A89AB",
+    title: "RETIREMENT",
+    amount: 5740
+  }
 ];
 
 const ColorCircle = styled.div`
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  background: ${p => (p.color ? p.color : 'red')};
+  background: ${p => (p.color ? p.color : "red")};
 `;
 
-const FinancialRow = ({item}) => {
+const FinancialRow = ({ item }) => {
   return (
     <div
       style={{
         height: 100,
         marginBottom: 24,
-        borderBottom: '1px solid #efefef',
-        position: 'relative',
+        borderBottom: "1px solid #efefef",
+        position: "relative",
         width: 350,
-        maxWidth: '100%',
+        maxWidth: "100%"
       }}
     >
-      <div style={{display: 'inline-block'}}>
+      <div style={{ display: "inline-block" }}>
         <BigLabel>{item.title}</BigLabel>
-        <BigValue style={{fontSize: 40}}>
-          {(item.amount / 100).toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
+        <BigValue style={{ fontSize: 40 }}>
+          {(item.amount / 100).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD"
           })}
         </BigValue>
       </div>
-      <div style={{display: 'inline-block', marginLeft: 16}}>
+      <div style={{ display: "inline-block", marginLeft: 16 }}>
         <ColorCircle color={item.color} />
       </div>
       {/* <div style={{position: 'absolute', right: 50, bottom: 50}}>
@@ -108,20 +108,23 @@ const FinancialRow = ({item}) => {
 class Financials extends React.PureComponent {
   render() {
     return (
-      <div style={{paddingBottom: 90}}>
+      <div style={{ paddingBottom: 90 }}>
         <div>
-          <TopContainer style={{justifyContent: 'flex-end'}}>
+          <TopContainer style={{ justifyContent: "flex-end" }}>
             <div>
-              {' '}
-              <BigValue style={{textAlign: 'right'}}>Anthony Comito</BigValue>
-              <BigLabel style={{textAlign: 'right'}}>
-                christianlonglastname@yahoo.com
+              {" "}
+              <BigValue style={{ textAlign: "right" }}>
+                {" "}
+                {this.props.employee.firstName} {this.props.employee.lastName}
+              </BigValue>
+              <BigLabel style={{ textAlign: "right" }}>
+                {this.props.employee.email}
               </BigLabel>
             </div>
           </TopContainer>
-          <Row gutter={16} style={{marginTop: 30}}>
+          <Row gutter={16} style={{ marginTop: 30 }}>
             <Col xs={16}>
-              {' '}
+              {" "}
               {MOCK_DATA.map(item => (
                 <FinancialRow key={item.id} item={item} />
               ))}
@@ -132,7 +135,7 @@ class Financials extends React.PureComponent {
               </PieChartPlaceholder>
             </Col>
           </Row>
-        </div>{' '}
+        </div>{" "}
       </div>
     );
   }

@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import TopContainer from 'components/common/TopContainer';
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import BigValue from 'components/text/BigValue';
-import BigLabel from 'components/text/BigLabel';
+import React from "react";
+import styled from "styled-components";
+import TopContainer from "components/common/TopContainer";
+import Row from "components/common/Row";
+import Col from "components/common/Col";
+import BigValue from "components/text/BigValue";
+import BigLabel from "components/text/BigLabel";
 // lib
-import checkSVG from 'lib/media/check-circle.svg';
+import checkSVG from "lib/media/check-circle.svg";
 
 const BenefitType = styled(BigLabel)`
   font-weight: 500;
@@ -24,7 +24,7 @@ const RequiredHours = styled(BigLabel)`
 const BenefitRow = () => (
   <Row
     gutter={16}
-    style={{height: 80, marginTop: 24, borderBottom: '1px solid #efefef'}}
+    style={{ height: 80, marginTop: 24, borderBottom: "1px solid #efefef" }}
   >
     <Col xs={12}>
       <BenefitType>TELEDOC</BenefitType>
@@ -44,16 +44,16 @@ const BenefitRow = () => (
 const MOCK_DATA = [
   {
     requiredHours: 40,
-    type: 'type',
+    type: "type"
   },
   {
     requiredHours: 40,
-    type: 'type',
+    type: "type"
   },
   {
     requiredHours: 40,
-    type: 'type',
-  },
+    type: "type"
+  }
 ];
 
 const ColumnTitle = styled.div`
@@ -67,49 +67,51 @@ class Benefits extends React.PureComponent {
     return (
       <div>
         <div>
-          <TopContainer style={{justifyContent: 'flex-end'}}>
+          <TopContainer style={{ justifyContent: "flex-end" }}>
             <div>
-              {' '}
-              <BigValue style={{textAlign: 'right'}}>Anthony Comito</BigValue>
-              <BigLabel style={{textAlign: 'right', textTransform: 'none'}}>
-                christianlonglastname@yahoo.com
+              {" "}
+              <BigValue style={{ textAlign: "right" }}>
+                {this.props.employee.firstName} {this.props.employee.lastName}
+              </BigValue>
+              <BigLabel style={{ textAlign: "right" }}>
+                {this.props.employee.email}
               </BigLabel>
             </div>
           </TopContainer>
-        </div>{' '}
-        <Row gutter={16} style={{marginTop: 16, marginBottom: 24}}>
+        </div>{" "}
+        <Row gutter={16} style={{ marginTop: 16, marginBottom: 24 }}>
           <Col xs={4}>
-            <ColumnTitle style={{marginLeft: 8}}>
+            <ColumnTitle style={{ marginLeft: 8 }}>
               {this.props.month.toUpperCase()} <br />
               HOURS
             </ColumnTitle>
           </Col>
           <Col xs={10}>
             <ColumnTitle>
-              {' '}
+              {" "}
               BENEFIT
-              <br /> TYPE{' '}
+              <br /> TYPE{" "}
             </ColumnTitle>
           </Col>
           <Col xs={5}>
             <ColumnTitle>
-              {' '}
+              {" "}
               REQUIRED <br />
-              HOURS{' '}
+              HOURS{" "}
             </ColumnTitle>
           </Col>
 
           <Col xs={5}>
             <ColumnTitle>
               FEBRUARY <br />
-              ELIGIBILITY{' '}
+              ELIGIBILITY{" "}
             </ColumnTitle>
           </Col>
         </Row>
-        <Row gutter={16} style={{marginTop: 16}}>
+        <Row gutter={16} style={{ marginTop: 16 }}>
           <Col xs={4}>
             <TopContainer>
-              <BigValue style={{textAlign: 'center'}}>41</BigValue>
+              <BigValue style={{ textAlign: "center" }}>41</BigValue>
             </TopContainer>
           </Col>
           <Col xs={20}>

@@ -1,18 +1,21 @@
-import React from 'react';
-import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-import moment from 'moment';
-import queryString from 'query-string';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import queryString from "query-string";
 // COMPONENTS
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import DatePicker from 'components/inputs/DatePicker';
-import SideNav from 'components/common/SideNav';
-import Benefits from './Benefits';
-import Financials from './Financials';
-import Account from './Account';
+import Row from "components/common/Row";
+import Col from "components/common/Col";
+import DatePicker from "components/inputs/DatePicker";
+import SideNav from "components/common/SideNav";
+import Benefits from "./Benefits";
+import Financials from "./Financials";
+import Account from "./Account";
+// APOLLO
+import employeeByIdQuery from "ApolloClient/Queries/employeeById";
+import { Query } from "react-apollo";
 
-const {MonthPicker} = DatePicker;
+const { MonthPicker } = DatePicker;
 
 const DateText = styled.div`
   color: #1371a3;
@@ -48,39 +51,39 @@ const ChangeDate = styled.button`
 
 class AppEmployeesDetail extends React.PureComponent {
   state = {
-    editDate: false,
+    editDate: false
   };
   onParamChange = newValues => {
     let oldParams = queryString.parse(this.props.location.search);
     let newParams = {
       ...oldParams,
-      ...newValues,
+      ...newValues
     };
     let newString = queryString.stringify(newParams);
     this.props.history.push(`?${newString}`);
   };
   checkParams = () => {
     let oldParams = queryString.parse(this.props.location.search);
-    if (!oldParams.tab && oldParams.tab !== 'null') {
+    if (!oldParams.tab && oldParams.tab !== "null") {
       let month = moment()
-        .format('MMMM')
+        .format("MMMM")
         .toLowerCase();
       let year = moment()
-        .format('YYYY')
+        .format("YYYY")
         .toLowerCase();
-      return this.onParamChange({month, year, tab: 'benefits'});
+      return this.onParamChange({ month, year, tab: "benefits" });
     }
     if (
-      (!oldParams.year && oldParams.year !== 'null') ||
-      (!oldParams.month && oldParams.month !== 'null')
+      (!oldParams.year && oldParams.year !== "null") ||
+      (!oldParams.month && oldParams.month !== "null")
     ) {
       let month = moment()
-        .format('MMMM')
+        .format("MMMM")
         .toLowerCase();
       let year = moment()
-        .format('YYYY')
+        .format("YYYY")
         .toLowerCase();
-      return this.onParamChange({month, year});
+      return this.onParamChange({ month, year });
     }
   };
   componentWillMount() {
@@ -89,113 +92,133 @@ class AppEmployeesDetail extends React.PureComponent {
   getNavItems = () => {
     return [
       {
-        label: 'Benefits',
-        activeValue: 'benefits',
+        label: "Benefits",
+        activeValue: "benefits",
         onClick: () =>
           this.onParamChange({
-            tab: 'benefits',
-          }),
+            tab: "benefits"
+          })
       },
       {
-        label: 'Financials',
-        activeValue: 'financials',
+        label: "Financials",
+        activeValue: "financials",
         onClick: () =>
           this.onParamChange({
-            tab: 'financials',
-          }),
+            tab: "financials"
+          })
       },
       {
-        label: 'Account',
-        activeValue: 'account',
+        label: "Account",
+        activeValue: "account",
         onClick: () =>
           this.onParamChange({
-            tab: 'account',
-          }),
-      },
-      {
-        label: 'Password',
-        activeValue: 'password',
-        onClick: () =>
-          this.onParamChange({
-            tab: 'password',
-          }),
-      },
+            tab: "account"
+          })
+      }
+      // {
+      //   label: "Password",
+      //   activeValue: "password",
+      //   onClick: () =>
+      //     this.onParamChange({
+      //       tab: "password"
+      //     })
+      // }
     ];
   };
   render() {
-    const {location, history} = this.props;
+    const { location, history } = this.props;
 
-    const {tab, month, year} = queryString.parse(location.search);
-    const sharedProps = {
-      history,
-      location,
-      month,
-    };
+    let employeeId = this.props.match.params.id;
+
+    const { tab, month, year } = queryString.parse(location.search);
+
     return (
-      <div>
-        <div>
-          <Link to="/employees">Employees</Link> / Mark Wahlberg / {tab}{' '}
-        </div>
-        <Row>
-          <Col xs={24} md={16} />
-          <Col xs={24}>
-            {' '}
-            <div style={{marginBottom: 16}}>
-              <DateText>
-                {month && month.toUpperCase()} {year && year}
-              </DateText>
-              <div style={{position: 'relative'}}>
-                <ChangeDate
-                  onClick={() =>
-                    this.setState({editDate: !this.state.editDate})
-                  }
-                >
-                  Change Month
-                </ChangeDate>
-                <div style={{opacity: 0, position: 'absolute', right: 0}}>
-                  <MonthPicker
-                    open={this.state.editDate}
-                    value={month && moment(`${month} ${year}`, 'MMMM YYYY')}
-                    onChange={value =>
-                      this.onParamChange({
-                        month: value.format('MMMM'),
-                        year: value.format('YYYY'),
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </Col>
-          <Col xs={24} md={6}>
-            <SideNav items={this.getNavItems()} tab={tab} />
-          </Col>
-          <Col xs={24} md={18}>
-            {' '}
+      <Query query={employeeByIdQuery} variables={{ id: employeeId }}>
+        {({ error, loading, data }) => {
+          if (loading) return null;
+          if (error) return null;
+          let employee = data.employeeById;
+
+          const sharedProps = {
+            history,
+            location,
+            month,
+            employee
+          };
+
+          return (
             <div>
-              {(() => {
-                switch (tab) {
-                  case 'financials':
-                    return <Financials {...sharedProps} />;
-                  case 'benefits':
-                    return <Benefits {...sharedProps} />;
-                  case 'account':
-                    return <Account {...sharedProps} />;
-                  case 'password':
-                    return <div {...sharedProps} />;
-                  default:
-                    return <div {...sharedProps} />;
-                }
-              })()}
+              <div>
+                <Link to="/employees">Employees</Link> / {employee.firstName}{" "}
+                {employee.lastName} / {tab}{" "}
+              </div>
+              <Row>
+                <Col xs={24} md={16} />
+                <Col xs={24}>
+                  {" "}
+                  <div style={{ marginBottom: 16 }}>
+                    <DateText>
+                      {month && month.toUpperCase()} {year && year}
+                    </DateText>
+                    <div style={{ position: "relative" }}>
+                      <ChangeDate
+                        onClick={() =>
+                          this.setState({ editDate: !this.state.editDate })
+                        }
+                      >
+                        Change Month
+                      </ChangeDate>
+                      <div
+                        style={{ opacity: 0, position: "absolute", right: 0 }}
+                      >
+                        <MonthPicker
+                          open={this.state.editDate}
+                          value={
+                            month && moment(`${month} ${year}`, "MMMM YYYY")
+                          }
+                          onChange={value =>
+                            this.onParamChange({
+                              month: value.format("MMMM"),
+                              year: value.format("YYYY")
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+                <Col xs={24} md={6}>
+                  <SideNav items={this.getNavItems()} tab={tab} />
+                </Col>
+                <Col xs={24} md={18}>
+                  {" "}
+                  <div>
+                    {(() => {
+                      switch (tab) {
+                        case "financials":
+                          return <Financials {...sharedProps} />;
+                        case "benefits":
+                          return <Benefits {...sharedProps} />;
+                        case "account":
+                          return <Account {...sharedProps} />;
+                        case "password":
+                          return <div {...sharedProps} />;
+                        default:
+                          return <div {...sharedProps} />;
+                      }
+                    })()}
+                  </div>
+                </Col>
+              </Row>
+              {this.state.editDate && (
+                <DatePickerBackground
+                  onClick={() => this.setState({ editDate: false })}
+                />
+              )}
             </div>
-          </Col>
-        </Row>
-        {this.state.editDate && (
-          <DatePickerBackground
-            onClick={() => this.setState({editDate: false})}
-          />
-        )}
-      </div>
+          );
+        }}
+      </Query>
     );
   }
 }

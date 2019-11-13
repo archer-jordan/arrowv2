@@ -29,17 +29,6 @@ export default {
     neutral8: '#CBD2D9',
     neutral9: '#E4E7EB',
     neutral10: '#F5F7FA',
-    // Accent B
-    supportB1: '#05606E',
-    supportB2: '#07818F',
-    supportB3: '#099AA4',
-    supportB4: '#0FB5BA',
-    supportB5: '#1CD4D4',
-    supportB6: '#3AE7E1',
-    supportB7: '#62F4EB',
-    supportB8: '#92FDF2',
-    supportB9: '#C1FEF6',
-    supportB10: '#E1FCF8',
     // Red
     red1: '#610404',
     red2: '#780A0A',

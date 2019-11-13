@@ -7,10 +7,19 @@ import Button from 'components/common/Button';
 import Row from 'components/common/Row';
 import CompanyTypeInpput from 'components/inputs/CompanyTypeInput';
 import Col from 'components/common/Col';
-import Select from 'antd/lib/select';
-import 'antd/lib/select/style/css';
+import Icon from 'components/common/Icon';
+import ErrorBlock from 'components/common/ErrorBlock';
+// APOLLO
+import customerIdAlreadyExists from 'ApolloClient/Queries/customerIdAlreadyExists';
+import {Query} from 'react-apollo';
 
-const {Option} = Select;
+const RedText = styled.div`
+  color: ${p => p.theme.colors.red2};
+`;
+
+const GreenText = styled.div`
+  color: #0e7817;
+`;
 
 const Container = styled.div`
   min-height: 200px;
@@ -23,6 +32,7 @@ class CustomerForm extends React.PureComponent {
   state = {
     title: this.props.title || null,
     companyType: this.props.companyType || null,
+    assignedId: this.props.assignedId || null,
     ein: this.props.ein || null,
     naics: this.props.naics || null,
     sic: this.props.sic || null,
@@ -30,11 +40,64 @@ class CustomerForm extends React.PureComponent {
     zip: this.props.zip || null,
     city: this.props.city || null,
     state: this.props.state || null,
+    errors: [],
+  };
+  isDisabled = () => {
+    if (!this.state.title) {
+      return true;
+    }
+    if (!this.state.companyType) {
+      return true;
+    }
+    if (!this.state.assignedId) {
+      return true;
+    }
+    if (!this.state.ein) {
+      return true;
+    }
+    if (!this.state.street) {
+      return true;
+    }
+    if (!this.state.zip) {
+      return true;
+    }
+    if (!this.state.city) {
+      return true;
+    }
+    if (!this.state.state) {
+      return true;
+    }
   };
   onSubmit = () => {
+    this.setState({errors: []});
+    if (!this.state.title) {
+      return this.setState({errors: ['Please provide a title']});
+    }
+    if (!this.state.companyType) {
+      return this.setState({errors: ['Please provide a company type']});
+    }
+    if (!this.state.assignedId) {
+      return this.setState({errors: ['Please provide an ID']});
+    }
+    if (!this.state.ein) {
+      return this.setState({errors: ['Please provide an EIN']});
+    }
+    if (!this.state.street) {
+      return this.setState({errors: ['Please provide a street']});
+    }
+    if (!this.state.zip) {
+      return this.setState({errors: ['Please provide an zip']});
+    }
+    if (!this.state.city) {
+      return this.setState({errors: ['Please provide an city']});
+    }
+    if (!this.state.state) {
+      return this.setState({errors: ['Please provide an state']});
+    }
     this.props.onSubmit({
       title: this.state.title,
       companyType: this.state.companyType,
+      assignedId: this.state.assignedId,
       ein: this.state.ein,
       naics: this.state.naics,
       sic: this.state.sic,
@@ -49,6 +112,72 @@ class CustomerForm extends React.PureComponent {
     return (
       <Container>
         <Row gutter={16}>
+          <Col xs={12}>
+            <FormItem label="ID">
+              <Input
+                value={this.state.assignedId}
+                onChange={e => this.setState({assignedId: e.target.value})}
+              />
+              {!this.props.editing &&
+                this.state.assignedId !== this.props.assignedId && (
+                  <React.Fragment>
+                    {this.state.assignedId && this.state.assignedId.length < 3 && (
+                      <RedText>
+                        <Icon type="close-circle" style={{marginRight: 4}} />
+                        Please input at least 3 characters
+                      </RedText>
+                    )}
+                    {this.state.assignedId &&
+                      this.state.assignedId.length >= 3 && (
+                        <Query
+                          query={customerIdAlreadyExists}
+                          variables={{assignedId: this.state.assignedId}}
+                          onCompleted={data =>
+                            this.setState({
+                              emailExists: data.customerIdAlreadyExists.exists,
+                            })
+                          }
+                        >
+                          {({data, loading, error}) => {
+                            if (loading)
+                              return (
+                                <div>
+                                  <Icon type="loading" />
+                                </div>
+                              );
+                            if (error) return 'Error';
+                            return (
+                              <div>
+                                {!data.customerIdAlreadyExists.exists ? (
+                                  <GreenText>
+                                    <Icon
+                                      type="check-circle"
+                                      style={{marginRight: 4}}
+                                    />
+                                    ID does not exist
+                                  </GreenText>
+                                ) : (
+                                  <RedText>
+                                    <Icon
+                                      type="close-circle"
+                                      style={{marginRight: 4}}
+                                    />
+                                    ID already exists
+                                  </RedText>
+                                )}
+                              </div>
+                            );
+                          }}
+                        </Query>
+                      )}
+                  </React.Fragment>
+                )}
+            </FormItem>
+          </Col>{' '}
+          <Col xs={12}>
+            <div style={{height: 90}} />{' '}
+          </Col>
+          <Col xs={24} />
           <Col xs={12}>
             <FormItem label="Company Name">
               <Input
@@ -122,7 +251,11 @@ class CustomerForm extends React.PureComponent {
             </FormItem>
           </Col>
         </Row>
-
+        {this.state.errors && this.state.errors.length > 0 && (
+          <FormItem>
+            <ErrorBlock errors={this.state.errors} />
+          </FormItem>
+        )}
         <FormItem>
           {this.props.onCancel && (
             <Button style={{width: 100}} grey onClick={this.props.onCancel}>
@@ -130,7 +263,7 @@ class CustomerForm extends React.PureComponent {
             </Button>
           )}
           <Button
-            disabled={this.props.loading}
+            disabled={this.props.loading || this.isDisabled()}
             style={{width: 140}}
             onClick={this.onSubmit}
           >
