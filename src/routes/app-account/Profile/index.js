@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+// COMPONENTS
 import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
@@ -8,6 +9,8 @@ import Loading from 'components/common/Loading';
 // APOLLO
 import {Query} from 'react-apollo';
 import customerById from 'ApolloClient/Queries/customerById';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
 
 const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
@@ -120,7 +123,9 @@ class Profile extends React.PureComponent {
                     <DataItem label="Zip" value={customer.zip} />
                     <DataItem
                       label="Company Type"
-                      value={customer.companyType}
+                      value={helpers.mapCompanyTypeToLabel(
+                        customer.companyType
+                      )}
                     />
                     <DataItem label="EIN #" value={customer.ein} />{' '}
                   </div>

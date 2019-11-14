@@ -117,7 +117,6 @@ class UserForm extends React.PureComponent {
                 this.setState({email: e.target.value});
                 this.handleFilter(e.target.value);
               }}
-              //onChange={e => this.setState({email: e.target.value})}
             />
             {!this.props.editing && (
               <React.Fragment>
