@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
+import ErrorBlock from 'components/common/ErrorBlock';
 import message from 'components/common/message';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
@@ -46,21 +47,55 @@ const TextButton = styled.button`
 class AuthResetPassword extends React.PureComponent {
   state = {
     loading: false,
+    password: null,
+    confirmPassword: null,
+    errors: [],
   };
   checkPassword = password => {
     return false;
   };
   onSubmit = async () => {
     try {
+      // make sure password has been filled in
+      if (!this.state.password) {
+        return this.setState({errors: ['Please provide an password']});
+      }
+      // make sure password is at least 6 characters
+      if (this.state.password.length < 6) {
+        return this.setState({
+          errors: [
+            'Passwords should be at least 6 characters with at least one special character',
+          ],
+        });
+      }
+      // make sure it includes a special character
+      if (!this.state.password.match(/[_\W0-9]/)) {
+        return this.setState({
+          errors: ['Passwords should be include one special character'],
+        });
+      }
+      // make sure the confirmPassword input has been filled in
+      if (!this.state.confirmPassword) {
+        return this.setState({errors: ['Please confirm your password']});
+      }
+      //
+      if (this.state.confirmPassword !== this.state.password) {
+        return this.setState({errors: ['Your passwords do not match']});
+      }
+
+      // set the form as loading
       this.setState({
         loading: true,
       });
+
+      // call the mutation
       let res = await this.props.resetPassword({
         variables: {
           newPassword: this.state.password,
           token: this.props.match.params.token,
         },
       });
+      // show a success message
       message.success('Password reset. Logging you in...');
       let {accessToken, refreshToken} = res.data.resetPassword.tokens;
       window.localStorage.setItem('arrow_access_token', accessToken);
@@ -68,7 +103,7 @@ class AuthResetPassword extends React.PureComponent {
       this.setState({
         loading: false,
       });
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 500);
     } catch (err) {
       this.setState({
         loading: false,
@@ -99,6 +134,11 @@ class AuthResetPassword extends React.PureComponent {
                 onChange={e => this.setState({confirmPassword: e.target.value})}
               />
             </FormItem>
+            {this.state.errors && this.state.errors.length > 0 && (
+              <FormItem>
+                <ErrorBlock errors={this.state.errors} />
+              </FormItem>
+            )}
             <Button onClick={this.onSubmit} style={{width: 150}}>
               {!this.state.loading ? ' Set password' : '...'}
             </Button>

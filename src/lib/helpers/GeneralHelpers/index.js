@@ -7,4 +7,21 @@ export default {
       return value;
     });
   },
+  mapCompanyTypeToLabel: companyType => {
+    if (!companyType) return '';
+    switch (companyType) {
+      case 'cCorp':
+        return 'C-Corp';
+      case 'sCorp':
+        return 'S-Corp';
+      case 'llc':
+        return 'LLC';
+      case 'llp':
+        return 'LLP';
+      case 'other':
+        return 'Other';
+      default:
+        return '';
+    }
+  },
 };
