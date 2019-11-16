@@ -23,25 +23,28 @@ class Password extends React.PureComponent {
   };
 
   onSubmit = async () => {
-    this.setState({loading: true});
-
     try {
+      // set loading
+      this.setState({loading: true});
+      // await the change password mutation
       await AuthHelpers.changePassword({
         oldPassword: this.state.oldPassword,
         newPassword: this.state.newPassword,
+      });
+      // show the user a success message
+      message.success('Your password was successfully changed...');
+      // reset all the values
+      this.setState({
+        loading: false,
+        oldPassword: undefined,
+        newPassword: undefined,
+        confirmNewPassword: undefined,
       });
     } catch (err) {
       this.setState({loading: false});
       console.log('err', err);
       return message.error(err.message || 'Something went wrong');
     }
-    message.success('New password saved!');
-    this.setState({
-      loading: false,
-      oldPassword: null,
-      newPassword: null,
-      confirmNewPassword: null,
-    });
   };
   render() {
     let disabled =

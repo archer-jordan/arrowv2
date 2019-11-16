@@ -62,7 +62,7 @@ class Users extends React.PureComponent {
           },
         ],
       });
-      message.success('User successfully created!');
+      message.success('User successfully saved');
       this.setState({addNew: false, loading: false});
     } catch (err) {
       console.log(err);
