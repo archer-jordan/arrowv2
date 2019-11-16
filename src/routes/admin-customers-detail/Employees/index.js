@@ -10,8 +10,11 @@ import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
 // APOLLO
 import {Query} from 'react-apollo';
 import employeesQuery from 'ApolloClient/Queries/employees';
+import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
+
+const compose = require('lodash/flowRight');
 
 const UploadButton = styled.input`
   width: 0.1px;
@@ -82,8 +85,7 @@ class Employees extends React.PureComponent {
   };
   onRow = (record, rowIndex) => {
     return {
-      onClick: event => selectedEmployee =>
-        this.setState({selectedEmployee: record}),
+      onClick: () => this.setState({selectedEmployee: record}),
     };
   };
   handleUpload = event => {
@@ -113,6 +115,9 @@ class Employees extends React.PureComponent {
       },
     });
   };
+  onSave = values => {
+    console.log(values);
+  };
   handleTableChange = (pagination, filters, sorter) => {
     if (sorter.order) {
       let sortBy = `${sorter.columnKey}${helpers.capitalize(sorter.order)}`;
@@ -124,7 +129,8 @@ class Employees extends React.PureComponent {
       return (
         <EmployeeForm
           {...this.state.selectedEmployee}
-          onSubmit={values => console.log(values)}
+          onSubmit={this.onSave}
+          loading={this.state.loading}
           onCancel={() => this.setState({selectedEmployee: null})}
         />
       );
@@ -175,7 +181,6 @@ class Employees extends React.PureComponent {
                   })
                 }
                 current={this.state.current}
-                onEdit={selectedEmployee => this.setState({selectedEmployee})}
               />
             );
           }}
@@ -208,6 +213,7 @@ class Employees extends React.PureComponent {
   }
 }
 
-export default graphql(newEmployeesUpload, {name: 'newEmployeesUpload'})(
-  Employees
-);
+export default compose(
+  graphql(saveEmployee, {name: 'saveEmployee'}),
+  graphql(newEmployeesUpload, {name: 'newEmployeesUpload'})
+)(Employees);

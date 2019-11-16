@@ -28,6 +28,9 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 
+  .ant-calendar-column-header-inner {
+    color: #fff !important;
+  }
 
   /* CALENDAR STYLES OVERWRITING ANTD CALENDAR DEFAULT STYLES */
 
@@ -60,12 +63,21 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
-
-  /* TABLE STYLES OVERWRITING ANTD TABLE DEFAULT STYLES */
+  /* ================================================
+    TABLE STYLES OVERWRITING ANTD TABLE DEFAULT STYLES 
+  ==================================================== */
 
   th {
     background: #145d92 !important;
 
+  }
+
+  .ant-table-thead > tr > th .ant-table-column-sorter .ant-table-column-sorter-inner .ant-table-column-sorter-down.on {
+    color: ${theme.colors.support2} !important;
+  }
+
+  .ant-table-thead > tr > th .ant-table-column-sorter .ant-table-column-sorter-inner .ant-table-column-sorter-up.on {
+    color: ${theme.colors.support2} !important;
   }
 
   .ant-table-header-column {

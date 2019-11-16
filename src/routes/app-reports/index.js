@@ -7,7 +7,7 @@ import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import Loading from 'components/common/Loading';
 import Breadcrumb from 'components/common/Breadcrumb';
-import DatePicker from 'components/inputs/DatePicker';
+import MonthPicker from 'components/inputs/MonthPicker';
 import HealthAndWelfare from './HealthAndWelfare';
 import Eligibility from './Eligibility';
 import Retirement from './Retirement';
@@ -17,8 +17,6 @@ import SideNav from 'components/common/SideNav';
 // APOLLO
 import {Query} from 'react-apollo';
 import companyReports from 'ApolloClient/Queries/companyReports';
-
-const {MonthPicker} = DatePicker;
 
 const DateText = styled.div`
   color: #1371a3;

@@ -35,6 +35,7 @@ class UsersTable extends React.PureComponent {
           dataSource={dataSource}
           columns={columns}
           pagination={false}
+          rowKey="id"
           onRow={(record, rowIndex) => {
             return {
               onClick: event => onClick(record), // click row
