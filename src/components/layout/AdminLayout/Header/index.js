@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import queryString from "query-string";
-import styled from "styled-components";
-import Row from "components/common/Row";
-import Col from "components/common/Col";
+import React, {useState} from 'react';
+import {withRouter} from 'react-router-dom';
+import styled from 'styled-components';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 // LIB
-import logoWhiteSVG from "lib/media/arrow-logo-white.png";
-import hamburgerSVG from "lib/media/hamburger-menu.svg";
+import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import hamburgerSVG from 'lib/media/hamburger-menu.svg';
 // import DrawerContent from './DrawerContent';
-import Drawer from "antd/lib/drawer";
-import "antd/lib/drawer/style/css";
+import Drawer from 'antd/lib/drawer';
+import 'antd/lib/drawer/style/css';
 // APOLLO
-import AuthHelpers from "lib/helpers/AuthHelpers";
-import ApolloClient from "ApolloClient/index.js";
+import AuthHelpers from 'lib/helpers/AuthHelpers';
+import ApolloClient from 'ApolloClient/index.js';
 
 const HeaderContainer = styled.div`
   background: #145d92;
@@ -54,50 +53,49 @@ const ShowMobileCol = styled(Col)`
   }
 `;
 
-const Header = ({ history, location, currentUser }) => {
+const Header = ({history, location, currentUser}) => {
   const [visisble, setVisible] = useState(false);
-  const { tab } = queryString.parse(location.search);
 
   const onLogout = async () => {
     await AuthHelpers.signOut(currentUser.id);
     await ApolloClient.resetStore();
-    return history.push("/");
+    return history.push('/');
   };
   return (
     <HeaderContainer>
       <Row
         style={{
           height: 80,
-          margin: "auto",
+          margin: 'auto',
           width: 1150,
-          maxWidth: "90%",
-          display: "flex",
-          alignItems: "center"
+          maxWidth: '90%',
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
-        {" "}
+        {' '}
         <Col xs={6}>
           <img
             src={logoWhiteSVG}
             alt="logo-white"
             height="40"
-            onClick={() => history.push("/admin/customers")}
-            style={{ cursor: "pointer" }}
+            onClick={() => history.push('/admin/customers')}
+            style={{cursor: 'pointer'}}
           />
         </Col>
         <Col xs={10}></Col>
-        <MobileCol xs={8} style={{ textAlign: "right" }}>
+        <MobileCol xs={8} style={{textAlign: 'right'}}>
           <Username>
-            logged-in as <strong>{currentUser.email}</strong>{" "}
+            logged-in as <strong>{currentUser.email}</strong>{' '}
             <SignoutBtn onClick={onLogout}>sign-out</SignoutBtn>
           </Username>
         </MobileCol>
         <ShowMobileCol xs={4} />
-        <ShowMobileCol xs={2} style={{ textAlign: "right" }}>
-          <img onClick={() => setVisible(true)} src={hamburgerSVG} alt="menu" />{" "}
+        <ShowMobileCol xs={2} style={{textAlign: 'right'}}>
+          <img onClick={() => setVisible(true)} src={hamburgerSVG} alt="menu" />{' '}
           <Drawer onClose={() => setVisible(false)} visible={visisble}></Drawer>
         </ShowMobileCol>
-      </Row>{" "}
+      </Row>{' '}
     </HeaderContainer>
   );
 };

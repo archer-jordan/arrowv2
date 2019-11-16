@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
 import styled from 'styled-components';
@@ -7,11 +6,6 @@ import styled from 'styled-components';
 const Text = styled.div`
   font-weight: 600;
   color: #0f466a;
-  font-family: ${p => p.theme.fontFamily};
-`;
-
-const TextLink = styled(Link)`
-  font-weight: 600;
   font-family: ${p => p.theme.fontFamily};
 `;
 
@@ -32,20 +26,11 @@ const columns = [
   },
 ];
 
-const MockTableHeaderBackground = styled.div`
-  background: blue;
-  height: 50px;
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-`;
-
 class UsersTable extends React.PureComponent {
   render() {
     const {dataSource, onClick} = this.props;
     return (
       <div style={{position: 'relative'}}>
-        <MockTableHeaderBackground />
         <Table
           dataSource={dataSource}
           columns={columns}

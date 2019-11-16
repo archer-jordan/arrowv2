@@ -79,6 +79,7 @@ class AdminHome extends React.PureComponent {
               width={'700px'}
               onChange={e => this.setState({searchText: e.target.value})}
               label="search by name or ID#"
+              value={this.state.searchText}
             />
           </Col>
           <Col xs={4}></Col>
