@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
 import moment from 'moment';
@@ -11,9 +10,10 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const TextLink = styled(Link)`
+const TextLink = styled(Text)`
   font-weight: 600;
   font-family: ${p => p.theme.fontFamily};
+  color: ${p => p.theme.colors.support2};
 `;
 
 const columns = [

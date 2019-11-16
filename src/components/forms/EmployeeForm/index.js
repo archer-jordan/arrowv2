@@ -3,9 +3,11 @@ import styled from 'styled-components';
 // COMPONENTS
 import FormItem from 'components/common/FormItem';
 import Input from 'components/inputs/Input';
+import DateInput from 'components/inputs/DatePicker';
 import Button from 'components/common/Button';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
+import moment from 'moment';
 
 const Container = styled.div`
   min-height: 200px;
@@ -21,7 +23,10 @@ class EmployeeForm extends React.PureComponent {
     assignedId: this.props.assignedId || null,
     status: this.props.status || null,
     email: this.props.email || null,
-    dob: this.props.dob || null,
+    dob: this.props.dob ? moment(parseInt(this.props.dob)) : null,
+    hireDate: this.props.hireDate
+      ? moment(parseInt(this.props.hireDate))
+      : null,
     // location
     street: this.props.street || null,
     zip: this.props.zip || null,
@@ -38,6 +43,8 @@ class EmployeeForm extends React.PureComponent {
       assignedId: this.state.assignedId,
       email: this.state.email,
       status: this.state.status,
+      hireDate: this.hireDate.valueOf(),
+      dob: this.dob.valueOf(),
       // location
       street: this.state.street,
       zip: this.state.zip,
@@ -75,9 +82,9 @@ class EmployeeForm extends React.PureComponent {
           </Col>
           <Col xs={12}>
             <FormItem label="Hire Date">
-              <Input
-                value={this.state.email}
-                onChange={e => this.setState({email: e.target.value})}
+              <DateInput
+                value={this.state.hireDate}
+                onChange={e => this.setState({hireDate: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -99,7 +106,7 @@ class EmployeeForm extends React.PureComponent {
           </Col>
           <Col xs={12}>
             <FormItem label="DOB">
-              <Input
+              <DateInput
                 value={this.state.dob}
                 onChange={e => this.setState({dob: e.target.value})}
               />

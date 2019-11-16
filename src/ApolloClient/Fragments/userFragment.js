@@ -7,6 +7,8 @@ export default gql`
     id
     email
     roles
+    title
+    phone
     firstName
     lastName
     image {

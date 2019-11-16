@@ -93,7 +93,7 @@ class AppEmployees extends React.PureComponent {
   };
   onRow = (record, rowIndex) => {
     return {
-      onClick: event => this.props.history.push(`/employees/${record.id}`), // click row
+      onClick: () => this.props.history.push(`/employees/${record.id}`), // click row
     };
   };
   render() {
