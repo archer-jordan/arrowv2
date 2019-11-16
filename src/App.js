@@ -4,8 +4,7 @@ import theme, {GlobalStyle} from 'lib/theme';
 import {ThemeProvider} from 'styled-components';
 import AppRoutes from './routes/index';
 import {ApolloProvider} from 'react-apollo';
-// APOLLO
-import client from 'ApolloClient';
+import client from 'ApolloClient/index.js';
 
 export default () => (
   <ApolloProvider client={client}>

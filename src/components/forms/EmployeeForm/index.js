@@ -5,20 +5,7 @@ import FormItem from 'components/common/FormItem';
 import Input from 'components/inputs/Input';
 import Button from 'components/common/Button';
 import Row from 'components/common/Row';
-import CompanyTypeInpput from 'components/inputs/CompanyTypeInput';
 import Col from 'components/common/Col';
-import Icon from 'components/common/Icon';
-// APOLLO
-import customerIdAlreadyExists from 'ApolloClient/Queries/customerIdAlreadyExists';
-import {Query} from 'react-apollo';
-
-const RedText = styled.div`
-  color: ${p => p.theme.colors.red2};
-`;
-
-const GreenText = styled.div`
-  color: #0e7817;
-`;
 
 const Container = styled.div`
   min-height: 200px;
@@ -27,7 +14,7 @@ const Container = styled.div`
   border-radius: 5px;
 `;
 
-class CustomerForm extends React.PureComponent {
+class EmployeeForm extends React.PureComponent {
   state = {
     lastName: this.props.lastName || null,
     firstName: this.props.firstName || null,
@@ -180,8 +167,8 @@ class CustomerForm extends React.PureComponent {
   }
 }
 
-CustomerForm.defaultProps = {
+EmployeeForm.defaultProps = {
   buttonText: 'Save Changes',
 };
 
-export default CustomerForm;
+export default EmployeeForm;

@@ -16,14 +16,6 @@ const TextLink = styled(Link)`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const MockTableHeaderBackground = styled.div`
-  background: blue;
-  height: 50px;
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-`;
-
 const columns = [
   {
     title: 'ID',
@@ -63,18 +55,10 @@ const columns = [
 
 class EmployeesTable extends React.PureComponent {
   render() {
-    const {
-      history,
-      total,
-      loading,
-      current,
-      dataSource,
-      onPageChange,
-    } = this.props;
+    const {total, loading, current, dataSource, onPageChange} = this.props;
 
     return (
       <div style={{position: 'relative'}}>
-        <MockTableHeaderBackground />
         <Table
           dataSource={dataSource}
           columns={columns}
