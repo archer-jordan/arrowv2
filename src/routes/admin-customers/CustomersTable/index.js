@@ -9,23 +9,6 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const columns = [
-  {
-    title: 'Company Name',
-    dataIndex: 'id',
-    key: 'id',
-    render: (text, record) => <Text>{record.title}</Text>,
-  },
-  {
-    title: 'ID',
-    render: (text, record) => <Text>{record.assignedId || 'N/A'}</Text>,
-  },
-  {
-    title: 'Status',
-    render: (text, record) => <Text>{record.status}</Text>,
-  },
-];
-
 const MockTableHeaderBackground = styled.div`
   background: blue;
   height: 50px;
@@ -44,6 +27,28 @@ class CustomersTable extends React.PureComponent {
       current,
       onPageChange,
     } = this.props;
+
+    const columns = [
+      {
+        title: 'Company Name',
+        key: 'title',
+        sorter: () => {},
+        render: (text, record) => <Text>{record.title}</Text>,
+      },
+      {
+        title: 'ID',
+        key: 'assignedId',
+        sorter: () => {},
+        render: (text, record) => <Text>{record.assignedId || 'N/A'}</Text>,
+      },
+      {
+        title: 'Status',
+        key: 'status',
+        sorter: () => {},
+        render: (text, record) => <Text>{record.status}</Text>,
+      },
+    ];
+
     return (
       <div style={{position: 'relative'}}>
         <MockTableHeaderBackground />
@@ -56,7 +61,9 @@ class CustomersTable extends React.PureComponent {
             current: current || 1,
             onChange: (page, pageSize) => onPageChange(page),
           }}
+          rowKey="id"
           loading={loading}
+          onChange={this.props.handleTableChange}
           onRow={(record, rowIndex) => {
             return {
               onClick: event => history.push(`/admin/customers/${record.id}`), // click row

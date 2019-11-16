@@ -16,31 +16,41 @@ const TextLink = styled(Link)`
   font-family: ${p => p.theme.fontFamily};
 `;
 
+const MockTableHeaderBackground = styled.div`
+  background: blue;
+  height: 50px;
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+`;
+
 const columns = [
   {
     title: 'ID',
-    dataIndex: 'key',
-    key: 'key',
+    key: 'assignedId',
+    sorter: () => {},
     width: 25,
     render: (text, record) => <TextLink>{record.assignedId}</TextLink>,
   },
   {
     title: 'Last Name',
-    dataIndex: 'lastName',
     key: 'lastName',
+    sorter: () => {},
     width: 100,
     render: (text, record) => <Text>{record.lastName}</Text>,
   },
   {
     title: 'First Name',
-    dataIndex: 'firtName',
-    key: 'firtName',
+    key: 'firstName',
+    sorter: () => {},
     width: 100,
     render: (text, record) => <Text>{record.firstName}</Text>,
   },
   {
     title: 'Hire Date',
     width: 100,
+    key: 'hireDate',
+    sorter: () => {},
     render: record => (
       <Text>
         {record.hireDate
@@ -50,14 +60,6 @@ const columns = [
     ),
   },
 ];
-
-const MockTableHeaderBackground = styled.div`
-  background: blue;
-  height: 50px;
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-`;
 
 class EmployeesTable extends React.PureComponent {
   render() {
@@ -69,12 +71,14 @@ class EmployeesTable extends React.PureComponent {
       dataSource,
       onPageChange,
     } = this.props;
+
     return (
       <div style={{position: 'relative'}}>
         <MockTableHeaderBackground />
         <Table
           dataSource={dataSource}
           columns={columns}
+          rowKey="id"
           pagination={{
             pageSize: 5,
             total,
@@ -82,14 +86,8 @@ class EmployeesTable extends React.PureComponent {
             onChange: (page, pageSize) => onPageChange(page),
           }}
           loading={loading}
-          onChange={(pagination, filters, sorter) =>
-            console.log(pagination, filters, sorter)
-          }
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: event => history.push(`/employees/${record.id}`), // click row
-            };
-          }}
+          onChange={this.props.handleTableChange}
+          onRow={this.props.onRow}
         />{' '}
       </div>
     );
