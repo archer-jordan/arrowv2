@@ -46,16 +46,16 @@ const TextButton = styled.button`
 // STYLED-COMPONENTS
 // ========================================
 const SuccessCard = () => (
-  <div style={{height: 257}}>
+  <div style={{minHeight: 257, paddingTop: 200}}>
     <div style={{textAlign: 'center'}}>
-      <Icon style={{fontSize: 50, marginBottom: 10}} type="like-o" />
-      <h2 style={{textAlign: 'center', margin: 0, color: '#000'}}>
-        Please Check Your Email!
+      <Icon
+        style={{fontSize: 40, marginBottom: 10, color: '#fff'}}
+        type="check-circle"
+      />
+      <h2 style={{textAlign: 'center', margin: 0, fontSize: 18, color: '#fff'}}>
+        if your email exists in our system, you will be sent a password reset
+        email
       </h2>
-      <h3 style={{textAlign: 'center', margin: 0, color: '#888'}}>
-        A password reset link has been <br />
-        sent to your email!
-      </h3>
     </div>
   </div>
 );
@@ -94,6 +94,7 @@ class AuthForgotPassword extends React.PureComponent {
               <FormItem>
                 <TextInput
                   label="Email"
+                  value={this.state.email}
                   onChange={e => this.setState({email: e.target.value})}
                 />
               </FormItem>

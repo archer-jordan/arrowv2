@@ -7,6 +7,10 @@ export default {
       return value;
     });
   },
+  capitalize: s => {
+    if (typeof s !== 'string') return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  },
   mapCompanyTypeToLabel: companyType => {
     if (!companyType) return '';
     switch (companyType) {

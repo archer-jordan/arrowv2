@@ -4,13 +4,15 @@ import Col from 'components/common/Col';
 import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
 import TextInput from 'components/inputs/TextInput';
-import EmployeesTable from './EmployeesTable';
+import EmployeesTable from 'components/common/EmployeesTable';
 import Papa from 'papaparse';
 import moment from 'moment';
 // APOLLO
 import {Query} from 'react-apollo';
 import employeesQuery from 'ApolloClient/Queries/employees';
 import client from 'ApolloClient/index.js';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
 
 class AppEmployees extends React.PureComponent {
   state = {
@@ -19,6 +21,7 @@ class AppEmployees extends React.PureComponent {
     skip: 0,
     downloading: false,
     current: 1,
+    sortBy: 'lastNameAscend',
   };
   onSearch = () => {
     this.setState({
@@ -82,6 +85,17 @@ class AppEmployees extends React.PureComponent {
       console.log(err);
     }
   };
+  handleTableChange = (pagination, filters, sorter) => {
+    if (sorter.order) {
+      let sortBy = `${sorter.columnKey}${helpers.capitalize(sorter.order)}`;
+      this.setState({sortBy});
+    }
+  };
+  onRow = (record, rowIndex) => {
+    return {
+      onClick: event => this.props.history.push(`/employees/${record.id}`), // click row
+    };
+  };
   render() {
     return (
       <div style={{width: 900, margin: 'auto', maxWidth: '100%'}}>
@@ -135,6 +149,7 @@ class AppEmployees extends React.PureComponent {
             customerId: this.props.currentUser.companyId,
             searchText: this.state.searchText,
             skip: this.state.skip,
+            sortBy: this.state.sortBy,
           }}
         >
           {({data, loading, error}) => {
@@ -145,6 +160,8 @@ class AppEmployees extends React.PureComponent {
                 dataSource={!loading ? data.employees.employees : []}
                 total={!loading ? data.employees.count : null}
                 loading={loading}
+                onRow={this.onRow}
+                handleTableChange={this.handleTableChange}
                 onPageChange={page =>
                   this.setState({
                     skip: page === 1 ? 0 : (page - 1) * 5,

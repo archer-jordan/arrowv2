@@ -11,6 +11,8 @@ import Col from 'components/common/Col';
 import message from 'components/common/message';
 import Button from 'components/common/Button';
 import CustomersTable from './CustomersTable';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
 
 class AdminHome extends React.PureComponent {
   state = {
@@ -19,6 +21,7 @@ class AdminHome extends React.PureComponent {
     searchText: '',
     skip: 0,
     current: 1,
+    sortBy: 'titleAscend',
   };
   onCreateCustomer = async values => {
     try {
@@ -46,6 +49,13 @@ class AdminHome extends React.PureComponent {
       this.props.history.push(`/admin/customers/${res.data.saveCustomer.id}`);
     } catch (err) {
       console.log(err);
+    }
+  };
+  handleTableChange = (pagination, filters, sorter) => {
+    console.log(sorter.order);
+    if (sorter.order) {
+      let sortBy = `${sorter.columnKey}${helpers.capitalize(sorter.order)}`;
+      this.setState({sortBy});
     }
   };
   render() {
@@ -81,7 +91,11 @@ class AdminHome extends React.PureComponent {
 
         <Query
           query={customersQuery}
-          variables={{searchText: this.state.searchText, skip: this.state.skip}}
+          variables={{
+            searchText: this.state.searchText,
+            skip: this.state.skip,
+            sortBy: this.state.sortBy,
+          }}
         >
           {({data, loading, error}) => {
             if (error) return 'error';
@@ -90,6 +104,7 @@ class AdminHome extends React.PureComponent {
                 history={this.props.history}
                 dataSource={!loading ? data.customers.customers : []}
                 total={!loading ? data.customers.count : null}
+                handleTableChange={this.handleTableChange}
                 onPageChange={page =>
                   this.setState({
                     skip: page === 1 ? 0 : (page - 1) * 5,

@@ -5,6 +5,7 @@ import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
+import ErrorBlock from 'components/common/ErrorBlock';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 // APOLLO
@@ -44,8 +45,40 @@ const TextButton = styled.button`
 `;
 
 class AuthResetPassword extends React.PureComponent {
+  state = {
+    loading: false,
+    password: null,
+    confirmPassword: null,
+    errors: [],
+  };
   onSubmit = async () => {
     try {
+      // make sure password has been filled in
+      if (!this.state.password) {
+        return this.setState({errors: ['Please provide an password']});
+      }
+      // make sure password is at least 6 characters
+      if (this.state.password.length < 6) {
+        return this.setState({
+          errors: [
+            'Passwords should be at least 6 characters with at least one special character',
+          ],
+        });
+      }
+      // make sure it includes a special character
+      if (!this.state.password.match(/[_\W0-9]/)) {
+        return this.setState({
+          errors: ['Passwords should be include one special character'],
+        });
+      }
+      // make sure the confirmPassword input has been filled in
+      if (!this.state.confirmPassword) {
+        return this.setState({errors: ['Please confirm your password']});
+      }
+      //
+      if (this.state.confirmPassword !== this.state.password) {
+        return this.setState({errors: ['Your passwords do not match']});
+      }
       let res = await this.props.resetPassword({
         variables: {
           newPassword: this.state.password,
@@ -86,6 +119,11 @@ class AuthResetPassword extends React.PureComponent {
                 onChange={e => this.setState({password: e.target.value})}
               />
             </FormItem>
+            {this.state.errors && this.state.errors.length > 0 && (
+              <FormItem>
+                <ErrorBlock errors={this.state.errors} />
+              </FormItem>
+            )}
             <Button onClick={this.onSubmit} style={{width: 150}}>
               Reset password
             </Button>

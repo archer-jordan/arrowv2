@@ -2,15 +2,16 @@ import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import Papa from 'papaparse';
-import EmployeesTable from './EmployeesTable';
-import Loading from 'components/common/Loading';
 import EmployeeForm from 'components/forms/EmployeeForm';
+import EmployeesTable from 'components/common/EmployeesTable';
 // APOLLO
 import {graphql} from 'react-apollo';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
 // APOLLO
 import {Query} from 'react-apollo';
 import employeesQuery from 'ApolloClient/Queries/employees';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
 
 const UploadButton = styled.input`
   width: 0.1px;
@@ -51,6 +52,10 @@ class Employees extends React.PureComponent {
     loading: false,
     editManually: false,
     selectedEmployee: null,
+    //
+    skip: 0,
+    current: 1,
+    sortBy: 'lastNameAscend',
   };
   formatRow = row => {
     return {
@@ -73,6 +78,12 @@ class Employees extends React.PureComponent {
       ssn: row['SSN/Fed ID'],
       city: row['City'],
       status: row['Status'],
+    };
+  };
+  onRow = (record, rowIndex) => {
+    return {
+      onClick: event => selectedEmployee =>
+        this.setState({selectedEmployee: record}),
     };
   };
   handleUpload = event => {
@@ -101,6 +112,12 @@ class Employees extends React.PureComponent {
         stopLoading();
       },
     });
+  };
+  handleTableChange = (pagination, filters, sorter) => {
+    if (sorter.order) {
+      let sortBy = `${sorter.columnKey}${helpers.capitalize(sorter.order)}`;
+      this.setState({sortBy});
+    }
   };
   render() {
     if (this.state.selectedEmployee) {
@@ -135,16 +152,29 @@ class Employees extends React.PureComponent {
       return (
         <Query
           query={employeesQuery}
-          variables={{customerId: this.props.customer.id}}
+          variables={{
+            customerId: this.props.customer.id,
+            skip: this.state.skip,
+            sortBy: this.state.sortBy,
+          }}
         >
           {({data, loading, error}) => {
-            if (loading) return <Loading />;
             if (error) return 'error';
-            if (data.employees.count === 0) return 'No employees';
             return (
               <EmployeesTable
                 history={this.props.history}
-                dataSource={data.employees.employees}
+                dataSource={!loading ? data.employees.employees : []}
+                total={!loading ? data.employees.count : null}
+                loading={loading}
+                onRow={this.onRow}
+                handleTableChange={this.handleTableChange}
+                onPageChange={page =>
+                  this.setState({
+                    skip: page === 1 ? 0 : (page - 1) * 5,
+                    current: page,
+                  })
+                }
+                current={this.state.current}
                 onEdit={selectedEmployee => this.setState({selectedEmployee})}
               />
             );
