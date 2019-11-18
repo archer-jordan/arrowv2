@@ -70,6 +70,7 @@ class CustomerForm extends React.PureComponent {
   };
   onSubmit = () => {
     this.setState({errors: []});
+
     if (!this.state.title) {
       return this.setState({errors: ['Please provide a title']});
     }
@@ -78,6 +79,9 @@ class CustomerForm extends React.PureComponent {
     }
     if (!this.state.assignedId) {
       return this.setState({errors: ['Please provide an ID']});
+    }
+    if (this.state.assignedIdExists) {
+      return this.setState({errors: ['This ID already exists']});
     }
     if (!this.state.ein) {
       return this.setState({errors: ['Please provide an EIN']});
@@ -134,7 +138,8 @@ class CustomerForm extends React.PureComponent {
                           variables={{assignedId: this.state.assignedId}}
                           onCompleted={data =>
                             this.setState({
-                              emailExists: data.customerIdAlreadyExists.exists,
+                              assignedIdExists:
+                                data.customerIdAlreadyExists.exists,
                             })
                           }
                         >
