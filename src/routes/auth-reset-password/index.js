@@ -109,6 +109,7 @@ class AuthResetPassword extends React.PureComponent {
               <TextInput
                 label="New Password"
                 type="password"
+                value={this.state.password}
                 onChange={e => this.setState({password: e.target.value})}
               />
             </FormItem>
@@ -116,7 +117,8 @@ class AuthResetPassword extends React.PureComponent {
               <TextInput
                 label="Confirm New Password"
                 type="password"
-                onChange={e => this.setState({password: e.target.value})}
+                value={this.state.confirmPassword}
+                onChange={e => this.setState({confirmPassword: e.target.value})}
               />
             </FormItem>
             {this.state.errors && this.state.errors.length > 0 && (
