@@ -16,7 +16,9 @@ import DownloadXL from './DownloadXL';
 import SideNav from 'components/common/SideNav';
 // APOLLO
 import {Query} from 'react-apollo';
-import companyReports from 'ApolloClient/Queries/companyReports';
+import customerReport from 'ApolloClient/Queries/customerReport';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
 
 const DateText = styled.div`
   color: #1371a3;
@@ -194,20 +196,21 @@ class AppReports extends React.PureComponent {
           </Col>
           <Col xs={24} md={18}>
             <Query
-              query={companyReports}
+              query={customerReport}
               variables={{
-                companyId: this.props.currentUser.companyId,
-                month: 'November',
-                year: '2019',
+                customerId: this.props.currentUser.companyId,
+                month: moment(helpers.capitalize(month), 'MMMM').format('M'),
+                year: year,
               }}
             >
               {({loading, data, error}) => {
                 if (loading) return <Loading />;
                 if (error) return 'error...';
+                if (!data.customerReport) return 'No results';
                 const sharedProps = {
                   history,
                   location,
-                  report: data.companyReports,
+                  report: data.customerReport,
                 };
                 return (
                   <div>
