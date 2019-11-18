@@ -8,8 +8,7 @@ const AppNavContainer = styled.div`
   border-bottom: 1px solid #efefef;
 `;
 
-const NavItemContainer = styled(Link)`
-  color: ${p => (p.active ? p.theme.colors.support1 : '#fff')} !important;
+const NavItemContainer = styled.div`
   text-align: center;
   cursor: pointer;
   letter-spacing: 1px;
@@ -17,7 +16,10 @@ const NavItemContainer = styled(Link)`
   text-decoration: none;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
-  &:hover {
+  a {
+    color: ${p => (p.active ? p.theme.colors.support1 : '#fff')} !important;
+  }
+  a:hover {
     color: ${p => p.theme.colors.support4} !important;
   }
 `;
@@ -39,8 +41,8 @@ const ActiveBar = styled.div`
 
 const NavItem = ({children, active, to}) => (
   <div>
-    <NavItemContainer active={active} to={to}>
-      {children}
+    <NavItemContainer active={active}>
+      <Link to={to}>{children}</Link>
     </NavItemContainer>
     <ActiveBar active={active} />
   </div>

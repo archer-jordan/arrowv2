@@ -138,7 +138,7 @@ class Employees extends React.PureComponent {
     if (!this.state.editManually) {
       return (
         <React.Fragment>
-          <div>
+          {/* <div>
             <UploadButton
               name="file"
               type="file"
@@ -146,7 +146,7 @@ class Employees extends React.PureComponent {
               onChange={this.handleUpload}
             />{' '}
             <Label for="file">Upload New Employees</Label>
-          </div>
+          </div> */}
           <PinkText onClick={() => this.setState({editManually: true})}>
             Click here to manually update individual employee records
           </PinkText>
