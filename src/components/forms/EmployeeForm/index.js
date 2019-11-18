@@ -37,6 +37,7 @@ class EmployeeForm extends React.PureComponent {
     if (!this.state.assignedId) {
       return null;
     }
+
     this.props.onSubmit({
       lastName: this.state.lastName,
       firstName: this.state.firstName,
