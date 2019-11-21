@@ -160,6 +160,8 @@ class AdminCustomerDetail extends React.PureComponent {
     const {location, history} = this.props;
     const {tab} = queryString.parse(location.search);
 
+    // TODO: which query we use depends if it's an admin or a regular employee
+
     return (
       <div style={{padding: 8}}>
         <Query

@@ -53,10 +53,10 @@ const Value = styled(Label)`
 
 const DataItem = ({label = ' ', value = ''}) => (
   <Row>
-    <Col xs={12}>
+    <Col xs={8}>
       <Label>{label}</Label>
     </Col>
-    <Col xs={12}>
+    <Col xs={16}>
       <Value>{value}</Value>
     </Col>
   </Row>
@@ -88,13 +88,15 @@ class Profile extends React.PureComponent {
           </Row>
         </MobileTopContainer>
         <RowContainer>
-          <Col xs={24} sm={10}>
+          <Col xs={24} sm={11}>
             <MobileHeadline>Contact information</MobileHeadline>
             <DataItem label="First Name" value={profile.firstName} />
             <DataItem label="Last Name" value={profile.lastName} />
-            <DataItem label="Role or Title" value={profile.title} />{' '}
+            {profile.title && (
+              <DataItem label="Role or Title" value={profile.title} />
+            )}
             <DataItem label="Email" value={profile.email} />
-            <DataItem label="Phone" value={profile.phone} />
+            {profile.phone && <DataItem label="Phone" value={profile.phone} />}
           </Col>{' '}
           <Col
             xs={0}
@@ -103,7 +105,7 @@ class Profile extends React.PureComponent {
           >
             <div style={{width: 2, height: 200, background: '#efefef'}} />
           </Col>
-          <Col xs={24} sm={10}>
+          <Col xs={24} sm={9}>
             <MobileHeadline>Company information</MobileHeadline>
             <Query
               query={customerById}
@@ -122,7 +124,7 @@ class Profile extends React.PureComponent {
                     <DataItem label="State" value={customer.state} />
                     <DataItem label="Zip" value={customer.zip} />
                     <DataItem
-                      label="Company Type"
+                      label="Type"
                       value={helpers.mapCompanyTypeToLabel(
                         customer.companyType
                       )}

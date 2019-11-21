@@ -14,9 +14,13 @@ export default gql`
       totalHealthAndWelfare
       totalVHS
       totalEmployees
+      totalRetirement
       # labels
+      labelForTotalFringe
+      labelForTotalHours
       labelForVHS
       labelForAdminCosts
+      labelForTotalRetirement
       # benefits
       benefits {
         label

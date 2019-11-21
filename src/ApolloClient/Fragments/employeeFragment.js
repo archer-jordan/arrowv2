@@ -10,7 +10,6 @@ export default gql`
     gender
     dob
     hireDate
-    ssn
     street
     zip
     status
