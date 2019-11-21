@@ -152,7 +152,7 @@ class UserForm extends React.PureComponent {
                                 type="check-circle"
                                 style={{marginRight: 4}}
                               />
-                              Email does not exist
+                              <strong>{this.state.email}</strong> is available
                             </GreenText>
                           ) : (
                             <RedText>
@@ -160,7 +160,8 @@ class UserForm extends React.PureComponent {
                                 type="close-circle"
                                 style={{marginRight: 4}}
                               />
-                              Email already exists
+                              <strong>{this.state.email}</strong> is not
+                              available
                             </RedText>
                           )}
                         </div>
