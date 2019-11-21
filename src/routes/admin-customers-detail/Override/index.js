@@ -85,6 +85,8 @@ class Override extends React.PureComponent {
       totalVHS: dataArray[8],
       totalEmployees: dataArray[10],
       // labels
+      labelForTotalFringe: headersArray[6],
+      labelForTotalHours: headersArray[5],
       labelForVHS: dataArray[30],
       labelForAdminCosts: dataArray[9],
       // benefits

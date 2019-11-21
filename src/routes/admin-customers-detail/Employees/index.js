@@ -1,9 +1,12 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import {validate} from 'email-validator';
 import Papa from 'papaparse';
+// COMPONENTS
 import EmployeeForm from 'components/forms/EmployeeForm';
 import EmployeesTable from 'components/common/EmployeesTable';
+import ErrorBlock from 'components/common/ErrorBlock';
 // APOLLO
 import {graphql} from 'react-apollo';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
@@ -13,6 +16,7 @@ import employeesQuery from 'ApolloClient/Queries/employees';
 import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
+import checkEmployeesCSV from '../../../ApolloClient/Mutations/checkEmployeesCSV';
 
 const compose = require('lodash/flowRight');
 
@@ -49,6 +53,14 @@ const PinkText = styled.div`
     color: ${p => p.theme.colors.support1};
   }
 `;
+
+/**
+ * 1. Check if we have correct number of columns
+ * 2. Check if all emails are valid
+ * 3. Check that all values exist in each row?
+ * 4. Check if any of the employees already exist
+ *
+ */
 
 class Employees extends React.PureComponent {
   state = {
@@ -88,31 +100,80 @@ class Employees extends React.PureComponent {
       onClick: () => this.setState({selectedEmployee: record}),
     };
   };
-  handleUpload = event => {
-    this.setState({loading: true});
+  afterParse = async (results, file) => {
     const stopLoading = () => this.setState({loading: false});
+    const formatRow = this.formatRow;
     const newEmployeesUpload = async formattedData =>
-      this.props.newEmployeesUpload({
+      await this.props.newEmployeesUpload({
         variables: {
           employees: formattedData,
         },
       });
-    const formatRow = this.formatRow;
+    const checkEmployeesCSV = async values => {
+      return await this.props.checkEmployeesCSV({
+        variables: {
+          values,
+        },
+      });
+    };
+
+    // 1. make sure the spreadsheet has the correct number of columns
+    if (results.meta.fields.length !== 15) {
+      return this.setState({
+        errors: [
+          `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
+        ],
+      });
+    }
+    // 2. make sure the emails are all valid
+    let invalidEmails = [];
+    results.data.forEach((item, i) => {
+      let email = item['E-Mail'];
+      if (item['EAID']) {
+        if (!email) {
+          invalidEmails.push(`Email does not exist for row ${i + 2}`);
+        }
+        if (email && !validate(email)) {
+          invalidEmails.push(`Email is invalid for row ${i + 2}: ${email}`);
+        }
+      }
+    });
+    if (invalidEmails.length > 0) {
+      return this.setState({
+        errors: invalidEmails,
+      });
+    }
+
+    let formattedData = [];
+    results.data.forEach(item => {
+      if (item['EAID']) {
+        formattedData.push(formatRow(item));
+      }
+    });
+    // Do server check to see if these people already exist
+    let mutationResult = await checkEmployeesCSV(
+      formattedData.map(item => ({
+        companyAssignedId: item.assignedCompanyId,
+        employeeAssignedId: item.assignedId,
+      }))
+    );
+    //if server check fails, we show the errors that we got back
+    if (!mutationResult.data.checkEmployeesCSV.success) {
+      return this.setState({
+        errors: mutationResult.data.checkEmployeesCSV.errors,
+      });
+    }
+    //newEmployeesUpload(formattedData);
+    stopLoading();
+  };
+  handleUpload = event => {
+    this.setState({loading: true});
+
+    const afterParse = this.afterParse;
+
     Papa.parse(event.target.files[0], {
       header: true,
-      complete(results, file) {
-        console.log(results.data);
-
-        let formattedData = [];
-        results.data.forEach(item => {
-          if (item['EAID']) {
-            formattedData.push(formatRow(item));
-          }
-        });
-        console.log(formattedData);
-        newEmployeesUpload(formattedData);
-        stopLoading();
-      },
+      complete: afterParse,
     });
   };
   onSave = values => {
@@ -138,7 +199,7 @@ class Employees extends React.PureComponent {
     if (!this.state.editManually) {
       return (
         <React.Fragment>
-          {/* <div>
+          <div>
             <UploadButton
               name="file"
               type="file"
@@ -146,7 +207,14 @@ class Employees extends React.PureComponent {
               onChange={this.handleUpload}
             />{' '}
             <Label for="file">Upload New Employees</Label>
-          </div> */}
+          </div>
+          {this.state.errors && this.state.errors.length > 0 && (
+            <div style={{marginTop: 16, maxWidth: '100%', width: 600}}>
+              {this.state.errors.map(error => (
+                <ErrorBlock key={error} error={error} />
+              ))}
+            </div>
+          )}
           <PinkText onClick={() => this.setState({editManually: true})}>
             Click here to manually update individual employee records
           </PinkText>
@@ -215,5 +283,6 @@ class Employees extends React.PureComponent {
 
 export default compose(
   graphql(saveEmployee, {name: 'saveEmployee'}),
-  graphql(newEmployeesUpload, {name: 'newEmployeesUpload'})
+  graphql(newEmployeesUpload, {name: 'newEmployeesUpload'}),
+  graphql(checkEmployeesCSV, {name: 'checkEmployeesCSV'})
 )(Employees);

@@ -109,7 +109,8 @@ class AppReports extends React.PureComponent {
     }
   };
   getNavItems = () => {
-    return [
+    // an array of data that will build our sidenav items
+    let navItems = [
       {
         label: 'Health & Welfare',
         activeValue: 'health',
@@ -151,6 +152,18 @@ class AppReports extends React.PureComponent {
           }),
       },
     ];
+
+    // if the query does not have retirement data, then we don't want to show the retirement tab
+    if (
+      this.state.queryData &&
+      !this.state.queryData.labelForTotalRetirement &&
+      !this.state.queryData.totalRetirement
+    ) {
+      navItems = navItems.filter(item => item.activeValue !== 'retirement');
+    }
+
+    // return the nav options
+    return navItems;
   };
   render() {
     const {location, history} = this.props;
@@ -202,11 +215,13 @@ class AppReports extends React.PureComponent {
                 month: moment(helpers.capitalize(month), 'MMMM').format('M'),
                 year: year,
               }}
+              onCompleted={queryData => this.setState({queryData})}
             >
               {({loading, data, error}) => {
                 if (loading) return <Loading />;
                 if (error) return 'error...';
-                if (!data.customerReport) return 'No results';
+                if (!data.customerReport)
+                  return 'No results for this time period...';
                 const sharedProps = {
                   history,
                   location,

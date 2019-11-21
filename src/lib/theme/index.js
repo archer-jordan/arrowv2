@@ -38,7 +38,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${theme.fontFamily} !important;
   }
   .ant-calendar-month-panel-selected-cell .ant-calendar-month-panel-month {
-    background: ${theme.colors.primary1} !important;
+    background: #e5eff5 !important;
+    /* ${theme.colors.primary2} !important; */
   }
   .ant-calendar-month-panel-month:hover {
     background: #e5eff5 !important;

@@ -86,6 +86,12 @@ const Caption = styled.p`
 // totalHealthAndWelfare: "String"
 // totalVHS: "String"
 // year: "String"
+
+// labelForTotalFringe
+// labelForTotalHours
+// labelForVHS
+// labelForAdminCosts
+// labelForTotalRetirement
 class HealthAndWelfare extends React.PureComponent {
   render() {
     const {report} = this.props;
@@ -96,7 +102,7 @@ class HealthAndWelfare extends React.PureComponent {
             {' '}
             <Col xs={24} md={9} lg={7}>
               <BigValue>{numeral(report.totalHours).format('0,0')}</BigValue>
-              <BigLabel>Total Hours</BigLabel>
+              <BigLabel>{report.labelForTotalHours || 'Total Hours'}</BigLabel>
             </Col>
             <Col xs={24} md={8} lg={8}>
               <MobileWrapper>
@@ -106,7 +112,9 @@ class HealthAndWelfare extends React.PureComponent {
                     currency: 'USD',
                   })}
                 </BigValue>
-                <BigLabel>TOTAL FRINGE*</BigLabel>
+                <BigLabel>
+                  {report.labelForTotalFringe || 'TOTAL FRINGE*'}
+                </BigLabel>
               </MobileWrapper>
             </Col>
             <Col xs={24} md={7} lg={9} />
