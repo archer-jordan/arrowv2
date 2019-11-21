@@ -159,7 +159,8 @@ class CustomerForm extends React.PureComponent {
                                       type="check-circle"
                                       style={{marginRight: 4}}
                                     />
-                                    ID does not exist
+                                    <strong>{this.state.assignedId}</strong> is
+                                    available
                                   </GreenText>
                                 ) : (
                                   <RedText>
@@ -167,7 +168,8 @@ class CustomerForm extends React.PureComponent {
                                       type="close-circle"
                                       style={{marginRight: 4}}
                                     />
-                                    ID already exists
+                                    <strong>{this.state.assignedId}</strong> is
+                                    not available
                                   </RedText>
                                 )}
                               </div>
