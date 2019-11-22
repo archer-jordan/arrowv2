@@ -78,7 +78,12 @@ class AuthResetPassword extends React.PureComponent {
       if (!this.state.confirmPassword) {
         return this.setState({errors: ['Please confirm your password']});
       }
-      //
+      //must contain at least one uppercase l
+      if (!/[A-Z]/.test(this.state.password)) {
+        return this.setState({
+          errors: ['Passwords should be include one uppercase character'],
+        });
+      }
       if (this.state.confirmPassword !== this.state.password) {
         return this.setState({errors: ['Your passwords do not match']});
       }

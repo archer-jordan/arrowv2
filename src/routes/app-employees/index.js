@@ -39,7 +39,6 @@ class AppEmployees extends React.PureComponent {
         dob: item.dob,
         gender: item.gender,
         status: item.status,
-        ssn: item.ssn,
         street: item.street,
         city: item.city,
         state: item.state,
