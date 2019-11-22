@@ -53,6 +53,7 @@ class AuthResetPassword extends React.PureComponent {
   };
   onSubmit = async () => {
     try {
+      console.log();
       // make sure password has been filled in
       if (!this.state.password) {
         return this.setState({errors: ['Please provide an password']});
@@ -71,6 +72,14 @@ class AuthResetPassword extends React.PureComponent {
           errors: ['Passwords should be include one special character'],
         });
       }
+
+      //must contain at least one uppercase l
+      if (!/[A-Z]/.test(this.state.password)) {
+        return this.setState({
+          errors: ['Passwords should be include one uppercase character'],
+        });
+      }
+
       // make sure the confirmPassword input has been filled in
       if (!this.state.confirmPassword) {
         return this.setState({errors: ['Please confirm your password']});

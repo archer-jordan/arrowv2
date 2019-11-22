@@ -17,7 +17,7 @@ const ErrorBlock = ({errors = [], error}) => (
   <ErrorBlockContainer>
     <Icon type="close-circle" style={{marginRight: 4, fontSize: 18}} />
     {errors && errors.map(item => item)}
-    {error}
+    {error && error}
   </ErrorBlockContainer>
 );
 
