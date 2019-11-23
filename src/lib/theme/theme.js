@@ -3,7 +3,7 @@ export default {
   // COLORS
   colors: {
     // primary
-    primary1: '#002159',
+    primary1: '#145d92',
     primary2: '#01337D',
     primary3: '#03449E',
     primary4: '#0552B5',

@@ -6,43 +6,19 @@ import Papa from 'papaparse';
 // COMPONENTS
 import EmployeeForm from 'components/forms/EmployeeForm';
 import EmployeesTable from 'components/common/EmployeesTable';
-import ErrorBlock from 'components/common/ErrorBlock';
+import UploadBlock from './UploadBlock';
+import message from 'components/common/message';
 // APOLLO
-import {graphql} from 'react-apollo';
+import {graphql, Query} from 'react-apollo';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
-// APOLLO
-import {Query} from 'react-apollo';
 import employeesQuery from 'ApolloClient/Queries/employees';
 import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
+import updateEmployeesUpload from 'ApolloClient/Mutations/updateEmployeesUpload';
+import checkEmployeesCSV from 'ApolloClient/Mutations/checkEmployeesCSV';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
-import checkEmployeesCSV from '../../../ApolloClient/Mutations/checkEmployeesCSV';
 
 const compose = require('lodash/flowRight');
-
-const UploadButton = styled.input`
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-`;
-
-const Label = styled.label`
-  font-weight: 600;
-  color: ${p => p.theme.colors.support2};
-  padding: 6px 10px;
-  border-radius: 25px;
-  border: 2px solid ${p => p.theme.colors.support2};
-  background: transparent;
-  display: inline-block;
-  cursor: pointer;
-  &:hover {
-    border: 2px solid ${p => p.theme.colors.support1};
-    color: ${p => p.theme.colors.support1};
-  }
-`;
 
 const PinkText = styled.div`
   margin-top: 24px;
@@ -59,7 +35,6 @@ const PinkText = styled.div`
  * 2. Check if all emails are valid
  * 3. Check that all values exist in each row?
  * 4. Check if any of the employees already exist
- *
  */
 
 class Employees extends React.PureComponent {
@@ -71,7 +46,11 @@ class Employees extends React.PureComponent {
     skip: 0,
     current: 1,
     sortBy: 'lastNameAscend',
+    updateErrors: [],
   };
+  /**
+   * formatRow takes in a CSV row and parses it into a structure we want for passing into the mutation
+   */
   formatRow = row => {
     return {
       firstName: row['First Name'],
@@ -95,37 +74,10 @@ class Employees extends React.PureComponent {
       status: row['Status'],
     };
   };
-  onRow = (record, rowIndex) => {
-    return {
-      onClick: () => this.setState({selectedEmployee: record}),
-    };
-  };
-  afterParse = async (results, file) => {
-    const stopLoading = () => this.setState({loading: false});
-    const formatRow = this.formatRow;
-    const newEmployeesUpload = async formattedData =>
-      await this.props.newEmployeesUpload({
-        variables: {
-          employees: formattedData,
-        },
-      });
-    const checkEmployeesCSV = async values => {
-      return await this.props.checkEmployeesCSV({
-        variables: {
-          values,
-        },
-      });
-    };
-
-    // 1. make sure the spreadsheet has the correct number of columns
-    if (results.meta.fields.length !== 15) {
-      return this.setState({
-        errors: [
-          `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
-        ],
-      });
-    }
-    // 2. make sure the emails are all valid
+  /**
+   * getInvalidEmails takes in the parsed result and will check for invalid emails each row
+   */
+  getInvalidEmails = results => {
     let invalidEmails = [];
     results.data.forEach((item, i) => {
       let email = item['E-Mail'];
@@ -138,42 +90,115 @@ class Employees extends React.PureComponent {
         }
       }
     });
+    return invalidEmails;
+  };
+  /**
+   *
+   */
+  getFormatted = results => {
+    let formattedData = [];
+    results.data.forEach(item => {
+      if (item['EAID']) {
+        formattedData.push(this.formatRow(item));
+      }
+    });
+    return formattedData;
+  };
+
+  /**
+   * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
+   */
+  afterParse = async (results, file) => {
+    // 1. make sure the spreadsheet has the correct number of columns
+    if (results.meta.fields.length !== 15) {
+      return this.setState({
+        errors: [
+          `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
+        ],
+      });
+    }
+
+    // 2. make sure the emails are all valid
+    let invalidEmails = this.getInvalidEmails(results);
+
     if (invalidEmails.length > 0) {
       return this.setState({
+        loading: false,
         errors: invalidEmails,
       });
     }
 
-    let formattedData = [];
-    results.data.forEach(item => {
-      if (item['EAID']) {
-        formattedData.push(formatRow(item));
-      }
-    });
+    let formattedData = this.getFormatted(results);
+
     // Do server check to see if these people already exist
-    let mutationResult = await checkEmployeesCSV(
-      formattedData.map(item => ({
-        companyAssignedId: item.assignedCompanyId,
-        employeeAssignedId: item.assignedId,
-      }))
-    );
+    let mutationResult = await this.props.checkEmployeesCSV({
+      variables: {
+        values: formattedData.map(item => ({
+          companyAssignedId: item.assignedCompanyId,
+          employeeAssignedId: item.assignedId,
+        })),
+      },
+    });
+
     //if server check fails, we show the errors that we got back
     if (!mutationResult.data.checkEmployeesCSV.success) {
       return this.setState({
         errors: mutationResult.data.checkEmployeesCSV.errors,
       });
     }
-    //newEmployeesUpload(formattedData);
-    stopLoading();
-  };
-  handleUpload = event => {
-    this.setState({loading: true});
 
-    const afterParse = this.afterParse;
+    // if all is sell, upload new employees
+    await this.props.newEmployeesUpload({
+      variables: {
+        employees: formattedData,
+      },
+    });
+    this.setState({loading: false});
+  };
+  afterUploadParse = async (results, file) => {
+    // 1. make sure the spreadsheet has the correct number of columns
+    if (results.meta.fields.length !== 15) {
+      return this.setState({
+        loading: false,
+        updateErrors: [
+          `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
+        ],
+      });
+    }
+
+    // 2. make sure the emails are all valid
+    let invalidEmails = this.getInvalidEmails(results);
+
+    if (invalidEmails.length > 0) {
+      return this.setState({
+        loading: false,
+        updateErrors: invalidEmails,
+      });
+    }
+
+    let formattedData = this.getFormatted(results);
+
+    try {
+      await this.props.updateEmployeesUpload({
+        variables: {
+          employees: formattedData,
+        },
+      });
+      this.setState({loading: false});
+      message.success(`Employees successfully updated`);
+    } catch (err) {
+      return this.setState({
+        loading: false,
+        updateErrors: [err.message],
+      });
+    }
+  };
+  handleUpload = (event, complete) => {
+    this.setState({loading: true});
 
     Papa.parse(event.target.files[0], {
       header: true,
-      complete: afterParse,
+      complete,
     });
   };
   onSave = values => {
@@ -186,6 +211,12 @@ class Employees extends React.PureComponent {
     }
   };
   render() {
+    /*
+      IF THE USER CLICKS ON A EMPLOYEE IN THE EMPLOYEES TABLE,
+      WE WILL SHOW THE FORM WITH THAT EMPLOYEES DATA. 
+      THE USER CAN THEN EDIT THE RECORD
+    */
+
     if (this.state.selectedEmployee) {
       return (
         <EmployeeForm
@@ -196,31 +227,11 @@ class Employees extends React.PureComponent {
         />
       );
     }
-    if (!this.state.editManually) {
-      return (
-        <React.Fragment>
-          <div>
-            <UploadButton
-              name="file"
-              type="file"
-              id="file"
-              onChange={this.handleUpload}
-            />{' '}
-            <Label for="file">Upload New Employees</Label>
-          </div>
-          {this.state.errors && this.state.errors.length > 0 && (
-            <div style={{marginTop: 16, maxWidth: '100%', width: 600}}>
-              {this.state.errors.map(error => (
-                <ErrorBlock key={error} error={error} />
-              ))}
-            </div>
-          )}
-          <PinkText onClick={() => this.setState({editManually: true})}>
-            Click here to manually update individual employee records
-          </PinkText>
-        </React.Fragment>
-      );
-    }
+
+    /*
+      IF THE USER CHOOSES TO EDI MANUALLY, WE"LL SHOW THE EMPLOYEES TABLE 
+      WHERE THEY CAN CLICK TO SELECT AN EMPLOYEE TO EDIT
+    */
 
     if (this.state.editManually) {
       return (
@@ -240,7 +251,11 @@ class Employees extends React.PureComponent {
                 dataSource={!loading ? data.employees.employees : []}
                 total={!loading ? data.employees.count : null}
                 loading={loading}
-                onRow={this.onRow}
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: () => this.setState({selectedEmployee: record}),
+                  };
+                }}
                 handleTableChange={this.handleTableChange}
                 onPageChange={page =>
                   this.setState({
@@ -255,34 +270,38 @@ class Employees extends React.PureComponent {
         </Query>
       );
     }
-
-    return <div />;
-    // return (
-    //   <div>
-    //     {!this.state.editManually && (
-    //       <React.Fragment>
-    //         <div>
-    //           <UploadButton
-    //             name="file"
-    //             type="file"
-    //             id="file"
-    //             onChange={this.handleUpload}
-    //           />{' '}
-    //           <Label for="file">Upload New Employees</Label>
-    //         </div>
-    //         <PinkText onClick={() => this.setState({editManually: true})}>
-    //           Click here to manually update individual employee records
-    //         </PinkText>
-    //       </React.Fragment>
-    //     )}
-    //     {this.state.editManually && }
-    //   </div>
-    // );
+    /*
+      BY DEFAULT WE WILL SHOW THE UPLOAD BUTTON OPTIONS
+    */
+    return (
+      <div style={{width: 700, maxWidth: '100%'}}>
+        <UploadBlock
+          name="file"
+          errors={this.state.errors || []}
+          loading={this.state.loading}
+          onChange={event => this.handleUpload(event, this.afterParse)}
+          sectionTitle="ADD NEW EMPLOYEES TO THE DATABASE"
+          buttonText="Upload New Employees"
+        />
+        <UploadBlock
+          name="file-update"
+          errors={this.state.updateErrors || []}
+          loading={this.state.loading}
+          onChange={event => this.handleUpload(event, this.afterUploadParse)}
+          sectionTitle="UPDATE EXISTING EMPLOYEE RECORDS"
+          buttonText="Upload Employee Updates"
+        />
+        <PinkText onClick={() => this.setState({editManually: true})}>
+          Click here to manually update individual employee records
+        </PinkText>
+      </div>
+    );
   }
 }
 
 export default compose(
   graphql(saveEmployee, {name: 'saveEmployee'}),
   graphql(newEmployeesUpload, {name: 'newEmployeesUpload'}),
-  graphql(checkEmployeesCSV, {name: 'checkEmployeesCSV'})
+  graphql(checkEmployeesCSV, {name: 'checkEmployeesCSV'}),
+  graphql(updateEmployeesUpload, {name: 'updateEmployeesUpload'})
 )(Employees);
