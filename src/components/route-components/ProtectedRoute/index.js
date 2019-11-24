@@ -43,7 +43,9 @@ class ProtectedRoute extends React.Component {
             ) : (
               <Redirect to="/" />
             )}
-            <AdminView />
+            {currentUser &&
+              currentUser.roles &&
+              currentUser.roles.includes('superAdmin') && <AdminView />}
           </div>
         )}
       />
