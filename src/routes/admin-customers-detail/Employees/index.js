@@ -179,11 +179,18 @@ class Employees extends React.PureComponent {
     let formattedData = this.getFormatted(results);
 
     try {
-      await this.props.updateEmployeesUpload({
+      let mutationResult = await this.props.updateEmployeesUpload({
         variables: {
           employees: formattedData,
         },
       });
+      //if server check fails, we show the errors that we got back
+      if (!mutationResult.data.updateEmployeesUpload.success) {
+        return this.setState({
+          loading: false,
+          updateErrors: mutationResult.data.updateEmployeesUpload.errors,
+        });
+      }
       this.setState({loading: false});
       message.success(`Employees successfully updated`);
     } catch (err) {
@@ -194,7 +201,7 @@ class Employees extends React.PureComponent {
     }
   };
   handleUpload = (event, complete) => {
-    this.setState({loading: true});
+    this.setState({loading: true, updateErrors: [], errors: []});
 
     Papa.parse(event.target.files[0], {
       header: true,

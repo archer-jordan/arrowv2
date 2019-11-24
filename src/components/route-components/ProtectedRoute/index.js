@@ -1,6 +1,7 @@
 // TOP LEVEL IMPORTS
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
+import AdminView from './AdminView';
 
 class ProtectedRoute extends React.Component {
   render() {
@@ -22,8 +23,10 @@ class ProtectedRoute extends React.Component {
     if (
       currentUser &&
       currentUser.roles &&
-      currentUser.roles.includes('superAdmin')
+      currentUser.roles.includes('superAdmin') &&
+      !currentUser.companyId
     ) {
+      console.log('reoroute');
       return <Redirect to="/admin" />;
     }
 
@@ -40,6 +43,7 @@ class ProtectedRoute extends React.Component {
             ) : (
               <Redirect to="/" />
             )}
+            <AdminView />
           </div>
         )}
       />

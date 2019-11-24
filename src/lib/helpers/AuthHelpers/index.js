@@ -1,11 +1,9 @@
 import message from 'components/common/message';
 import client from 'ApolloClient/index.js';
-import createUserProfile from 'ApolloClient/Mutations/createUserProfile';
 import authenticate from 'ApolloClient/Mutations/authenticate';
 import logout from 'ApolloClient/Mutations/logout';
 import currentUser from 'ApolloClient/Queries/currentUser';
 import sendResetPasswordEmail from 'ApolloClient/Mutations/sendResetPasswordEmail';
-import signup from 'ApolloClient/Mutations/signup';
 import changePassword from 'ApolloClient/Mutations/changePassword';
 
 const AuthHelpers = {};
@@ -49,69 +47,8 @@ AuthHelpers.handleLogin = ({email, password}) =>
         data.authenticate.tokens.refreshToken
       );
 
-      // let res = await client.query({
-      //   query: currentUser
-      // });
-
       resolve(true);
     } catch (err) {
-      reject(err);
-    }
-  });
-
-AuthHelpers.handleSignup = async ({email, password, profile = {}, role}) =>
-  new Promise(async (resolve, reject) => {
-    let userId;
-    try {
-      await client.mutate({
-        mutation: signup,
-        variables: {
-          user: {
-            email,
-            password,
-          },
-        },
-      });
-
-      // sign in with email
-      let {data} = await client.mutate({
-        mutation: authenticate,
-        variables: {
-          params: {
-            password,
-            user: {
-              email: email,
-            },
-          },
-        },
-      });
-
-      window.localStorage.setItem(
-        'arrow_access_token',
-        data.authenticate.tokens.accessToken
-      );
-      window.localStorage.setItem(
-        'arrow_refresh_token',
-        data.authenticate.tokens.refreshToken
-      );
-
-      setTimeout(async () => {
-        let res = await client.query({
-          query: currentUser,
-        });
-
-        await client.mutate({
-          mutation: createUserProfile,
-          variables: {
-            userId: res.data.currentUser.id,
-            role,
-          },
-        });
-      }, 1000);
-
-      resolve(userId);
-    } catch (err) {
-      console.log(err);
       reject(err);
     }
   });

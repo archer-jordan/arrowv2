@@ -207,48 +207,51 @@ class AppReports extends React.PureComponent {
           <Col xs={24} md={6}>
             <SideNav items={this.getNavItems()} tab={tab} />
           </Col>
+
           <Col xs={24} md={18}>
-            <Query
-              query={customerReport}
-              variables={{
-                customerId: this.props.currentUser.companyId,
-                month: moment(helpers.capitalize(month), 'MMMM').format('M'),
-                year: year,
-              }}
-              onCompleted={queryData => this.setState({queryData})}
-            >
-              {({loading, data, error}) => {
-                if (loading) return <Loading />;
-                if (error) return 'error...';
-                if (!data.customerReport)
-                  return 'No results for this time period...';
-                const sharedProps = {
-                  history,
-                  location,
-                  report: data.customerReport,
-                };
-                return (
-                  <div>
-                    {(() => {
-                      switch (tab) {
-                        case 'retirement':
-                          return <Retirement {...sharedProps} />;
-                        case 'benefits':
-                          return <Benefits {...sharedProps} />;
-                        case 'download':
-                          return <DownloadXL {...sharedProps} />;
-                        case 'eligibility':
-                          return <Eligibility {...sharedProps} />;
-                        case 'health':
-                          return <HealthAndWelfare {...sharedProps} />;
-                        default:
-                          return <HealthAndWelfare {...sharedProps} />;
-                      }
-                    })()}
-                  </div>
-                );
-              }}
-            </Query>
+            {this.props.currentUser.companyId && year && month && (
+              <Query
+                query={customerReport}
+                variables={{
+                  customerId: this.props.currentUser.companyId,
+                  month: moment(helpers.capitalize(month), 'MMMM').format('M'),
+                  year: year,
+                }}
+                onCompleted={queryData => this.setState({queryData})}
+              >
+                {({loading, data, error}) => {
+                  if (loading) return <Loading />;
+                  if (error) return 'error...';
+                  if (!data.customerReport)
+                    return 'No results for this time period...';
+                  const sharedProps = {
+                    history,
+                    location,
+                    report: data.customerReport,
+                  };
+                  return (
+                    <div>
+                      {(() => {
+                        switch (tab) {
+                          case 'retirement':
+                            return <Retirement {...sharedProps} />;
+                          case 'benefits':
+                            return <Benefits {...sharedProps} />;
+                          case 'download':
+                            return <DownloadXL {...sharedProps} />;
+                          case 'eligibility':
+                            return <Eligibility {...sharedProps} />;
+                          case 'health':
+                            return <HealthAndWelfare {...sharedProps} />;
+                          default:
+                            return <HealthAndWelfare {...sharedProps} />;
+                        }
+                      })()}
+                    </div>
+                  );
+                }}
+              </Query>
+            )}
           </Col>
         </Row>
         {this.state.editDate && (

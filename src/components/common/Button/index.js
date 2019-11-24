@@ -1,8 +1,8 @@
 // TOP LEVEL IMPORTS
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-const getBackgroundColor = ({ grey, disabled, secondary, theme, danger }) => {
+const getBackgroundColor = ({grey, disabled, secondary, theme, danger}) => {
   if (disabled) {
     return theme.colors.neutral8;
   }
@@ -13,13 +13,13 @@ const getBackgroundColor = ({ grey, disabled, secondary, theme, danger }) => {
     return theme.colors.neutral10;
   }
   if (secondary) {
-    return "transparent";
+    return 'transparent';
   }
 
-  return "#ed3245";
+  return '#ed3245';
 };
 
-const getTextColor = ({ grey, danger, disabled, secondary, theme }) => {
+const getTextColor = ({grey, danger, disabled, secondary, theme}) => {
   if (disabled) {
     return theme.colors.neutral4;
   }
@@ -30,9 +30,9 @@ const getTextColor = ({ grey, danger, disabled, secondary, theme }) => {
     return theme.colors.neutral4;
   }
   if (secondary) {
-    return "#bc2837";
+    return '#bc2837';
   }
-  return "#fff";
+  return '#fff';
 };
 
 const getHoverBackgroundColor = ({
@@ -40,7 +40,7 @@ const getHoverBackgroundColor = ({
   disabled,
   secondary,
   theme,
-  danger
+  danger,
 }) => {
   if (disabled) {
     return theme.colors.neutral8;
@@ -52,16 +52,16 @@ const getHoverBackgroundColor = ({
     return theme.colors.neutral9;
   }
   if (secondary) {
-    return "transparent";
+    return 'transparent';
   }
-  return "#bc2837";
+  return '#bc2837';
 };
 
 const ButtonContainer = styled.button`
   width: ${p => {
-    if (p.fullWidth) return "100%";
+    if (p.fullWidth) return '100%';
     if (p.style.width) return p.style.width;
-    return "100%";
+    return '100%';
   }};
   height: 40px;
   border-radius: 35px;
@@ -70,9 +70,8 @@ const ButtonContainer = styled.button`
   line-height: 40px;
   /* text-transform: uppercase; */
   letter-spacing: 0.025em;
-  border: ${p => (p.secondary && !p.disabled ? "2px solid #bc2837" : null)};
+  border: ${p => (p.secondary && !p.disabled ? '2px solid #bc2837' : null)};
   align-items: center;
-  /* box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); */
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
   :hover {
@@ -119,10 +118,10 @@ const Button = props => (
 Button.defaultProps = {
   fullWidth: true,
   disabled: false,
-  type: "button",
+  type: 'button',
   style: {
-    minWidth: 122
-  }
+    minWidth: 122,
+  },
 };
 
 export default Button;
