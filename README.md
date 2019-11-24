@@ -12,22 +12,6 @@ To run locally, make sure you have npm or yarn installed. Then cd to the folder 
 
 You should see the app running at localhost:3000
 
-## Get Started in the VM
-
-Once in your VM, make sure you pull the latest git version and then consider running an install to make sure all the latest code is there:
-
-```
-> npm install
-```
-
-After, you can fire up a dev server
-
-```
-> npm run devserver
-```
-
-If you have trouble, check the URL/Ports being set in the npm run devserver script. Also, consider if there may be white listing issues between yourself/VM/Graphql entpoint, etc. Also check the proxy URL provided in package.json... is this in tune with the graphql endpoint you want it to hit?
-
 If you see errors like below in the terminal:
 
 ```
