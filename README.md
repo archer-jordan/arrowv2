@@ -33,8 +33,6 @@ To ignore, add // eslint-disable-next-line to the line before.
 
 Its okay. They're just linting warnings. Your code did compile.
 
-You can go to https://<VM_URL>:3000
-
 ## Arrow Frontend 101
 
 Arrow's frontend is a create-react-app. To work on the application, you'll want to at least be familiar with the following:
@@ -46,10 +44,6 @@ Arrow's frontend is a create-react-app. To work on the application, you'll want 
 - antd react components
 - antd Row and Col components, which are similar to bootstrap but use 24 columns instead of bootstrap's 12.
 - strategies for overwriting antd styles (see below)
-
-## Console Errors
-
-- As of 8/4/2019 we have some console errors about react life cycle methods within two packages: (1) antd and (2) react-document title. Unfortunately, we just have to wait for some updates from these third party packages: https://github.com/gaearon/react-document-title/issues/62 and wait for v4 of antd. This shouldn't be an issue with the functionality, just an annoyance in the console.logs in development mode.
 
 ## Overwriting antd styles
 
