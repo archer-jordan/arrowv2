@@ -208,8 +208,22 @@ class Employees extends React.PureComponent {
       complete,
     });
   };
-  onSave = values => {
-    console.log(values);
+  onSave = async values => {
+    try {
+      await this.props.saveEmployee({
+        variables: {
+          id: this.state.selectedEmployee.id,
+          params: {
+            ...values,
+          },
+        },
+      });
+      this.setState({
+        selectedEmployee: null,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
   handleTableChange = (pagination, filters, sorter) => {
     if (sorter.order) {

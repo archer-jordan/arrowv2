@@ -26,7 +26,6 @@ class ProtectedRoute extends React.Component {
       currentUser.roles.includes('superAdmin') &&
       !currentUser.companyId
     ) {
-      console.log('reoroute');
       return <Redirect to="/admin" />;
     }
 

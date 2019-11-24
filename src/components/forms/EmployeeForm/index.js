@@ -26,7 +26,7 @@ class EmployeeForm extends React.PureComponent {
     dob: this.props.dob ? moment(parseInt(this.props.dob)) : null,
     hireDate: this.props.hireDate
       ? moment(parseInt(this.props.hireDate))
-      : null,
+      : moment(),
     // location
     street: this.props.street || null,
     zip: this.props.zip || null,
@@ -44,8 +44,8 @@ class EmployeeForm extends React.PureComponent {
       assignedId: this.state.assignedId,
       email: this.state.email,
       status: this.state.status,
-      hireDate: this.hireDate.valueOf(),
-      dob: this.dob.valueOf(),
+      hireDate: this.state.hireDate.valueOf().toString(),
+      dob: this.state.dob.valueOf().toString(),
       // location
       street: this.state.street,
       zip: this.state.zip,
