@@ -13,6 +13,7 @@ import Button from 'components/common/Button';
 import CustomersTable from './CustomersTable';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
+import ErrorHelpers from '../../lib/helpers/ErrorHelpers/index';
 
 class AdminHome extends React.PureComponent {
   state = {
@@ -48,6 +49,11 @@ class AdminHome extends React.PureComponent {
       message.success('New customer created!');
       this.props.history.push(`/admin/customers/${res.data.saveCustomer.id}`);
     } catch (err) {
+      this.setState({
+        loading: false,
+        errors: [err.message],
+      });
+      ErrorHelpers.handleError(err);
       console.log(err);
     }
   };

@@ -6,6 +6,7 @@ import formatRow from './formatRow';
 import Icon from 'components/common/Icon';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
+import message from 'components/common/message';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
@@ -85,22 +86,28 @@ const ReportRow = ({item}) => (
       {item.month}/{item.year}
     </Col>
     <Col xs={8}></Col>
-    <Col xs={8}>{item.id}</Col>
+    <Col xs={8}></Col>
   </Row>
 );
 
 class Override extends React.PureComponent {
+  state = {
+    loading: false,
+  };
   onCustomerUpload = async (results, file) => {
     // set to loading
     this.setState({loading: true});
     // format the data
     let data = formatRow(results.data[0], results.data[1]);
     // call the upload mutation
-    await this.props.customerTotalsUpload({
+    let result = await this.props.customerTotalsUpload({
       variables: {
         values: data,
       },
     });
+
+    console.log(result);
+    message.success('Upload complete');
     // turn off loading
     this.setState({loading: false});
   };
@@ -128,16 +135,20 @@ class Override extends React.PureComponent {
             );
           }}
         </Query>
+        {!this.state.loading ? (
+          <div style={{marginTop: 32}}>
+            <UploadButton
+              name="file"
+              type="file"
+              id="file"
+              onChange={this.handleUpload}
+            />{' '}
+            <Label htmlFor="file">Upload New File</Label>
+          </div>
+        ) : (
+          <Icon type="loading" />
+        )}
 
-        <div>
-          <UploadButton
-            name="file"
-            type="file"
-            id="file"
-            onChange={this.handleUpload}
-          />{' '}
-          <Label htmlFor="file">Upload New File</Label>
-        </div>
         <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>
       </div>
     );

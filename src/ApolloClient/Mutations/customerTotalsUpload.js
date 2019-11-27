@@ -5,6 +5,7 @@ export default gql`
   mutation customerTotalsUpload($values: CustomerReportParams) {
     customerTotalsUpload(values: $values) {
       success
+      errors
     }
   }
 `;
