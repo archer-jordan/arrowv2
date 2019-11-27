@@ -95,26 +95,28 @@ const AppNav = ({pathname, currentUser}) => {
                 ACCOUNT
               </NavItem>
             </MobileCol>
-            {currentUser.roles.includes('coAdmin') && (
-              <MobileCol>
-                <NavItem
-                  to={`/employees`}
-                  active={pathname && pathname.includes('/employees')}
-                >
-                  EMPLOYEES
-                </NavItem>
-              </MobileCol>
-            )}
-            {currentUser.roles.includes('coAdmin') && (
-              <MobileCol>
-                <NavItem
-                  to={`/users`}
-                  active={pathname && pathname.includes('/users')}
-                >
-                  USERS
-                </NavItem>
-              </MobileCol>
-            )}
+            {currentUser.roles.includes('coAdmin') &&
+              currentUser.roles.includes('superAdmin') && (
+                <MobileCol>
+                  <NavItem
+                    to={`/employees`}
+                    active={pathname && pathname.includes('/employees')}
+                  >
+                    EMPLOYEES
+                  </NavItem>
+                </MobileCol>
+              )}
+            {currentUser.roles.includes('coAdmin') &&
+              currentUser.roles.includes('superAdmin') && (
+                <MobileCol>
+                  <NavItem
+                    to={`/users`}
+                    active={pathname && pathname.includes('/users')}
+                  >
+                    USERS
+                  </NavItem>
+                </MobileCol>
+              )}
             <MobileCol>
               <NavItem
                 to={`/support`}
