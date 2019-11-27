@@ -6,8 +6,6 @@ import ApolloLinkTimeout from 'apollo-link-timeout';
 // ================================================
 // set up apollo link over http
 
-console.log('process.env.REACT_APP_API_HOST', process.env.REACT_APP_API_HOST);
-
 export const httpLink = new HttpLink({
   uri: !process.env.REACT_APP_API_HOST
     ? 'http://10.0.0.133:3000/graphql'

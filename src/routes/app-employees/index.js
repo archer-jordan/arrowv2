@@ -68,7 +68,7 @@ class AppEmployees extends React.PureComponent {
       let res = await client.query({
         query: employeesQuery,
         variables: {
-          customerId: this.props.currentUser.companyId,
+          customerId: this.props.currentUser.customerId,
           searchText: this.state.searchText,
           skip: 0,
           limit: 5000,
@@ -145,7 +145,7 @@ class AppEmployees extends React.PureComponent {
         <Query
           query={employeesQuery}
           variables={{
-            customerId: this.props.currentUser.companyId,
+            customerId: this.props.currentUser.customerId,
             searchText: this.state.searchText,
             skip: this.state.skip,
             sortBy: this.state.sortBy,

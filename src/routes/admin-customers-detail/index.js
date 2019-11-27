@@ -14,6 +14,8 @@ import Contacts from './Contacts';
 import Status from './Status';
 import Users from './Users';
 import Override from './Override';
+import Documents from './Documents';
+import Plan from './Plan';
 // APOLLO
 import {Query, graphql} from 'react-apollo';
 import customerByIdQuery from 'ApolloClient/Queries/customerById';
@@ -209,6 +211,10 @@ class AdminCustomerDetail extends React.PureComponent {
                             return <Contacts {...sharedProps} />;
                           case 'override':
                             return <Override {...sharedProps} />;
+                          case 'plan':
+                            return <Plan {...sharedProps} />;
+                          case 'documents':
+                            return <Documents {...sharedProps} />;
                           default:
                             return <div {...sharedProps} />;
                         }

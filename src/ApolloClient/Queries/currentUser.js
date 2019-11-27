@@ -6,7 +6,7 @@ export default gql`
   query currentUser {
     currentUser {
       ...userFragment
-      companyId
+      customerId
       companyStatus
       company {
         id

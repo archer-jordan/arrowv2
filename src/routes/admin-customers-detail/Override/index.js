@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import Papa from 'papaparse';
+import formatRow from './formatRow';
+// COMPONENTS
+import Icon from 'components/common/Icon';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
 // APOLLO
-import {graphql} from 'react-apollo';
+import {graphql, Query} from 'react-apollo';
 import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
+import customerReportsByCustomerId from 'ApolloClient/Queries/customerReportsByCustomerId';
 
 const UploadButton = styled.input`
   width: 0.1px;
@@ -27,6 +33,15 @@ const Label = styled.label`
     border: 2px solid ${p => p.theme.colors.support1};
     color: ${p => p.theme.colors.support1};
   }
+`;
+
+const SectionTitle = styled.div`
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 25px;
+  margin-bottom: 24px;
+  background: ${p => p.theme.colors.primary1};
+  margin-top: 48px;
 `;
 
 // 0: "COMPANY NAME"
@@ -64,111 +79,57 @@ const Label = styled.label`
 // 30: "* including H&W, VHS, Administrative Costs"
 // 31: "TOTAL CONTRIBUTIONS TO RETIREMENT INCLUDING H&W & VHS"
 
-const valueExists = value => {
-  if (value && value.length === 0) return null;
-  if (value && value === 'null') return null;
-  if (!value) return null;
-  return value;
-};
+const ReportRow = ({item}) => (
+  <Row>
+    <Col xs={8}>
+      {item.month}/{item.year}
+    </Col>
+    <Col xs={8}></Col>
+    <Col xs={8}>{item.id}</Col>
+  </Row>
+);
 
 class Override extends React.PureComponent {
-  formatRow = (headersArray, dataArray) => {
-    return {
-      assignedId: dataArray[1],
-      month: dataArray[2],
-      year: dataArray[4],
-      activeThisMonth: dataArray[11],
-      // totals
-      totalHours: dataArray[5],
-      totalFringe: dataArray[6],
-      totalHealthAndWelfare: dataArray[7],
-      totalVHS: dataArray[8],
-      totalEmployees: dataArray[10],
-      // labels
-      labelForTotalFringe: headersArray[6],
-      labelForTotalHours: headersArray[5],
-      labelForVHS: dataArray[30],
-      labelForAdminCosts: dataArray[9],
-      // benefits
-      benefits: [
-        // benefit 1
-        {
-          label: valueExists(headersArray[12]),
-          employees: valueExists(dataArray[12]),
-          value: valueExists(dataArray[22]),
-        },
-        // benefit 2
-        {
-          label: valueExists(headersArray[13]),
-          employees: valueExists(dataArray[13]),
-          value: valueExists(dataArray[23]),
-        },
-        // benefit 3
-        {
-          label: valueExists(headersArray[15]),
-          employees: valueExists(dataArray[15]),
-          value: valueExists(dataArray[24]),
-        },
-        // benefit 4
-        {
-          label: valueExists(headersArray[16]),
-          employees: valueExists(dataArray[16]),
-          value: valueExists(dataArray[25]),
-        },
-        // benefit 5
-        {
-          label: valueExists(headersArray[17]),
-          employees: valueExists(dataArray[17]),
-          value: valueExists(dataArray[26]),
-        },
-        // benefit 6
-        {
-          label: valueExists(headersArray[18]),
-          employees: valueExists(dataArray[18]),
-          value: valueExists(dataArray[27]),
-        },
-        // benefit 7
-        {
-          label: valueExists(headersArray[19]),
-          employees: valueExists(dataArray[19]),
-          value: valueExists(dataArray[28]),
-        },
-        // benefit 8
-        {
-          label: valueExists(headersArray[20]),
-          employees: valueExists(dataArray[20]),
-          value: valueExists(dataArray[29]),
-        },
-      ],
-    };
+  onCustomerUpload = async (results, file) => {
+    // set to loading
+    this.setState({loading: true});
+    // format the data
+    let data = formatRow(results.data[0], results.data[1]);
+    // call the upload mutation
+    await this.props.customerTotalsUpload({
+      variables: {
+        values: data,
+      },
+    });
+    // turn off loading
+    this.setState({loading: false});
   };
   handleUpload = event => {
-    this.setState({loading: true});
-    const stopLoading = () => this.setState({loading: false});
-    const customerTotalsUpload = async formattedData =>
-      this.props.customerTotalsUpload({
-        variables: {
-          values: formattedData,
-        },
-      });
-    const formatRow = this.formatRow;
     Papa.parse(event.target.files[0], {
       header: false,
-      complete(results, file) {
-        console.log(results.data[1]);
-        let data = formatRow(results.data[0], results.data[1]);
-        console.log({data});
-        // console.log(formattedData);
-        customerTotalsUpload(data);
-        stopLoading();
-      },
+      complete: this.onCustomerUpload,
     });
   };
   render() {
     return (
-      <div>
-        <div>Company Totals</div>
-        {/* <div>
+      <div style={{width: 700, maxWidth: '100%'}}>
+        <SectionTitle>Company Totals</SectionTitle>
+        <Query
+          query={customerReportsByCustomerId}
+          variables={{customerId: this.props.customer.id}}
+        >
+          {({data, loading, error}) => {
+            if (loading) return <Icon type="loading" />;
+            if (error) return 'error';
+            let results = data.customerReportsByCustomerId;
+            return (
+              results &&
+              results.map(item => <ReportRow key={item.id} item={item} />)
+            );
+          }}
+        </Query>
+
+        <div>
           <UploadButton
             name="file"
             type="file"
@@ -177,7 +138,7 @@ class Override extends React.PureComponent {
           />{' '}
           <Label htmlFor="file">Upload New File</Label>
         </div>
-        <div style={{marginTop: 24}}>Emloyee Totals</div> */}
+        <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>
       </div>
     );
   }

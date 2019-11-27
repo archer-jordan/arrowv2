@@ -8,6 +8,10 @@ import EmployeeForm from 'components/forms/EmployeeForm';
 import EmployeesTable from 'components/common/EmployeesTable';
 import UploadBlock from './UploadBlock';
 import message from 'components/common/message';
+import Icon from 'components/common/Icon';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
+import Popconfirm from 'components/common/Popconfirm';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
@@ -15,6 +19,9 @@ import employeesQuery from 'ApolloClient/Queries/employees';
 import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
 import updateEmployeesUpload from 'ApolloClient/Mutations/updateEmployeesUpload';
 import checkEmployeesCSV from 'ApolloClient/Mutations/checkEmployeesCSV';
+import singleUpload from 'ApolloClient/Mutations/singleUpload';
+import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
+import getAttachment from 'ApolloClient/Queries/getAttachment';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 
@@ -29,6 +36,61 @@ const PinkText = styled.div`
     color: ${p => p.theme.colors.support1};
   }
 `;
+
+const SectionTitle = styled.div`
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 25px;
+  margin-bottom: 24px;
+  background: ${p => p.theme.colors.primary1};
+  margin-top: 48px;
+`;
+
+const Filename = styled.div`
+  font-size: 18px;
+`;
+
+const ButtonText = styled.div`
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: right;
+  color: ${p => p.theme.colors.support1};
+  cursor: pointer;
+`;
+
+const DownloadText = styled.a`
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: right;
+  color: ${p => p.theme.colors.support1};
+  cursor: pointer;
+`;
+
+const FileRow = ({filename, url, onDelete}) => (
+  <Row style={{width: '90%', margin: 'auto'}}>
+    <Col xs={16}>
+      <Filename>{filename}</Filename>
+    </Col>
+    <Col xs={4}>
+      <DownloadText href={url} download={filename}>
+        Download
+      </DownloadText>
+    </Col>
+    <Col xs={4}>
+      {' '}
+      <Popconfirm
+        title="Are you sure you want to delete this?"
+        onConfirm={onDelete}
+      >
+        <ButtonText>Delete</ButtonText>{' '}
+      </Popconfirm>
+    </Col>
+  </Row>
+);
 
 /**
  * 1. Check if we have correct number of columns
@@ -191,6 +253,31 @@ class Employees extends React.PureComponent {
           updateErrors: mutationResult.data.updateEmployeesUpload.errors,
         });
       }
+
+      // upload file to s3
+      let uploadResult = await this.props.singleUpload({
+        variables: {
+          file: this.state.file,
+        },
+      });
+
+      if (uploadResult.data.singleUpload) {
+        const {filename, mimetype, url} = uploadResult.data.singleUpload;
+
+        await this.props.saveAttachment({
+          variables: {
+            params: {
+              filename,
+              mimetype,
+              url,
+              customerId: this.props.customer.id,
+              type: 'EmployeeUploads',
+            },
+          },
+        });
+        // TODO: save this file somewhere
+      }
+
       this.setState({loading: false});
       message.success(`Employees successfully updated`);
     } catch (err) {
@@ -201,8 +288,12 @@ class Employees extends React.PureComponent {
     }
   };
   handleUpload = (event, complete) => {
-    this.setState({loading: true, updateErrors: [], errors: []});
-
+    this.setState({
+      loading: true,
+      updateErrors: [],
+      errors: [],
+      file: event.target.files[0],
+    });
     Papa.parse(event.target.files[0], {
       header: true,
       complete,
@@ -296,20 +387,43 @@ class Employees extends React.PureComponent {
     */
     return (
       <div style={{width: 700, maxWidth: '100%'}}>
+        <SectionTitle>ADD NEW EMPLOYEES TO THE DATABASE"</SectionTitle>
+        <Query
+          query={getAttachment}
+          pollInterval={600000} // every ten minutes
+          variables={{
+            customerId: this.props.customer.id,
+            type: 'EmployeeUploads',
+          }}
+        >
+          {({data, loading, error}) => {
+            if (loading) return <Icon type="loading" />;
+            if (error) return 'error';
+            if (!data.getAttachment) return null;
+            return (
+              <FileRow
+                filename={data.getAttachment.filename}
+                url={data.getAttachment.url}
+                onDelete={() =>
+                  console.log(data.getAttachment.id, 'EmployeeUploads')
+                }
+              />
+            );
+          }}
+        </Query>
         <UploadBlock
           name="file"
           errors={this.state.errors || []}
           loading={this.state.loading}
           onChange={event => this.handleUpload(event, this.afterParse)}
-          sectionTitle="ADD NEW EMPLOYEES TO THE DATABASE"
           buttonText="Upload New Employees"
         />
+        <SectionTitle>UPDATE EXISTING EMPLOYEE RECORDS</SectionTitle>
         <UploadBlock
           name="file-update"
           errors={this.state.updateErrors || []}
           loading={this.state.loading}
           onChange={event => this.handleUpload(event, this.afterUploadParse)}
-          sectionTitle="UPDATE EXISTING EMPLOYEE RECORDS"
           buttonText="Upload Employee Updates"
         />
         <PinkText onClick={() => this.setState({editManually: true})}>
@@ -324,5 +438,7 @@ export default compose(
   graphql(saveEmployee, {name: 'saveEmployee'}),
   graphql(newEmployeesUpload, {name: 'newEmployeesUpload'}),
   graphql(checkEmployeesCSV, {name: 'checkEmployeesCSV'}),
-  graphql(updateEmployeesUpload, {name: 'updateEmployeesUpload'})
+  graphql(updateEmployeesUpload, {name: 'updateEmployeesUpload'}),
+  graphql(singleUpload, {name: 'singleUpload'}),
+  graphql(saveAttachment, {name: 'saveAttachment'})
 )(Employees);

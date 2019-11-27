@@ -209,11 +209,11 @@ class AppReports extends React.PureComponent {
           </Col>
 
           <Col xs={24} md={18}>
-            {this.props.currentUser.companyId && year && month && (
+            {this.props.currentUser.customerId && year && month && (
               <Query
                 query={customerReport}
                 variables={{
-                  customerId: this.props.currentUser.companyId,
+                  customerId: this.props.currentUser.customerId,
                   month: moment(helpers.capitalize(month), 'MMMM').format('M'),
                   year: year,
                 }}

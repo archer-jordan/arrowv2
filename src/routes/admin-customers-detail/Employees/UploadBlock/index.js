@@ -4,15 +4,6 @@ import ErrorBlock from 'components/common/ErrorBlock';
 import theme from 'lib/theme';
 import Icon from 'components/common/Icon';
 
-const SectionTitle = styled.div`
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 25px;
-  margin-bottom: 24px;
-  background: ${p => p.theme.colors.primary1};
-  margin-top: 48px;
-`;
-
 const UploadButton = styled.input`
   width: 0.1px;
   height: 0.1px;
@@ -41,7 +32,6 @@ class UploadBlock extends React.PureComponent {
   render() {
     return (
       <React.Fragment>
-        <SectionTitle>{this.props.sectionTitle}</SectionTitle>
         {!this.props.loading ? (
           <div>
             <UploadButton
@@ -51,7 +41,7 @@ class UploadBlock extends React.PureComponent {
               disabled={this.props.loading}
               onChange={this.props.onChange}
             />{' '}
-            <Label for={this.props.name}>{this.props.buttonText}</Label>
+            <Label htmlFor={this.props.name}>{this.props.buttonText}</Label>
           </div>
         ) : (
           <Icon

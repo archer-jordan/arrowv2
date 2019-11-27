@@ -109,7 +109,7 @@ class Profile extends React.PureComponent {
             <MobileHeadline>Company information</MobileHeadline>
             <Query
               query={customerById}
-              variables={{id: this.props.currentUser.companyId}}
+              variables={{id: this.props.currentUser.customerId}}
             >
               {({data, error, loading}) => {
                 if (loading) return <Loading />;

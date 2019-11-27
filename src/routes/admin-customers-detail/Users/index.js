@@ -21,7 +21,7 @@ class Users extends React.PureComponent {
       let params = {
         ...newValues,
         roles: ['coAdmin'],
-        companyId: this.props.customer.id,
+        customerId: this.props.customer.id,
       };
       await this.props.saveUser({
         variables: {
@@ -48,7 +48,7 @@ class Users extends React.PureComponent {
       let params = {
         ...newValues,
         roles: ['coAdmin'],
-        companyId: this.props.customer.id,
+        customerId: this.props.customer.id,
       };
       await this.props.saveUser({
         variables: {
