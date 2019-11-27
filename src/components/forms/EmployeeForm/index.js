@@ -37,8 +37,7 @@ class EmployeeForm extends React.PureComponent {
     if (!this.state.assignedId) {
       return null;
     }
-
-    this.props.onSubmit({
+    let newData = {
       lastName: this.state.lastName,
       firstName: this.state.firstName,
       assignedId: this.state.assignedId,
@@ -51,7 +50,8 @@ class EmployeeForm extends React.PureComponent {
       zip: this.state.zip,
       city: this.state.city,
       state: this.state.state,
-    });
+    };
+    this.props.onSubmit(newData);
   };
   render() {
     return (

@@ -11,7 +11,7 @@ import message from 'components/common/message';
 import Icon from 'components/common/Icon';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
-import Popconfirm from 'components/common/Popconfirm';
+import ErrorBlock from 'components/common/ErrorBlock';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
@@ -24,6 +24,7 @@ import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
 import getAttachment from 'ApolloClient/Queries/getAttachment';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
+import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 
 const compose = require('lodash/flowRight');
 
@@ -322,12 +323,25 @@ class Employees extends React.PureComponent {
             ...values,
           },
         },
+        refetchQueries: [
+          {
+            query: employeesQuery,
+            variables: {
+              customerId: this.props.customer.id,
+              skip: this.state.skip,
+              sortBy: this.state.sortBy,
+            },
+          },
+        ],
       });
+      message.success('Employee successfully updated');
       this.setState({
         selectedEmployee: null,
       });
     } catch (err) {
-      console.log(err);
+      ErrorHelpers.handleError(err);
+      this.setState({errors: [err.message]});
+      console.log(err.message);
     }
   };
   handleTableChange = (pagination, filters, sorter) => {
@@ -345,12 +359,19 @@ class Employees extends React.PureComponent {
 
     if (this.state.selectedEmployee) {
       return (
-        <EmployeeForm
-          {...this.state.selectedEmployee}
-          onSubmit={this.onSave}
-          loading={this.state.loading}
-          onCancel={() => this.setState({selectedEmployee: null})}
-        />
+        <React.Fragment>
+          <EmployeeForm
+            {...this.state.selectedEmployee}
+            onSubmit={this.onSave}
+            loading={this.state.loading}
+            onCancel={() => this.setState({selectedEmployee: null})}
+          />{' '}
+          {this.state.errors && (
+            <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
+              <ErrorBlock errors={this.state.errors} />
+            </div>
+          )}
+        </React.Fragment>
       );
     }
 
