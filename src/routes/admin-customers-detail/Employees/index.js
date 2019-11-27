@@ -74,20 +74,12 @@ const FileRow = ({filename, url, onDelete}) => (
   <Row style={{width: '90%', margin: 'auto'}}>
     <Col xs={16}>
       <Filename>{filename}</Filename>
-    </Col>
+    </Col>{' '}
+    <Col xs={4}></Col>
     <Col xs={4}>
       <DownloadText href={url} download={filename}>
         Download
       </DownloadText>
-    </Col>
-    <Col xs={4}>
-      {' '}
-      <Popconfirm
-        title="Are you sure you want to delete this?"
-        onConfirm={onDelete}
-      >
-        <ButtonText>Delete</ButtonText>{' '}
-      </Popconfirm>
     </Col>
   </Row>
 );
@@ -170,7 +162,7 @@ class Employees extends React.PureComponent {
   /**
    * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
    */
-  afterParse = async (results, file) => {
+  afterParseAdd = async (results, file) => {
     // 1. make sure the spreadsheet has the correct number of columns
     if (results.meta.fields.length !== 15) {
       return this.setState({
@@ -215,9 +207,32 @@ class Employees extends React.PureComponent {
         employees: formattedData,
       },
     });
+
+    // upload file to s3
+    let uploadResult = await this.props.singleUpload({
+      variables: {
+        file: this.state.file,
+      },
+    });
+
+    if (uploadResult.data.singleUpload) {
+      const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
+      await this.props.saveAttachment({
+        variables: {
+          params: {
+            filename,
+            mimetype,
+            url,
+            key,
+            customerId: this.props.customer.id,
+            type: 'EmployeeUploads',
+          },
+        },
+      });
+    }
     this.setState({loading: false});
   };
-  afterUploadParse = async (results, file) => {
+  afterParseUpdate = async (results, file) => {
     // 1. make sure the spreadsheet has the correct number of columns
     if (results.meta.fields.length !== 15) {
       return this.setState({
@@ -262,20 +277,19 @@ class Employees extends React.PureComponent {
       });
 
       if (uploadResult.data.singleUpload) {
-        const {filename, mimetype, url} = uploadResult.data.singleUpload;
-
+        const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
         await this.props.saveAttachment({
           variables: {
             params: {
               filename,
               mimetype,
               url,
+              key,
               customerId: this.props.customer.id,
               type: 'EmployeeUploads',
             },
           },
         });
-        // TODO: save this file somewhere
       }
 
       this.setState({loading: false});
@@ -347,39 +361,53 @@ class Employees extends React.PureComponent {
 
     if (this.state.editManually) {
       return (
-        <Query
-          query={employeesQuery}
-          variables={{
-            customerId: this.props.customer.id,
-            skip: this.state.skip,
-            sortBy: this.state.sortBy,
-          }}
-        >
-          {({data, loading, error}) => {
-            if (error) return 'error';
-            return (
-              <EmployeesTable
-                history={this.props.history}
-                dataSource={!loading ? data.employees.employees : []}
-                total={!loading ? data.employees.count : null}
-                loading={loading}
-                onRow={(record, rowIndex) => {
-                  return {
-                    onClick: () => this.setState({selectedEmployee: record}),
-                  };
-                }}
-                handleTableChange={this.handleTableChange}
-                onPageChange={page =>
-                  this.setState({
-                    skip: page === 1 ? 0 : (page - 1) * 5,
-                    current: page,
-                  })
-                }
-                current={this.state.current}
-              />
-            );
-          }}
-        </Query>
+        <React.Fragment>
+          <div
+            style={{
+              cursor: 'pointer',
+              marginBottom: 16,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            onClick={() => this.setState({editManually: null})}
+          >
+            <Icon type="left" style={{fontSize: 13, marginRight: 4}} />
+            Back
+          </div>
+          <Query
+            query={employeesQuery}
+            variables={{
+              customerId: this.props.customer.id,
+              skip: this.state.skip,
+              sortBy: this.state.sortBy,
+            }}
+          >
+            {({data, loading, error}) => {
+              if (error) return 'error';
+              return (
+                <EmployeesTable
+                  history={this.props.history}
+                  dataSource={!loading ? data.employees.employees : []}
+                  total={!loading ? data.employees.count : null}
+                  loading={loading}
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: () => this.setState({selectedEmployee: record}),
+                    };
+                  }}
+                  handleTableChange={this.handleTableChange}
+                  onPageChange={page =>
+                    this.setState({
+                      skip: page === 1 ? 0 : (page - 1) * 5,
+                      current: page,
+                    })
+                  }
+                  current={this.state.current}
+                />
+              );
+            }}
+          </Query>
+        </React.Fragment>
       );
     }
     /*
@@ -411,11 +439,12 @@ class Employees extends React.PureComponent {
             );
           }}
         </Query>
+        <div style={{height: 24}} />
         <UploadBlock
           name="file"
           errors={this.state.errors || []}
           loading={this.state.loading}
-          onChange={event => this.handleUpload(event, this.afterParse)}
+          onChange={event => this.handleUpload(event, this.afterParseAdd)}
           buttonText="Upload New Employees"
         />
         <SectionTitle>UPDATE EXISTING EMPLOYEE RECORDS</SectionTitle>
@@ -423,7 +452,7 @@ class Employees extends React.PureComponent {
           name="file-update"
           errors={this.state.updateErrors || []}
           loading={this.state.loading}
-          onChange={event => this.handleUpload(event, this.afterUploadParse)}
+          onChange={event => this.handleUpload(event, this.afterParseUpdate)}
           buttonText="Upload Employee Updates"
         />
         <PinkText onClick={() => this.setState({editManually: true})}>
