@@ -76,7 +76,7 @@ class UserForm extends React.PureComponent {
         gutter={16}
       >
         <Col xs={24}>
-          <FormItem label="First Name">
+          <FormItem label="First Name" required>
             <Input
               value={this.state.firstName}
               onChange={e => this.setState({firstName: e.target.value})}
@@ -84,7 +84,7 @@ class UserForm extends React.PureComponent {
           </FormItem>
         </Col>{' '}
         <Col xs={24}>
-          <FormItem label="Last Name">
+          <FormItem label="Last Name" required>
             <Input
               value={this.state.lastName}
               onChange={e => this.setState({lastName: e.target.value})}
@@ -108,7 +108,7 @@ class UserForm extends React.PureComponent {
           </FormItem>{' '}
         </Col>{' '}
         <Col xs={24}>
-          <FormItem label="Email">
+          <FormItem label="Email" required>
             <Input
               value={this.state.email}
               disabled={this.props.editing}
