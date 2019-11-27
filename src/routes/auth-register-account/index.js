@@ -12,6 +12,7 @@ import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import resetPassword from 'ApolloClient/Mutations/resetPassword';
 import {graphql} from 'react-apollo';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
+import GeneralHelpers from 'lib/helpers/GeneralHelpers';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -56,36 +57,15 @@ class AuthResetPassword extends React.PureComponent {
   };
   onSubmit = async () => {
     try {
-      // make sure password has been filled in
-      if (!this.state.password) {
-        return this.setState({errors: ['Please provide an password']});
-      }
-      // make sure password is at least 6 characters
-      if (this.state.password.length < 6) {
+      let errors = GeneralHelpers.passwordCheck(
+        this.state.password,
+        this.state.confirmPassword
+      );
+
+      if (errors && errors.length > 0) {
         return this.setState({
-          errors: [
-            'Passwords should be at least 6 characters with at least one special character',
-          ],
+          errors,
         });
-      }
-      // make sure it includes a special character
-      if (!this.state.password.match(/[_\W0-9]/)) {
-        return this.setState({
-          errors: ['Passwords should be include one special character'],
-        });
-      }
-      // make sure the confirmPassword input has been filled in
-      if (!this.state.confirmPassword) {
-        return this.setState({errors: ['Please confirm your password']});
-      }
-      //must contain at least one uppercase l
-      if (!/[A-Z]/.test(this.state.password)) {
-        return this.setState({
-          errors: ['Passwords should be include one uppercase character'],
-        });
-      }
-      if (this.state.confirmPassword !== this.state.password) {
-        return this.setState({errors: ['Your passwords do not match']});
       }
 
       // set the form as loading

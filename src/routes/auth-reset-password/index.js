@@ -8,10 +8,11 @@ import message from 'components/common/message';
 import ErrorBlock from 'components/common/ErrorBlock';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import ErrorHelpers from 'lib/helpers/ErrorHelpers';
+import GeneralHelpers from 'lib/helpers/GeneralHelpers';
 // APOLLO
 import resetPassword from 'ApolloClient/Mutations/resetPassword';
 import {graphql} from 'react-apollo';
-import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -53,41 +54,17 @@ class AuthResetPassword extends React.PureComponent {
   };
   onSubmit = async () => {
     try {
-      console.log();
-      // make sure password has been filled in
-      if (!this.state.password) {
-        return this.setState({errors: ['Please provide an password']});
-      }
-      // make sure password is at least 6 characters
-      if (this.state.password.length < 6) {
+      let errors = GeneralHelpers.passwordCheck(
+        this.state.newPassword,
+        this.state.confirmNewPassword
+      );
+
+      if (errors && errors.length > 0) {
         return this.setState({
-          errors: [
-            'Passwords should be at least 6 characters with at least one special character',
-          ],
-        });
-      }
-      // make sure it includes a special character
-      if (!this.state.password.match(/[_\W0-9]/)) {
-        return this.setState({
-          errors: ['Passwords should be include one special character'],
+          errors,
         });
       }
 
-      //must contain at least one uppercase l
-      if (!/[A-Z]/.test(this.state.password)) {
-        return this.setState({
-          errors: ['Passwords should be include one uppercase character'],
-        });
-      }
-
-      // make sure the confirmPassword input has been filled in
-      if (!this.state.confirmPassword) {
-        return this.setState({errors: ['Please confirm your password']});
-      }
-      //
-      if (this.state.confirmPassword !== this.state.password) {
-        return this.setState({errors: ['Your passwords do not match']});
-      }
       let res = await this.props.resetPassword({
         variables: {
           newPassword: this.state.password,

@@ -5,8 +5,10 @@ import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
+import ErrorBlock from 'components/common/ErrorBlock';
 // LIB
 import AuthHelpers from 'lib/helpers/AuthHelpers';
+import GeneralHelpers from 'lib/helpers/GeneralHelpers';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -20,10 +22,25 @@ class Password extends React.PureComponent {
     newPassword: null,
     confirmNewPassword: null,
     loading: false,
+    errors: [],
   };
 
   onSubmit = async () => {
     try {
+      this.setState({
+        errors: [],
+      });
+      let errors = GeneralHelpers.passwordCheck(
+        this.state.newPassword,
+        this.state.confirmNewPassword
+      );
+
+      if (errors && errors.length > 0) {
+        return this.setState({
+          errors,
+        });
+      }
+
       // set loading
       this.setState({loading: true});
       // await the change password mutation
@@ -84,6 +101,11 @@ class Password extends React.PureComponent {
                 dark
               />
             </FormItem>
+            {this.state.errors && this.state.errors.length > 0 && (
+              <FormItem>
+                <ErrorBlock errors={this.state.errors} />
+              </FormItem>
+            )}
             <Button
               onClick={this.onSubmit}
               style={{width: 140}}
