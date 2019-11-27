@@ -54,6 +54,10 @@ class AuthResetPassword extends React.PureComponent {
   };
   onSubmit = async () => {
     try {
+      this.setState({
+        errors: [],
+      });
+
       let errors = GeneralHelpers.passwordCheck(
         this.state.newPassword,
         this.state.confirmNewPassword
@@ -72,11 +76,7 @@ class AuthResetPassword extends React.PureComponent {
         },
       });
       message.success('Password reset. Logging you in...');
-      console.log(res);
       let {accessToken, refreshToken} = res.data.resetPassword.tokens;
-
-      console.log(accessToken);
-      console.log(refreshToken);
       window.localStorage.setItem('arrow_access_token', accessToken);
       window.localStorage.setItem('arrow_refresh_token', refreshToken);
       window.location.reload();

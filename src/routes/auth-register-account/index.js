@@ -57,6 +57,9 @@ class AuthResetPassword extends React.PureComponent {
   };
   onSubmit = async () => {
     try {
+      this.setState({
+        errors: [],
+      });
       let errors = GeneralHelpers.passwordCheck(
         this.state.password,
         this.state.confirmPassword

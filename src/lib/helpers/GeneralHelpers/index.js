@@ -34,9 +34,12 @@ export default {
     if (!/[A-Z]/.test(password)) {
       return ['Passwords should be include one uppercase character'];
     }
+    // check if password match
     if (confirmPassword !== password) {
       return ['Your passwords do not match'];
     }
+
+    return null;
   },
   mapCompanyTypeToLabel: companyType => {
     if (!companyType) return '';
