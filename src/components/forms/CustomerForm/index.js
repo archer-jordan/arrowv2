@@ -46,25 +46,8 @@ class CustomerForm extends React.PureComponent {
     if (!this.state.title) {
       return true;
     }
-    if (!this.state.companyType) {
-      return true;
-    }
+
     if (!this.state.assignedId) {
-      return true;
-    }
-    if (!this.state.ein) {
-      return true;
-    }
-    if (!this.state.street) {
-      return true;
-    }
-    if (!this.state.zip) {
-      return true;
-    }
-    if (!this.state.city) {
-      return true;
-    }
-    if (!this.state.state) {
       return true;
     }
   };
@@ -74,30 +57,10 @@ class CustomerForm extends React.PureComponent {
     if (!this.state.title) {
       return this.setState({errors: ['Please provide a title']});
     }
-    if (!this.state.companyType) {
-      return this.setState({errors: ['Please provide a company type']});
-    }
     if (!this.state.assignedId) {
       return this.setState({errors: ['Please provide an ID']});
     }
-    if (this.state.assignedIdExists) {
-      return this.setState({errors: ['This ID already exists']});
-    }
-    if (!this.state.ein) {
-      return this.setState({errors: ['Please provide an EIN']});
-    }
-    if (!this.state.street) {
-      return this.setState({errors: ['Please provide a street']});
-    }
-    if (!this.state.zip) {
-      return this.setState({errors: ['Please provide an zip']});
-    }
-    if (!this.state.city) {
-      return this.setState({errors: ['Please provide an city']});
-    }
-    if (!this.state.state) {
-      return this.setState({errors: ['Please provide an state']});
-    }
+
     this.props.onSubmit({
       title: this.state.title,
       companyType: this.state.companyType,
@@ -117,7 +80,7 @@ class CustomerForm extends React.PureComponent {
       <Container>
         <Row gutter={16}>
           <Col xs={12}>
-            <FormItem label="ID">
+            <FormItem label="ID" required>
               <Input
                 value={this.state.assignedId}
                 onChange={e => this.setState({assignedId: e.target.value})}
@@ -186,7 +149,7 @@ class CustomerForm extends React.PureComponent {
           </Col>
           <Col xs={24} />
           <Col xs={12}>
-            <FormItem label="Company Name">
+            <FormItem label="Company Name" required>
               <Input
                 value={this.state.title}
                 onChange={e => this.setState({title: e.target.value})}

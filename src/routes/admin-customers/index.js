@@ -38,7 +38,11 @@ class AdminHome extends React.PureComponent {
         refetchQueries: [
           {
             query: customersQuery,
-            variables: {searchText: this.state.searchText},
+            variables: {
+              searchText: this.state.searchText,
+              skip: this.state.skip,
+              sortBy: this.state.sortBy,
+            },
           },
         ],
       });

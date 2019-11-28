@@ -16,27 +16,8 @@ const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
   height: 32px;
   line-height: 32px;
-  @media only screen and (max-width: 414px) {
-    display: none;
-  }
-`;
-
-const MobileHeadline = styled(BigValue)`
-  font-size: 24px;
-  height: 32px;
-  line-height: 32px;
-  display: none;
   margin-bottom: 16px;
-  margin-top: 16px;
-  @media only screen and (max-width: 414px) {
-    display: inherit;
-  }
-`;
-
-const MobileTopContainer = styled(TopContainer)`
-  @media only screen and (max-width: 414px) {
-    display: none;
-  }
+  margin-top: 40px;
 `;
 
 const Label = styled(BigValue)`
@@ -77,19 +58,9 @@ class Profile extends React.PureComponent {
 
     return (
       <div>
-        <MobileTopContainer>
-          <Row style={{width: '100%'}}>
-            <Col xs={24} sm={12}>
-              <ColumnHeadline>Contact information</ColumnHeadline>
-            </Col>
-            <Col xs={24} sm={12}>
-              <ColumnHeadline>Company information</ColumnHeadline>
-            </Col>
-          </Row>
-        </MobileTopContainer>
         <RowContainer>
-          <Col xs={24} sm={11}>
-            <MobileHeadline>Contact information</MobileHeadline>
+          <Col xs={24}>
+            <ColumnHeadline>Contact information</ColumnHeadline>
             <DataItem label="First Name" value={profile.firstName} />
             <DataItem label="Last Name" value={profile.lastName} />
             {profile.title && (
@@ -98,22 +69,15 @@ class Profile extends React.PureComponent {
             <DataItem label="Email" value={profile.email} />
             {profile.phone && <DataItem label="Phone" value={profile.phone} />}
           </Col>{' '}
-          <Col
-            xs={0}
-            sm={2}
-            style={{display: 'flex', justifyContent: 'center'}}
-          >
-            <div style={{width: 2, height: 200, background: '#efefef'}} />
-          </Col>
-          <Col xs={24} sm={9}>
-            <MobileHeadline>Company information</MobileHeadline>
+          <Col xs={24}>
+            <ColumnHeadline>Company information</ColumnHeadline>
+
             <Query
               query={customerById}
               variables={{id: this.props.currentUser.customerId}}
             >
               {({data, error, loading}) => {
                 if (loading) return <Loading />;
-                console.log(data.customerById);
                 let customer = data.customerById;
                 return (
                   <div>

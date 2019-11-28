@@ -9,10 +9,11 @@ const Container = styled.div`
 
 const Required = styled.span`
   color: ${p => p.theme.colors.red4};
-  font-size: 17px;
+  font-size: 18px;
   position: relative;
   top: 4px;
   right: -3px;
+  line-height: 10px;
 `;
 
 class FormItem extends React.PureComponent {
