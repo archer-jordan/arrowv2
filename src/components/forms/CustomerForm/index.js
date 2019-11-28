@@ -228,7 +228,11 @@ class CustomerForm extends React.PureComponent {
         )}
         <FormItem>
           {this.props.onCancel && (
-            <Button style={{width: 100}} grey onClick={this.props.onCancel}>
+            <Button
+              style={{width: 100, marginRight: 16}}
+              grey
+              onClick={this.props.onCancel}
+            >
               Cancel
             </Button>
           )}

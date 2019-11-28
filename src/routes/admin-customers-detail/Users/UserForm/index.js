@@ -180,7 +180,11 @@ class UserForm extends React.PureComponent {
         </Col>{' '}
         <Col xs={24}>
           <FormItem>
-            <Button grey style={{width: 90}} onClick={this.props.onCancel}>
+            <Button
+              grey
+              style={{width: 100, marginRight: 16}}
+              onClick={this.props.onCancel}
+            >
               Cancel
             </Button>
             <Button
