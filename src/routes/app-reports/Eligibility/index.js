@@ -55,6 +55,8 @@ const MobileWrapper = styled.div`
 
 class Eligibility extends React.PureComponent {
   render() {
+    const {report} = this.props;
+
     return (
       <div>
         <TopContainer>
@@ -62,12 +64,12 @@ class Eligibility extends React.PureComponent {
           <Row style={{width: '100%'}}>
             {' '}
             <Col xs={24} md={9} lg={7}>
-              <BigValue>975</BigValue>
+              <BigValue>{report.totalEmployees}</BigValue>
               <BigLabel>Total Employees</BigLabel>{' '}
             </Col>
             <Col xs={24} md={8} lg={8}>
               <MobileWrapper>
-                <BigValue>400</BigValue>
+                <BigValue>{report.activeThisMonth}</BigValue>
                 <BigLabel>Active this month</BigLabel>{' '}
               </MobileWrapper>
             </Col>
@@ -76,11 +78,16 @@ class Eligibility extends React.PureComponent {
         </TopContainer>
         <Row style={{paddingBottom: 64}}>
           {' '}
-          {MOCK_DATA.map((card, i) => {
+          {report.benefits.map((benefit, i) => {
             return (
-              <Col key={card.title} xs={12} md={6}>
+              <Col key={benefit.label} xs={12} md={6}>
                 <EligibilityCard
-                  card={card}
+                  card={{
+                    label: benefit.label,
+                    value: benefit.employees,
+                    comparison: report.totalEmployees - benefit.employees,
+                    type: 'Employees',
+                  }}
                   noBorder={(i + 1) % 4 === 0 && i !== 0}
                 />
               </Col>

@@ -1,4 +1,5 @@
 import React from 'react';
+import numeral from 'numeral';
 import TopContainer from 'components/common/TopContainer';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
@@ -11,9 +12,12 @@ class Retirement extends React.PureComponent {
           <TopContainer>
             <div>
               {' '}
-              <BigValue>$15,679.85</BigValue>
+              <BigValue>
+                ${numeral(this.props.report.totalRetirement).format('0,0.00')}
+              </BigValue>
               <BigLabel>
-                TOTAL CONTRIBUTIONS TO RETIREMENT INCLUDING H&W & VHS{' '}
+                {this.props.report.labelForTotalRetirement ||
+                  'TOTAL CONTRIBUTIONS TO RETIREMENT INCLUDING H&W & VHS'}{' '}
               </BigLabel>
             </div>
           </TopContainer>

@@ -38,21 +38,26 @@ const DATA = [
     color: 'hsl(84, 70%, 50%)',
   },
 ];
-const MyResponsivePie = ({data = DATA /* see data tab */}) => (
+
+const DEFAULT_COLORS = [
+  '#8CB3CD',
+  '#145D92',
+  '#5A89AB',
+  '#0F3557',
+  '#0B4F71',
+  '#166086',
+  '#3994C1',
+];
+const MyResponsivePie = ({
+  colors = DEFAULT_COLORS,
+  data = DATA /* see data tab */,
+}) => (
   <ResponsivePie
     data={data}
     //margin={{top: 40, right: 80, bottom: 80, left: 80}}
     padAngle={0.7}
     cornerRadius={3}
-    colors={[
-      '#8CB3CD',
-      '#145D92',
-      '#5A89AB',
-      '#0F3557',
-      '#0B4F71',
-      '#166086',
-      '#3994C1',
-    ]}
+    colors={colors}
     borderColor={{from: 'color', modifiers: [['darker', 0.2]]}}
     radialLabelsSkipAngle={10}
     radialLabelsTextXOffset={6}

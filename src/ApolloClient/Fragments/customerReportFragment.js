@@ -15,8 +15,12 @@ export default gql`
     totalVHS
     totalEmployees
     totalRetirement
+    totalFringeBenefitsSpend
+    #captions
+    captionForVHS
     # labels
     labelForTotalFringe
+    totalFringeBenefitsSpend
     labelForTotalHours
     labelForVHS
     labelForAdminCosts

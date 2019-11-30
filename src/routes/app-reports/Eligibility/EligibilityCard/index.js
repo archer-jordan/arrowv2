@@ -52,9 +52,22 @@ class EligibilityCard extends React.PureComponent {
     return (
       <Container noBorder={this.props.noBorder}>
         {' '}
-        <Title>{this.props.card.title}</Title>
+        <Title>{this.props.card.label}</Title>
         <PieChartPlaceholder>
-          <PieChart />
+          <PieChart
+            data={[
+              {
+                id: '1',
+                label: 'Eligible',
+                value: this.props.card.value,
+              },
+              {
+                id: '2',
+                label: 'Ineligble',
+                value: this.props.card.comparison,
+              },
+            ]}
+          />
         </PieChartPlaceholder>{' '}
         <Value>{this.props.card.value}</Value>
         <Type>{this.props.card.type}</Type>

@@ -16,11 +16,6 @@ const MOCK_DATA = [
 const PieChartPlaceholder = styled.div`
   width: 300px;
   height: 300px;
-  /* max-width: 100%;
-  max-height: 100%;
-  border-radius: 50%;
-  background: #1371a3;
-  margin-top: 16px; */
 `;
 
 const ValueItemContainer = styled.div`
@@ -58,12 +53,7 @@ const ValueItem = ({label, value, color}) => (
       <Col xs={21}>
         {' '}
         <ValueItemLabel>{label}</ValueItemLabel>
-        <ValueItemValue>
-          {(value / 100).toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </ValueItemValue>
+        <ValueItemValue>{value}</ValueItemValue>
       </Col>
     </Row>
   </ValueItemContainer>
@@ -95,22 +85,22 @@ const Caption = styled.p`
 class HealthAndWelfare extends React.PureComponent {
   render() {
     const {report} = this.props;
+    let labelForVHS = report.labelForVHS
+      ? report.labelForVHS
+      : 'TOTAL VACATION, HOLIDAY, SICK';
     return (
       <div>
         <TopContainer>
           <Row style={{width: '100%'}}>
             {' '}
             <Col xs={24} md={9} lg={7}>
-              <BigValue>{numeral(report.totalHours).format('0,0')}</BigValue>
+              <BigValue>{numeral(report.totalHours).format('0,0.0')}</BigValue>
               <BigLabel>{report.labelForTotalHours || 'Total Hours'}</BigLabel>
             </Col>
             <Col xs={24} md={8} lg={8}>
               <MobileWrapper>
                 <BigValue>
-                  {(report.totalFringe / 100).toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  })}
+                  ${numeral(report.totalFringe).format('0,0.00')}
                 </BigValue>
                 <BigLabel>
                   {report.labelForTotalFringe || 'TOTAL FRINGE*'}
@@ -126,13 +116,37 @@ class HealthAndWelfare extends React.PureComponent {
         <Row align="top">
           {' '}
           <Col xs={24} md={16}>
-            {MOCK_DATA.map((item, i) => (
-              <ValueItem key={item.label} {...item} color={CHART_COLORS[i]} />
-            ))}
+            <ValueItem
+              label="Total Health & Welfare"
+              value={`$${numeral(report.totalHealthAndWelfare).format(
+                '0,0.00'
+              )}`}
+              color={CHART_COLORS[0]}
+            />
+            <ValueItem
+              label={labelForVHS}
+              value={`$${numeral(report.totalVHS).format('0,0.00')}`}
+              color={CHART_COLORS[1]}
+            />
           </Col>
           <Col xs={24} md={8}>
             <PieChartPlaceholder>
-              <PieChart />
+              <PieChart
+                data={[
+                  {
+                    id: 'Total Health & Welfare',
+                    label: 'Total Health & Welfare',
+                    value: report.totalHealthAndWelfare,
+                    color: CHART_COLORS[0],
+                  },
+                  {
+                    id: labelForVHS,
+                    label: labelForVHS,
+                    value: report.totalVHS,
+                    color: CHART_COLORS[1],
+                  },
+                ]}
+              />
             </PieChartPlaceholder>
           </Col>
         </Row>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import TopContainer from 'components/common/TopContainer';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
+import numeral from 'numeral';
 
 const ValueBlockContainer = styled.div`
   height: 75px;
@@ -24,35 +25,29 @@ const Caption = styled.p`
   }
 `;
 
-const MOCK_DATA = [
-  {label: 'Limited Medical', value: 9940220},
-  {label: 'Teledoc', value: 940220},
-  {label: 'MEC', value: 9940220},
-  {label: 'TERM LIFE INSURANCE', value: 940220},
-];
-
 const ValueBlock = ({value, label}) => (
   <ValueBlockContainer>
     <ValueItemLabel>{label}</ValueItemLabel>
-    <ValueItemValue>
-      {(value / 100).toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      })}
-    </ValueItemValue>
+    <ValueItemValue>${numeral(value).format('0,0.00')}</ValueItemValue>
   </ValueBlockContainer>
 );
 
 class Benefits extends React.PureComponent {
   render() {
+    const {report} = this.props;
     return (
       <div>
         <div>
           <TopContainer>
             <div>
               {' '}
-              <BigValue>$6,993.42</BigValue>
-              <BigLabel>TOTAL FRINGE BENEFITS SPEND*</BigLabel>
+              <BigValue>
+                ${numeral(report.totalFringeBenefitsSpend).format('0,0.00')}
+              </BigValue>
+              <BigLabel>
+                {report.totalFringeBenefitsSpendLabel ||
+                  'TOTAL FRINGE BENEFITS SPEND*'}
+              </BigLabel>
             </div>
           </TopContainer>
           <Caption style={{textAlign: 'right'}}>
@@ -60,8 +55,8 @@ class Benefits extends React.PureComponent {
           </Caption>
         </div>
         <div style={{paddingLeft: 24}}>
-          {MOCK_DATA.map(item => {
-            return <ValueBlock key={item.label} {...item} />;
+          {report.benefits.map(benefit => {
+            return <ValueBlock key={benefit.label} {...benefit} />;
           })}{' '}
         </div>
       </div>

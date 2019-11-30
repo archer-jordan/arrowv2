@@ -4,9 +4,10 @@ import Papa from 'papaparse';
 import formatRow from './formatRow';
 // COMPONENTS
 import Icon from 'components/common/Icon';
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
+import Button from 'components/common/Button';
 import message from 'components/common/message';
+import ErrorBlock from 'components/common/ErrorBlock';
+import ReportRow from './ReportRow';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
@@ -45,82 +46,66 @@ const SectionTitle = styled.div`
   margin-top: 48px;
 `;
 
-// 0: "COMPANY NAME"
-// 1: "COID"
-// 2: "Month(#)"
-// 3: "MONTH"
-// 4: "YEAR"
-// 5: "TOTAL HOURS"
-// 6: "TOTAL FRINGE*"
-// 7: "TOTAL HEALTH & WELFARE"
-// 8: "TOTAL VACATION, HOLIDAY, SICK"
-// 9: "*Including Administrative Costs"
-// 10: "TOTAL EMPLOYEES"
-// 11: "ACTIVE THIS MONTH"
-// ==> CUSTOM BENEFITS Employee counts start here
-// 12: "LIMITED MEDICAL"
-// 13: "TELEDOC"
-// 14: "MEC"
-// 15: "TERM LIFE INSURANCE"
-// 16: "null"
-// 17: "null"
-// 18: "null"
-// 19: "null"
-// 20: "*charts below: eligible vs. active this month"
-// 21: "TOTAL FRINGE BENEFITS SPEND*"
-// ==> CUSTOM BENEFITS values
-// 22: "LIMITED MEDICAL"
-// 23: "TELEDOC"
-// 24: "MEC"
-// 25: "TERM LIFE INSURANCE"
-// 26: "null"
-// 27: "null"
-// 28: "null"
-// 29: "null"
-// 30: "* including H&W, VHS, Administrative Costs"
-// 31: "TOTAL CONTRIBUTIONS TO RETIREMENT INCLUDING H&W & VHS"
-
-const ReportRow = ({item}) => (
-  <Row>
-    <Col xs={8}>
-      {item.month}/{item.year}
-    </Col>
-    <Col xs={8}></Col>
-    <Col xs={8}></Col>
-  </Row>
-);
-
 class Override extends React.PureComponent {
   state = {
     loading: false,
+    selectedItem: null,
+    companyErrors: [],
   };
   onCustomerUpload = async (results, file) => {
     // set to loading
     this.setState({loading: true});
+    console.log({
+      data: results.data[0],
+      length: results.data[0].length,
+      headers: results.data[1],
+    });
+    if (results.data[1].length !== 32) {
+      return this.setState({
+        companyErrors: [
+          'This sheet does not have the correct number of columns',
+        ],
+      });
+    }
     // format the data
+
     let data = formatRow(results.data[0], results.data[1]);
     // call the upload mutation
     let result = await this.props.customerTotalsUpload({
       variables: {
         values: data,
       },
+      refetchQueries: [
+        {
+          query: customerReportsByCustomerId,
+          variables: {
+            customerId: this.props.customer.id,
+          },
+        },
+      ],
     });
 
     console.log(result);
     message.success('Upload complete');
     // turn off loading
-    this.setState({loading: false});
+    this.setState({loading: false, companyFile: null});
   };
   handleUpload = event => {
-    Papa.parse(event.target.files[0], {
+    Papa.parse(this.state.companyFile, {
       header: false,
       complete: this.onCustomerUpload,
+    });
+  };
+  handleCompanyChange = event => {
+    this.setState({
+      companyFile: event.target.files[0],
     });
   };
   render() {
     return (
       <div style={{width: 700, maxWidth: '100%'}}>
         <SectionTitle>Company Totals</SectionTitle>
+        {/* SHOW PAST UPLOADS */}
         <Query
           query={customerReportsByCustomerId}
           variables={{customerId: this.props.customer.id}}
@@ -131,22 +116,55 @@ class Override extends React.PureComponent {
             let results = data.customerReportsByCustomerId;
             return (
               results &&
-              results.map(item => <ReportRow key={item.id} item={item} />)
+              results.map(item => (
+                <ReportRow
+                  key={item.id}
+                  item={item}
+                  active={
+                    this.state.selectedItem &&
+                    this.state.selectedItem.id === item.id
+                  }
+                  onClick={() =>
+                    this.state.selectedItem &&
+                    this.state.selectedItem.id === item.id
+                      ? this.setState({selectedItem: null})
+                      : this.setState({selectedItem: item})
+                  }
+                />
+              ))
             );
           }}
         </Query>
-        {!this.state.loading ? (
+        {/* SHOW ERRORS IF THEY EXIST */}
+        {this.state.companyErrors && this.state.companyErrors.length > 0 && (
+          <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
+            <ErrorBlock errors={this.state.companyErrors} />
+          </div>
+        )}
+        {this.state.companyFile && this.state.companyFile.name}
+        {/* COMPANY UPLOAD BUTTON */}
+        {this.state.companyFile && !this.state.loading && (
+          <Button
+            style={{marginTop: 32, marginLeft: 16, width: 100}}
+            onClick={this.handleUpload}
+          >
+            Upload File
+          </Button>
+        )}
+        {this.state.companyFile && this.state.loading && (
+          <Icon type="loading" />
+        )}
+        {/* COMPANY UPLOAD BUTTON */}
+        {!this.state.companyFile && (
           <div style={{marginTop: 32}}>
             <UploadButton
               name="file"
               type="file"
               id="file"
-              onChange={this.handleUpload}
+              onChange={this.handleCompanyChange}
             />{' '}
-            <Label htmlFor="file">Upload New File</Label>
+            <Label htmlFor="file">Select New File</Label>
           </div>
-        ) : (
-          <Icon type="loading" />
         )}
 
         <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>

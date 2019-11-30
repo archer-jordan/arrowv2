@@ -153,11 +153,13 @@ class AppReports extends React.PureComponent {
       },
     ];
 
+    console.log(this.state.queryData && this.state.queryData.customerReport);
     // if the query does not have retirement data, then we don't want to show the retirement tab
     if (
       this.state.queryData &&
-      !this.state.queryData.labelForTotalRetirement &&
-      !this.state.queryData.totalRetirement
+      this.state.queryData.customerReport &&
+      !this.state.queryData.customerReport.labelForTotalRetirement &&
+      !this.state.queryData.customerReport.totalRetirement
     ) {
       navItems = navItems.filter(item => item.activeValue !== 'retirement');
     }
