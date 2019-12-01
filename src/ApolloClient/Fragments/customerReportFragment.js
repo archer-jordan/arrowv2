@@ -17,7 +17,7 @@ export default gql`
     totalRetirement
     totalFringeBenefitsSpend
     #captions
-    captionForVHS
+    captionForHealthAndWelfare
     # labels
     labelForTotalFringe
     totalFringeBenefitsSpend

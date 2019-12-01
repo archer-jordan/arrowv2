@@ -51,7 +51,8 @@ class Benefits extends React.PureComponent {
             </div>
           </TopContainer>
           <Caption style={{textAlign: 'right'}}>
-            *Including H&W, VHS & Administrative Costs
+            {report.captionForHealthAndWelfare ||
+              '*Including H&W, VHS & Administrative Costs'}
           </Caption>
         </div>
         <div style={{paddingLeft: 24}}>

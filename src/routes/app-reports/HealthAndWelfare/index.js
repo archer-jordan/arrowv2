@@ -111,7 +111,8 @@ class HealthAndWelfare extends React.PureComponent {
           </Row>
         </TopContainer>{' '}
         <Caption style={{textAlign: 'right'}}>
-          *Including H&W, VHS & Administrative Costs
+          {report.captionForHealthAndWelfare ||
+            '*Including H&W, VHS & Administrative Costs'}
         </Caption>
         <Row align="top">
           {' '}

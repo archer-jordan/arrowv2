@@ -12,7 +12,7 @@ import HealthAndWelfare from './HealthAndWelfare';
 import Eligibility from './Eligibility';
 import Retirement from './Retirement';
 import Benefits from './Benefits';
-import DownloadXL from './DownloadXL';
+import Downloads from './Downloads';
 import SideNav from 'components/common/SideNav';
 // APOLLO
 import {Query} from 'react-apollo';
@@ -144,7 +144,7 @@ class AppReports extends React.PureComponent {
           }),
       },
       {
-        label: 'Download XL',
+        label: 'Downloads',
         activeValue: 'download',
         onClick: () =>
           this.onParamChange({
@@ -240,7 +240,7 @@ class AppReports extends React.PureComponent {
                           case 'benefits':
                             return <Benefits {...sharedProps} />;
                           case 'download':
-                            return <DownloadXL {...sharedProps} />;
+                            return <Downloads {...sharedProps} />;
                           case 'eligibility':
                             return <Eligibility {...sharedProps} />;
                           case 'health':

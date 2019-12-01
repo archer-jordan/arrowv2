@@ -8,6 +8,11 @@ const Label = styled.span`
   text-transform: uppercase;
 `;
 
+const PageBreak = styled.div`
+  border: 2px solid ${p => p.theme.colors.neutral7};
+  margin-top: 16px;
+`;
+
 const ReportRow = ({item, active, onClick}) => {
   const {
     month,
@@ -27,7 +32,7 @@ const ReportRow = ({item, active, onClick}) => {
     totalEmployees,
     totalHealthAndWelfare,
     labelForAdminCosts,
-    captionForVHS,
+    captionForHealthAndWelfare,
     totalFringeBenefitsSpend,
     totalFringeBenefitsSpendLabel,
   } = item;
@@ -70,13 +75,10 @@ const ReportRow = ({item, active, onClick}) => {
             <div>
               <Label>{labelForVHS || 'TOTAL VHS'}</Label>: {totalVHS}
             </div>
-            {/*  <div>
-              <Label>VHS caption</Label>: {captionForVHS}
-            </div>
-           <div>
+            <div>
               <Label>{'Label for Admin Costs'}</Label>:{' '}
               {labelForAdminCosts || 'N/A'}
-            </div> */}
+            </div>
             <div>
               <Label>Total Employees</Label>: {totalEmployees}
             </div>
@@ -93,6 +95,12 @@ const ReportRow = ({item, active, onClick}) => {
               <Label>{labelForTotalRetirement || 'Total Retirement'}</Label>:{' '}
               {totalRetirement || 'N/A'}
             </div>
+            <PageBreak />
+            <div>
+              <Label>Caption for Health & Welfare</Label>:{' '}
+              {captionForHealthAndWelfare}
+            </div>
+            <PageBreak />
             <Label> BENEFITS:</Label>{' '}
             <div style={{paddingLeft: 16}}>
               {benefits &&

@@ -302,14 +302,14 @@ class Employees extends React.PureComponent {
       });
     }
   };
-  handleUpload = (event, complete) => {
+  handleUpload = (file, complete) => {
     this.setState({
       loading: true,
       updateErrors: [],
       errors: [],
-      file: event.target.files[0],
+      file,
     });
-    Papa.parse(event.target.files[0], {
+    Papa.parse(file, {
       header: true,
       complete,
     });
@@ -437,7 +437,7 @@ class Employees extends React.PureComponent {
     return (
       <div style={{width: 700, maxWidth: '100%'}}>
         <SectionTitle>ADD NEW EMPLOYEES TO THE DATABASE"</SectionTitle>
-        <Query
+        {/* <Query
           query={getAttachment}
           pollInterval={600000} // every ten minutes
           variables={{
@@ -459,13 +459,13 @@ class Employees extends React.PureComponent {
               />
             );
           }}
-        </Query>
+        </Query> */}
         <div style={{height: 24}} />
         <UploadBlock
           name="file"
           errors={this.state.errors || []}
           loading={this.state.loading}
-          onChange={event => this.handleUpload(event, this.afterParseAdd)}
+          onChange={file => this.handleUpload(file, this.afterParseAdd)}
           buttonText="Upload New Employees"
         />
         <SectionTitle>UPDATE EXISTING EMPLOYEE RECORDS</SectionTitle>
@@ -473,7 +473,7 @@ class Employees extends React.PureComponent {
           name="file-update"
           errors={this.state.updateErrors || []}
           loading={this.state.loading}
-          onChange={event => this.handleUpload(event, this.afterParseUpdate)}
+          onChange={file => this.handleUpload(file, this.afterParseUpdate)}
           buttonText="Upload Employee Updates"
         />
         <PinkText onClick={() => this.setState({editManually: true})}>

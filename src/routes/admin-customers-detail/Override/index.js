@@ -53,42 +53,44 @@ class Override extends React.PureComponent {
     companyErrors: [],
   };
   onCustomerUpload = async (results, file) => {
-    // set to loading
-    this.setState({loading: true});
-    console.log({
-      data: results.data[0],
-      length: results.data[0].length,
-      headers: results.data[1],
-    });
-    if (results.data[1].length !== 32) {
-      return this.setState({
-        companyErrors: [
-          'This sheet does not have the correct number of columns',
+    try {
+      // set to loading
+      this.setState({loading: true});
+
+      // check the length and throw an error if we have the incorrect number of columns we were expecting
+      if (results.data[1].length !== 32) {
+        return this.setState({
+          companyErrors: [
+            'This sheet does not have the correct number of columns',
+          ],
+        });
+      }
+      // format the data
+      let data = formatRow(results.data[0], results.data[1]);
+      // call the upload mutation
+      let result = await this.props.customerTotalsUpload({
+        variables: {
+          values: data,
+        },
+        refetchQueries: [
+          {
+            query: customerReportsByCustomerId,
+            variables: {
+              customerId: this.props.customer.id,
+            },
+          },
         ],
       });
+
+      console.log(result);
+      message.success('Upload complete');
+      // turn off loading
+      this.setState({loading: false, companyFile: null});
+    } catch (err) {
+      this.setState({
+        companyErrors: [err.message],
+      });
     }
-    // format the data
-
-    let data = formatRow(results.data[0], results.data[1]);
-    // call the upload mutation
-    let result = await this.props.customerTotalsUpload({
-      variables: {
-        values: data,
-      },
-      refetchQueries: [
-        {
-          query: customerReportsByCustomerId,
-          variables: {
-            customerId: this.props.customer.id,
-          },
-        },
-      ],
-    });
-
-    console.log(result);
-    message.success('Upload complete');
-    // turn off loading
-    this.setState({loading: false, companyFile: null});
   };
   handleUpload = event => {
     Papa.parse(this.state.companyFile, {
