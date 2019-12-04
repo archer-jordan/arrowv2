@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Papa from 'papaparse';
 import formatRow from './formatRow';
+import formatEmployeeRow from './formatEmployeeRow';
 // COMPONENTS
 import Icon from 'components/common/Icon';
 import Button from 'components/common/Button';
@@ -12,6 +13,9 @@ import ReportRow from './ReportRow';
 import {graphql, Query} from 'react-apollo';
 import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
 import customerReportsByCustomerId from 'ApolloClient/Queries/customerReportsByCustomerId';
+import uploadEmployeeReports from 'ApolloClient/Mutations/uploadEmployeeReports';
+
+const compose = require('lodash/flowRight');
 
 const UploadButton = styled.input`
   width: 0.1px;
@@ -92,15 +96,42 @@ class Override extends React.PureComponent {
       });
     }
   };
-  handleUpload = event => {
-    Papa.parse(this.state.companyFile, {
+  onEmployeeUpload = async (results, file) => {
+    console.log({results, file});
+    let headersArray = results.data[0];
+    let formattedData = [];
+    results.data.forEach((item, i) => {
+      // 0 index item is the header row, which we don't want to include in formatted data
+      if (i !== 0 && item[0] !== null && item[0] !== '') {
+        console.log(item); // check that item has 36 columns
+        let formattedItem = formatEmployeeRow(headersArray, item);
+        formattedData.push(formattedItem);
+      }
+    });
+    await this.props.uploadEmployeeReports({
+      variables: {
+        values: formattedData,
+      },
+    });
+    console.log(formattedData);
+  };
+  handleUpload = (
+    file = this.state.companyFile,
+    complete = this.onCustomerUpload
+  ) => {
+    Papa.parse(file, {
       header: false,
-      complete: this.onCustomerUpload,
+      complete,
     });
   };
   handleCompanyChange = event => {
     this.setState({
       companyFile: event.target.files[0],
+    });
+  };
+  handleEmployeeChange = event => {
+    this.setState({
+      employeeFile: event.target.files[0],
     });
   };
   render() {
@@ -170,11 +201,34 @@ class Override extends React.PureComponent {
         )}
 
         <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>
+        {this.state.employeeFile && this.state.employeeFile.name}
+        {this.state.employeeFile && !this.state.loading && (
+          <Button
+            style={{marginTop: 32, marginLeft: 16, width: 100}}
+            onClick={() =>
+              this.handleUpload(this.state.employeeFile, this.onEmployeeUpload)
+            }
+          >
+            Upload File
+          </Button>
+        )}
+        {!this.state.employeeFile && (
+          <div style={{marginTop: 32}}>
+            <UploadButton
+              name="employee-file"
+              type="file"
+              id="employee-file"
+              onChange={this.handleEmployeeChange}
+            />{' '}
+            <Label htmlFor="employee-file">Select New File</Label>
+          </div>
+        )}
       </div>
     );
   }
 }
 
-export default graphql(customerTotalsUpload, {name: 'customerTotalsUpload'})(
-  Override
-);
+export default compose(
+  graphql(uploadEmployeeReports, {name: 'uploadEmployeeReports'}),
+  graphql(customerTotalsUpload, {name: 'customerTotalsUpload'})
+)(Override);

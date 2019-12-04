@@ -1,11 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import TopContainer from "components/common/TopContainer";
-import Row from "components/common/Row";
-import Col from "components/common/Col";
-import BigValue from "components/text/BigValue";
-import BigLabel from "components/text/BigLabel";
-import PieChart from "components/common/PieChart";
+import React from 'react';
+import styled from 'styled-components';
+import moment from 'moment';
+import TopContainer from 'components/common/TopContainer';
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
+import BigValue from 'components/text/BigValue';
+import BigLabel from 'components/text/BigLabel';
+import PieChart from 'components/common/PieChart';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
+// APOLLO
+import employeeReportByEmployeeId from 'ApolloClient/Queries/employeeReportByEmployeeId';
+import {Query} from 'react-apollo';
 
 const PieChartPlaceholder = styled.div`
   width: 250px;
@@ -24,118 +30,127 @@ const PieChartPlaceholder = styled.div`
 
 const MOCK_DATA = [
   {
-    id: "1",
-    color: "#8CB3CD",
-    title: "FRINGE DOLLARS",
-    amount: 19642
+    id: '1',
+    color: '#8CB3CD',
+    title: 'FRINGE DOLLARS',
+    amount: 19642,
   },
   {
-    id: "2",
-    color: "#145D92",
-    title: "HEALTH & WELFARE",
-    amount: 12527
+    id: '2',
+    color: '#145D92',
+    title: 'HEALTH & WELFARE',
+    amount: 12527,
   },
   {
-    id: "3",
-    color: "#5A89AB",
-    title: "RETIREMENT",
-    amount: 5740
-  }
+    id: '3',
+    color: '#5A89AB',
+    title: 'RETIREMENT',
+    amount: 5740,
+  },
 ];
 
 const ColorCircle = styled.div`
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  background: ${p => (p.color ? p.color : "red")};
+  background: ${p => (p.color ? p.color : 'red')};
 `;
 
-const FinancialRow = ({ item }) => {
+const FinancialRow = ({label, value, color}) => {
   return (
     <div
       style={{
         height: 100,
         marginBottom: 24,
-        borderBottom: "1px solid #efefef",
-        position: "relative",
+        borderBottom: '1px solid #efefef',
+        position: 'relative',
         width: 350,
-        maxWidth: "100%"
+        maxWidth: '100%',
       }}
     >
-      <div style={{ display: "inline-block" }}>
-        <BigLabel>{item.title}</BigLabel>
-        <BigValue style={{ fontSize: 40 }}>
-          {(item.amount / 100).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD"
-          })}
-        </BigValue>
+      <div style={{display: 'inline-block', minWidth: 150}}>
+        <BigLabel>{label}</BigLabel>
+        <BigValue style={{fontSize: 40}}>${value}</BigValue>
       </div>
-      <div style={{ display: "inline-block", marginLeft: 16 }}>
-        <ColorCircle color={item.color} />
+      <div style={{display: 'inline-block', marginLeft: 16}}>
+        <ColorCircle color={color} />
       </div>
-      {/* <div style={{position: 'absolute', right: 50, bottom: 50}}>
-        <ColorCircle color={item.color} />
-      </div> */}
     </div>
   );
-  // return (
-  //   <Row
-  //     gutter={16}
-  //     align="center"
-  //     style={{height: 100, marginTop: 24, borderBottom: '1px solid #efefef'}}
-  //   >
-  //     <Col xs={12}>
-  //       {' '}
-  //       <div style={{position: 'relative'}}>
-  //         <BigLabel>{item.title}</BigLabel>
-  //         <BigValue style={{fontSize: 40}}>
-  //           {(item.amount / 100).toLocaleString('en-US', {
-  //             style: 'currency',
-  //             currency: 'USD',
-  //           })}
-  //         </BigValue>
-  //         <div style={{position: 'absolute', right: 50, bottom: 15}}>
-  //           <ColorCircle color={item.color} />
-  //         </div>
-  //       </div>
-  //     </Col>
-  //     <Col xs={12}></Col>
-  //   </Row>
-  // );
 };
 
 class Financials extends React.PureComponent {
   render() {
     return (
-      <div style={{ paddingBottom: 90 }}>
+      <div style={{paddingBottom: 90}}>
         <div>
-          <TopContainer style={{ justifyContent: "flex-end" }}>
+          <TopContainer style={{justifyContent: 'flex-end'}}>
             <div>
-              {" "}
-              <BigValue style={{ textAlign: "right" }}>
-                {" "}
+              {' '}
+              <BigValue style={{textAlign: 'right'}}>
+                {' '}
                 {this.props.employee.firstName} {this.props.employee.lastName}
               </BigValue>
-              <BigLabel style={{ textAlign: "right" }}>
+              <BigLabel style={{textAlign: 'right'}}>
                 {this.props.employee.email}
               </BigLabel>
             </div>
           </TopContainer>
-          <Row gutter={16} style={{ marginTop: 30 }}>
-            <Col xs={16}>
-              {" "}
-              {MOCK_DATA.map(item => (
-                <FinancialRow key={item.id} item={item} />
-              ))}
-            </Col>
-            <Col xs={8}>
-              <PieChartPlaceholder>
-                <PieChart />
-              </PieChartPlaceholder>
-            </Col>
-          </Row>
-        </div>{" "}
+          <Query
+            query={employeeReportByEmployeeId}
+            variables={{
+              month: moment(
+                helpers.capitalize(this.props.month),
+                'MMMM'
+              ).format('M'),
+              year: this.props.year,
+              employeeId: this.props.employeeId,
+            }}
+          >
+            {({loading, data, error}) => {
+              if (loading) return 'loading';
+              if (error) return 'error';
+              if (
+                !data.employeeReportByEmployeeId ||
+                !data.employeeReportByEmployeeId.benefits
+              ) {
+                return 'No data';
+              }
+              let report = data.employeeReportByEmployeeId;
+
+              return (
+                <Row gutter={16} style={{marginTop: 30}}>
+                  <Col xs={16}>
+                    {' '}
+                    <FinancialRow
+                      label="Fringe Dollars"
+                      value={report.fringeDollars}
+                      color="#8CB3CD"
+                    />
+                    <FinancialRow
+                      label="Health & Welfare"
+                      value={report.healthAndWelfare}
+                      color="#145D92"
+                    />
+                    <FinancialRow
+                      label="Retirement"
+                      value={report.retirement}
+                      color="#5A89AB"
+                    />
+                    {/* {MOCK_DATA.map(item => (
+                      <FinancialRow key={item.id} item={item} />
+                    ))} */}
+                  </Col>
+                  <Col xs={8}>
+                    <PieChartPlaceholder>
+                      <PieChart />
+                    </PieChartPlaceholder>
+                  </Col>
+                </Row>
+              );
+            }}
+          </Query>
+        </div>{' '}
       </div>
     );
   }

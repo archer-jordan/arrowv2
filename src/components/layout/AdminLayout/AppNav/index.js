@@ -78,7 +78,7 @@ const AppNav = ({pathname}) => {
         >
           {' '}
           <div style={{flex: 1}}>
-            <CompanyName>Company Name</CompanyName>
+            <CompanyName>ARCHER JORDAN ADMIN</CompanyName>
           </div>
           <RightContainer>
             <MobileCol>

@@ -141,7 +141,9 @@ class AppEmployeesDetail extends React.PureComponent {
             history,
             location,
             month,
+            year,
             employee,
+            employeeId,
           };
 
           return (
