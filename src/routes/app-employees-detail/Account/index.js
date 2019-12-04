@@ -1,10 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import Row from "components/common/Row";
-import Col from "components/common/Col";
-import BigValue from "components/text/BigValue";
-import BigLabel from "components/text/BigLabel";
-import TopContainer from "components/common/TopContainer";
+// TOP LEVEL IMPORTS
+import React from 'react';
+import moment from 'moment';
+import styled from 'styled-components';
+// COMPONENTS
+import Row from 'components/common/Row';
+import Col from 'components/common/Col';
+import BigValue from 'components/text/BigValue';
+import BigLabel from 'components/text/BigLabel';
+import TopContainer from 'components/common/TopContainer';
 
 const Label = styled(BigValue)`
   font-size: 16px;
@@ -18,7 +21,7 @@ const Value = styled(Label)`
   font-weight: 400;
 `;
 
-const DataItem = ({ label = "First Name", value = "John" }) => (
+const DataItem = ({label = 'First Name', value = 'John'}) => (
   <Row>
     <Col xs={12}>
       <Label>{label}</Label>
@@ -33,22 +36,27 @@ class Account extends React.PureComponent {
   render() {
     return (
       <div>
-        <TopContainer style={{ justifyContent: "flex-end" }}>
+        <TopContainer style={{justifyContent: 'flex-end'}}>
           <div>
-            {" "}
-            <BigValue style={{ textAlign: "right" }}>
-              {" "}
+            {' '}
+            <BigValue style={{textAlign: 'right'}}>
+              {' '}
               {this.props.employee.firstName} {this.props.employee.lastName}
             </BigValue>
-            <BigLabel style={{ textAlign: "right" }}>
+            <BigLabel style={{textAlign: 'right'}}>
               {this.props.employee.email}
             </BigLabel>
           </div>
         </TopContainer>
-        <div style={{ width: 350, maxWidth: "100%", marginTop: 24 }}>
+        <div style={{width: 350, maxWidth: '100%', marginTop: 24}}>
           <DataItem label="Last Name" value={this.props.employee.lastName} />
           <DataItem label="First Name" value={this.props.employee.firstName} />
-          {/* <DataItem label="MI" value="n/a" /> */}
+          <DataItem label="Gender" value={this.props.employee.gender} />
+          <DataItem
+            label="DOB"
+            value={moment(parseInt(this.props.employee.dob)).format('M/D/YYYY')}
+          />
+          <DataItem label="Email" value={this.props.employee.email} />
         </div>
       </div>
     );

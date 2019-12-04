@@ -117,33 +117,44 @@ class Financials extends React.PureComponent {
                 return 'No data';
               }
               let report = data.employeeReportByEmployeeId;
-
+              let dataArray = [
+                {
+                  id: '1',
+                  label: 'Fringe Dollars',
+                  value: report.fringeDollars,
+                  color: '#8CB3CD',
+                },
+                {
+                  id: '2',
+                  label: 'Health & Welfare',
+                  value: report.healthAndWelfare,
+                  color: '#145D92',
+                },
+                {
+                  id: '3',
+                  label: 'Retirement',
+                  value: report.retirement,
+                  color: '#5A89AB',
+                },
+              ];
               return (
                 <Row gutter={16} style={{marginTop: 30}}>
                   <Col xs={16}>
                     {' '}
-                    <FinancialRow
-                      label="Fringe Dollars"
-                      value={report.fringeDollars}
-                      color="#8CB3CD"
-                    />
-                    <FinancialRow
-                      label="Health & Welfare"
-                      value={report.healthAndWelfare}
-                      color="#145D92"
-                    />
-                    <FinancialRow
-                      label="Retirement"
-                      value={report.retirement}
-                      color="#5A89AB"
-                    />
-                    {/* {MOCK_DATA.map(item => (
-                      <FinancialRow key={item.id} item={item} />
-                    ))} */}
+                    {dataArray.map(item => {
+                      return (
+                        <FinancialRow
+                          key={item.id}
+                          label={item.label}
+                          value={item.value}
+                          color={item.color}
+                        />
+                      );
+                    })}
                   </Col>
                   <Col xs={8}>
                     <PieChartPlaceholder>
-                      <PieChart />
+                      <PieChart data={dataArray} />
                     </PieChartPlaceholder>
                   </Col>
                 </Row>

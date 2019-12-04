@@ -119,10 +119,12 @@ class Override extends React.PureComponent {
     file = this.state.companyFile,
     complete = this.onCustomerUpload
   ) => {
-    Papa.parse(file, {
-      header: false,
-      complete,
-    });
+    if (file && complete) {
+      Papa.parse(file, {
+        header: false,
+        complete,
+      });
+    }
   };
   handleCompanyChange = event => {
     this.setState({
@@ -179,7 +181,9 @@ class Override extends React.PureComponent {
         {this.state.companyFile && !this.state.loading && (
           <Button
             style={{marginTop: 32, marginLeft: 16, width: 100}}
-            onClick={this.handleUpload}
+            onClick={() =>
+              this.handleUpload(this.state.companyFile, this.onCustomerUpload)
+            }
           >
             Upload File
           </Button>
