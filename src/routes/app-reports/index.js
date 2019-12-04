@@ -1,61 +1,27 @@
 import React from 'react';
 import queryString from 'query-string';
-import styled from 'styled-components';
 import moment from 'moment';
 // COMPONENTS
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import Loading from 'components/common/Loading';
 import Breadcrumb from 'components/common/Breadcrumb';
-import MonthPicker from 'components/inputs/MonthPicker';
+import MonthComponent from 'components/common/MonthComponent';
 import HealthAndWelfare from './HealthAndWelfare';
 import Eligibility from './Eligibility';
 import Retirement from './Retirement';
 import Benefits from './Benefits';
 import Downloads from './Downloads';
 import SideNav from 'components/common/SideNav';
+import EmployeeDashboard from './EmployeeDashboard';
 // APOLLO
 import {Query} from 'react-apollo';
 import customerReport from 'ApolloClient/Queries/customerReport';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 
-const DateText = styled.div`
-  color: #1371a3;
-  text-align: right;
-  font-size: 40px;
-`;
-
-const DatePickerBackground = styled.div`
-  position: fixed;
-  background: transparent;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 100;
-`;
-
-const ChangeDate = styled.button`
-  color: ${p => p.theme.colors.support1};
-  text-align: right;
-  font-size: 16px;
-  cursor: pointer;
-  display: block;
-  margin-left: auto;
-  text-decoration: underline;
-  background: transparent;
-  border: 0px;
-  padding: 0px;
-  &:focus {
-    outline: 0;
-  }
-`;
-
 class AppReports extends React.PureComponent {
-  state = {
-    editDate: false,
-  };
+  state = {};
   onParamChange = newValues => {
     let oldParams = queryString.parse(this.props.location.search);
     let newParams = {
@@ -170,6 +136,18 @@ class AppReports extends React.PureComponent {
   render() {
     const {location, history} = this.props;
 
+    if (
+      this.props.currentUser &&
+      this.props.currentUser.roles.includes('coEmployee')
+    ) {
+      return (
+        <EmployeeDashboard
+          employeeId={this.props.currentUser.employeeId}
+          {...this.props}
+        />
+      );
+    }
+
     const {tab, month, year} = queryString.parse(location.search);
 
     return (
@@ -179,32 +157,11 @@ class AppReports extends React.PureComponent {
           <Col xs={24} md={16} />
           <Col xs={24}>
             {' '}
-            <div style={{marginBottom: 16}}>
-              <DateText>
-                {month && month.toUpperCase()} {year && year}
-              </DateText>
-              <div style={{position: 'relative'}}>
-                <ChangeDate
-                  onClick={() =>
-                    this.setState({editDate: !this.state.editDate})
-                  }
-                >
-                  Change Month
-                </ChangeDate>
-                <div style={{opacity: 0, position: 'absolute', right: 0}}>
-                  <MonthPicker
-                    open={this.state.editDate}
-                    value={month && moment(`${month} ${year}`, 'MMMM YYYY')}
-                    onChange={value =>
-                      this.onParamChange({
-                        month: value.format('MMMM'),
-                        year: value.format('YYYY'),
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
+            <MonthComponent
+              year={year}
+              month={month}
+              onChange={this.onParamChange}
+            />
           </Col>
           <Col xs={24} md={6}>
             <SideNav items={this.getNavItems()} tab={tab} />
@@ -256,11 +213,6 @@ class AppReports extends React.PureComponent {
             )}
           </Col>
         </Row>
-        {this.state.editDate && (
-          <DatePickerBackground
-            onClick={() => this.setState({editDate: false})}
-          />
-        )}
       </div>
     );
   }

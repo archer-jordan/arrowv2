@@ -1,21 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-import moment from 'moment';
 import queryString from 'query-string';
+import moment from 'moment';
+// APOLLO
+import employeeByIdQuery from 'ApolloClient/Queries/employeeById';
+import {Query} from 'react-apollo';
+// COMPONENTS
+import Benefits from '../../app-employees-detail/Benefits'; // re-used from app-employees-detail
+import Financials from '../../app-employees-detail/Financials'; // re-used from app-employees-detail
+import Account from '../../app-employees-detail/Account'; // re-used from app-employees-detail
 // COMPONENTS
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import MonthComponent from 'components/common/MonthComponent';
 import SideNav from 'components/common/SideNav';
-import Benefits from './Benefits';
-import Financials from './Financials';
-import Account from './Account';
-// APOLLO
-import employeeByIdQuery from 'ApolloClient/Queries/employeeById';
-import {Query} from 'react-apollo';
 
-class AppEmployeesDetail extends React.PureComponent {
+class EmployeeDashboard extends React.PureComponent {
   state = {
     editDate: false,
   };
@@ -59,6 +58,13 @@ class AppEmployeesDetail extends React.PureComponent {
     }
   };
   componentWillMount() {
+    let oldParams =
+      this.props.location &&
+      this.props.location.search &&
+      queryString.parse(this.props.location.search);
+    if (oldParams.tab === 'health') {
+      return this.onParamChange({tab: 'benefits'});
+    }
     this.checkParams();
   }
   getNavItems = () => {
@@ -87,30 +93,21 @@ class AppEmployeesDetail extends React.PureComponent {
             tab: 'account',
           }),
       },
-      {
-        label: 'Password',
-        activeValue: 'password',
-        onClick: () =>
-          this.onParamChange({
-            tab: 'password',
-          }),
-      },
     ];
   };
   render() {
-    const {location, history} = this.props;
-
-    let employeeId = this.props.employeeId || this.props.match.params.id;
-
+    const {location, history, employeeId} = this.props;
     const {tab, month, year} = queryString.parse(location.search);
 
     return (
       <Query query={employeeByIdQuery} variables={{id: employeeId}}>
-        {({error, loading, data}) => {
-          if (loading) return null;
-          if (error) return null;
+        {({data, loading, error}) => {
+          if (loading) return 'loading';
+          if (error) {
+            console.log(error.message);
+            return 'error';
+          }
           let employee = data.employeeById;
-
           const sharedProps = {
             history,
             location,
@@ -119,13 +116,8 @@ class AppEmployeesDetail extends React.PureComponent {
             employee,
             employeeId,
           };
-
           return (
             <div>
-              <div>
-                <Link to="/employees">Employees</Link> / {employee.firstName}{' '}
-                {employee.lastName} / {tab}{' '}
-              </div>
               <Row>
                 <Col xs={24} md={16} />
                 <Col xs={24}>
@@ -166,4 +158,4 @@ class AppEmployeesDetail extends React.PureComponent {
   }
 }
 
-export default AppEmployeesDetail;
+export default EmployeeDashboard;

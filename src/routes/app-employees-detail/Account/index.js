@@ -56,7 +56,16 @@ class Account extends React.PureComponent {
             label="DOB"
             value={moment(parseInt(this.props.employee.dob)).format('M/D/YYYY')}
           />
-          <DataItem label="Email" value={this.props.employee.email} />
+          <DataItem label="Street" value={this.props.employee.street} />
+          <DataItem label="Zip" value={this.props.employee.zip} />
+          <DataItem label="State" value={this.props.employee.state} />
+          <DataItem label="City" value={this.props.employee.city} />
+          <DataItem
+            label="Hire Date"
+            value={moment(parseInt(this.props.employee.hireDate)).format(
+              'M/D/YYYY'
+            )}
+          />
         </div>
       </div>
     );
