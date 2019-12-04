@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import moment from 'moment';
 import queryString from 'query-string';
@@ -85,14 +84,6 @@ class AppEmployeesDetail extends React.PureComponent {
         onClick: () =>
           this.onParamChange({
             tab: 'account',
-          }),
-      },
-      {
-        label: 'Password',
-        activeValue: 'password',
-        onClick: () =>
-          this.onParamChange({
-            tab: 'password',
           }),
       },
     ];
