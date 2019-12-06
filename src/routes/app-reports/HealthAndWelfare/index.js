@@ -6,16 +6,11 @@ import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
 import TopContainer from 'components/common/TopContainer';
-import PieChart from 'components/common/PieChart';
-
-const MOCK_DATA = [
-  {value: 9940220, label: 'TOTAL HEALTH & WELFARE'},
-  {value: 918718, label: 'TOTAL VACATION HOLIDAY & SICK'},
-];
+import {Doughnut} from 'react-chartjs-2';
 
 const PieChartPlaceholder = styled.div`
-  width: 300px;
-  height: 300px;
+  width: 500px;
+  height: 400px;
 `;
 
 const ValueItemContainer = styled.div`
@@ -116,7 +111,7 @@ class HealthAndWelfare extends React.PureComponent {
         </Caption>
         <Row align="top">
           {' '}
-          <Col xs={24} md={16}>
+          <Col xs={24} md={12}>
             <ValueItem
               label="Total Health & Welfare"
               value={`$${numeral(report.totalHealthAndWelfare).format(
@@ -130,10 +125,34 @@ class HealthAndWelfare extends React.PureComponent {
               color={CHART_COLORS[1]}
             />
           </Col>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={12}>
             <PieChartPlaceholder>
-              <PieChart
-                data={[
+              <Doughnut
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: true,
+                  legend: {
+                    display: false,
+                  },
+                }}
+                data={{
+                  labels: ['Total Health & Welfare', labelForVHS],
+                  datasets: [
+                    {
+                      data: [report.totalHealthAndWelfare, report.totalVHS],
+                      backgroundColor: [CHART_COLORS[0], CHART_COLORS[1]],
+                    },
+                  ],
+                }}
+              />
+            </PieChartPlaceholder>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+}
+/* data={[
                   {
                     id: 'Total Health & Welfare',
                     label: 'Total Health & Welfare',
@@ -146,14 +165,5 @@ class HealthAndWelfare extends React.PureComponent {
                     value: report.totalVHS,
                     color: CHART_COLORS[1],
                   },
-                ]}
-              />
-            </PieChartPlaceholder>
-          </Col>
-        </Row>
-      </div>
-    );
-  }
-}
-
+                ]} */
 export default HealthAndWelfare;

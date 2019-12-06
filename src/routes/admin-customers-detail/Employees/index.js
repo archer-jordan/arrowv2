@@ -44,7 +44,6 @@ const SectionTitle = styled.div`
   border-radius: 25px;
   margin-bottom: 24px;
   background: ${p => p.theme.colors.primary1};
-  margin-top: 48px;
 `;
 
 const Filename = styled.div`
@@ -436,7 +435,7 @@ class Employees extends React.PureComponent {
     */
     return (
       <div style={{width: 700, maxWidth: '100%'}}>
-        <SectionTitle>ADD NEW EMPLOYEES TO THE DATABASE"</SectionTitle>
+        <SectionTitle>ADD NEW EMPLOYEES TO THE DATABASE</SectionTitle>
         {/* <Query
           query={getAttachment}
           pollInterval={600000} // every ten minutes
@@ -468,7 +467,9 @@ class Employees extends React.PureComponent {
           onChange={file => this.handleUpload(file, this.afterParseAdd)}
           buttonText="Upload New Employees"
         />
-        <SectionTitle>UPDATE EXISTING EMPLOYEE RECORDS</SectionTitle>
+        <SectionTitle style={{marginTop: 48}}>
+          UPDATE EXISTING EMPLOYEE RECORDS
+        </SectionTitle>
         <UploadBlock
           name="file-update"
           errors={this.state.updateErrors || []}

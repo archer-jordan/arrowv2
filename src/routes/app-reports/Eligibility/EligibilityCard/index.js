@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import PieChart from 'components/common/PieChart';
+import {Doughnut} from 'react-chartjs-2';
 
 const PieChartPlaceholder = styled.div`
   margin: auto;
-  width: 150px;
+  width: 250px;
   height: 150px;
+  position: relative;
+  left: -20px;
   /* max-width: 100%;
   max-height: 100%;
   border-radius: 50%;
@@ -38,6 +40,8 @@ const Title = styled.div`
   color: #1371a3;
 `;
 
+const CHART_COLORS = ['#8CB3CD', '#0F3557', '#145D92', '#5A89AB'];
+
 const Type = styled.div`
   font-size: 14px;
   text-transform: uppercase;
@@ -54,7 +58,7 @@ class EligibilityCard extends React.PureComponent {
         {' '}
         <Title>{this.props.card.label}</Title>
         <PieChartPlaceholder>
-          <PieChart
+          {/* <PieChart
             data={[
               {
                 id: '1',
@@ -67,6 +71,24 @@ class EligibilityCard extends React.PureComponent {
                 value: this.props.card.comparison,
               },
             ]}
+          /> */}
+          <Doughnut
+            options={{
+              responsive: true,
+              maintainAspectRatio: true,
+              legend: {
+                display: false,
+              },
+            }}
+            data={{
+              labels: ['Eligible', 'Ineligble'],
+              datasets: [
+                {
+                  data: [this.props.card.value, this.props.card.comparison],
+                  backgroundColor: [CHART_COLORS[0], CHART_COLORS[1]],
+                },
+              ],
+            }}
           />
         </PieChartPlaceholder>{' '}
         <Value>{this.props.card.value}</Value>

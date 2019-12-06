@@ -1,6 +1,7 @@
 import React from 'react';
 import queryString from 'query-string';
 import moment from 'moment';
+import {Redirect} from 'react-router-dom';
 // COMPONENTS
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
@@ -119,7 +120,6 @@ class AppReports extends React.PureComponent {
       },
     ];
 
-    console.log(this.state.queryData && this.state.queryData.customerReport);
     // if the query does not have retirement data, then we don't want to show the retirement tab
     if (
       this.state.queryData &&
@@ -135,6 +135,14 @@ class AppReports extends React.PureComponent {
   };
   render() {
     const {location, history} = this.props;
+
+    // If user is a company admin but does not have persmission to view company data, we will re-route them
+    if (
+      this.props.currentUser.roles.includes('coAdmin') &&
+      !this.props.currentUser.permissions.includes('viewCompanyData')
+    ) {
+      return <Redirect to="/account?tab=profile" />;
+    }
 
     if (
       this.props.currentUser &&

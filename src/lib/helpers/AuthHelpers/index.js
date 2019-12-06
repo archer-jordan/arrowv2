@@ -2,7 +2,6 @@ import message from 'components/common/message';
 import client from 'ApolloClient/index.js';
 import authenticate from 'ApolloClient/Mutations/authenticate';
 import logout from 'ApolloClient/Mutations/logout';
-import currentUser from 'ApolloClient/Queries/currentUser';
 import sendResetPasswordEmail from 'ApolloClient/Mutations/sendResetPasswordEmail';
 import changePassword from 'ApolloClient/Mutations/changePassword';
 

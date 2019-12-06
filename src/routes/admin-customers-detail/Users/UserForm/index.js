@@ -21,6 +21,58 @@ const GreenText = styled.div`
   color: #0e7817;
 `;
 
+const Checkbox = styled.div`
+  cursor: pointer;
+  background: ${p => p.theme.colors.neutral9};
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  &:hover {
+    background: ${p =>
+      !p.checked ? p.theme.colors.neutral8 : p.theme.colors.neutral9};
+  }
+`;
+
+const CheckTitle = styled.div`
+  font-weight: 600;
+  font-size: 17px;
+`;
+
+const CheckCaption = styled.div`
+  color: ${p => p.theme.colors.neutral7};
+  line-height: 14px;
+  font-size: 14px;
+`;
+
+const Checked = styled.div`
+  background: ${p => p.theme.colors.primary4};
+  height: 15px;
+  width: 15px;
+  border-radius: 3px;
+`;
+
+const CheckItem = ({checked, onChange, title, caption}) => {
+  return (
+    <Row style={{marginTop: 24}}>
+      {' '}
+      <Col xs={3}>
+        <Checkbox checked={checked} onClick={() => onChange(!checked)}>
+          {checked && <Checked />}
+        </Checkbox>
+      </Col>
+      <Col xs={21}>
+        <CheckTitle>{title}</CheckTitle>
+        <CheckCaption>{caption}</CheckCaption>
+      </Col>
+    </Row>
+  );
+};
+
 class UserForm extends React.PureComponent {
   state = {
     email: this.props.email || null,
@@ -30,6 +82,7 @@ class UserForm extends React.PureComponent {
     title: this.props.title || null,
     phone: this.props.phone || null,
     emailExists: null,
+    permissions: this.props.permissions || [],
     errors: [],
   };
   onSave = () => {
@@ -59,11 +112,22 @@ class UserForm extends React.PureComponent {
       lastName: this.state.lastName,
       title: this.state.title,
       phone: this.state.phone,
+      permissions: this.state.permissions,
     });
   };
   handleFilter = debounce(finalEmail => {
     this.setState({finalEmail});
   }, 250);
+  onPermissionChange = (value, type) => {
+    return value
+      ? this.setState({
+          permissions: [...this.state.permissions, type],
+        })
+      : this.setState({
+          permissions: this.state.permissions.filter(item => item !== type),
+        });
+  };
+
   render() {
     return (
       <Row
@@ -171,6 +235,32 @@ class UserForm extends React.PureComponent {
                 )}
               </React.Fragment>
             )}
+            <div style={{marginTop: 48, marginBottom: 32}}>
+              <CheckItem
+                checked={this.state.permissions.includes('viewCompanyData')}
+                title="View Summary Company Data"
+                caption="(read-only)"
+                onChange={value =>
+                  this.onPermissionChange(value, 'viewCompanyData')
+                }
+              />
+              <CheckItem
+                checked={this.state.permissions.includes('viewEmployeeData')}
+                title="View Data on Employees"
+                caption="(read-only)"
+                onChange={value =>
+                  this.onPermissionChange(value, 'viewEmployeeData')
+                }
+              />
+              <CheckItem
+                checked={this.state.permissions.includes('manageUsers')}
+                title="View Data on Employees"
+                caption="(this company only: create, read, update, delete)"
+                onChange={value =>
+                  this.onPermissionChange(value, 'manageUsers')
+                }
+              />
+            </div>
           </FormItem>
           {this.state.errors && this.state.errors.length > 0 && (
             <FormItem>

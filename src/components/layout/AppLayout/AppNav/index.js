@@ -61,6 +61,10 @@ const RightContainer = styled.div`
 `;
 
 const AppNav = ({pathname, currentUser}) => {
+  let canViewReports =
+    currentUser.roles.includes('coAdmin') &&
+    currentUser.permissions.includes('viewCompanyData');
+
   return (
     <React.Fragment>
       <AppNavContainer>
@@ -79,14 +83,26 @@ const AppNav = ({pathname, currentUser}) => {
             <CompanyName>{currentUser.company.title}</CompanyName>
           </div>
           <RightContainer>
-            <MobileCol>
-              <NavItem
-                to={`/reports`}
-                active={pathname && pathname.includes('/reports')}
-              >
-                REPORTS
-              </NavItem>
-            </MobileCol>
+            {canViewReports || currentUser.roles.includes('superAdmin') ? (
+              <MobileCol>
+                <NavItem
+                  to={`/reports`}
+                  active={pathname && pathname.includes('/reports')}
+                >
+                  REPORTS
+                </NavItem>
+              </MobileCol>
+            ) : null}
+            {currentUser.roles.includes('coEmployee') && (
+              <MobileCol>
+                <NavItem
+                  to={`/reports`}
+                  active={pathname && pathname.includes('/reports')}
+                >
+                  Dashboard
+                </NavItem>
+              </MobileCol>
+            )}
             <MobileCol>
               <NavItem
                 to={`/account`}
@@ -95,7 +111,8 @@ const AppNav = ({pathname, currentUser}) => {
                 ACCOUNT
               </NavItem>
             </MobileCol>
-            {(currentUser.roles.includes('coAdmin') ||
+            {((currentUser.roles.includes('coAdmin') &&
+              currentUser.permissions.includes('viewEmployeeData')) ||
               currentUser.roles.includes('superAdmin')) && (
               <MobileCol>
                 <NavItem
@@ -106,7 +123,8 @@ const AppNav = ({pathname, currentUser}) => {
                 </NavItem>
               </MobileCol>
             )}
-            {(currentUser.roles.includes('coAdmin') ||
+            {((currentUser.roles.includes('coAdmin') &&
+              currentUser.permissions.includes('manageUsers')) ||
               currentUser.roles.includes('superAdmin')) && (
               <MobileCol>
                 <NavItem

@@ -22,6 +22,7 @@ export default gql`
         roles
         title
         phone
+        permissions
       }
     }
   }

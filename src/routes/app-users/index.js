@@ -1,4 +1,5 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import Button from 'components/common/Button';
@@ -23,6 +24,22 @@ class AppUsers extends React.PureComponent {
     });
   };
   render() {
+    // if curretn user is an employee, we'll re-route them because they automatically can't view employee data
+    if (
+      !this.props.currentUser.roles ||
+      this.props.currentUser.roles.includes('coEmployee')
+    ) {
+      return <Redirect to="/account?tab=profile" />;
+    }
+
+    // If user is a company admin but does not have persmission to edit users, we will re-route them from this tab
+    if (
+      this.props.currentUser.roles.includes('coAdmin') &&
+      !this.props.currentUser.permissions.includes('manageUsers')
+    ) {
+      return <Redirect to="/account?tab=profile" />;
+    }
+
     return (
       <div style={{width: 900, margin: 'auto', maxWidth: '100%'}}>
         <Row gutter={16} style={{marginTop: 24}}>

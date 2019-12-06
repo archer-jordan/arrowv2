@@ -20,7 +20,6 @@ const SectionTitle = styled.div`
   border-radius: 25px;
   margin-bottom: 24px;
   background: ${p => p.theme.colors.primary1};
-  margin-top: 48px;
 `;
 
 const UploadButton = styled.input`
@@ -203,7 +202,9 @@ class Plan extends React.PureComponent {
           }}
         </Query>
 
-        <SectionTitle>PLAN INFORMATION ( FOR EMPLOYEES )</SectionTitle>
+        <SectionTitle style={{marginTop: 48}}>
+          PLAN INFORMATION ( FOR EMPLOYEES )
+        </SectionTitle>
         <Query
           query={getAttachment}
           pollInterval={600000} // every ten minutes

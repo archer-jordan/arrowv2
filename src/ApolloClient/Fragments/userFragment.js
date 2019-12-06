@@ -10,6 +10,7 @@ export default gql`
     title
     phone
     firstName
+    permissions
     lastName
     image {
       ...imageFragment

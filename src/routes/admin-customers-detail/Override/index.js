@@ -47,7 +47,6 @@ const SectionTitle = styled.div`
   border-radius: 25px;
   margin-bottom: 24px;
   background: ${p => p.theme.colors.primary1};
-  margin-top: 48px;
 `;
 
 class Override extends React.PureComponent {

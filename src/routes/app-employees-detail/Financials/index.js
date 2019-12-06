@@ -6,7 +6,7 @@ import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
-import PieChart from 'components/common/PieChart';
+import {Doughnut} from 'react-chartjs-2';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 // APOLLO
@@ -14,40 +14,9 @@ import employeeReportByEmployeeId from 'ApolloClient/Queries/employeeReportByEmp
 import {Query} from 'react-apollo';
 
 const PieChartPlaceholder = styled.div`
-  width: 250px;
-  height: 250px;
+  width: 550px;
+  height: 350px;
 `;
-
-// [
-//   '#8CB3CD',
-//   '#145D92',
-//   '#5A89AB',
-//   '#0F3557',
-//   '#0B4F71',
-//   '#166086',
-//   '#3994C1',
-// ]
-
-const MOCK_DATA = [
-  {
-    id: '1',
-    color: '#8CB3CD',
-    title: 'FRINGE DOLLARS',
-    amount: 19642,
-  },
-  {
-    id: '2',
-    color: '#145D92',
-    title: 'HEALTH & WELFARE',
-    amount: 12527,
-  },
-  {
-    id: '3',
-    color: '#5A89AB',
-    title: 'RETIREMENT',
-    amount: 5740,
-  },
-];
 
 const ColorCircle = styled.div`
   height: 32px;
@@ -139,7 +108,7 @@ class Financials extends React.PureComponent {
               ];
               return (
                 <Row gutter={16} style={{marginTop: 30}}>
-                  <Col xs={16}>
+                  <Col xs={24} md={10}>
                     {' '}
                     {dataArray.map(item => {
                       return (
@@ -152,9 +121,29 @@ class Financials extends React.PureComponent {
                       );
                     })}
                   </Col>
-                  <Col xs={8}>
+                  <Col xs={24} md={14}>
                     <PieChartPlaceholder>
-                      <PieChart data={dataArray} />
+                      {/* <PieChart data={dataArray} /> */}
+                      <Doughnut
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: true,
+                          legend: {
+                            display: false,
+                          },
+                        }}
+                        data={{
+                          labels: dataArray.map(item => item.label), //['Eligible', 'Ineligble'],
+                          datasets: [
+                            {
+                              data: dataArray.map(item => item.value),
+                              backgroundColor: dataArray.map(
+                                item => item.color
+                              ),
+                            },
+                          ],
+                        }}
+                      />
                     </PieChartPlaceholder>
                   </Col>
                 </Row>

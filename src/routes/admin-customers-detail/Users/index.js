@@ -79,6 +79,7 @@ class Users extends React.PureComponent {
       );
     }
     if (this.state.selected) {
+      console.log(this.state.selected);
       return (
         <UserForm
           onSubmit={this.onSaveUser}
