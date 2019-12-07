@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 // COMPONENTS
-import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';

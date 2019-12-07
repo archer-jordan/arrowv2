@@ -9,10 +9,6 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const PinkText = styled(Text)`
-  color: ${p => p.theme.colors.support1};
-`;
-
 class MessagesTable extends React.PureComponent {
   render() {
     const {loading, dataSource} = this.props;

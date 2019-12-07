@@ -17,9 +17,7 @@ const ReportRow = ({item, active, onClick}) => {
   const {
     month,
     year,
-    id,
     totalFringe,
-    customerId,
     totalHours,
     activeThisMonth,
     labelForTotalHours,

@@ -43,13 +43,6 @@
 // 34: "HEALTH & WELFARE"
 // 35: "RETIREMENT"
 
-const valueExists = value => {
-  if (value && value.length === 0) return null;
-  if (value && value === 'null') return null;
-  if (!value) return null;
-  return value;
-};
-
 const formatEmployeeRow = (headersArray, dataArray) => {
   let benefits = [];
 

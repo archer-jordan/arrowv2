@@ -16,6 +16,6 @@ export default gql`
     state
     city
     assignedId
-    assignedCompanyId
+    assignedCustomerId
   }
 `;

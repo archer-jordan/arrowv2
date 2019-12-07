@@ -18,14 +18,6 @@ const PinkText = styled(Text)`
   color: ${p => p.theme.colors.support1};
 `;
 
-const MockTableHeaderBackground = styled.div`
-  background: blue;
-  height: 50px;
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-`;
-
 class CustomersTable extends React.PureComponent {
   state = {
     impersonating: false,

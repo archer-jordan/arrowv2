@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
 // APOLLO
 import {Query} from 'react-apollo';
