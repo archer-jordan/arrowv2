@@ -54,34 +54,52 @@ class AuthResetPassword extends React.PureComponent {
   };
   onSubmit = async () => {
     try {
+      // reset errors state
       this.setState({
         errors: [],
+        loading: true,
       });
 
+      // use the helper to check for errors
       let errors = GeneralHelpers.passwordCheck(
         this.state.newPassword,
         this.state.confirmNewPassword
       );
 
+      // if any errors exist, stop here and set the errors state
       if (errors && errors.length > 0) {
         return this.setState({
           errors,
+          loading: true,
         });
       }
 
+      // call mutation to reset password
       let res = await this.props.resetPassword({
         variables: {
           newPassword: this.state.password,
           token: this.props.match.params.token,
         },
       });
+
+      // shoot off a success message
       message.success('Password reset. Logging you in...');
+
+      // pull out the access token and refresh token
       let {accessToken, refreshToken} = res.data.resetPassword.tokens;
+
+      // set items in local storage
       window.localStorage.setItem('arrow_access_token', accessToken);
       window.localStorage.setItem('arrow_refresh_token', refreshToken);
+
+      // reload the page
       window.location.reload();
     } catch (err) {
       ErrorHelpers.handleError(err);
+      return this.setState({
+        errors: [err],
+        loading: true,
+      });
     }
   };
   render() {

@@ -103,31 +103,28 @@ class CustomersTable extends React.PureComponent {
     ];
 
     return (
-      <div style={{position: 'relative'}}>
-        <MockTableHeaderBackground />
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{
-            pageSize: 5,
-            total,
-            current: current || 1,
-            onChange: (page, pageSize) => onPageChange(page),
-          }}
-          rowKey="id"
-          loading={loading}
-          onChange={this.props.handleTableChange}
-          onRow={(record, rowIndex) => {
-            return {
-              //onClick: event => {}, // click row
-              onDoubleClick: event => {}, // double click row
-              onContextMenu: event => {}, // right button click row
-              onMouseEnter: event => {}, // mouse enter row
-              onMouseLeave: event => {}, // mouse leave row
-            };
-          }}
-        />{' '}
-      </div>
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={{
+          pageSize: 5,
+          total,
+          current: current || 1,
+          onChange: (page, pageSize) => onPageChange(page),
+        }}
+        rowKey="id"
+        loading={loading}
+        onChange={this.props.handleTableChange}
+        onRow={(record, rowIndex) => {
+          return {
+            //onClick: event => {}, // click row
+            onDoubleClick: event => {}, // double click row
+            onContextMenu: event => {}, // right button click row
+            onMouseEnter: event => {}, // mouse enter row
+            onMouseLeave: event => {}, // mouse leave row
+          };
+        }}
+      />
     );
   }
 }

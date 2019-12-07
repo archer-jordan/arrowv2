@@ -91,18 +91,18 @@ const AppNav = ({pathname}) => {
             </MobileCol>
             <MobileCol>
               <NavItem
-                to={`/admin/vendors`}
-                active={pathname && pathname.includes('/vendors')}
-              >
-                VENDORS
-              </NavItem>
-            </MobileCol>
-            <MobileCol>
-              <NavItem
                 to={`/admin/users`}
                 active={pathname && pathname.includes('/users')}
               >
                 USERS
+              </NavItem>
+            </MobileCol>
+            <MobileCol>
+              <NavItem
+                to={`/admin/support`}
+                active={pathname && pathname.includes('/support')}
+              >
+                SUPPORT
               </NavItem>
             </MobileCol>
           </RightContainer>
