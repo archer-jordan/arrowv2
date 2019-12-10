@@ -37,7 +37,7 @@ class AppEmployees extends React.PureComponent {
         'First Name': item.firstName,
         Email: item.email,
         'Hire Date': moment(parseInt(item.hireDate)).format('MM/DD/YYYY'),
-        dob: item.dob,
+        dob: moment(parseInt(item.dob)).format('MM/DD/YYYY'),
         gender: item.gender,
         status: item.status,
         street: item.street,

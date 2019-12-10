@@ -10,8 +10,10 @@ import UploadBlock from './UploadBlock';
 import message from 'components/common/message';
 import Icon from 'components/common/Icon';
 import ErrorBlock from 'components/common/ErrorBlock';
+import Downloading from './Downloading';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
+import compose from 'lodash/flowRight';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
 import employeesQuery from 'ApolloClient/Queries/employees';
 import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
@@ -19,11 +21,10 @@ import updateEmployeesUpload from 'ApolloClient/Mutations/updateEmployeesUpload'
 import checkEmployeesCSV from 'ApolloClient/Mutations/checkEmployeesCSV';
 import singleUpload from 'ApolloClient/Mutations/singleUpload';
 import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
+import client from 'ApolloClient/index.js';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
-
-const compose = require('lodash/flowRight');
 
 const PinkText = styled.div`
   margin-top: 24px;
@@ -168,27 +169,27 @@ class Employees extends React.PureComponent {
     });
 
     // upload file to s3
-    let uploadResult = await this.props.singleUpload({
-      variables: {
-        file: this.state.file,
-      },
-    });
+    // let uploadResult = await this.props.singleUpload({
+    //   variables: {
+    //     file: this.state.file,
+    //   },
+    // });
 
-    if (uploadResult.data.singleUpload) {
-      const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
-      await this.props.saveAttachment({
-        variables: {
-          params: {
-            filename,
-            mimetype,
-            url,
-            key,
-            customerId: this.props.customer.id,
-            type: 'EmployeeUploads',
-          },
-        },
-      });
-    }
+    // if (uploadResult.data.singleUpload) {
+    //   const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
+    //   await this.props.saveAttachment({
+    //     variables: {
+    //       params: {
+    //         filename,
+    //         mimetype,
+    //         url,
+    //         key,
+    //         customerId: this.props.customer.id,
+    //         type: 'EmployeeUploads',
+    //       },
+    //     },
+    //   });
+    //}
     this.setState({loading: false});
   };
   afterParseUpdate = async (results, file) => {
@@ -229,27 +230,27 @@ class Employees extends React.PureComponent {
       }
 
       // upload file to s3
-      let uploadResult = await this.props.singleUpload({
-        variables: {
-          file: this.state.file,
-        },
-      });
+      // let uploadResult = await this.props.singleUpload({
+      //   variables: {
+      //     file: this.state.file,
+      //   },
+      // });
 
-      if (uploadResult.data.singleUpload) {
-        const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
-        await this.props.saveAttachment({
-          variables: {
-            params: {
-              filename,
-              mimetype,
-              url,
-              key,
-              customerId: this.props.customer.id,
-              type: 'EmployeeUploads',
-            },
-          },
-        });
-      }
+      // if (uploadResult.data.singleUpload) {
+      //   const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
+      //   await this.props.saveAttachment({
+      //     variables: {
+      //       params: {
+      //         filename,
+      //         mimetype,
+      //         url,
+      //         key,
+      //         customerId: this.props.customer.id,
+      //         type: 'EmployeeUploads',
+      //       },
+      //     },
+      //   });
+      // }
 
       this.setState({loading: false});
       message.success(`Employees successfully updated`);
@@ -258,6 +259,64 @@ class Employees extends React.PureComponent {
         loading: false,
         updateErrors: [err.message],
       });
+    }
+  };
+  cleanData = data => {
+    return data.map(item => {
+      return {
+        'Employee ID': item.assignedId,
+        'Last Name': item.lastName,
+        'First Name': item.firstName,
+        Email: item.email,
+        'Hire Date': moment(parseInt(item.hireDate)).format('MM/DD/YYYY'),
+        dob: moment(parseInt(item.dob)).format('MM/DD/YYYY'),
+        gender: item.gender,
+        status: item.status,
+        street: item.street,
+        ssn: item.ssn,
+        city: item.city,
+        state: item.state,
+        zip: item.zip,
+      };
+    });
+  };
+  downloadFile = (dataSource, exportFilename = 'employee-data.csv') => {
+    let data = Papa.unparse(this.cleanData(dataSource), {header: true});
+    let csvData = new Blob([data], {type: 'text/csv;charset=utf-8;'});
+    if (navigator.msSaveBlob) {
+      navigator.msSaveBlob(csvData, exportFilename);
+    } else {
+      // In FF link must be added to DOM to be clicked
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(csvData);
+      link.setAttribute('download', exportFilename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    this.setState({downloading: false});
+  };
+  onDownload = async () => {
+    try {
+      this.setState({downloading: true});
+      let res = await client.query({
+        query: employeesQuery,
+        fetchPolicy: 'network-only',
+        variables: {
+          customerId: this.props.customer.id,
+          skip: 0,
+          limit: 10000,
+        },
+      });
+      if (res.data.error) {
+        this.setState({downloading: false});
+        throw new Error('Error in employees query during CSV download');
+      }
+      console.log(res.data.employees.employees);
+      this.downloadFile(res.data.employees.employees);
+    } catch (err) {
+      this.setState({downloading: false});
+      console.log(err);
     }
   };
   handleUpload = (file, complete) => {
@@ -439,6 +498,10 @@ class Employees extends React.PureComponent {
         <PinkText onClick={() => this.setState({editManually: true})}>
           Click here to manually update individual employee records
         </PinkText>
+        <PinkText style={{marginTop: 16}} onClick={this.onDownload}>
+          Click here to download the employee database in csv format
+        </PinkText>
+        <Downloading visible={this.state.downloading} />
       </div>
     );
   }

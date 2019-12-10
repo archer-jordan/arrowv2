@@ -20,6 +20,7 @@ export default gql`
       count
       employees {
         ...employeeFragment
+        ssn
       }
     }
   }

@@ -12,7 +12,7 @@ import singleUpload from 'ApolloClient/Mutations/singleUpload';
 import deleteAttachment from 'ApolloClient/Mutations/deleteAttachment';
 import getAttachment from 'ApolloClient/Queries/getAttachment';
 
-const compose = require('lodash/flowRight');
+import compose from 'lodash/flowRight';
 
 const SectionTitle = styled.div`
   color: #fff;

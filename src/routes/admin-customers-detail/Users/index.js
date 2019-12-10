@@ -1,9 +1,11 @@
 import React from 'react';
+import compose from 'lodash/flowRight';
 import Button from 'components/common/Button';
 import message from 'components/common/message';
 import UserForm from './UserForm';
 import UsersTable from './UsersTable';
 // APOLLO
+import createNewUser from 'ApolloClient/Mutations/createNewUser';
 import saveUser from 'ApolloClient/Mutations/saveUser';
 import customerByIdQuery from 'ApolloClient/Queries/customerById';
 import {graphql} from 'react-apollo';
@@ -23,7 +25,7 @@ class Users extends React.PureComponent {
         roles: ['coAdmin'],
         customerId: this.props.customer.id,
       };
-      await this.props.saveUser({
+      await this.props.createNewUser({
         variables: {
           params,
         },
@@ -69,6 +71,7 @@ class Users extends React.PureComponent {
     }
   };
   render() {
+    // if user clicks "create user" button, we'll show the form for creating an user
     if (this.state.addNew) {
       return (
         <UserForm
@@ -78,8 +81,12 @@ class Users extends React.PureComponent {
         />
       );
     }
+
+    /**
+     * if the user selects an item from the table,
+     * we'll show their selection in the form so they can edit it
+     */
     if (this.state.selected) {
-      console.log(this.state.selected);
       return (
         <UserForm
           onSubmit={this.onSaveUser}
@@ -90,6 +97,10 @@ class Users extends React.PureComponent {
         />
       );
     }
+
+    /**
+     * By default we'll show the users table
+     */
     return (
       <div style={{width: 600}}>
         {' '}
@@ -108,4 +119,7 @@ class Users extends React.PureComponent {
   }
 }
 
-export default graphql(saveUser, {name: 'saveUser'})(Users);
+export default compose(
+  graphql(saveUser, {name: 'saveUser'}),
+  graphql(createNewUser, {name: 'createNewUser'})
+)(Users);

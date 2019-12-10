@@ -15,7 +15,7 @@ import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
 import customerReportsByCustomerId from 'ApolloClient/Queries/customerReportsByCustomerId';
 import uploadEmployeeReports from 'ApolloClient/Mutations/uploadEmployeeReports';
 
-const compose = require('lodash/flowRight');
+import compose from 'lodash/flowRight';
 
 const UploadButton = styled.input`
   width: 0.1px;

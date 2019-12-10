@@ -12,7 +12,7 @@ import singleUpload from 'ApolloClient/Mutations/singleUpload';
 import deleteAttachment from 'ApolloClient/Mutations/deleteAttachment';
 import getAttachments from 'ApolloClient/Queries/getAttachments';
 
-const compose = require('lodash/flowRight');
+import compose from 'lodash/flowRight';
 
 const UploadButton = styled.input`
   width: 0.1px;

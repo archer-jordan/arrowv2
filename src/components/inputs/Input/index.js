@@ -10,4 +10,7 @@ export default styled.input`
   &:focus {
     outline: 0;
   }
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
