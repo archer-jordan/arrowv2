@@ -5,9 +5,21 @@ import FormItem from 'components/common/FormItem';
 import Input from 'components/inputs/Input';
 import DateInput from 'components/inputs/DatePicker';
 import Button from 'components/common/Button';
+import Icon from 'components/common/Icon';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import moment from 'moment';
+// APOLLO
+import {Query} from 'react-apollo';
+import employeeIdAlreadyExists from 'ApolloClient/Queries/employeeIdAlreadyExists';
+
+const RedText = styled.div`
+  color: ${p => p.theme.colors.red2};
+`;
+
+const GreenText = styled.div`
+  color: #0e7817;
+`;
 
 const Container = styled.div`
   min-height: 200px;
@@ -15,6 +27,52 @@ const Container = styled.div`
   max-width: 100%;
   border-radius: 5px;
 `;
+
+const AssignedIdCheck = ({editing, assignedId, oldAssigned, customerId}) => (
+  <React.Fragment>
+    {!editing && assignedId !== oldAssigned && (
+      <React.Fragment>
+        {assignedId && assignedId.length < 3 && (
+          <RedText>
+            <Icon type="close-circle" style={{marginRight: 4}} />
+            Please input at least 3 characters
+          </RedText>
+        )}
+        {assignedId && assignedId.length >= 3 && (
+          <Query
+            query={employeeIdAlreadyExists}
+            variables={{assignedId, customerId}}
+          >
+            {({data, loading, error}) => {
+              if (loading)
+                return (
+                  <div>
+                    <Icon type="loading" />
+                  </div>
+                );
+              if (error) return 'Error';
+              return (
+                <div>
+                  {!data.employeeIdAlreadyExists.exists ? (
+                    <GreenText>
+                      <Icon type="check-circle" style={{marginRight: 4}} />
+                      <strong>{assignedId}</strong> is available
+                    </GreenText>
+                  ) : (
+                    <RedText>
+                      <Icon type="close-circle" style={{marginRight: 4}} />
+                      <strong>{assignedId}</strong> is not available
+                    </RedText>
+                  )}
+                </div>
+              );
+            }}
+          </Query>
+        )}
+      </React.Fragment>
+    )}
+  </React.Fragment>
+);
 
 class EmployeeForm extends React.PureComponent {
   state = {
@@ -70,6 +128,12 @@ class EmployeeForm extends React.PureComponent {
               <Input
                 value={this.state.assignedId}
                 onChange={e => this.setState({assignedId: e.target.value})}
+              />
+              <AssignedIdCheck
+                editing={this.props.editing}
+                assignedId={this.state.assignedId}
+                oldAssigned={this.props.assignedId}
+                customerId={this.props.customerId}
               />
             </FormItem>
           </Col>

@@ -380,6 +380,7 @@ class Employees extends React.PureComponent {
           <EmployeeForm
             {...this.state.selectedEmployee}
             onSubmit={this.onSave}
+            customerId={this.props.customer.id}
             loading={this.state.loading}
             onCancel={() => this.setState({selectedEmployee: null})}
           />{' '}

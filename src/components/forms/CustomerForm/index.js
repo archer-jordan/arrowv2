@@ -99,12 +99,6 @@ class CustomerForm extends React.PureComponent {
                         <Query
                           query={customerIdAlreadyExists}
                           variables={{assignedId: this.state.assignedId}}
-                          onCompleted={data =>
-                            this.setState({
-                              assignedIdExists:
-                                data.customerIdAlreadyExists.exists,
-                            })
-                          }
                         >
                           {({data, loading, error}) => {
                             if (loading)
