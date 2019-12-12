@@ -7,19 +7,23 @@ import usersQuery from 'ApolloClient/Queries/users';
 class AdminUsers extends React.PureComponent {
   render() {
     return (
-      <Query query={usersQuery} variables={{roles: ['superAdmin']}}>
-        {({loading, data, error}) => {
-          if (loading) return 'loading';
-          if (error) return 'error';
-          return (
-            <UsersTable
-              dataSource={(data && data.users && data.users.users) || []}
-              total={data.users.count}
-              loading={loading}
-            />
-          );
-        }}
-      </Query>
+      <div
+        style={{width: 900, margin: 'auto', maxWidth: '100%', marginTop: 96}}
+      >
+        <Query query={usersQuery} variables={{roles: ['superAdmin']}}>
+          {({loading, data, error}) => {
+            if (loading) return 'loading';
+            if (error) return 'error';
+            return (
+              <UsersTable
+                dataSource={(data && data.users && data.users.users) || []}
+                total={data.users.count}
+                loading={loading}
+              />
+            );
+          }}
+        </Query>
+      </div>
     );
   }
 }

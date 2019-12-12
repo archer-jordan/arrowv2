@@ -48,8 +48,11 @@ const ButtonText = styled.div`
   font-weight: 600;
   letter-spacing: 1px;
   text-align: right;
-  color: ${p => p.theme.colors.support1};
+  color: ${p => p.theme.colors.neutral8};
   cursor: pointer;
+  &:hover {
+    color: ${p => p.theme.colors.neutral7};
+  }
 `;
 
 const DownloadText = styled.a`
@@ -58,7 +61,10 @@ const DownloadText = styled.a`
   font-weight: 600;
   letter-spacing: 1px;
   text-align: right;
-  color: ${p => p.theme.colors.support1};
+  color: ${p => p.theme.colors.support3};
+  &:hover {
+    color: ${p => p.theme.colors.support1};
+  }
   cursor: pointer;
 `;
 
