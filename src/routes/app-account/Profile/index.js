@@ -13,10 +13,17 @@ import helpers from 'lib/helpers/GeneralHelpers';
 
 const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
-  height: 32px;
-  line-height: 32px;
+  height: 24px;
+  line-height: 24px;
   margin-bottom: 16px;
-  margin-top: 40px;
+`;
+
+const Outline = styled.div`
+  background: #e5eff5;
+  border-radius: 25px;
+  height: 40px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
 `;
 
 const Label = styled(BigValue)`
@@ -33,19 +40,19 @@ const Value = styled(Label)`
 
 const DataItem = ({label = ' ', value = ''}) => (
   <Row>
-    <Col xs={8}>
+    <Col xs={12} md={4}>
       <Label>{label}</Label>
     </Col>
-    <Col xs={16}>
+    <Col xs={12} md={20}>
       <Value>{value}</Value>
     </Col>
   </Row>
 );
 
 const RowContainer = styled(Row)`
-  width: 100%;
-  padding: 24px;
+  max-width: 100%;
   min-height: 500px;
+  width: 700px;
   @media only screen and (max-width: 414px) {
     padding: 0px;
   }
@@ -59,18 +66,25 @@ class Profile extends React.PureComponent {
       <div>
         <RowContainer>
           <Col xs={24}>
-            <ColumnHeadline>Contact information</ColumnHeadline>
-            <DataItem label="First Name" value={profile.firstName} />
-            <DataItem label="Last Name" value={profile.lastName} />
-            {profile.title && (
-              <DataItem label="Role or Title" value={profile.title} />
-            )}
-            <DataItem label="Email" value={profile.email} />
-            {profile.phone && <DataItem label="Phone" value={profile.phone} />}
+            <Outline>
+              <ColumnHeadline>Contact information</ColumnHeadline>
+            </Outline>
+            <div style={{paddingLeft: 16}}>
+              <DataItem label="First Name" value={profile.firstName} />
+              <DataItem label="Last Name" value={profile.lastName} />
+              {profile.title && (
+                <DataItem label="Role or Title" value={profile.title} />
+              )}
+              <DataItem label="Email" value={profile.email} />
+              {profile.phone && (
+                <DataItem label="Phone" value={profile.phone} />
+              )}
+            </div>
           </Col>{' '}
           <Col xs={24}>
-            <ColumnHeadline>Company information</ColumnHeadline>
-
+            <Outline style={{marginTop: 32}}>
+              <ColumnHeadline>Company information</ColumnHeadline>
+            </Outline>
             <Query
               query={customerById}
               variables={{id: this.props.currentUser.customerId}}
@@ -79,7 +93,7 @@ class Profile extends React.PureComponent {
                 if (loading) return <Loading />;
                 let customer = data.customerById;
                 return (
-                  <div>
+                  <div style={{paddingLeft: 16}}>
                     {' '}
                     <DataItem label="Name" value={customer.title} />
                     <DataItem label="Address" value={customer.street} />
