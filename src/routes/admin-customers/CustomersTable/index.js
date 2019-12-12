@@ -3,12 +3,13 @@ import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
 import styled from 'styled-components';
 import Icon from 'components/common/Icon';
+import Tooltip from 'components/common/Tooltip';
 // APOLLO
 import impersonateCustomer from 'ApolloClient/Mutations/impersonateCustomer';
 import currentUser from 'ApolloClient/Queries/currentUser';
 import {graphql} from 'react-apollo';
 
-const Text = styled.div`
+const Text = styled.span`
   font-weight: 600;
   color: #0f466a;
   font-family: ${p => p.theme.fontFamily};
@@ -82,13 +83,18 @@ class CustomersTable extends React.PureComponent {
         title: '',
         render: record => {
           return (
-            <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
-              {this.state.impersonating === record.id ? (
-                <Icon type="loading" />
-              ) : (
-                'CUSTOMER VIEW'
-              )}
-            </PinkText>
+            <Tooltip
+              placement="right"
+              title="Click to see what your customer will see"
+            >
+              <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
+                {this.state.impersonating === record.id ? (
+                  <Icon type="loading" />
+                ) : (
+                  'CUSTOMER VIEW'
+                )}
+              </PinkText>
+            </Tooltip>
           );
         },
       },

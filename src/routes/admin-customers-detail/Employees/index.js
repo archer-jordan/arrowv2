@@ -6,11 +6,13 @@ import Papa from 'papaparse';
 // COMPONENTS
 import EmployeeForm from 'components/forms/EmployeeForm';
 import EmployeesTable from 'components/common/EmployeesTable';
+import Alert from 'components/common/Alert';
 import UploadBlock from './UploadBlock';
 import message from 'components/common/message';
 import Icon from 'components/common/Icon';
 import ErrorBlock from 'components/common/ErrorBlock';
-import Downloading from './Downloading';
+// import Downloading from './Downloading';
+import DownloadEmployees from './DownloadEmployees';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import compose from 'lodash/flowRight';
@@ -21,7 +23,6 @@ import updateEmployeesUpload from 'ApolloClient/Mutations/updateEmployeesUpload'
 import checkEmployeesCSV from 'ApolloClient/Mutations/checkEmployeesCSV';
 import singleUpload from 'ApolloClient/Mutations/singleUpload';
 import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
-import client from 'ApolloClient/index.js';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
@@ -123,74 +124,79 @@ class Employees extends React.PureComponent {
    * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
    */
   afterParseAdd = async (results, file) => {
-    // 1. make sure the spreadsheet has the correct number of columns
-    if (results.meta.fields.length !== 15) {
-      return this.setState({
-        errors: [
-          `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
-        ],
+    try {
+      // 1. make sure the spreadsheet has the correct number of columns
+      if (results.meta.fields.length !== 15) {
+        return this.setState({
+          errors: [
+            `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
+          ],
+        });
+      }
+
+      // 2. make sure the emails are all valid
+      let invalidEmails = this.getInvalidEmails(results);
+
+      if (invalidEmails.length > 0) {
+        return this.setState({
+          loading: false,
+          errors: invalidEmails,
+        });
+      }
+
+      let formattedData = this.getFormatted(results);
+
+      // Do server check to see if these people already exist
+      let mutationResult = await this.props.checkEmployeesCSV({
+        variables: {
+          values: formattedData.map(item => ({
+            companyAssignedId: item.assignedCustomerId,
+            employeeAssignedId: item.assignedId,
+          })),
+        },
       });
-    }
 
-    // 2. make sure the emails are all valid
-    let invalidEmails = this.getInvalidEmails(results);
+      //if server check fails, we show the errors that we got back
+      if (!mutationResult.data.checkEmployeesCSV.success) {
+        return this.setState({
+          errors: mutationResult.data.checkEmployeesCSV.errors,
+        });
+      }
 
-    if (invalidEmails.length > 0) {
-      return this.setState({
-        loading: false,
-        errors: invalidEmails,
+      // if all is sell, upload new employees
+      await this.props.newEmployeesUpload({
+        variables: {
+          employees: formattedData,
+        },
       });
+
+      // upload file to s3
+      // let uploadResult = await this.props.singleUpload({
+      //   variables: {
+      //     file: this.state.file,
+      //   },
+      // });
+
+      // if (uploadResult.data.singleUpload) {
+      //   const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
+      //   await this.props.saveAttachment({
+      //     variables: {
+      //       params: {
+      //         filename,
+      //         mimetype,
+      //         url,
+      //         key,
+      //         customerId: this.props.customer.id,
+      //         type: 'EmployeeUploads',
+      //       },
+      //     },
+      //   });
+      //}
+      this.setState({loading: false, successfulAdd: true});
+    } catch (err) {
+      this.setState({loading: false});
+      console.log(err);
     }
-
-    let formattedData = this.getFormatted(results);
-
-    // Do server check to see if these people already exist
-    let mutationResult = await this.props.checkEmployeesCSV({
-      variables: {
-        values: formattedData.map(item => ({
-          companyAssignedId: item.assignedCustomerId,
-          employeeAssignedId: item.assignedId,
-        })),
-      },
-    });
-
-    //if server check fails, we show the errors that we got back
-    if (!mutationResult.data.checkEmployeesCSV.success) {
-      return this.setState({
-        errors: mutationResult.data.checkEmployeesCSV.errors,
-      });
-    }
-
-    // if all is sell, upload new employees
-    await this.props.newEmployeesUpload({
-      variables: {
-        employees: formattedData,
-      },
-    });
-
-    // upload file to s3
-    // let uploadResult = await this.props.singleUpload({
-    //   variables: {
-    //     file: this.state.file,
-    //   },
-    // });
-
-    // if (uploadResult.data.singleUpload) {
-    //   const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
-    //   await this.props.saveAttachment({
-    //     variables: {
-    //       params: {
-    //         filename,
-    //         mimetype,
-    //         url,
-    //         key,
-    //         customerId: this.props.customer.id,
-    //         type: 'EmployeeUploads',
-    //       },
-    //     },
-    //   });
-    //}
-    this.setState({loading: false});
   };
   afterParseUpdate = async (results, file) => {
     // 1. make sure the spreadsheet has the correct number of columns
@@ -252,71 +258,12 @@ class Employees extends React.PureComponent {
       //   });
       // }
 
-      this.setState({loading: false});
-      message.success(`Employees successfully updated`);
+      this.setState({loading: false, successfulUpdate: true});
     } catch (err) {
       return this.setState({
         loading: false,
         updateErrors: [err.message],
       });
-    }
-  };
-  cleanData = data => {
-    return data.map(item => {
-      return {
-        'Employee ID': item.assignedId,
-        'Last Name': item.lastName,
-        'First Name': item.firstName,
-        Email: item.email,
-        'Hire Date': moment(parseInt(item.hireDate)).format('MM/DD/YYYY'),
-        dob: moment(parseInt(item.dob)).format('MM/DD/YYYY'),
-        gender: item.gender,
-        status: item.status,
-        street: item.street,
-        ssn: item.ssn,
-        city: item.city,
-        state: item.state,
-        zip: item.zip,
-      };
-    });
-  };
-  downloadFile = (dataSource, exportFilename = 'employee-data.csv') => {
-    let data = Papa.unparse(this.cleanData(dataSource), {header: true});
-    let csvData = new Blob([data], {type: 'text/csv;charset=utf-8;'});
-    if (navigator.msSaveBlob) {
-      navigator.msSaveBlob(csvData, exportFilename);
-    } else {
-      // In FF link must be added to DOM to be clicked
-      let link = document.createElement('a');
-      link.href = window.URL.createObjectURL(csvData);
-      link.setAttribute('download', exportFilename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-    this.setState({downloading: false});
-  };
-  onDownload = async () => {
-    try {
-      this.setState({downloading: true});
-      let res = await client.query({
-        query: employeesQuery,
-        fetchPolicy: 'network-only',
-        variables: {
-          customerId: this.props.customer.id,
-          skip: 0,
-          limit: 10000,
-        },
-      });
-      if (res.data.error) {
-        this.setState({downloading: false});
-        throw new Error('Error in employees query during CSV download');
-      }
-      console.log(res.data.employees.employees);
-      this.downloadFile(res.data.employees.employees);
-    } catch (err) {
-      this.setState({downloading: false});
-      console.log(err);
     }
   };
   handleUpload = (file, complete) => {
@@ -478,6 +425,15 @@ class Employees extends React.PureComponent {
             );
           }}
         </Query> */}
+        {this.state.successfulAdd && (
+          <Alert
+            message="Upload Success"
+            description="Your employees were successfully added"
+            type="success"
+            closable
+            showIcon
+          />
+        )}
         <div style={{height: 24}} />
         <UploadBlock
           name="file"
@@ -489,6 +445,16 @@ class Employees extends React.PureComponent {
         <SectionTitle style={{marginTop: 48}}>
           UPDATE EXISTING EMPLOYEE RECORDS
         </SectionTitle>
+        {this.state.successfulUpdate && (
+          <Alert
+            message="Upload Success"
+            description="Employees were successfully updated"
+            type="success"
+            closable
+            showIcon
+          />
+        )}
+        <div style={{height: 24}} />
         <UploadBlock
           name="file-update"
           errors={this.state.updateErrors || []}
@@ -499,10 +465,7 @@ class Employees extends React.PureComponent {
         <PinkText onClick={() => this.setState({editManually: true})}>
           Click here to manually update individual employee records
         </PinkText>
-        <PinkText style={{marginTop: 16}} onClick={this.onDownload}>
-          Click here to download the employee database in csv format
-        </PinkText>
-        <Downloading visible={this.state.downloading} />
+        <DownloadEmployees customer={this.props.customer} />
       </div>
     );
   }
