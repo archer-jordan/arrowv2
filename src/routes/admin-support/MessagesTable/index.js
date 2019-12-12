@@ -1,5 +1,7 @@
 import React from 'react';
 import Table from 'antd/lib/table';
+import Popconfirm from 'components/common/Popconfirm';
+import Button from 'components/common/Button';
 import 'antd/lib/table/style/css';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -34,6 +36,16 @@ class MessagesTable extends React.PureComponent {
             {record.createdAt &&
               moment(parseInt(record.createdAt)).format('M/D/YY')}
           </Text>
+        ),
+      },
+      {
+        title: 'Actions',
+        render: (text, record) => (
+          <Popconfirm title="Are you sure you want to close this ticket?">
+            <Button style={{width: 110}} secondary>
+              Close Ticket
+            </Button>
+          </Popconfirm>
         ),
       },
     ];
