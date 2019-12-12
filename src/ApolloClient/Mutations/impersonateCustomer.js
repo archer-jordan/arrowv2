@@ -5,6 +5,7 @@ export default gql`
   mutation impersonateCustomer($customerId: String!, $turnOff: Boolean) {
     impersonateCustomer(customerId: $customerId, turnOff: $turnOff) {
       success
+      errors
     }
   }
 `;

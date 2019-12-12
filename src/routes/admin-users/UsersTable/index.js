@@ -2,7 +2,6 @@ import React from 'react';
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
 import styled from 'styled-components';
-import moment from 'moment';
 
 const Text = styled.div`
   font-weight: 600;
@@ -10,9 +9,9 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-class MessagesTable extends React.PureComponent {
+class UsersTable extends React.PureComponent {
   render() {
-    const {loading, dataSource} = this.props;
+    const {loading, total, dataSource} = this.props;
 
     const columns = [
       {
@@ -20,20 +19,12 @@ class MessagesTable extends React.PureComponent {
         render: (text, record) => <Text>{record.email}</Text>,
       },
       {
-        title: 'Subject',
-        render: (text, record) => <Text>{record.subject}</Text>,
+        title: 'First Name',
+        render: (text, record) => <Text>{record.firstName}</Text>,
       },
       {
-        title: 'Message',
-        render: (text, record) => <Text>{record.message}</Text>,
-      },
-      {
-        title: 'Created',
-        render: (text, record) => (
-          <Text>
-            {record.createdAt && moment(record.createdAt).format('M/D/YY')}
-          </Text>
-        ),
+        title: 'Last Name',
+        render: (text, record) => <Text>{record.lastName}</Text>,
       },
     ];
 
@@ -43,7 +34,7 @@ class MessagesTable extends React.PureComponent {
         columns={columns}
         pagination={{
           pageSize: 5,
-          total: dataSource.length,
+          total: total,
         }}
         rowKey="id"
         loading={loading}
@@ -52,4 +43,4 @@ class MessagesTable extends React.PureComponent {
   }
 }
 
-export default MessagesTable;
+export default UsersTable;

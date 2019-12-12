@@ -1,4 +1,5 @@
 import React from 'react';
+import UsersTable from './UsersTable';
 // APOLLO CLIENT
 import {Query} from 'react-apollo';
 import usersQuery from 'ApolloClient/Queries/users';
@@ -10,8 +11,13 @@ class AdminUsers extends React.PureComponent {
         {({loading, data, error}) => {
           if (loading) return 'loading';
           if (error) return 'error';
-          console.log(data);
-          return null;
+          return (
+            <UsersTable
+              dataSource={(data && data.users && data.users.users) || []}
+              total={data.users.count}
+              loading={loading}
+            />
+          );
         }}
       </Query>
     );

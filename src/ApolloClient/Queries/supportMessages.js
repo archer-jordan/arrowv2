@@ -10,6 +10,7 @@ export default gql`
       subject
       message
       userId
+      createdAt
     }
   }
 `;
