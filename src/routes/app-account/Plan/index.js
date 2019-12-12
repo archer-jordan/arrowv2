@@ -23,12 +23,14 @@ const DownloadText = styled.a`
 
 class Plan extends React.PureComponent {
   render() {
+    const {currentUser} = this.props;
     return (
       <div>
         {/* We show this one if current user is a company admin */}
-        {this.props.currentUser &&
-          this.props.currentUser.roles &&
-          this.props.currentUser.roles.includes('coAdmin') && (
+        {currentUser &&
+          currentUser.roles &&
+          (currentUser.roles.includes('coAdmin') ||
+            currentUser.roles.includes('superAdmin')) && (
             <Query
               query={getAttachment}
               variables={{
