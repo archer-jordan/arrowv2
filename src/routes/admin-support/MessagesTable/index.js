@@ -31,7 +31,8 @@ class MessagesTable extends React.PureComponent {
         title: 'Created',
         render: (text, record) => (
           <Text>
-            {record.createdAt && moment(record.createdAt).format('M/D/YY')}
+            {record.createdAt &&
+              moment(parseInt(record.createdAt)).format('M/D/YY')}
           </Text>
         ),
       },
