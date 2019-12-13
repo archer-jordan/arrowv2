@@ -91,6 +91,7 @@ class Profile extends React.PureComponent {
             >
               {({data, error, loading}) => {
                 if (loading) return <Loading />;
+                if (error) return 'Error';
                 let customer = data.customerById;
                 return (
                   <div style={{paddingLeft: 16}}>

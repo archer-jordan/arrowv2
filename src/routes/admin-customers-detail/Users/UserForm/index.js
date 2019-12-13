@@ -254,7 +254,7 @@ class UserForm extends React.PureComponent {
               />
               <CheckItem
                 checked={this.state.permissions.includes('manageUsers')}
-                title="View Data on Employees"
+                title="Create Admin Users"
                 caption="(this company only: create, read, update, delete)"
                 onChange={value =>
                   this.onPermissionChange(value, 'manageUsers')
