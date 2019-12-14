@@ -36,7 +36,7 @@ const columns = [
 
 class UsersTable extends React.PureComponent {
   render() {
-    const { total, loading, current, dataSource, onPageChange } = this.props;
+    const { total, loading, dataSource } = this.props;
     return (
       <div style={{ position: "relative" }}>
         <MockTableHeaderBackground />
@@ -46,8 +46,6 @@ class UsersTable extends React.PureComponent {
           pagination={{
             pageSize: 5,
             total,
-            current: current || 1,
-            onChange: (page, pageSize) => onPageChange(page)
           }}
           loading={loading}
         />{" "}

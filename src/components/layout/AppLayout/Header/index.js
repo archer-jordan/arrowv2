@@ -87,7 +87,7 @@ const Header = ({history, location, currentUser}) => {
       >
         {' '}
         <Col xs={6}>
-          <img src={logoWhiteSVG} alt="logo-white" height="40" />
+          <img src={logoWhiteSVG} alt="logo-white" height="40" onClick={() => history.push('/reports')} />
         </Col>
         <Col xs={10}></Col>
         <MobileCol xs={8} style={{textAlign: 'right'}}>

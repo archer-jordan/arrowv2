@@ -83,19 +83,28 @@ class CustomersTable extends React.PureComponent {
         title: '',
         render: record => {
           return (
-            <Tooltip
-              placement="right"
-              title="Click to see what your customer will see"
-            >
-              <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
+            <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
                 {this.state.impersonating === record.id ? (
                   <Icon type="loading" />
                 ) : (
                   'CUSTOMER VIEW'
                 )}
               </PinkText>
-            </Tooltip>
-          );
+          )
+          // return (
+          //   <Tooltip
+          //     placement="right"
+          //     title="Click to see what your customer will see"
+          //   >
+          //     <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
+          //       {this.state.impersonating === record.id ? (
+          //         <Icon type="loading" />
+          //       ) : (
+          //         'CUSTOMER VIEW'
+          //       )}
+          //     </PinkText>
+          //   </Tooltip>
+          // );
         },
       },
     ];

@@ -34,7 +34,7 @@ class CompanyTypeInpput extends React.PureComponent {
           <Option value="llc">LLC</Option>
           <Option value="llp">LLP</Option>
           <Option value="cCorp">C-Corp</Option>
-          <Option value="sCrop">S-Corp</Option>
+          <Option value="sCorp">S-Corp</Option>
           <Option value="other">Other</Option>
         </Select>
       </Wrapper>
