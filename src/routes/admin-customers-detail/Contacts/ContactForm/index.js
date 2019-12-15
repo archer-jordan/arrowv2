@@ -5,8 +5,7 @@ import Input from 'components/inputs/Input';
 import FormItem from 'components/common/FormItem';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
-import Icon from 'components/common/Icon';
-import Popconfirm from 'components/common/Popconfirm';
+
 import Button from 'components/common/Button';
 import ErrorBlock from 'components/common/ErrorBlock';
 
@@ -21,12 +20,12 @@ const RemoveBtn = styled.div`
 
 class ContactForm extends React.PureComponent {
   state = {
-    id: this.props.contact.id || '',
-    email: this.props.contact.email || '',
-    firstName: this.props.contact.firstName || '',
-    lastName: this.props.contact.lastName || '',
-    title: this.props.contact.title || '',
-    phone: this.props.contact.phone || '',
+    id: this.props.contact && this.props.contact.id,
+    email: this.props.contact && this.props.contact.email,
+    firstName: this.props.contact && this.props.contact.firstName,
+    lastName: this.props.contact && this.props.contact.lastName,
+    title: this.props.contact && this.props.contact.title,
+    phone: this.props.contact && this.props.contact.phone,
     errors: [],
   };
   onSave = () => {
@@ -65,7 +64,7 @@ class ContactForm extends React.PureComponent {
         gutter={16}
       >
         {' '}
-        <Col xs={12} />{' '}
+         {/*<Col xs={12} />{' '}
         <Col xs={12}>
           <Popconfirm
             title="Are you sure you want to delete this contact?"
@@ -77,7 +76,7 @@ class ContactForm extends React.PureComponent {
               Remove
             </RemoveBtn>
           </Popconfirm>
-        </Col>
+        </Col> */}
         <Col xs={12}>
           <FormItem label="First Name">
             <Input
@@ -128,7 +127,10 @@ class ContactForm extends React.PureComponent {
         <Col xs={12} />
         <Col xs={24}>
           <FormItem>
-            <Button secondary style={{width: 140}} onClick={this.onSave}>
+            <Button grey style={{width: 140}} onClick={this.props.onCancel}>
+              Cancel
+            </Button>
+            <Button style={{width: 140}} onClick={this.onSave}>
               Save Changes
             </Button>
           </FormItem>
