@@ -11,6 +11,10 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
+const Clickable = styled(Text)`
+  color: ${p => p.theme.colors.support1};
+`;
+
 const RemoveBtn = styled.div`
   text-align: center;
   cursor: pointer;
@@ -20,45 +24,52 @@ const RemoveBtn = styled.div`
   }
 `;
 
-
 class ContactsTable extends React.PureComponent {
   render() {
     const {dataSource, onClick, onRemove} = this.props;
     const columns = [
-        {
-          title: 'Last Name',
-          dataIndex: 'id',
-          key: 'id',
-          render: (text, record) => <Text onClick={() => onClick(record)}>{record.lastName}</Text>,
-        },
-        {
-          title: 'First Name',
-          render: (text, record) => <Text>{record.firstName}</Text>,
-        },
-        {
-          title: 'Email',
-          render: (text, record) => <Text>{record.email}</Text>,
-        },
-        {
-            title: 'Phone',
-            render: (text, record) => <Text>{record.phone}</Text>,
-          },
-          {
-            title: 'Title',
-            render: (text, record) => <Text>{record.title}</Text>,
-          },
-        {
-            title: 'Actions',
-            render: (text, record) => <Popconfirm
+      {
+        title: 'Last Name',
+        dataIndex: 'id',
+        key: 'id',
+        render: (text, record) => (
+          <Clickable onClick={() => onClick(record)}>
+            {record.lastName}
+          </Clickable>
+        ),
+      },
+      {
+        title: 'First Name',
+        render: (text, record) => <Text>{record.firstName}</Text>,
+      },
+      {
+        title: 'Email',
+        render: (text, record) => <Text>{record.email}</Text>,
+      },
+      {
+        title: 'Phone',
+        render: (text, record) => <Text>{record.phone}</Text>,
+      },
+      {
+        title: 'Title',
+        render: (text, record) => <Text>{record.title}</Text>,
+      },
+      {
+        title: 'Actions',
+        render: (text, record) => (
+          <Popconfirm
             title="Are you sure you want to delete this contact?"
             onConfirm={() => onRemove(record.id)}
             okText="Yes"
-          ><RemoveBtn>
+          >
+            <RemoveBtn>
               <Icon type="delete" style={{marginRight: 4}} />
               Remove
-            </RemoveBtn></Popconfirm>,
-          },
-      ];
+            </RemoveBtn>
+          </Popconfirm>
+        ),
+      },
+    ];
     return (
       <div style={{position: 'relative'}}>
         <Table
