@@ -164,12 +164,16 @@ class Employees extends React.PureComponent {
       }
 
       // if all is sell, upload new employees
-      await this.props.newEmployeesUpload({
+      let dataUploadResult = await this.props.newEmployeesUpload({
         variables: {
           employees: formattedData,
         },
       });
+      if (dataUploadResult.data.newEmployeesUpload.success) { 
+        return this.setState({loading: false, successfulAdd: true});
+      }
 
+      return this.setState({ errors: dataUploadResult.data.newEmployeesUpload.errors, loading: false})
       // upload file to s3
       // let uploadResult = await this.props.singleUpload({
       //   variables: {
@@ -192,7 +196,7 @@ class Employees extends React.PureComponent {
       //     },
       //   });
       //}
-      this.setState({loading: false, successfulAdd: true});
+
     } catch (err) {
       this.setState({loading: false});
       console.log(err);

@@ -5,6 +5,7 @@ export default gql`
   mutation newEmployeesUpload($employees: [EmployeeParams]) {
     newEmployeesUpload(employees: $employees) {
       success
+      errors
     }
   }
 `;
