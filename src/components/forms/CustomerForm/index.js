@@ -99,6 +99,7 @@ class CustomerForm extends React.PureComponent {
                         <Query
                           query={customerIdAlreadyExists}
                           variables={{assignedId: this.state.assignedId}}
+                          fetchPolicy="network-only"
                         >
                           {({data, loading, error}) => {
                             if (loading)
