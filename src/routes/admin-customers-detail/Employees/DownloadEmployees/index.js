@@ -6,6 +6,8 @@ import Papa from 'papaparse';
 // APOLLO CLIENT
 import employeesQuery from 'ApolloClient/Queries/employees';
 import client from 'ApolloClient/index.js';
+// helpers
+import helpers from 'lib/helpers/GeneralHelpers';
 
 const PinkText = styled.div`
   margin-top: 24px;
@@ -24,19 +26,33 @@ class DownloadEmployees extends React.PureComponent {
   cleanData = data => {
     return data.map(item => {
       return {
-        'Employee ID': item.assignedId,
+        'COMPANY NAME': this.props.customer.title,
+        COID: this.props.customer.assignedId,
+        EAID: item.assignedId,
         'Last Name': item.lastName,
         'First Name': item.firstName,
-        Email: item.email,
-        'Hire Date': moment(parseInt(item.hireDate)).format('MM/DD/YYYY'),
-        dob: moment(parseInt(item.dob)).format('MM/DD/YYYY'),
-        gender: item.gender,
-        status: item.status,
-        street: item.street,
-        ssn: item.ssn,
-        city: item.city,
-        state: item.state,
-        zip: item.zip,
+        'Hire Date YYYYMMDD': moment(parseInt(item.hireDate)).format(
+          'YYYYMMDD'
+        ),
+        'SSN/Fed ID': item.ssn,
+        Address: item.street,
+        City: item.city,
+        State: item.state,
+        'Zip Code': item.zip,
+        'Birth Date YYYYMMDD': moment(parseInt(item.dob)).format('YYYYMMDD'),
+        'E-mail': item.email,
+        Gender: item.gender === 'male' ? 'M' : 'F',
+        Status: helpers.capitalize(item.status),
+        // E-mail: item.email,
+        // 'Hire Date': moment(parseInt(item.hireDate)).format('MM/DD/YYYY'),
+        // dob: moment(parseInt(item.dob)).format('MM/DD/YYYY'),
+        // gender: item.gender,
+        // status: item.status,
+        // street: item.street,
+        // ssn: item.ssn,
+        // city: item.city,
+        // state: item.state,
+        // zip: item.zip,
       };
     });
   };
