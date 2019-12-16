@@ -131,6 +131,7 @@ class Employees extends React.PureComponent {
           errors: [
             `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
           ],
+          loading: false,
         });
       }
 
@@ -159,6 +160,7 @@ class Employees extends React.PureComponent {
       //if server check fails, we show the errors that we got back
       if (!mutationResult.data.checkEmployeesCSV.success) {
         return this.setState({
+          loading: false,
           errors: mutationResult.data.checkEmployeesCSV.errors,
         });
       }
@@ -234,6 +236,16 @@ class Employees extends React.PureComponent {
           customerId: this.props.customer.id,
           employees: formattedData,
         },
+        refetchQueries: [
+          {
+            query: employeesQuery,
+            variables: {
+              customerId: this.props.customer.id,
+              skip: this.state.skip,
+              sortBy: this.state.sortBy,
+            },
+          },
+        ],
       });
       //if server check fails, we show the errors that we got back
       if (!mutationResult.data.updateEmployeesUpload.success) {
@@ -289,7 +301,7 @@ class Employees extends React.PureComponent {
       });
     } catch (err) {
       ErrorHelpers.handleError(err);
-      this.setState({errors: [err.message]});
+      this.setState({errors: [err.message], loading: false});
       console.log(err.message);
     }
   };
