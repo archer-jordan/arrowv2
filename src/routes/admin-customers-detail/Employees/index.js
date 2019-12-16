@@ -166,14 +166,18 @@ class Employees extends React.PureComponent {
       // if all is sell, upload new employees
       let dataUploadResult = await this.props.newEmployeesUpload({
         variables: {
+          customerId: this.props.customer.id,
           employees: formattedData,
         },
       });
-      if (dataUploadResult.data.newEmployeesUpload.success) { 
+      if (dataUploadResult.data.newEmployeesUpload.success) {
         return this.setState({loading: false, successfulAdd: true});
       }
 
-      return this.setState({ errors: dataUploadResult.data.newEmployeesUpload.errors, loading: false})
+      return this.setState({
+        errors: dataUploadResult.data.newEmployeesUpload.errors,
+        loading: false,
+      });
       // upload file to s3
       // let uploadResult = await this.props.singleUpload({
       //   variables: {
@@ -196,7 +200,6 @@ class Employees extends React.PureComponent {
       //     },
       //   });
       //}
-
     } catch (err) {
       this.setState({loading: false});
       console.log(err);
@@ -228,6 +231,7 @@ class Employees extends React.PureComponent {
     try {
       let mutationResult = await this.props.updateEmployeesUpload({
         variables: {
+          customerId: this.props.customer.id,
           employees: formattedData,
         },
       });
@@ -238,29 +242,6 @@ class Employees extends React.PureComponent {
           updateErrors: mutationResult.data.updateEmployeesUpload.errors,
         });
       }
-
-      // upload file to s3
-      // let uploadResult = await this.props.singleUpload({
-      //   variables: {
-      //     file: this.state.file,
-      //   },
-      // });
-
-      // if (uploadResult.data.singleUpload) {
-      //   const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
-      //   await this.props.saveAttachment({
-      //     variables: {
-      //       params: {
-      //         filename,
-      //         mimetype,
-      //         url,
-      //         key,
-      //         customerId: this.props.customer.id,
-      //         type: 'EmployeeUploads',
-      //       },
-      //     },
-      //   });
-      // }
 
       this.setState({loading: false, successfulUpdate: true});
     } catch (err) {

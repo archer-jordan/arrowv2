@@ -2,8 +2,11 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  mutation updateEmployeesUpload($employees: [EmployeeParams]) {
-    updateEmployeesUpload(employees: $employees) {
+  mutation updateEmployeesUpload(
+    $customerId: ID!
+    $employees: [EmployeeParams]
+  ) {
+    updateEmployeesUpload(customerId: $customerId, employees: $employees) {
       success
       errors
     }
