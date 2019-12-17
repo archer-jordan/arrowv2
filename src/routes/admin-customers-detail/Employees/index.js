@@ -70,8 +70,8 @@ class Employees extends React.PureComponent {
     return {
       firstName: row['First Name'],
       lastName: row['Last Name'],
-      //email: row['E-Mail'],
-      email: `arcomito+${row['EAID']}@gmail.com`,
+      email: row['E-Mail'],
+      //email: `arcomito+${row['EAID']}@gmail.com`,
       assignedId: row['EAID'],
       assignedCustomerId: row['COID'],
       gender: row['Gender'] === 'M' ? 'male' : 'female',
