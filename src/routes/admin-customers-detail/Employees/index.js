@@ -81,9 +81,9 @@ class Employees extends React.PureComponent {
       dob: moment(row['Birth Date YYYYMMDD'], 'YYYYMMDD')
         .valueOf()
         .toString(),
-      street: row[' Address'],
+      street: row['Address'],
       zip: row['Zip Code'],
-      state: row['State '],
+      state: row['State'],
       ssn: row['SSN/Fed ID'],
       city: row['City'],
       status: row['Status'],
