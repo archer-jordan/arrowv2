@@ -3,6 +3,8 @@ import React from 'react';
 import {Query, graphql} from 'react-apollo';
 import saveCustomer from 'ApolloClient/Mutations/saveCustomer';
 import customersQuery from 'ApolloClient/Queries/customers';
+import compose from 'lodash/flowRight';
+import deleteCustomer from 'ApolloClient/Mutations/deleteCustomer';
 // COMPONENTS
 import CustomerForm from 'components/forms/CustomerForm';
 import Row from 'components/common/Row';
@@ -23,6 +25,7 @@ class AdminHome extends React.PureComponent {
     skip: 0,
     current: 1,
     sortBy: 'titleAscend',
+    deleting: false,
   };
   onCreateCustomer = async values => {
     try {
@@ -66,6 +69,35 @@ class AdminHome extends React.PureComponent {
     if (sorter.order) {
       let sortBy = `${sorter.columnKey}${helpers.capitalize(sorter.order)}`;
       this.setState({sortBy});
+    }
+  };
+  onDeleteCustomer = async customerId => {
+    try {
+      this.setState({
+        deleting: customerId,
+      });
+      console.log({
+        customerId,
+      });
+      await this.props.deleteCustomer({
+        variables: {
+          customerId,
+        },
+        refetchQueries: [
+          {
+            query: customersQuery,
+            variables: {
+              searchText: this.state.searchText,
+              skip: this.state.skip,
+              sortBy: this.state.sortBy,
+            },
+          },
+        ],
+      });
+    } catch (err) {
+      this.setState({
+        deleting: false,
+      });
     }
   };
   render() {
@@ -116,6 +148,8 @@ class AdminHome extends React.PureComponent {
                 dataSource={!loading ? data.customers.customers : []}
                 total={!loading ? data.customers.count : null}
                 handleTableChange={this.handleTableChange}
+                onDeleteCustomer={this.onDeleteCustomer}
+                deleting={this.state.deleting}
                 onPageChange={page =>
                   this.setState({
                     skip: page === 1 ? 0 : (page - 1) * 5,
@@ -132,4 +166,7 @@ class AdminHome extends React.PureComponent {
   }
 }
 
-export default graphql(saveCustomer, {name: 'saveCustomer'})(AdminHome);
+export default compose(
+  graphql(deleteCustomer, {name: 'deleteCustomer'}),
+  graphql(saveCustomer, {name: 'saveCustomer'})
+)(AdminHome);

@@ -3,9 +3,10 @@ import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
 import styled from 'styled-components';
 import Icon from 'components/common/Icon';
-import Tooltip from 'components/common/Tooltip';
+import Popconfirm from 'components/common/Popconfirm';
 // APOLLO
 import impersonateCustomer from 'ApolloClient/Mutations/impersonateCustomer';
+
 import currentUser from 'ApolloClient/Queries/currentUser';
 import {graphql} from 'react-apollo';
 
@@ -17,6 +18,10 @@ const Text = styled.span`
 
 const PinkText = styled(Text)`
   color: ${p => p.theme.colors.support1};
+`;
+
+const DeleteText = styled(Text)`
+  color: ${p => p.theme.colors.neutral6};
 `;
 
 class CustomersTable extends React.PureComponent {
@@ -44,6 +49,7 @@ class CustomersTable extends React.PureComponent {
       console.log(err);
     }
   };
+
   render() {
     const {
       history,
@@ -84,28 +90,40 @@ class CustomersTable extends React.PureComponent {
         render: record => {
           return (
             <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
-                {this.state.impersonating === record.id ? (
-                  <Icon type="loading" />
-                ) : (
-                  'CUSTOMER VIEW'
-                )}
-              </PinkText>
-          )
-          // return (
-          //   <Tooltip
-          //     placement="right"
-          //     title="Click to see what your customer will see"
-          //   >
-          //     <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
-          //       {this.state.impersonating === record.id ? (
-          //         <Icon type="loading" />
-          //       ) : (
-          //         'CUSTOMER VIEW'
-          //       )}
-          //     </PinkText>
-          //   </Tooltip>
-          // );
+              {this.state.impersonating === record.id ? (
+                <Icon type="loading" />
+              ) : (
+                'CUSTOMER VIEW'
+              )}
+            </PinkText>
+          );
         },
+      },
+      {
+        title: '',
+        sorter: () => {},
+        render: (text, record) => (
+          <Popconfirm
+            title="Are you sure you want to delete this customer?"
+            onConfirm={() => this.props.onDeleteCustomer(record.id)}
+            okText="Yes"
+          >
+            <DeleteText>
+              {' '}
+              <Icon
+                type={
+                  this.props.deleting && this.props.deleting === record.id
+                    ? 'loading'
+                    : 'delete'
+                }
+                style={{marginRight: 5}}
+              />
+              {this.props.deleting && this.props.deleting === record.id
+                ? ''
+                : 'Delete'}
+            </DeleteText>
+          </Popconfirm>
+        ),
       },
     ];
 
