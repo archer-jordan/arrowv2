@@ -98,14 +98,29 @@ class Employees extends React.PureComponent {
       let email = item['E-Mail'];
       if (item['EAID']) {
         if (!email) {
-          invalidEmails.push(`Email does not exist for row ${i + 2}`);
+          invalidEmails.push(`Email does not exist for row ${i + 1}`);
         }
         if (email && !validate(email)) {
-          invalidEmails.push(`Email is invalid for row ${i + 2}: ${email}`);
+          invalidEmails.push(`Email is invalid for row ${i + 1}: ${email}`);
         }
       }
     });
     return invalidEmails;
+  };
+
+  getInvalidFields = results => {
+    let invalidFields = [];
+    results.data.forEach((item, i) => {
+      if (
+        !item['EAID'] ||
+        item['EAID'] === '' ||
+        item['EAID'] === 'NULL' ||
+        item['EAID'] === ' '
+      ) {
+        invalidFields.push(`EAID does not exist for ${i + 1}`);
+      }
+    });
+    return invalidFields;
   };
   /**
    *
@@ -142,6 +157,16 @@ class Employees extends React.PureComponent {
         return this.setState({
           loading: false,
           errors: invalidEmails,
+        });
+      }
+
+      // 3. make sure EAID is not empty
+      let invalidFields = this.getInvalidFields(results);
+
+      if (invalidFields.length > 0) {
+        return this.setState({
+          loading: false,
+          errors: invalidFields,
         });
       }
 
@@ -225,6 +250,16 @@ class Employees extends React.PureComponent {
       return this.setState({
         loading: false,
         updateErrors: invalidEmails,
+      });
+    }
+
+    // 3. make sure EAID is not empty
+    let invalidFields = this.getInvalidFields(results);
+
+    if (invalidFields.length > 0) {
+      return this.setState({
+        loading: false,
+        updateErrors: invalidFields,
       });
     }
 
