@@ -359,6 +359,7 @@ class Employees extends React.PureComponent {
           </div>
           <Query
             query={employeesQuery}
+            fetchPolicy="network-only"
             variables={{
               customerId: this.props.customer.id,
               skip: this.state.skip,
