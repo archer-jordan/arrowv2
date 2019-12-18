@@ -11,5 +11,6 @@ export default gql`
     firstName
     permissions
     lastName
+    createdAt
   }
 `;

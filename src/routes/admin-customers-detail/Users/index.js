@@ -2,7 +2,7 @@ import React from 'react';
 import compose from 'lodash/flowRight';
 import Button from 'components/common/Button';
 import message from 'components/common/message';
-import UserForm from './UserForm';
+import UserForm from 'components/forms/UserForm';
 import UsersTable from './UsersTable';
 // APOLLO
 import createNewUser from 'ApolloClient/Mutations/createNewUser';

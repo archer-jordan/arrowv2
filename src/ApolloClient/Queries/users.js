@@ -8,6 +8,7 @@ export default gql`
       count
       users {
         ...userFragment
+        createdByEmail
       }
     }
   }

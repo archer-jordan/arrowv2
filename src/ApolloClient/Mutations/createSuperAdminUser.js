@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 import userFragment from 'ApolloClient/Fragments/userFragment';
 
 export default gql`
-  mutation deleteUser($id: ID) {
-    deleteUser(id: $id) {
+  mutation createSuperAdminUser($params: UserParams) {
+    createSuperAdminUser(params: $params) {
       ...userFragment
     }
   }
