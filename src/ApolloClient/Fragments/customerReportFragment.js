@@ -26,6 +26,7 @@ export default gql`
     labelForVHS
     labelForAdminCosts
     labelForTotalRetirement
+    totalHealthAndWelfareLabel
     # benefits
     benefits {
       label

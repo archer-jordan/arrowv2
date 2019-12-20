@@ -83,6 +83,10 @@ class HealthAndWelfare extends React.PureComponent {
     let labelForVHS = report.labelForVHS
       ? report.labelForVHS
       : 'TOTAL VACATION, HOLIDAY, SICK';
+
+    let totalHealthAndWelfareLabel = report.totalHealthAndWelfareLabel
+      ? report.totalHealthAndWelfareLabel
+      : 'Total Health & Welfare';
     return (
       <div>
         <TopContainer>
@@ -113,7 +117,7 @@ class HealthAndWelfare extends React.PureComponent {
           {' '}
           <Col xs={24} md={12}>
             <ValueItem
-              label="Total Health & Welfare"
+              label={totalHealthAndWelfareLabel}
               value={`$${numeral(report.totalHealthAndWelfare).format(
                 '0,0.00'
               )}`}
@@ -134,9 +138,26 @@ class HealthAndWelfare extends React.PureComponent {
                   legend: {
                     display: false,
                   },
+                  tooltips: {
+                    mode: 'label',
+                    callbacks: {
+                      title: function(tooltipItem, data) {
+                        return data.labels[tooltipItem[0].index];
+                      },
+
+                      beforeLabel: function(tooltipItem, data) {
+                        return null;
+                      },
+
+                      label: function(tooltipItem, data) {
+                        let value = data.datasets[0].data[tooltipItem.index];
+                        return ` $${numeral(value).format('0,0.00')}`;
+                      },
+                    },
+                  },
                 }}
                 data={{
-                  labels: ['Total Health & Welfare', labelForVHS],
+                  labels: [totalHealthAndWelfareLabel, labelForVHS],
                   datasets: [
                     {
                       data: [report.totalHealthAndWelfare, report.totalVHS],

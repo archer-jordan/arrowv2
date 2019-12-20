@@ -25,18 +25,18 @@ const ColorCircle = styled.div`
   background: ${p => (p.color ? p.color : 'red')};
 `;
 
+const FinancialRowContainer = styled.div`
+  height: 100px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #efefef;
+  position: relative;
+  width: 350px;
+  max-width: 100%;
+`;
+
 const FinancialRow = ({label, value, color}) => {
   return (
-    <div
-      style={{
-        height: 100,
-        marginBottom: 24,
-        borderBottom: '1px solid #efefef',
-        position: 'relative',
-        width: 350,
-        maxWidth: '100%',
-      }}
-    >
+    <FinancialRowContainer>
       <div style={{display: 'inline-block', minWidth: 150}}>
         <BigLabel>{label}</BigLabel>
         <BigValue style={{fontSize: 40}}>${value}</BigValue>
@@ -44,7 +44,7 @@ const FinancialRow = ({label, value, color}) => {
       <div style={{display: 'inline-block', marginLeft: 16}}>
         {color && <ColorCircle color={color} />}
       </div>
-    </div>
+    </FinancialRowContainer>
   );
 };
 
