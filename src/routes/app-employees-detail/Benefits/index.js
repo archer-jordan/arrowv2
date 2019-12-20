@@ -15,21 +15,21 @@ import {Query} from 'react-apollo';
 
 const BenefitType = styled(BigLabel)`
   font-weight: 500;
-  font-size: 28px;
+  font-size: 24px;
   color: #0f466a;
 `;
 
 const RequiredHours = styled(BigLabel)`
   font-weight: 300;
-  font-size: 40px;
-  line-height: 40px;
+  font-size: 32px;
+  line-height: 32px;
   margin-top: 0px;
 `;
 
 const BenefitRow = ({label, hours, eligibility}) => (
   <Row
     gutter={16}
-    style={{height: 80, marginTop: 24, borderBottom: '1px solid #efefef'}}
+    style={{height: 72, paddingTop: 16, borderBottom: '1px solid #efefef'}}
   >
     <Col xs={12}>
       <BenefitType>{label}</BenefitType>

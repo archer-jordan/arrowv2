@@ -156,7 +156,7 @@ const formatRow = (headersArray, dataArray) => {
     totalFringeBenefitsSpendLabel: headersArray[21],
     totalFringeBenefitsSpend: dataArray[21],
     // total health and welfare
-    //totalHealthAndWelfareLabel: headersArray[7],
+    totalHealthAndWelfareLabel: headersArray[7],
     totalHealthAndWelfare: dataArray[7],
     // other values
     totalEmployees: dataArray[10],

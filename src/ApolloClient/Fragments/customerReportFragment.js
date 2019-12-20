@@ -21,6 +21,7 @@ export default gql`
     # labels
     labelForTotalFringe
     totalFringeBenefitsSpend
+    totalFringeBenefitsSpendLabel
     labelForTotalHours
     labelForVHS
     labelForAdminCosts
