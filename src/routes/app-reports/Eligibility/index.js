@@ -46,7 +46,7 @@ class Eligibility extends React.PureComponent {
                   card={{
                     label: benefit.label,
                     value: benefit.employees,
-                    comparison: report.totalEmployees - benefit.employees,
+                    comparison: report.activeThisMonth - benefit.employees,
                     type: 'Employees',
                   }}
                   noBorder={(i + 1) % 4 === 0 && i !== 0}
