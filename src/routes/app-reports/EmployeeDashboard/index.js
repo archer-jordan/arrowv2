@@ -100,7 +100,11 @@ class EmployeeDashboard extends React.PureComponent {
     const {tab, month, year} = queryString.parse(location.search);
 
     return (
-      <Query query={employeeByIdQuery} variables={{id: employeeId}}>
+      <Query
+        query={employeeByIdQuery}
+        variables={{id: employeeId}}
+        fetchPolicy="cache-and-network"
+      >
         {({data, loading, error}) => {
           if (loading) return 'loading';
           if (error) {

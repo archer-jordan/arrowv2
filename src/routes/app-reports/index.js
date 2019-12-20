@@ -179,6 +179,7 @@ class AppReports extends React.PureComponent {
             {this.props.currentUser.customerId && year && month && (
               <Query
                 query={customerReport}
+                fetchPolicy="cache-and-network"
                 variables={{
                   customerId: this.props.currentUser.customerId,
                   month: moment(helpers.capitalize(month), 'MMMM').format('M'),

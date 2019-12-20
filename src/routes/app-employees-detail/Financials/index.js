@@ -42,7 +42,7 @@ const FinancialRow = ({label, value, color}) => {
         <BigValue style={{fontSize: 40}}>${value}</BigValue>
       </div>
       <div style={{display: 'inline-block', marginLeft: 16}}>
-        <ColorCircle color={color} />
+        {color && <ColorCircle color={color} />}
       </div>
     </div>
   );
@@ -87,12 +87,12 @@ class Financials extends React.PureComponent {
               }
               let report = data.employeeReportByEmployeeId;
               let dataArray = [
-                {
-                  id: '1',
-                  label: 'Fringe Dollars',
-                  value: report.fringeDollars,
-                  color: '#8CB3CD',
-                },
+                //{
+                //  id: '1',
+                //  label: 'Fringe Dollars',
+                //  value: report.fringeDollars,
+                //  color: '#8CB3CD',
+                //},
                 {
                   id: '2',
                   label: 'Health & Welfare',
@@ -110,6 +110,11 @@ class Financials extends React.PureComponent {
                 <Row gutter={16} style={{marginTop: 30}}>
                   <Col xs={24} md={10}>
                     {' '}
+                    <FinancialRow
+                      label={'Fringe Dollars'}
+                      value={report.fringeDollars}
+                      color={null}
+                    />
                     {dataArray.map(item => {
                       return (
                         <FinancialRow
@@ -123,7 +128,6 @@ class Financials extends React.PureComponent {
                   </Col>
                   <Col xs={24} md={14}>
                     <PieChartPlaceholder>
-                      {/* <PieChart data={dataArray} /> */}
                       <Doughnut
                         options={{
                           responsive: true,

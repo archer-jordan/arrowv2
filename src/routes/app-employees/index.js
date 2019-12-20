@@ -158,6 +158,7 @@ class AppEmployees extends React.PureComponent {
         </Row>
         <Query
           query={employeesQuery}
+          fetchPolicy="cache-and-network"
           variables={{
             customerId: this.props.currentUser.customerId,
             searchText: this.state.searchText,

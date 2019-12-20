@@ -37,7 +37,6 @@ const BenefitRow = ({label, hours, eligibility}) => (
     <Col xs={6}>
       <RequiredHours>{hours}</RequiredHours>
     </Col>
-
     <Col xs={6}>
       {eligibility ? (
         <BigLabel>
@@ -59,6 +58,7 @@ class Benefits extends React.PureComponent {
     return (
       <Query
         query={employeeReportByEmployeeId}
+        fetchPolicy="cache-and-network"
         variables={{
           month: moment(helpers.capitalize(this.props.month), 'MMMM').format(
             'M'
@@ -70,7 +70,7 @@ class Benefits extends React.PureComponent {
         {({loading, data, error}) => {
           if (loading) return 'loading';
           if (error) return 'error';
-          console.log(data);
+
           if (
             !data.employeeReportByEmployeeId ||
             !data.employeeReportByEmployeeId.benefits
@@ -80,9 +80,6 @@ class Benefits extends React.PureComponent {
 
           let report = data.employeeReportByEmployeeId;
 
-          console.log({
-            data,
-          });
           return (
             <div>
               <div>
