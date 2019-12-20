@@ -89,7 +89,7 @@ class HealthAndWelfare extends React.PureComponent {
           <Row style={{width: '100%'}}>
             {' '}
             <Col xs={24} md={9} lg={7}>
-              <BigValue>{numeral(report.totalHours).format('0,0.0')}</BigValue>
+              <BigValue>{numeral(report.totalHours).format('0,0.00')}</BigValue>
               <BigLabel>{report.labelForTotalHours || 'Total Hours'}</BigLabel>
             </Col>
             <Col xs={24} md={8} lg={8}>
