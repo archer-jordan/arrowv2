@@ -8,11 +8,6 @@ const PieChartPlaceholder = styled.div`
   height: 150px;
   position: relative;
   left: -20px;
-  /* max-width: 100%;
-  max-height: 100%;
-  border-radius: 50%;
-  background: #1371a3;
-  margin-top: 8px; */
 `;
 
 const Container = styled.div`
@@ -39,8 +34,8 @@ const Title = styled.div`
   letter-spacing: 1px;
   color: #1371a3;
 `;
-
-const CHART_COLORS = ['#8CB3CD', '#0F3557', '#145D92', '#5A89AB'];
+/// ['#8CB3CD', '#0F3557', '#145D92', '#5A89AB']
+const CHART_COLORS = ['#0F3557', '#e5eff5'];
 
 const Type = styled.div`
   font-size: 14px;
@@ -58,20 +53,6 @@ class EligibilityCard extends React.PureComponent {
         {' '}
         <Title>{this.props.card.label}</Title>
         <PieChartPlaceholder>
-          {/* <PieChart
-            data={[
-              {
-                id: '1',
-                label: 'Eligible',
-                value: this.props.card.value,
-              },
-              {
-                id: '2',
-                label: 'Ineligble',
-                value: this.props.card.comparison,
-              },
-            ]}
-          /> */}
           <Doughnut
             options={{
               responsive: true,
