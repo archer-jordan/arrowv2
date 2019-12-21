@@ -135,6 +135,14 @@ class Employees extends React.PureComponent {
     return formattedData;
   };
 
+  checkForDuplicateIDs = formattedData => {
+    let allIds = formattedData.map(item => item.assignedId);
+    const checkIfArrayIsUnique = myArray => {
+      return myArray.length === new Set(myArray).size;
+    };
+    // check for duplicates
+    return checkIfArrayIsUnique(allIds);
+  };
   /**
    * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
    */
@@ -172,6 +180,16 @@ class Employees extends React.PureComponent {
 
       let formattedData = this.getFormatted(results);
 
+      // 4. make sure there are no duplicate EAIDs
+      let isUniqueArray = this.checkForDuplicateIDs(formattedData);
+
+      if (!isUniqueArray) {
+        return this.setState({
+          loading: false,
+          errors: ['This spreadsheet has dupliate employee IDs'],
+        });
+      }
+
       // Do server check to see if these people already exist
       let mutationResult = await this.props.checkEmployeesCSV({
         variables: {
@@ -205,28 +223,6 @@ class Employees extends React.PureComponent {
         errors: dataUploadResult.data.newEmployeesUpload.errors,
         loading: false,
       });
-      // upload file to s3
-      // let uploadResult = await this.props.singleUpload({
-      //   variables: {
-      //     file: this.state.file,
-      //   },
-      // });
-
-      // if (uploadResult.data.singleUpload) {
-      //   const {filename, mimetype, url, key} = uploadResult.data.singleUpload;
-      //   await this.props.saveAttachment({
-      //     variables: {
-      //       params: {
-      //         filename,
-      //         mimetype,
-      //         url,
-      //         key,
-      //         customerId: this.props.customer.id,
-      //         type: 'EmployeeUploads',
-      //       },
-      //     },
-      //   });
-      //}
     } catch (err) {
       this.setState({loading: false});
       console.log(err);
@@ -264,6 +260,16 @@ class Employees extends React.PureComponent {
     }
 
     let formattedData = this.getFormatted(results);
+
+    // 4. make sure there are no duplicate EAIDs
+    let isUniqueArray = this.checkForDuplicateIDs(formattedData);
+
+    if (!isUniqueArray) {
+      return this.setState({
+        loading: false,
+        updateErrors: ['This spreadsheet has dupliate employee IDs'],
+      });
+    }
 
     try {
       let mutationResult = await this.props.updateEmployeesUpload({
@@ -435,29 +441,6 @@ class Employees extends React.PureComponent {
     return (
       <div style={{width: 700, maxWidth: '100%'}}>
         <SectionTitle>ADD NEW EMPLOYEES TO THE DATABASE</SectionTitle>
-        {/* <Query
-          query={getAttachment}
-          pollInterval={600000} // every ten minutes
-          variables={{
-            customerId: this.props.customer.id,
-            type: 'EmployeeUploads',
-          }}
-        >
-          {({data, loading, error}) => {
-            if (loading) return <Icon type="loading" />;
-            if (error) return 'error';
-            if (!data.getAttachment) return null;
-            return (
-              <FileRow
-                filename={data.getAttachment.filename}
-                url={data.getAttachment.url}
-                onDelete={() =>
-                  console.log(data.getAttachment.id, 'EmployeeUploads')
-                }
-              />
-            );
-          }}
-        </Query> */}
         {this.state.successfulAdd && (
           <Alert
             message="Upload Success"
