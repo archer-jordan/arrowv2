@@ -87,12 +87,6 @@ class Financials extends React.PureComponent {
               }
               let report = data.employeeReportByEmployeeId;
               let dataArray = [
-                //{
-                //  id: '1',
-                //  label: 'Fringe Dollars',
-                //  value: report.fringeDollars,
-                //  color: '#8CB3CD',
-                //},
                 {
                   id: '2',
                   label: 'Health & Welfare',

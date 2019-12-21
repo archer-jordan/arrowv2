@@ -17,6 +17,22 @@ const BenefitType = styled(BigLabel)`
   font-weight: 500;
   font-size: 24px;
   color: #0f466a;
+  @media only screen and (max-width: 414px) {
+    font-size: 16px;
+  }
+`;
+
+const HoursContainer = styled.div`
+  width: 100%;
+  background: #e5eff5;
+  max-width: 100%;
+  border-radius: 15px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  @media only screen and (max-width: 414px) {
+    height: 75px;
+  }
 `;
 
 const RequiredHours = styled(BigLabel)`
@@ -26,21 +42,30 @@ const RequiredHours = styled(BigLabel)`
   margin-top: 0px;
 `;
 
+const EligibleIcon = styled.img`
+  height: 56px;
+  width: 56px;
+  @media only screen and (max-width: 414px) {
+    height: 28px;
+    width: 28px;
+  }
+`;
+
 const BenefitRow = ({label, hours, eligibility}) => (
   <Row
     gutter={16}
     style={{height: 72, paddingTop: 16, borderBottom: '1px solid #efefef'}}
   >
-    <Col xs={12}>
+    <Col xs={16} md={12}>
       <BenefitType>{label}</BenefitType>
     </Col>
-    <Col xs={6}>
+    <Col xs={4} md={6}>
       <RequiredHours>{hours}</RequiredHours>
     </Col>
-    <Col xs={6}>
+    <Col xs={4} md={6}>
       {eligibility ? (
         <BigLabel>
-          <img src={checkSVG} alt="check-circle" height="56" weight="56" />
+          <EligibleIcon src={checkSVG} alt="check-circle" />
         </BigLabel>
       ) : null}
     </Col>
@@ -52,7 +77,50 @@ const ColumnTitle = styled.div`
   line-height: 16px;
   color: #0f466a;
 `;
-// tri
+
+const Header = ({month}) => (
+  <Row gutter={16} style={{marginTop: 16, marginBottom: 24}}>
+    <Col xs={0} md={4}>
+      <ColumnTitle style={{marginLeft: 8}}>
+        {month.toUpperCase()} <br />
+        HOURS
+      </ColumnTitle>
+    </Col>
+    <Col xs={12} md={10}>
+      <ColumnTitle>
+        {' '}
+        BENEFIT
+        <br /> TYPE{' '}
+      </ColumnTitle>
+    </Col>
+    <Col xs={6} md={5}>
+      <ColumnTitle>
+        {' '}
+        REQUIRED <br />
+        HOURS{' '}
+      </ColumnTitle>
+    </Col>
+    <Col xs={6} md={5}>
+      <ColumnTitle>
+        {moment(helpers.capitalize(month), 'MMMM')
+          .add(1, 'months')
+          .format('MMMM')
+          .toUpperCase()}
+        <br />
+        ELIGIBILITY{' '}
+      </ColumnTitle>
+    </Col>
+  </Row>
+);
+
+const MobileLabel = styled.span`
+  margin-left: 8px;
+  display: none;
+  @media only screen and (max-width: 414px) {
+    display: inline;
+  }
+`;
+
 class Benefits extends React.PureComponent {
   render() {
     return (
@@ -82,60 +150,34 @@ class Benefits extends React.PureComponent {
 
           return (
             <div>
-              <div>
-                <TopContainer style={{justifyContent: 'flex-end'}}>
-                  <div>
-                    {' '}
-                    <BigValue style={{textAlign: 'right'}}>
-                      {this.props.employee.firstName}{' '}
-                      {this.props.employee.lastName}
-                    </BigValue>
-                    <BigLabel style={{textAlign: 'right'}}>
-                      {this.props.employee.email}
-                    </BigLabel>
-                  </div>
-                </TopContainer>
-              </div>{' '}
-              <Row gutter={16} style={{marginTop: 16, marginBottom: 24}}>
-                <Col xs={4}>
-                  <ColumnTitle style={{marginLeft: 8}}>
-                    {this.props.month.toUpperCase()} <br />
-                    HOURS
-                  </ColumnTitle>
-                </Col>
-                <Col xs={10}>
-                  <ColumnTitle>
-                    {' '}
-                    BENEFIT
-                    <br /> TYPE{' '}
-                  </ColumnTitle>
-                </Col>
-                <Col xs={5}>
-                  <ColumnTitle>
-                    {' '}
-                    REQUIRED <br />
-                    HOURS{' '}
-                  </ColumnTitle>
-                </Col>
-
-                <Col xs={5}>
-                  <ColumnTitle>
-                    {moment(helpers.capitalize(this.props.month), 'MMMM')
-                      .add(1, 'months')
-                      .format('MMMM')
-                      .toUpperCase()}
-                    <br />
-                    ELIGIBILITY{' '}
-                  </ColumnTitle>
-                </Col>
-              </Row>
+              <TopContainer style={{justifyContent: 'flex-end'}}>
+                <div>
+                  {' '}
+                  <BigValue style={{textAlign: 'right'}}>
+                    {this.props.employee.firstName}{' '}
+                    {this.props.employee.lastName}
+                  </BigValue>
+                  <BigLabel style={{textAlign: 'right'}}>
+                    {this.props.employee.email}
+                  </BigLabel>
+                </div>
+              </TopContainer>
               <Row gutter={16} style={{marginTop: 16}}>
-                <Col xs={4}>
-                  <TopContainer>
+                <Col xs={0} sm={24}>
+                  <Header month={this.props.month} />
+                </Col>
+                <Col xs={24} md={4}>
+                  <HoursContainer>
                     <BigValue style={{textAlign: 'center'}}>
                       {report.hours}
+                      <MobileLabel>
+                        {this.props.month.toUpperCase()} HOURS
+                      </MobileLabel>
                     </BigValue>
-                  </TopContainer>
+                  </HoursContainer>
+                </Col>
+                <Col xs={24} sm={0}>
+                  <Header month={this.props.month} />
                 </Col>
                 <Col xs={20}>
                   {report.benefits.map(item => (
