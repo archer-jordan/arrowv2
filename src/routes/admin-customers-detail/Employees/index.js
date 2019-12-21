@@ -1,7 +1,5 @@
 import React from 'react';
-import moment from 'moment';
 import styled from 'styled-components';
-import {validate} from 'email-validator';
 import Papa from 'papaparse';
 // COMPONENTS
 import EmployeeForm from 'components/forms/EmployeeForm';
@@ -26,6 +24,7 @@ import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
+import employeeHelpers from './employeeHelpers';
 
 const PinkText = styled.div`
   margin-top: 24px;
@@ -63,86 +62,17 @@ class Employees extends React.PureComponent {
     sortBy: 'lastNameAscend',
     updateErrors: [],
   };
-  /**
-   * formatRow takes in a CSV row and parses it into a structure we want for passing into the mutation
-   */
-  formatRow = row => {
-    return {
-      firstName: row['First Name'],
-      lastName: row['Last Name'],
-      email: row['E-Mail'],
-      //email: `arcomito+${row['EAID']}@gmail.com`,
-      assignedId: row['EAID'],
-      assignedCustomerId: row['COID'],
-      gender: row['Gender'] === 'M' ? 'male' : 'female',
-      hireDate: moment(row['Hire Date YYYYMMDD'], 'YYYYMMDD')
-        .valueOf()
-        .toString(),
-      dob: moment(row['Birth Date YYYYMMDD'], 'YYYYMMDD')
-        .valueOf()
-        .toString(),
-      street: row['Address'],
-      zip: row['Zip Code'],
-      state: row['State'],
-      ssn: row['SSN/Fed ID'],
-      city: row['City'],
-      status: row['Status'],
-    };
-  };
-  /**
-   * getInvalidEmails takes in the parsed result and will check for invalid emails each row
-   */
-  getInvalidEmails = results => {
-    let invalidEmails = [];
-    results.data.forEach((item, i) => {
-      let email = item['E-Mail'];
-      if (item['EAID']) {
-        if (!email) {
-          invalidEmails.push(`Email does not exist for row ${i + 1}`);
-        }
-        if (email && !validate(email)) {
-          invalidEmails.push(`Email is invalid for row ${i + 1}: ${email}`);
-        }
-      }
-    });
-    return invalidEmails;
-  };
 
-  getInvalidFields = results => {
-    let invalidFields = [];
-    results.data.forEach((item, i) => {
-      if (
-        !item['EAID'] ||
-        item['EAID'] === '' ||
-        item['EAID'] === 'NULL' ||
-        item['EAID'] === ' '
-      ) {
-        invalidFields.push(`EAID does not exist for ${i + 1}`);
-      }
-    });
-    return invalidFields;
-  };
-  /**
-   *
-   */
   getFormatted = results => {
     let formattedData = [];
     results.data.forEach(item => {
       if (item['EAID']) {
-        formattedData.push(this.formatRow(item));
+        formattedData.push(employeeHelpers.formatRow(item));
       }
     });
     return formattedData;
   };
 
-  checkForDuplicateIDs = formattedData => {
-    let allIds = formattedData.map(item => item.assignedId);
-    const checkIfArrayIsUnique = myArray => {
-      return myArray.length === new Set(myArray).size;
-    };
-    // check for duplicates
-    return checkIfArrayIsUnique(allIds);
-  };
   /**
    * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
    */
@@ -159,7 +89,7 @@ class Employees extends React.PureComponent {
       }
 
       // 2. make sure the emails are all valid
-      let invalidEmails = this.getInvalidEmails(results);
+      let invalidEmails = employeeHelpers.getInvalidEmails(results);
 
       if (invalidEmails.length > 0) {
         return this.setState({
@@ -169,7 +99,7 @@ class Employees extends React.PureComponent {
       }
 
       // 3. make sure EAID is not empty
-      let invalidFields = this.getInvalidFields(results);
+      let invalidFields = employeeHelpers.getInvalidFields(results);
 
       if (invalidFields.length > 0) {
         return this.setState({
@@ -181,7 +111,7 @@ class Employees extends React.PureComponent {
       let formattedData = this.getFormatted(results);
 
       // 4. make sure there are no duplicate EAIDs
-      let isUniqueArray = this.checkForDuplicateIDs(formattedData);
+      let isUniqueArray = employeeHelpers.checkForDuplicateIDs(formattedData);
 
       if (!isUniqueArray) {
         return this.setState({
@@ -240,7 +170,7 @@ class Employees extends React.PureComponent {
     }
 
     // 2. make sure the emails are all valid
-    let invalidEmails = this.getInvalidEmails(results);
+    let invalidEmails = employeeHelpers.getInvalidEmails(results);
 
     if (invalidEmails.length > 0) {
       return this.setState({
@@ -250,7 +180,7 @@ class Employees extends React.PureComponent {
     }
 
     // 3. make sure EAID is not empty
-    let invalidFields = this.getInvalidFields(results);
+    let invalidFields = employeeHelpers.getInvalidFields(results);
 
     if (invalidFields.length > 0) {
       return this.setState({
@@ -262,7 +192,7 @@ class Employees extends React.PureComponent {
     let formattedData = this.getFormatted(results);
 
     // 4. make sure there are no duplicate EAIDs
-    let isUniqueArray = this.checkForDuplicateIDs(formattedData);
+    let isUniqueArray = employeeHelpers.checkForDuplicateIDs(formattedData);
 
     if (!isUniqueArray) {
       return this.setState({

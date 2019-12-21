@@ -96,8 +96,8 @@ const AppNav = ({pathname, currentUser}) => {
             {currentUser.roles.includes('coEmployee') && (
               <MobileCol>
                 <NavItem
-                  to={`/reports`}
-                  active={pathname && pathname.includes('/reports')}
+                  to={`/dashboard`}
+                  active={pathname && pathname.includes('/dashboard')}
                 >
                   Dashboard
                 </NavItem>

@@ -29,6 +29,7 @@ import AppUsersRoute from 'routes/app-users';
 import AppEmployeesRoute from 'routes/app-employees';
 import AppAccountRoute from 'routes/app-account';
 import AppSupportRoute from 'routes/app-support';
+import AppEmployeeDashboardRoute from 'routes/app-employee-dashboard';
 import AppEmployeesDetailRoute from 'routes/app-employees-detail';
 // ADMIN
 import AdminCustomers from 'routes/admin-customers';
@@ -105,6 +106,13 @@ class AppRoutes extends React.Component {
             path="/reports"
             currentUser={currentUser}
             component={AppReportsRoute}
+          />
+          <ProtectedRoute
+            exact
+            layout={AppLayout}
+            path="/dashboard"
+            currentUser={currentUser}
+            component={AppEmployeeDashboardRoute}
           />
           <ProtectedRoute
             exact

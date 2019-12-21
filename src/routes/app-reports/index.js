@@ -14,7 +14,7 @@ import Retirement from './Retirement';
 import Benefits from './Benefits';
 import Downloads from './Downloads';
 import SideNav from 'components/common/SideNav';
-import EmployeeDashboard from './EmployeeDashboard';
+// import EmployeeDashboard from './EmployeeDashboard';
 // APOLLO
 import {Query} from 'react-apollo';
 import customerReport from 'ApolloClient/Queries/customerReport';
@@ -144,17 +144,17 @@ class AppReports extends React.PureComponent {
       return <Redirect to="/account?tab=profile" />;
     }
 
-    if (
-      this.props.currentUser &&
-      this.props.currentUser.roles.includes('coEmployee')
-    ) {
-      return (
-        <EmployeeDashboard
-          employeeId={this.props.currentUser.employeeId}
-          {...this.props}
-        />
-      );
-    }
+    // if (
+    //   this.props.currentUser &&
+    //   this.props.currentUser.roles.includes('coEmployee')
+    // ) {
+    //   return (
+    //     <EmployeeDashboard
+    //       employeeId={this.props.currentUser.employeeId}
+    //       {...this.props}
+    //     />
+    //   );
+    // }
 
     const {tab, month, year} = queryString.parse(location.search);
 
