@@ -6,21 +6,19 @@ import formatEmployeeRow from './formatEmployeeRow';
 // COMPONENTS
 import Icon from 'components/common/Icon';
 import Button from 'components/common/Button';
-import message from 'components/common/message';
 import ErrorBlock from 'components/common/ErrorBlock';
 import Modal from 'components/common/Modal';
 import Title from 'components/text/Title';
 import Caption from 'components/text/Caption';
-import ReportRow from './ReportRow';
 import Alert from 'components/common/Alert';
 // APOLLO
-import {graphql, Query} from 'react-apollo';
+import {graphql} from 'react-apollo';
 import client from 'ApolloClient/index.js';
 import customerReportQuery from 'ApolloClient/Queries/customerReport';
 import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
 import customerReportsByCustomerId from 'ApolloClient/Queries/customerReportsByCustomerId';
 import uploadEmployeeReports from 'ApolloClient/Mutations/uploadEmployeeReports';
-
+import checkIfEmployeeTotalsExist from 'ApolloClient/Queries/checkIfEmployeeTotalsExist';
 import compose from 'lodash/flowRight';
 
 const UploadButton = styled.input`
@@ -94,7 +92,6 @@ class Override extends React.PureComponent {
       this.setState({loading: true});
 
       // check the length and throw an error if we have the incorrect number of columns we were expecting
-      console.log(results.data[1]);
       if (results.data[1].length !== 32) {
         return this.setState({
           companyErrors: [
@@ -106,7 +103,7 @@ class Override extends React.PureComponent {
       // format the data
       const data = formatRow(results.data[0], results.data[1]);
 
-      // TODO: verify if we already have data for this month
+      // verify if we already have data for this month
       const reportExists = await client.query({
         query: customerReportQuery,
         variables: {
@@ -155,22 +152,54 @@ class Override extends React.PureComponent {
   };
   onEmployeeUpload = async (results, file) => {
     try {
-      console.log({results, file});
       let headersArray = results.data[0];
       let formattedData = [];
       results.data.forEach((item, i) => {
         // 0 index item is the header row, which we don't want to include in formatted data
         if (i !== 0 && item[0] !== null && item[0] !== '') {
-          console.log(item); // check that item has 36 columns
           let formattedItem = formatEmployeeRow(headersArray, item);
           formattedData.push(formattedItem);
         }
       });
+
+      let employeeTotalsExist = await client.query({
+        query: checkIfEmployeeTotalsExist,
+        variables: {
+          employeeAssignedIds: formattedData.map(item => item.assignedId),
+          month: formattedData[0].month,
+          year: formattedData[0].year,
+          customerId: this.props.customer.id,
+        },
+      });
+      return console.log(employeeTotalsExist);
+      // verify if we already have data for this month
+      // const reportExists = await client.query({
+      //   query: employeeReportByEmployeeIdQuery,
+      //   variables: {
+      //     employeeId: this.props.customer.id,
+      //     month: formattedData[0].month,
+      //     year: formattedData[0].year,
+      //   },
+      // });
+
+      // if (
+      //   reportExists.data &&
+      //   reportExists.data.customerReport &&
+      //   reportExists.data.customerReport.id
+      // ) {
+      //   return this.setState({
+      //     confirmEmployeeUpdateModal: true,
+      //     employeeData: formattedData[0],
+      //   });
+      // }
+
+      // update data
       await this.props.uploadEmployeeReports({
         variables: {
           values: formattedData,
         },
       });
+
       this.setState({
         loading: false,
         employeeFile: null,
@@ -241,35 +270,6 @@ class Override extends React.PureComponent {
         </Modal>
         <SectionTitle>Company Totals</SectionTitle>
         {/* SHOW PAST UPLOADS */}
-        {/* <Query
-          query={customerReportsByCustomerId}
-          variables={{customerId: this.props.customer.id}}
-        >
-          {({data, loading, error}) => {
-            if (loading) return <Icon type="loading" />;
-            if (error) return 'error';
-            let results = data.customerReportsByCustomerId;
-            return (
-              results &&
-              results.map(item => (
-                <ReportRow
-                  key={item.id}
-                  item={item}
-                  active={
-                    this.state.selectedItem &&
-                    this.state.selectedItem.id === item.id
-                  }
-                  onClick={() =>
-                    this.state.selectedItem &&
-                    this.state.selectedItem.id === item.id
-                      ? this.setState({selectedItem: null})
-                      : this.setState({selectedItem: item})
-                  }
-                />
-              ))
-            );
-          }}
-        </Query> */}
         {/* SHOW ERRORS IF THEY EXIST */}
         {this.state.companyErrors && this.state.companyErrors.length > 0 && (
           <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>

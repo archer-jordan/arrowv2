@@ -14,7 +14,6 @@ import Retirement from './Retirement';
 import Benefits from './Benefits';
 import Downloads from './Downloads';
 import SideNav from 'components/common/SideNav';
-// import EmployeeDashboard from './EmployeeDashboard';
 // APOLLO
 import {Query} from 'react-apollo';
 import customerReport from 'ApolloClient/Queries/customerReport';

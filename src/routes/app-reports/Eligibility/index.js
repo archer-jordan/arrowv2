@@ -13,7 +13,11 @@ const MobileWrapper = styled.div`
     margin-top: 24px;
   }
 `;
-
+const Caption = styled.p`
+  @media only screen and (max-width: 414px) {
+    margin-bottom: 32px;
+  }
+`;
 class Eligibility extends React.PureComponent {
   render() {
     const {report} = this.props;
@@ -37,6 +41,11 @@ class Eligibility extends React.PureComponent {
             <Col xs={24} md={7} lg={9} />
           </Row>
         </TopContainer>
+        {report.captionForEligibility && (
+          <Caption style={{textAlign: 'right'}}>
+            {report.captionForEligibility}
+          </Caption>
+        )}
         <Row style={{paddingBottom: 64}}>
           {' '}
           {report.benefits.map((benefit, i) => {

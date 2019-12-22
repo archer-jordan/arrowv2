@@ -18,6 +18,8 @@ export default gql`
     totalFringeBenefitsSpend
     #captions
     captionForHealthAndWelfare
+    captionForEligibility
+    captionForBenefits
     # labels
     labelForTotalFringe
     totalFringeBenefitsSpend

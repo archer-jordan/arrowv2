@@ -118,7 +118,9 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   }
 
   return {
+    // employee/customer ID
     assignedId: dataArray[2],
+    // the assigned ID of the company
     companyAssignedId: dataArray[1],
     month: dataArray[3],
     year: dataArray[5],

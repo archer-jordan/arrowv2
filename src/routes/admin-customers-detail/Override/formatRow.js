@@ -134,6 +134,7 @@ const formatRow = (headersArray, dataArray) => {
 
   // return an object with the structure we'd like
   return {
+    // the assigned id of the customer/company
     assignedId: dataArray[1],
     month: dataArray[2],
     year: dataArray[4],
@@ -151,7 +152,8 @@ const formatRow = (headersArray, dataArray) => {
     totalVHS: dataArray[8],
     labelForVHS: headersArray[8],
     // captions
-    captionForHealthAndWelfare: dataArray[30],
+    captionForHealthAndWelfare: dataArray[9],
+    captionForBenefits: dataArray[30],
     // total fringe benfits spend
     totalFringeBenefitsSpendLabel: headersArray[21],
     totalFringeBenefitsSpend: dataArray[21],
@@ -163,6 +165,8 @@ const formatRow = (headersArray, dataArray) => {
     //  other labels
     labelForAdminCosts: dataArray[9],
     benefits,
+    //
+    captionForEligibility: headersArray[20],
   };
 };
 
