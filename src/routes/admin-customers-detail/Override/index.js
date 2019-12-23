@@ -53,6 +53,24 @@ const SectionTitle = styled.div`
   background: ${p => p.theme.colors.primary1};
 `;
 
+const Filename = ({name, onClick}) => (
+  <span style={{position: 'relative'}}>
+    <Icon
+      type="close-circle"
+      theme="filled"
+      style={{
+        position: 'absolute',
+        left: -28,
+        bottom: 0,
+        color: '#999',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+    {name}
+  </span>
+);
+
 class Override extends React.PureComponent {
   state = {
     loading: false,
@@ -151,6 +169,7 @@ class Override extends React.PureComponent {
     }
   };
   onEmployeeUpload = async (results, file) => {
+    this.setState({loading: true});
     try {
       let headersArray = results.data[0];
       let formattedData = [];
@@ -171,7 +190,26 @@ class Override extends React.PureComponent {
           customerId: this.props.customer.id,
         },
       });
+
+      // if exists true, we already have data for this month
+      if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
+        return this.setState({
+          employeeErrors:
+            employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
+          loading: false,
+        });
+      }
+      // if we got other errors back, show those
+      if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors) {
+        return this.setState({
+          employeeErrors:
+            employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
+          loading: false,
+        });
+      }
+
       return console.log(employeeTotalsExist);
+
       // verify if we already have data for this month
       // const reportExists = await client.query({
       //   query: employeeReportByEmployeeIdQuery,
@@ -285,7 +323,17 @@ class Override extends React.PureComponent {
             showIcon
           />
         )}
-        {this.state.companyFile && this.state.companyFile.name}
+        {this.state.companyFile && (
+          <Filename
+            name={this.state.companyFile.name}
+            onClick={() =>
+              this.setState({
+                companyFile: null,
+                companyErrors: [],
+              })
+            }
+          />
+        )}
         {/* COMPANY CONFIRM UPLOAD BUTTON */}
         {this.state.companyFile && !this.state.loading && (
           <Button
@@ -318,11 +366,7 @@ class Override extends React.PureComponent {
         )}
         {/* EMPLOYEE TOTALS  */}
         <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>
-        {this.state.employeeErrors && this.state.employeeErrors.length > 0 && (
-          <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
-            <ErrorBlock errors={this.state.employeeErrors} />
-          </div>
-        )}
+
         {this.state.employeeSuccess && (
           <Alert
             message="Upload Success"
@@ -333,7 +377,17 @@ class Override extends React.PureComponent {
           />
         )}
         {/* SHOW EMPLOYEE TOTALS FILE NAME */}
-        {this.state.employeeFile && this.state.employeeFile.name}
+        {this.state.employeeFile && (
+          <Filename
+            name={this.state.employeeFile.name}
+            onClick={() =>
+              this.setState({
+                employeeFile: null,
+                employeeErrors: [],
+              })
+            }
+          />
+        )}
         {/* EMPLOYEE CONFIRM UPLOAD BUTTON */}
         {this.state.employeeFile && !this.state.loading && (
           <Button
@@ -344,6 +398,20 @@ class Override extends React.PureComponent {
           >
             Upload File
           </Button>
+        )}
+        {this.state.employeeErrors && this.state.employeeErrors.length > 0 && (
+          <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
+            {this.state.employeeErrors.slice(0, 4).map(item => (
+              <ErrorBlock key={item} error={item} />
+            ))}
+            {/* We don't want to render 1,000 error blocks if there were many errors. So show the first 4 and tell how many are left over */}
+            {this.state.employeeErrors.length > 4 && (
+              <ErrorBlock
+                error={`And ${this.state.employeeErrors.length -
+                  4} more errors`}
+              />
+            )}
+          </div>
         )}
         {/* EMPLOYEE SELECT FILE BUTTON */}
         {!this.state.employeeFile && (
@@ -367,6 +435,6 @@ class Override extends React.PureComponent {
 }
 
 export default compose(
-  graphql(uploadEmployeeReports, {name: 'uploadEmployeeReports'}),
+  //graphql(uploadEmployeeReports, {name: 'uploadEmployeeReports'}),
   graphql(customerTotalsUpload, {name: 'customerTotalsUpload'})
 )(Override);
