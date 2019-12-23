@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
-import FormLabel from 'components/text/FormLabel';
-import HintText from 'components/text/HintText';
+import FormLabel from './FormLabel';
+import HintText from './HintText';
 
 const Container = styled.div`
   margin-top: 22px;

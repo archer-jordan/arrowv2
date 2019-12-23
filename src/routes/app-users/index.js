@@ -1,5 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
+// COMPONENTS
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import Button from 'components/common/Button';
@@ -7,9 +9,20 @@ import Icon from 'components/common/Icon';
 import TextInput from 'components/inputs/TextInput';
 import UsersTable from './UsersTable';
 // APOLLO
-// APOLLO
 import usersQuery from 'ApolloClient/Queries/users';
 import {Query} from 'react-apollo';
+
+const Container = styled.div`
+  width: 900px;
+  margin: auto;
+  max-width: 100%;
+`;
+
+const ClearSearch = ({onClick}) => (
+  <div onClick={onClick} style={{position: 'absolute', right: 20, bottom: 7}}>
+    <Icon type="close-circle" style={{color: '#999', cursor: 'pointer'}} />
+  </div>
+);
 
 class AppUsers extends React.PureComponent {
   state = {
@@ -41,7 +54,7 @@ class AppUsers extends React.PureComponent {
     }
 
     return (
-      <div style={{width: 900, margin: 'auto', maxWidth: '100%'}}>
+      <Container>
         <Row gutter={16} style={{marginTop: 24}}>
           {' '}
           <Col xs={18}>
@@ -55,17 +68,11 @@ class AppUsers extends React.PureComponent {
                 onChange={e => this.setState({searchString: e.target.value})}
               />
               {this.state.searchText && (
-                <div
+                <ClearSearch
                   onClick={() =>
                     this.setState({searchString: '', searchText: null})
                   }
-                  style={{position: 'absolute', right: 20, bottom: 7}}
-                >
-                  <Icon
-                    type="close-circle"
-                    style={{color: '#999', cursor: 'pointer'}}
-                  />
-                </div>
+                />
               )}
             </div>
           </Col>
@@ -95,7 +102,7 @@ class AppUsers extends React.PureComponent {
             );
           }}
         </Query>
-      </div>
+      </Container>
     );
   }
 }

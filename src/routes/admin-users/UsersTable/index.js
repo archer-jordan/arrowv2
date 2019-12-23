@@ -11,7 +11,7 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const DateText = styled(Text)`
+const CaptionText = styled(Text)`
   color: ${p => p.theme.colors.neutral7};
   font-weight: 500;
 `;
@@ -27,7 +27,12 @@ class UsersTable extends React.PureComponent {
     const columns = [
       {
         title: 'Email',
-        render: (text, record) => <Text>{record.email}</Text>,
+        render: (text, record) => (
+          <div>
+            <Text>{record.email}</Text>
+            <CaptionText>{record.title}</CaptionText>
+          </div>
+        ),
       },
       {
         title: 'First Name',
@@ -42,12 +47,12 @@ class UsersTable extends React.PureComponent {
         render: (text, record) => (
           <Text>
             {record.createdByEmail}{' '}
-            <DateText>
+            <CaptionText>
               {record.createdAt &&
                 `Created on ${moment(parseInt(record.createdAt)).format(
                   'M/D/YY'
                 )}`}
-            </DateText>
+            </CaptionText>
           </Text>
         ),
       },

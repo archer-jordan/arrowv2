@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import FormLabel from 'components/text/FormLabel';
+import FormLabel from '../FormLabel';
 
 const HintText = styled(FormLabel)`
   color: ${p => p.theme.colors.neutral7};

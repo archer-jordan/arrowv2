@@ -143,18 +143,6 @@ class AppReports extends React.PureComponent {
       return <Redirect to="/account?tab=profile" />;
     }
 
-    // if (
-    //   this.props.currentUser &&
-    //   this.props.currentUser.roles.includes('coEmployee')
-    // ) {
-    //   return (
-    //     <EmployeeDashboard
-    //       employeeId={this.props.currentUser.employeeId}
-    //       {...this.props}
-    //     />
-    //   );
-    // }
-
     const {tab, month, year} = queryString.parse(location.search);
 
     return (
@@ -175,6 +163,7 @@ class AppReports extends React.PureComponent {
           </Col>
 
           <Col xs={24} md={18}>
+            {/* Only show this if we have a customerId, year and month */}
             {this.props.currentUser.customerId && year && month && (
               <Query
                 query={customerReport}
@@ -184,13 +173,20 @@ class AppReports extends React.PureComponent {
                   month: moment(helpers.capitalize(month), 'MMMM').format('M'),
                   year: year,
                 }}
-                onCompleted={queryData => this.setState({queryData})}
+                onCompleted={queryData => this.setState({queryData})} // story the query result so that we can check it in getNavItems
               >
                 {({loading, data, error}) => {
+                  // display spinner if loading
                   if (loading) return <Loading />;
-                  if (error) return 'error...';
-                  if (!data.customerReport)
+                  // display error if error comes back
+                  if (error) {
+                    return 'Error... please contact support if this issue persists';
+                  }
+                  // display no result if no results come back
+                  if (!data.customerReport) {
                     return 'No results for this time period...';
+                  }
+
                   const sharedProps = {
                     history,
                     location,
