@@ -9,7 +9,6 @@ import UploadBlock from './UploadBlock';
 import message from 'components/common/message';
 import Icon from 'components/common/Icon';
 import ErrorBlock from 'components/common/ErrorBlock';
-// import Downloading from './Downloading';
 import DownloadEmployees from './DownloadEmployees';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
@@ -56,7 +55,6 @@ class Employees extends React.PureComponent {
     loading: false,
     editManually: false,
     selectedEmployee: null,
-    //
     skip: 0,
     current: 1,
     sortBy: 'lastNameAscend',

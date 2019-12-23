@@ -18,6 +18,7 @@ const Text = styled.span`
 
 const PinkText = styled(Text)`
   color: ${p => p.theme.colors.support1};
+  cursor: pointer;
 `;
 
 const DeleteText = styled(Text)`

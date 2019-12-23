@@ -89,9 +89,9 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 12px !important;
   }
 
-  .ant-table-row {
+  /* .ant-table-row {
     cursor: pointer;
-  }
+  } */
 
 
 

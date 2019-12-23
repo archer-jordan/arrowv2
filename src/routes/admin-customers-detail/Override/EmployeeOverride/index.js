@@ -7,6 +7,10 @@ import Button from 'components/common/Button';
 import ErrorBlock from 'components/common/ErrorBlock';
 import Alert from 'components/common/Alert';
 import Filename from '../Filename';
+import Title from 'components/text/Title';
+import Caption from 'components/text/Caption';
+import Icon from 'components/common/Icon';
+import OverrideModal from '../OverideModal';
 // APOLLO
 import {graphql} from 'react-apollo';
 import client from 'ApolloClient/index.js';
@@ -46,10 +50,37 @@ const SectionTitle = styled.div`
   background: ${p => p.theme.colors.primary1};
 `;
 
+const Content = ({month, year}) => (
+  <React.Fragment>
+    <Title>A report already exists</Title>
+    <Caption>
+      At least one employee already has a report for {month}/{year}, would you
+      like to override each employees report with the current CSV?
+    </Caption>
+  </React.Fragment>
+);
+
 class EmployeeOverride extends React.PureComponent {
   state = {
     loading: false,
     employeeErrors: [],
+  };
+  onCompleteUpload = async (values = this.state.employeeData) => {
+    try {
+      // update data
+      await this.props.uploadEmployeeReports({
+        variables: {
+          values,
+        },
+      });
+
+      this.setState({
+        loading: false,
+        employeeFile: null,
+        employeeSuccess: true,
+        employeeErrors: [],
+      });
+    } catch (err) {}
   };
   onEmployeeUpload = async (results, file) => {
     this.setState({loading: true});
@@ -77,9 +108,10 @@ class EmployeeOverride extends React.PureComponent {
       // if exists true, we already have data for this month
       if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
         return this.setState({
+          confirmUpdateModal: true,
+          employeeData: formattedData,
           employeeErrors:
             employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
-          loading: false,
         });
       }
       // if we got other errors back, show those
@@ -92,40 +124,6 @@ class EmployeeOverride extends React.PureComponent {
       }
 
       return console.log(employeeTotalsExist);
-
-      // verify if we already have data for this month
-      // const reportExists = await client.query({
-      //   query: employeeReportByEmployeeIdQuery,
-      //   variables: {
-      //     employeeId: this.props.customer.id,
-      //     month: formattedData[0].month,
-      //     year: formattedData[0].year,
-      //   },
-      // });
-
-      // if (
-      //   reportExists.data &&
-      //   reportExists.data.customerReport &&
-      //   reportExists.data.customerReport.id
-      // ) {
-      //   return this.setState({
-      //     confirmEmployeeUpdateModal: true,
-      //     employeeData: formattedData[0],
-      //   });
-      // }
-
-      // update data
-      await this.props.uploadEmployeeReports({
-        variables: {
-          values: formattedData,
-        },
-      });
-
-      this.setState({
-        loading: false,
-        employeeFile: null,
-        employeeSuccess: true,
-      });
     } catch (err) {
       console.log(err);
       this.setState({
@@ -147,9 +145,39 @@ class EmployeeOverride extends React.PureComponent {
   render() {
     return (
       <React.Fragment>
+        <OverrideModal
+          visible={this.state.confirmUpdateModal}
+          onUpdate={() => {
+            this.onCompleteUpload(this.state.employeeData);
+            this.setState({
+              confirmUpdateModal: false,
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              confirmUpdateModal: false,
+              employeeData: null,
+              employeeFile: null,
+              loading: false,
+            });
+          }}
+          content={
+            <Content
+              month={
+                this.state.employeeData &&
+                this.state.employeeData[0] &&
+                this.state.employeeData[0].month
+              }
+              year={
+                this.state.employeeData &&
+                this.state.employeeData[0] &&
+                this.state.employeeData[0].year
+              }
+            />
+          }
+        />
         {/* EMPLOYEE TOTALS  */}
         <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>
-
         {this.state.employeeSuccess && (
           <Alert
             message="Upload Success"
@@ -171,6 +199,8 @@ class EmployeeOverride extends React.PureComponent {
             }
           />
         )}
+        {/* LOADING SPINNER */}
+        {this.state.loading && <Icon type="loading" />}
         {/* EMPLOYEE CONFIRM UPLOAD BUTTON */}
         {this.state.employeeFile && !this.state.loading && (
           <Button
@@ -206,6 +236,7 @@ class EmployeeOverride extends React.PureComponent {
               onChange={event => {
                 this.setState({
                   employeeFile: event.target.files[0],
+                  employeeErrors: [],
                 });
               }}
             />{' '}

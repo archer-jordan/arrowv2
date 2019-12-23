@@ -14,6 +14,7 @@ const TextLink = styled(Text)`
   font-weight: 600;
   font-family: ${p => p.theme.fontFamily};
   color: ${p => p.theme.colors.support2};
+  cursor: pointer;
 `;
 
 const columns = [
