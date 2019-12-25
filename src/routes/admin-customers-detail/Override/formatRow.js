@@ -152,8 +152,8 @@ const formatRow = (headersArray, dataArray) => {
     totalVHS: dataArray[8],
     labelForVHS: headersArray[8],
     // captions
-    captionForHealthAndWelfare: dataArray[9],
-    captionForBenefits: dataArray[30],
+    captionForHealthAndWelfare: headersArray[9],
+    captionForBenefits: headersArray[30],
     // total fringe benfits spend
     totalFringeBenefitsSpendLabel: headersArray[21],
     totalFringeBenefitsSpend: dataArray[21],
