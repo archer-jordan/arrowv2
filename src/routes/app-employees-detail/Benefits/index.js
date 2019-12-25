@@ -17,7 +17,7 @@ const BenefitType = styled(BigLabel)`
   font-weight: 500;
   font-size: 24px;
   color: #0f466a;
-  @media only screen and (max-width: 414px) {
+  @media only screen and (max-width: 1200px) {
     font-size: 16px;
   }
 `;
@@ -30,7 +30,7 @@ const HoursContainer = styled.div`
   padding: 24px;
   display: flex;
   align-items: center;
-  @media only screen and (max-width: 414px) {
+  @media only screen and (max-width: 1200px) {
     height: 75px;
   }
 `;
@@ -45,7 +45,7 @@ const RequiredHours = styled(BigLabel)`
 const EligibleIcon = styled.img`
   height: 56px;
   width: 56px;
-  @media only screen and (max-width: 414px) {
+  @media only screen and (max-width: 1200px) {
     height: 28px;
     width: 28px;
   }
@@ -61,13 +61,13 @@ const BenefitRow = ({label, hours, eligibility}) => (
       width: '100%',
     }}
   >
-    <Col xs={14} md={12}>
+    <Col xs={14} xl={12}>
       <BenefitType>{label}</BenefitType>
     </Col>
-    <Col xs={6} md={6}>
+    <Col xs={6} xl={6}>
       <RequiredHours>{hours}</RequiredHours>
     </Col>
-    <Col xs={4} md={6}>
+    <Col xs={4} xl={6}>
       {eligibility ? (
         <BigLabel>
           <EligibleIcon src={checkSVG} alt="check-circle" />
@@ -85,27 +85,27 @@ const ColumnTitle = styled.div`
 
 const Header = ({month}) => (
   <Row gutter={16} style={{marginTop: 16, marginBottom: 24}}>
-    <Col xs={0} md={4}>
+    <Col xs={0} xl={4}>
       <ColumnTitle style={{marginLeft: 8}}>
         {month.toUpperCase()} <br />
         HOURS
       </ColumnTitle>
     </Col>
-    <Col xs={12} md={10}>
+    <Col xs={12} xl={10}>
       <ColumnTitle>
         {' '}
         BENEFIT
         <br /> TYPE{' '}
       </ColumnTitle>
     </Col>
-    <Col xs={6} md={5}>
+    <Col xs={6} xl={5}>
       <ColumnTitle>
         {' '}
         REQUIRED <br />
         HOURS{' '}
       </ColumnTitle>
     </Col>
-    <Col xs={6} md={5}>
+    <Col xs={6} xl={5}>
       <ColumnTitle>
         {moment(helpers.capitalize(month), 'MMMM')
           .add(1, 'months')
@@ -121,7 +121,7 @@ const Header = ({month}) => (
 const MobileLabel = styled.span`
   margin-left: 8px;
   display: none;
-  @media only screen and (max-width: 414px) {
+  @media only screen and (max-width: 1024px) {
     display: inline;
   }
 `;
@@ -168,10 +168,10 @@ class Benefits extends React.PureComponent {
                 </div>
               </TopContainer>
               <Row gutter={16} style={{marginTop: 16}}>
-                <Col xs={0} sm={24}>
+                <Col xs={0} xl={24}>
                   <Header month={this.props.month} />
                 </Col>
-                <Col xs={24} md={4}>
+                <Col xs={24} xl={4}>
                   <HoursContainer>
                     <BigValue style={{textAlign: 'center'}}>
                       {report.hours}
@@ -181,10 +181,10 @@ class Benefits extends React.PureComponent {
                     </BigValue>
                   </HoursContainer>
                 </Col>
-                <Col xs={24} sm={0}>
+                <Col xs={24} xl={0}>
                   <Header month={this.props.month} />
                 </Col>
-                <Col xs={24} md={20}>
+                <Col xs={24} xl={20}>
                   {report.benefits.map(item => (
                     <BenefitRow key={item.label} {...item} />
                   ))}
