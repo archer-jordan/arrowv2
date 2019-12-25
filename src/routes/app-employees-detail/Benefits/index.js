@@ -54,12 +54,17 @@ const EligibleIcon = styled.img`
 const BenefitRow = ({label, hours, eligibility}) => (
   <Row
     gutter={16}
-    style={{height: 72, paddingTop: 16, borderBottom: '1px solid #efefef'}}
+    style={{
+      height: 72,
+      paddingTop: 16,
+      borderBottom: '1px solid #efefef',
+      width: '100%',
+    }}
   >
-    <Col xs={16} md={12}>
+    <Col xs={14} md={12}>
       <BenefitType>{label}</BenefitType>
     </Col>
-    <Col xs={4} md={6}>
+    <Col xs={6} md={6}>
       <RequiredHours>{hours}</RequiredHours>
     </Col>
     <Col xs={4} md={6}>
@@ -179,7 +184,7 @@ class Benefits extends React.PureComponent {
                 <Col xs={24} sm={0}>
                   <Header month={this.props.month} />
                 </Col>
-                <Col xs={20}>
+                <Col xs={24} md={20}>
                   {report.benefits.map(item => (
                     <BenefitRow key={item.label} {...item} />
                   ))}
