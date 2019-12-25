@@ -135,6 +135,14 @@ class AppReports extends React.PureComponent {
   render() {
     const {location, history} = this.props;
 
+    // if the user is not a company admin and is just a coEmployee, then redirect them to the dashboard
+    if (
+      !this.props.currentUser.roles.includes('coAdmin') &&
+      this.props.currentUser.roles.includes('coEmployee')
+    ) {
+      return <Redirect to="/dashboard" />;
+    }
+
     // If user is a company admin but does not have persmission to view company data, we will re-route them
     if (
       this.props.currentUser.roles.includes('coAdmin') &&
