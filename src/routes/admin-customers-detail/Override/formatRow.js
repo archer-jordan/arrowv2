@@ -76,56 +76,60 @@ const valueExists = value => {
 // 30: "* including H&W, VHS, Administrative Costs"
 // 31: "75123.56"
 
+const cleanValue = value => {
+  return value && valueExists(value) && valueExists(value).replace(/,/g, '');
+};
+
 const formatRow = (headersArray, dataArray) => {
   // benefits
   let benefits = [
     // benefit 1
     {
       label: valueExists(headersArray[12]),
-      employees: valueExists(dataArray[12]),
-      value: valueExists(dataArray[22]),
+      employees: cleanValue(dataArray[12]),
+      value: cleanValue(dataArray[22]),
     },
     // benefit 2
     {
       label: valueExists(headersArray[13]),
-      employees: valueExists(dataArray[13]),
-      value: valueExists(dataArray[23]),
+      employees: cleanValue(dataArray[13]),
+      value: cleanValue(dataArray[23]),
     },
     // benefit 3
     {
       label: valueExists(headersArray[14]),
-      employees: valueExists(dataArray[14]),
-      value: valueExists(dataArray[24]),
+      employees: cleanValue(dataArray[14]),
+      value: cleanValue(dataArray[24]),
     },
     // benefit 4
     {
       label: valueExists(headersArray[15]),
-      employees: valueExists(dataArray[15]),
-      value: valueExists(dataArray[25]),
+      employees: cleanValue(dataArray[15]),
+      value: cleanValue(dataArray[25]),
     },
     // benefit 5
     {
       label: valueExists(headersArray[16]),
-      employees: valueExists(dataArray[16]),
-      value: valueExists(dataArray[26]),
+      employees: cleanValue(dataArray[16]),
+      value: cleanValue(dataArray[26]),
     },
     // benefit 6
     {
       label: valueExists(headersArray[17]),
-      employees: valueExists(dataArray[17]),
-      value: valueExists(dataArray[27]),
+      employees: cleanValue(dataArray[17]),
+      value: cleanValue(dataArray[27]),
     },
     // benefit 7
     {
       label: valueExists(headersArray[18]),
-      employees: valueExists(dataArray[18]),
-      value: valueExists(dataArray[28]),
+      employees: cleanValue(dataArray[18]),
+      value: cleanValue(dataArray[28]),
     },
     // benefit 8
     {
       label: valueExists(headersArray[19]),
-      employees: valueExists(dataArray[19]),
-      value: valueExists(dataArray[29]),
+      employees: cleanValue(dataArray[19]),
+      value: cleanValue(dataArray[29]),
     },
   ];
 
@@ -138,30 +142,30 @@ const formatRow = (headersArray, dataArray) => {
     assignedId: dataArray[1],
     month: dataArray[2],
     year: dataArray[4],
-    activeThisMonth: dataArray[11],
+    activeThisMonth: cleanValue(dataArray[11]),
     // total hours
-    totalHours: dataArray[5],
+    totalHours: cleanValue(dataArray[5]),
     labelForTotalHours: headersArray[5],
     // total fringe
     labelForTotalFringe: headersArray[6],
-    totalFringe: dataArray[6],
+    totalFringe: cleanValue(dataArray[6]),
     // retirement
-    totalRetirement: dataArray[31],
+    totalRetirement: cleanValue(dataArray[31]),
     labelForTotalRetirement: headersArray[31],
     // total VHS
-    totalVHS: dataArray[8],
+    totalVHS: cleanValue(dataArray[8]),
     labelForVHS: headersArray[8],
     // captions
     captionForHealthAndWelfare: headersArray[9],
     captionForBenefits: headersArray[30],
     // total fringe benfits spend
     totalFringeBenefitsSpendLabel: headersArray[21],
-    totalFringeBenefitsSpend: dataArray[21],
+    totalFringeBenefitsSpend: cleanValue(dataArray[21]),
     // total health and welfare
     totalHealthAndWelfareLabel: headersArray[7],
-    totalHealthAndWelfare: dataArray[7],
+    totalHealthAndWelfare: cleanValue(dataArray[7]),
     // other values
-    totalEmployees: dataArray[10],
+    totalEmployees: cleanValue(dataArray[10]),
     //  other labels
     labelForAdminCosts: dataArray[9],
     benefits,

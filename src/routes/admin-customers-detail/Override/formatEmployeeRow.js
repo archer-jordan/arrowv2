@@ -43,6 +43,18 @@
 // 34: "HEALTH & WELFARE"
 // 35: "RETIREMENT"
 
+const valueExists = value => {
+  if (value && value.length === 0) return null;
+  if (value && value === 'null') return null;
+  if (!value) return null;
+  return value;
+};
+
+// basically remove any commas from the value, if it exists
+const cleanValue = value => {
+  return value && valueExists(value) && valueExists(value).replace(/,/g, '');
+};
+
 const formatEmployeeRow = (headersArray, dataArray) => {
   let benefits = [];
 
@@ -50,7 +62,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[9] && dataArray[9] !== '') {
     benefits.push({
       label: dataArray[9],
-      hours: dataArray[10],
+      hours: cleanValue(dataArray[10]),
       eligibility: dataArray[11] === 'Y' ? true : false,
     });
   }
@@ -59,7 +71,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[12] && dataArray[12] !== '') {
     benefits.push({
       label: dataArray[12],
-      hours: dataArray[13],
+      hours: cleanValue(dataArray[13]),
       eligibility: dataArray[14] === 'Y' ? true : false,
     });
   }
@@ -68,7 +80,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[15] && dataArray[15] !== '') {
     benefits.push({
       label: dataArray[15],
-      hours: dataArray[16],
+      hours: cleanValue(dataArray[16]),
       eligibility: dataArray[17] === 'Y' ? true : false,
     });
   }
@@ -86,7 +98,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[21] && dataArray[21] !== '') {
     benefits.push({
       label: dataArray[21],
-      hours: dataArray[22],
+      hours: cleanValue(dataArray[22]),
       eligibility: dataArray[23] === 'Y' ? true : false,
     });
   }
@@ -95,7 +107,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[24] && dataArray[24] !== '') {
     benefits.push({
       label: dataArray[24],
-      hours: dataArray[25],
+      hours: cleanValue(dataArray[25]),
       eligibility: dataArray[26] === 'Y' ? true : false,
     });
   }
@@ -104,7 +116,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[27] && dataArray[27] !== '') {
     benefits.push({
       label: dataArray[27],
-      hours: dataArray[28],
+      hours: cleanValue(dataArray[28]),
       eligibility: dataArray[29] === 'Y' ? true : false,
     });
   }
@@ -112,7 +124,7 @@ const formatEmployeeRow = (headersArray, dataArray) => {
   if (dataArray[30] && dataArray[30] !== '') {
     benefits.push({
       label: dataArray[30],
-      hours: dataArray[31],
+      hours: cleanValue(dataArray[31]),
       eligibility: dataArray[32] === 'Y' ? true : false,
     });
   }
@@ -124,11 +136,11 @@ const formatEmployeeRow = (headersArray, dataArray) => {
     companyAssignedId: dataArray[1],
     month: dataArray[3],
     year: dataArray[5],
-    hours: dataArray[8],
+    hours: cleanValue(dataArray[8]),
     benefits,
-    fringeDollars: dataArray[33],
-    healthAndWelfare: dataArray[34],
-    retirement: dataArray[35],
+    fringeDollars: cleanValue(dataArray[33]),
+    healthAndWelfare: cleanValue(dataArray[34]),
+    retirement: cleanValue(dataArray[35]),
   };
 };
 
