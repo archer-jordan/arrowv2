@@ -33,6 +33,10 @@ export default gql`
     benefits {
       label
       value
+    }
+    # eligibility
+    eligibility {
+      label
       employees
     }
   }

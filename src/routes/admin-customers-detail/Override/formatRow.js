@@ -81,60 +81,98 @@ const cleanValue = value => {
 };
 
 const formatRow = (headersArray, dataArray) => {
-  // benefits
-  let benefits = [
-    // benefit 1
+  // eligibility
+  let eligibility = [
+    // eligibility 1
     {
       label: valueExists(headersArray[12]),
       employees: cleanValue(dataArray[12]),
+    },
+    // eligibility 2
+    {
+      label: valueExists(headersArray[13]),
+      employees: cleanValue(dataArray[13]),
+    },
+    // eligibility 3
+    {
+      label: valueExists(headersArray[14]),
+      employees: cleanValue(dataArray[14]),
+    },
+    // eligibility 4
+    {
+      label: valueExists(headersArray[15]),
+      employees: cleanValue(dataArray[15]),
+    },
+    // eligibility 5
+    {
+      label: valueExists(headersArray[16]),
+      employees: cleanValue(dataArray[16]),
+    },
+    // eligibility 6
+    {
+      label: valueExists(headersArray[17]),
+      employees: cleanValue(dataArray[17]),
+    },
+    // eligibility 7
+    {
+      label: valueExists(headersArray[18]),
+      employees: cleanValue(dataArray[18]),
+    },
+    // eligibility 8
+    {
+      label: valueExists(headersArray[19]),
+      employees: cleanValue(dataArray[19]),
+    },
+  ];
+
+  let benefits = [
+    // benefit 1
+    {
+      label: valueExists(headersArray[22]),
       value: cleanValue(dataArray[22]),
     },
     // benefit 2
     {
-      label: valueExists(headersArray[13]),
-      employees: cleanValue(dataArray[13]),
+      label: valueExists(headersArray[23]),
       value: cleanValue(dataArray[23]),
     },
     // benefit 3
     {
-      label: valueExists(headersArray[14]),
-      employees: cleanValue(dataArray[14]),
+      label: valueExists(headersArray[24]),
       value: cleanValue(dataArray[24]),
     },
     // benefit 4
     {
-      label: valueExists(headersArray[15]),
-      employees: cleanValue(dataArray[15]),
+      label: valueExists(headersArray[25]),
       value: cleanValue(dataArray[25]),
     },
     // benefit 5
     {
-      label: valueExists(headersArray[16]),
-      employees: cleanValue(dataArray[16]),
+      label: valueExists(headersArray[26]),
       value: cleanValue(dataArray[26]),
     },
     // benefit 6
     {
-      label: valueExists(headersArray[17]),
-      employees: cleanValue(dataArray[17]),
+      label: valueExists(headersArray[27]),
       value: cleanValue(dataArray[27]),
     },
     // benefit 7
     {
-      label: valueExists(headersArray[18]),
-      employees: cleanValue(dataArray[18]),
+      label: valueExists(headersArray[28]),
       value: cleanValue(dataArray[28]),
     },
     // benefit 8
     {
-      label: valueExists(headersArray[19]),
-      employees: cleanValue(dataArray[19]),
+      label: valueExists(headersArray[29]),
       value: cleanValue(dataArray[29]),
     },
   ];
 
   // remove any empty benefits
   benefits = benefits.filter(item => item.value);
+
+  // remove any empty eligibility
+  eligibility = eligibility.filter(item => item.employees);
 
   // return an object with the structure we'd like
   return {
@@ -169,6 +207,7 @@ const formatRow = (headersArray, dataArray) => {
     //  other labels
     labelForAdminCosts: dataArray[9],
     benefits,
+    eligibility,
     //
     captionForEligibility: headersArray[20],
   };

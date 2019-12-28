@@ -55,7 +55,7 @@ const cleanValue = value => {
   return value && valueExists(value) && valueExists(value).replace(/,/g, '');
 };
 
-const formatEmployeeRow = (headersArray, dataArray) => {
+const generateBenefits = (headersArray, dataArray) => {
   let benefits = [];
 
   // benefits 1
@@ -128,6 +128,14 @@ const formatEmployeeRow = (headersArray, dataArray) => {
       eligibility: dataArray[32] === 'Y' ? true : false,
     });
   }
+
+  return {
+    benefits,
+  };
+};
+
+const formatEmployeeRow = (headersArray, dataArray) => {
+  let {benefits} = generateBenefits(headersArray, dataArray);
 
   return {
     // employee/customer ID

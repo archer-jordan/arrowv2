@@ -48,7 +48,7 @@ class Eligibility extends React.PureComponent {
         )}
         <Row style={{paddingBottom: 64}}>
           {' '}
-          {report.benefits.map((benefit, i) => {
+          {report.eligibility.map((benefit, i) => {
             return (
               <Col key={benefit.label} xs={12} md={6}>
                 <EligibilityCard
