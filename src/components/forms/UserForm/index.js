@@ -73,6 +73,49 @@ const CheckItem = ({checked, onChange, title, caption}) => {
   );
 };
 
+const CheckForEmail = ({onCompleted, finalEmail, email}) => (
+  <React.Fragment>
+    {finalEmail && !validate(finalEmail) && (
+      <RedText>
+        <Icon type="close-circle" style={{marginRight: 4}} />
+        Not a valid email
+      </RedText>
+    )}
+    {finalEmail && validate(finalEmail) && (
+      <Query
+        query={emailAlreadyExists}
+        variables={{email: finalEmail}}
+        onCompleted={onCompleted}
+      >
+        {({data, loading, error}) => {
+          if (loading)
+            return (
+              <div>
+                <Icon type="loading" />
+              </div>
+            );
+          if (error) return 'Error';
+          return (
+            <div>
+              {!data.emailAlreadyExists.exists ? (
+                <GreenText>
+                  <Icon type="check-circle" style={{marginRight: 4}} />
+                  <strong>{email}</strong> is available
+                </GreenText>
+              ) : (
+                <RedText>
+                  <Icon type="close-circle" style={{marginRight: 4}} />
+                  <strong>{email}</strong> is not available
+                </RedText>
+              )}
+            </div>
+          );
+        }}
+      </Query>
+    )}
+  </React.Fragment>
+);
+
 class UserForm extends React.PureComponent {
   state = {
     email: this.props.email || null,
@@ -86,10 +129,13 @@ class UserForm extends React.PureComponent {
     errors: [],
   };
   onSave = () => {
-    if (!this.props.editing) {
+    // if the email has been changed, we need to make sure it's not already taken
+    if (this.props.email !== this.state.finalEmail) {
+      // if email exists, don't submit
       if (this.state.emailExists) {
         return null;
       }
+      // if emailExists is still null, don't submit
       if (this.state.emailExists == null) {
         return null;
       }
@@ -127,8 +173,26 @@ class UserForm extends React.PureComponent {
           permissions: this.state.permissions.filter(item => item !== type),
         });
   };
-
+  getDisabled = () => {
+    if (this.state.emailExists) {
+      return true;
+    }
+    if (this.state.emailExists === null) {
+      return true;
+    }
+    if (!this.state.finalEmail) {
+      return true;
+    }
+    if (!this.state.firstName) {
+      return true;
+    }
+    if (!this.state.lastName) {
+      return true;
+    }
+    return false;
+  };
   render() {
+    let disabled = this.getDisabled();
     return (
       <Row
         style={{
@@ -175,66 +239,28 @@ class UserForm extends React.PureComponent {
           <FormItem label="Email" required>
             <Input
               value={this.state.email}
-              //disabled={this.props.editing}
               type="search"
               onChange={e => {
                 this.setState({email: e.target.value});
                 this.handleFilter(e.target.value);
               }}
             />
-            {!this.props.editing && (
-              <React.Fragment>
-                {this.state.finalEmail && !validate(this.state.finalEmail) && (
-                  <RedText>
-                    <Icon type="close-circle" style={{marginRight: 4}} />
-                    Not a valid email
-                  </RedText>
-                )}
-                {this.state.finalEmail && validate(this.state.finalEmail) && (
-                  <Query
-                    query={emailAlreadyExists}
-                    variables={{email: this.state.finalEmail}}
-                    onCompleted={data =>
-                      this.setState({
-                        emailExists: data.emailAlreadyExists.exists,
-                      })
-                    }
-                  >
-                    {({data, loading, error}) => {
-                      if (loading)
-                        return (
-                          <div>
-                            <Icon type="loading" />
-                          </div>
-                        );
-                      if (error) return 'Error';
-                      return (
-                        <div>
-                          {!data.emailAlreadyExists.exists ? (
-                            <GreenText>
-                              <Icon
-                                type="check-circle"
-                                style={{marginRight: 4}}
-                              />
-                              <strong>{this.state.email}</strong> is available
-                            </GreenText>
-                          ) : (
-                            <RedText>
-                              <Icon
-                                type="close-circle"
-                                style={{marginRight: 4}}
-                              />
-                              <strong>{this.state.email}</strong> is not
-                              available
-                            </RedText>
-                          )}
-                        </div>
-                      );
-                    }}
-                  </Query>
-                )}
-              </React.Fragment>
-            )}
+            {/*
+              If the final email does not match the incoming email or finalEmail is null, 
+              then let's do a server check to see if the email already exists 
+            */}
+            {!this.state.finalEmail ||
+              (this.state.finalEmail !== this.props.email && (
+                <CheckForEmail
+                  finalEmail={this.state.finalEmail}
+                  email={this.state.email}
+                  onCompleted={data =>
+                    this.setState({
+                      emailExists: data.emailAlreadyExists.exists,
+                    })
+                  }
+                />
+              ))}
             {this.props.showPermissions && (
               <div style={{marginTop: 48, marginBottom: 32}}>
                 <CheckItem
@@ -280,11 +306,7 @@ class UserForm extends React.PureComponent {
               Cancel
             </Button>
             <Button
-              disabled={
-                !this.props.editing
-                  ? this.state.emailExists || this.state.emailExists === null
-                  : false
-              }
+              disabled={disabled}
               style={{width: 140}}
               onClick={this.onSave}
             >

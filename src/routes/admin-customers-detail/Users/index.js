@@ -91,7 +91,6 @@ class Users extends React.PureComponent {
         <UserForm
           onSubmit={this.onSaveUser}
           loading={this.state.loading}
-          editing
           onCancel={() => this.setState({selected: false})}
           {...this.state.selected}
         />
