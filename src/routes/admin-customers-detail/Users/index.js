@@ -79,7 +79,7 @@ class Users extends React.PureComponent {
     try {
       let params = {
         ...newValues,
-        roles: ['coAdmin'],
+        roles: this.state.selected ? this.state.selected.roles : ['coAdmin'],
         customerId: this.props.customer.id,
       };
       await this.props.saveUser({
@@ -95,7 +95,7 @@ class Users extends React.PureComponent {
         ],
       });
       message.success('User successfully saved');
-      this.setState({addNew: false, loading: false});
+      this.setState({addNew: false, selected: false, loading: false});
     } catch (err) {
       console.log(err);
     }
