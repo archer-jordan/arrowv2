@@ -9,14 +9,6 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const MockTableHeaderBackground = styled.div`
-  background: blue;
-  height: 50px;
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-`;
-
 const DEFAULT_COLUMNS = [
   {
     title: 'Last Name',

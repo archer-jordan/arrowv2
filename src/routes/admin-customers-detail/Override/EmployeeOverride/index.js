@@ -87,6 +87,7 @@ class EmployeeOverride extends React.PureComponent {
     try {
       let headersArray = results.data[0];
       let formattedData = [];
+
       results.data.forEach((item, i) => {
         // 0 index item is the header row, which we don't want to include in formatted data
         if (i !== 0 && item[0] !== null && item[0] !== '') {
@@ -94,6 +95,18 @@ class EmployeeOverride extends React.PureComponent {
           formattedData.push(formattedItem);
         }
       });
+
+      // 1. Make sure each row has the same year/month as all the others
+      return console.log({
+        headersArray,
+        formattedData,
+      });
+
+      // 2. Make sure there are no null employees
+
+      // 3. make sure we have the correct number of columns
+
+      // 4. make sure we don't have any duplicate ecomployee IDs
 
       let employeeTotalsExist = await client.query({
         query: checkIfEmployeeTotalsExist,

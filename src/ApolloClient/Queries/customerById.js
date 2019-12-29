@@ -14,17 +14,17 @@ export default gql`
         phone
         email
       }
-      adminUsers {
-        id
-        firstName
-        lastName
-        email
-        roles
-        title
-        phone
-        permissions
-        employeeId
-      }
+      # adminUsers {
+      #   id
+      #   firstName
+      #   lastName
+      #   email
+      #   roles
+      #   title
+      #   phone
+      #   permissions
+      #   employeeId
+      # }
     }
   }
   ${customerFragment}

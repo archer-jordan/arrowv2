@@ -2,6 +2,7 @@ import React from 'react';
 import compose from 'lodash/flowRight';
 import Button from 'components/common/Button';
 import message from 'components/common/message';
+import Loading from 'components/common/Loading';
 import UserForm from 'components/forms/UserForm';
 import UsersTable from './UsersTable';
 // APOLLO
@@ -9,7 +10,8 @@ import createNewUser from 'ApolloClient/Mutations/createNewUser';
 import saveUser from 'ApolloClient/Mutations/saveUser';
 import makeEmployeeAnAdmin from 'ApolloClient/Mutations/makeEmployeeAnAdmin';
 import customerByIdQuery from 'ApolloClient/Queries/customerById';
-import {graphql} from 'react-apollo';
+import customerAdminsQuery from 'ApolloClient/Queries/customerAdmins';
+import {graphql, Query} from 'react-apollo';
 
 class Users extends React.PureComponent {
   state = {
@@ -55,8 +57,8 @@ class Users extends React.PureComponent {
         },
         refetchQueries: [
           {
-            query: customerByIdQuery,
-            variables: {id: this.props.customer.id},
+            query: customerAdminsQuery,
+            variables: {customerId: this.props.customer.id},
           },
         ],
       });
@@ -89,8 +91,8 @@ class Users extends React.PureComponent {
         },
         refetchQueries: [
           {
-            query: customerByIdQuery,
-            variables: {id: this.props.customer.id},
+            query: customerAdminsQuery,
+            variables: {customerId: this.props.customer.id},
           },
         ],
       });
@@ -134,10 +136,21 @@ class Users extends React.PureComponent {
     return (
       <div style={{width: 900, maxWidth: '100%'}}>
         {' '}
-        <UsersTable
-          dataSource={this.props.customer.adminUsers}
-          onClick={selected => this.setState({selected})}
-        />
+        <Query
+          query={customerAdminsQuery}
+          variables={{customerId: this.props.customer.id}}
+        >
+          {({error, loading, data}) => {
+            if (loading) return <Loading />;
+            if (error) return 'error';
+            return (
+              <UsersTable
+                dataSource={data.customerAdmins}
+                onClick={selected => this.setState({selected})}
+              />
+            );
+          }}
+        </Query>
         <Button
           style={{width: 120, marginBottom: 8, marginTop: 32}}
           onClick={() => this.setState({addNew: true})}

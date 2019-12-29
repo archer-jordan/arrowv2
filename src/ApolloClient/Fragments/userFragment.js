@@ -12,5 +12,6 @@ export default gql`
     permissions
     lastName
     createdAt
+    employeeId
   }
 `;
