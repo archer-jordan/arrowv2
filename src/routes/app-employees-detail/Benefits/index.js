@@ -15,7 +15,7 @@ import {Query} from 'react-apollo';
 
 const BenefitType = styled(BigLabel)`
   font-weight: 500;
-  font-size: 24px;
+  font-size: 18px;
   color: #0f466a;
   @media only screen and (max-width: 1200px) {
     font-size: 16px;
@@ -43,12 +43,18 @@ const RequiredHours = styled(BigLabel)`
 `;
 
 const EligibleIcon = styled.img`
-  height: 56px;
-  width: 56px;
+  height: 48px;
+  width: 48px;
   @media only screen and (max-width: 1200px) {
     height: 28px;
     width: 28px;
   }
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const BenefitRow = ({label, hours, eligibility}) => (
@@ -61,17 +67,17 @@ const BenefitRow = ({label, hours, eligibility}) => (
       width: '100%',
     }}
   >
-    <Col xs={14} xl={12}>
+    <Col xs={14} xl={13}>
       <BenefitType>{label}</BenefitType>
     </Col>
     <Col xs={6} xl={6}>
       <RequiredHours>{hours}</RequiredHours>
     </Col>
-    <Col xs={4} xl={6}>
+    <Col xs={4} xl={5}>
       {eligibility ? (
-        <BigLabel>
+        <IconContainer>
           <EligibleIcon src={checkSVG} alt="check-circle" />
-        </BigLabel>
+        </IconContainer>
       ) : null}
     </Col>
   </Row>
@@ -99,13 +105,13 @@ const Header = ({month}) => (
       </ColumnTitle>
     </Col>
     <Col xs={6} xl={5}>
-      <ColumnTitle>
+      <ColumnTitle style={{marginLeft: 16}}>
         {' '}
         REQUIRED <br />
         HOURS{' '}
       </ColumnTitle>
     </Col>
-    <Col xs={6} xl={5}>
+    <Col xs={6} xl={5} style={{display: 'flex', justifyContent: 'center'}}>
       <ColumnTitle>
         {moment(helpers.capitalize(month), 'MMMM')
           .add(1, 'months')

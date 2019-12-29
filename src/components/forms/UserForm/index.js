@@ -175,7 +175,7 @@ class UserForm extends React.PureComponent {
           <FormItem label="Email" required>
             <Input
               value={this.state.email}
-              disabled={this.props.editing}
+              //disabled={this.props.editing}
               type="search"
               onChange={e => {
                 this.setState({email: e.target.value});

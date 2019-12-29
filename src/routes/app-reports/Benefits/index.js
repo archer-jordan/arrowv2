@@ -6,7 +6,7 @@ import BigLabel from 'components/text/BigLabel';
 import numeral from 'numeral';
 
 const ValueBlockContainer = styled.div`
-  height: 75px;
+  min-height: 75px;
   width: 200px;
   border-bottom: 2px solid ${p => p.theme.colors.neutral9};
   margin-bottom: 24px;

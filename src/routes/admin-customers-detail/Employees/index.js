@@ -13,6 +13,7 @@ import DownloadEmployees from './DownloadEmployees';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import compose from 'lodash/flowRight';
+import customerByIdQuery from 'ApolloClient/Queries/customerById';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
 import employeesQuery from 'ApolloClient/Queries/employees';
 import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
@@ -261,6 +262,10 @@ class Employees extends React.PureComponent {
               skip: this.state.skip,
               sortBy: this.state.sortBy,
             },
+          },
+          {
+            query: customerByIdQuery,
+            variables: {id: this.props.customer.id},
           },
         ],
       });
