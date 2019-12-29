@@ -220,6 +220,9 @@ class UserForm extends React.PureComponent {
     if (!this.state.lastName) {
       return true;
     }
+    if (this.props.loading) {
+      return true;
+    }
     return false;
   };
   render() {
