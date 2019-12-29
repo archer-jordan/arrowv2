@@ -88,6 +88,14 @@ class EmployeeOverride extends React.PureComponent {
       let headersArray = results.data[0];
       let formattedData = [];
 
+      if (headersArray.length !== 36) {
+        return this.setState({
+          employeeErrors: [
+            'This CSV does not have the correct number of columns',
+          ],
+        });
+      }
+
       results.data.forEach((item, i) => {
         // 0 index item is the header row, which we don't want to include in formatted data
         if (i !== 0 && item[0] !== null && item[0] !== '') {

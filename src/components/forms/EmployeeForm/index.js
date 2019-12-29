@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import FormItem from 'components/common/FormItem';
 import Input from 'components/inputs/Input';
 import DateInput from 'components/inputs/DatePicker';
+import EmployeeStatusType from 'components/inputs/EmployeeStatusType';
 import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
 import Row from 'components/common/Row';
@@ -163,7 +164,7 @@ class EmployeeForm extends React.PureComponent {
           </Col>
           <Col xs={12}>
             <FormItem label="Status">
-              <Input
+              <EmployeeStatusType
                 value={this.state.status}
                 onChange={e => this.setState({status: e.target.value})}
               />
