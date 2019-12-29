@@ -17,6 +17,11 @@ const RedText = styled.div`
   color: ${p => p.theme.colors.red2};
 `;
 
+const PinkText = styled.div`
+  color: ${p => p.theme.colors.primary1};
+  cursor: pointer;
+`;
+
 const GreenText = styled.div`
   color: #0e7817;
 `;
@@ -73,7 +78,12 @@ const CheckItem = ({checked, onChange, title, caption}) => {
   );
 };
 
-const CheckForEmail = ({onCompleted, finalEmail, email}) => (
+const CheckForEmail = ({
+  onCompleted,
+  finalEmail,
+  email,
+  makeEmployeeAnAdmin,
+}) => (
   <React.Fragment>
     {finalEmail && !validate(finalEmail) && (
       <RedText>
@@ -95,14 +105,34 @@ const CheckForEmail = ({onCompleted, finalEmail, email}) => (
               </div>
             );
           if (error) return 'Error';
+          let {exists, errors} = data.emailAlreadyExists;
           return (
             <div>
-              {!data.emailAlreadyExists.exists ? (
+              {/* If email exists, and the user is also an employee, show this block and allow the user to make that employee an admin */}
+              {exists &&
+                errors &&
+                errors.includes('Employee with this email exists') && (
+                  <div>
+                    <RedText>
+                      <Icon type="close-circle" style={{marginRight: 4}} />
+                      <strong>{email}</strong> is not available.
+                    </RedText>
+                    An employee user with this email already exists. <br />
+                    <PinkText onClick={makeEmployeeAnAdmin}>
+                      {' '}
+                      Click here to make them a company admin
+                    </PinkText>
+                  </div>
+                )}
+              {/* If email does not exist, show this block */}
+              {!exists && (
                 <GreenText>
                   <Icon type="check-circle" style={{marginRight: 4}} />
                   <strong>{email}</strong> is available
                 </GreenText>
-              ) : (
+              )}
+              {/* If email exists and we have no errors, show this block */}
+              {exists && !errors && (
                 <RedText>
                   <Icon type="close-circle" style={{marginRight: 4}} />
                   <strong>{email}</strong> is not available
@@ -177,7 +207,8 @@ class UserForm extends React.PureComponent {
     if (this.state.emailExists) {
       return true;
     }
-    if (this.state.emailExists === null) {
+    let emailHasChanged = this.state.finalEmail !== this.props.email;
+    if (emailHasChanged && this.state.emailExists === null) {
       return true;
     }
     if (!this.state.finalEmail) {
@@ -254,6 +285,9 @@ class UserForm extends React.PureComponent {
                 <CheckForEmail
                   finalEmail={this.state.finalEmail}
                   email={this.state.email}
+                  makeEmployeeAnAdmin={() => {
+                    this.props.makeEmployeeAnAdmin(this.state.finalEmail);
+                  }}
                   onCompleted={data =>
                     this.setState({
                       emailExists: data.emailAlreadyExists.exists,

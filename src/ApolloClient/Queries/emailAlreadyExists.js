@@ -5,6 +5,7 @@ export default gql`
   query emailAlreadyExists($email: String!) {
     emailAlreadyExists(email: $email) {
       exists
+      errors
     }
   }
 `;

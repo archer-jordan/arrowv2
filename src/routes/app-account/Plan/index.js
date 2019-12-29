@@ -71,6 +71,7 @@ class Plan extends React.PureComponent {
               {({data, loading, error}) => {
                 if (loading) return <Icon type="loading" />;
                 if (error) return 'error';
+                if (!data.getAttachment || !data.getAttachment.url) return null;
                 return (
                   <DownloadText
                     href={data.getAttachment.url}

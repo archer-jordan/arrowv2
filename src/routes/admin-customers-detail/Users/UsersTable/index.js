@@ -2,6 +2,7 @@ import React from 'react';
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
 import styled from 'styled-components';
+import Tag from 'components/common/Tag';
 
 const Text = styled.div`
   font-weight: 600;
@@ -23,6 +24,16 @@ const columns = [
   {
     title: 'Email',
     render: (text, record) => <Text>{record.email}</Text>,
+  },
+  {
+    title: 'Roles',
+    render: (text, record) => (
+      <Text>
+        {record.roles.map(item => (
+          <Tag key={item}>{item}</Tag>
+        ))}
+      </Text>
+    ),
   },
 ];
 

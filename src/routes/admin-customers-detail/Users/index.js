@@ -7,6 +7,7 @@ import UsersTable from './UsersTable';
 // APOLLO
 import createNewUser from 'ApolloClient/Mutations/createNewUser';
 import saveUser from 'ApolloClient/Mutations/saveUser';
+import makeEmployeeAnAdmin from 'ApolloClient/Mutations/makeEmployeeAnAdmin';
 import customerByIdQuery from 'ApolloClient/Queries/customerById';
 import {graphql} from 'react-apollo';
 
@@ -41,6 +42,35 @@ class Users extends React.PureComponent {
     } catch (err) {
       console.log(err);
     }
+  };
+  makeEmployeeAnAdmin = async email => {
+    this.setState({
+      loading: true,
+      addNew: false,
+    });
+    try {
+      await this.props.makeEmployeeAnAdmin({
+        variables: {
+          email,
+        },
+        refetchQueries: [
+          {
+            query: customerByIdQuery,
+            variables: {id: this.props.customer.id},
+          },
+        ],
+      });
+    } catch (err) {
+      this.setState({
+        loading: false,
+        errors: [err.message],
+      });
+    }
+    //
+    this.setState({
+      addNew: false,
+      loading: false,
+    });
   };
   onSaveUser = async newValues => {
     this.setState({
@@ -77,6 +107,7 @@ class Users extends React.PureComponent {
         <UserForm
           onSubmit={this.onCreateUser}
           loading={this.state.loading}
+          makeEmployeeAnAdmin={this.makeEmployeeAnAdmin}
           onCancel={() => this.setState({addNew: false})}
         />
       );
@@ -120,5 +151,6 @@ class Users extends React.PureComponent {
 
 export default compose(
   graphql(saveUser, {name: 'saveUser'}),
-  graphql(createNewUser, {name: 'createNewUser'})
+  graphql(createNewUser, {name: 'createNewUser'}),
+  graphql(makeEmployeeAnAdmin, {name: 'makeEmployeeAnAdmin'})
 )(Users);

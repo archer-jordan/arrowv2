@@ -96,18 +96,32 @@ class Profile extends React.PureComponent {
                 return (
                   <div style={{paddingLeft: 16}}>
                     {' '}
-                    <DataItem label="Name" value={customer.title} />
-                    <DataItem label="Address" value={customer.street} />
-                    <DataItem label="City" value={customer.city} />
-                    <DataItem label="State" value={customer.state} />
-                    <DataItem label="Zip" value={customer.zip} />
-                    <DataItem
-                      label="Type"
-                      value={helpers.mapCompanyTypeToLabel(
-                        customer.companyType
-                      )}
-                    />
-                    <DataItem label="EIN #" value={customer.ein} />{' '}
+                    {customer.title && (
+                      <DataItem label="Name" value={customer.title} />
+                    )}
+                    {customer.street && (
+                      <DataItem label="Address" value={customer.street} />
+                    )}
+                    {customer.city && (
+                      <DataItem label="City" value={customer.city} />
+                    )}
+                    {customer.state && (
+                      <DataItem label="State" value={customer.state} />
+                    )}
+                    {customer.zip && (
+                      <DataItem label="Zip" value={customer.zip} />
+                    )}
+                    {customer.companyType && (
+                      <DataItem
+                        label="Type"
+                        value={helpers.mapCompanyTypeToLabel(
+                          customer.companyType
+                        )}
+                      />
+                    )}
+                    {customer.ein && (
+                      <DataItem label="EIN #" value={customer.ein} />
+                    )}{' '}
                   </div>
                 );
               }}
