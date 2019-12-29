@@ -98,7 +98,10 @@ class AppEmployees extends React.PureComponent {
   };
   render() {
     // if curretn user is an employee, we'll re-route them because they automatically can't view employee data
-    if (this.props.currentUser.roles.includes('coEmployee')) {
+    if (
+      !this.props.currentUser.roles.includes('coAdmin') &&
+      this.props.currentUser.roles.includes('coEmployee')
+    ) {
       return <Redirect to="/account?tab=profile" />;
     }
 

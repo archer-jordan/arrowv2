@@ -99,7 +99,7 @@ const AppNav = ({pathname, currentUser}) => {
                   to={`/dashboard`}
                   active={pathname && pathname.includes('/dashboard')}
                 >
-                  Dashboard
+                  DASHBOARD
                 </NavItem>
               </MobileCol>
             )}
