@@ -13,7 +13,7 @@ import usersQuery from 'ApolloClient/Queries/users';
 import {Query} from 'react-apollo';
 
 const Container = styled.div`
-  width: 900px;
+  width: 950px;
   margin: auto;
   max-width: 100%;
 `;

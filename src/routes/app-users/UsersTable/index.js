@@ -39,7 +39,6 @@ class UsersTable extends React.PureComponent {
     const {total, loading, dataSource, columns} = this.props;
     return (
       <div style={{position: 'relative'}}>
-        <MockTableHeaderBackground />
         <Table
           dataSource={dataSource}
           columns={columns || DEFAULT_COLUMNS}

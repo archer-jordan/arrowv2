@@ -132,7 +132,7 @@ class Users extends React.PureComponent {
      * By default we'll show the users table
      */
     return (
-      <div style={{width: 600}}>
+      <div style={{width: 900, maxWidth: '100%'}}>
         {' '}
         <UsersTable
           dataSource={this.props.customer.adminUsers}
