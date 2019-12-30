@@ -67,6 +67,10 @@ class EmployeeOverride extends React.PureComponent {
   };
   onCompleteUpload = async (values = this.state.employeeData) => {
     try {
+      // make sure we have a value parameter
+      if (!values) {
+        throw new Error('No data found...');
+      }
       // update data
       await this.props.uploadEmployeeReports({
         variables: {
@@ -74,13 +78,19 @@ class EmployeeOverride extends React.PureComponent {
         },
       });
 
+      // reset all state
       this.setState({
         loading: false,
         employeeFile: null,
         employeeSuccess: true,
         employeeErrors: [],
       });
-    } catch (err) {}
+    } catch (err) {
+      this.setState({
+        loading: false,
+        employeeErrors: [err.message],
+      });
+    }
   };
   getInvalidFields = results => {
     let invalidFields = [];
@@ -152,6 +162,7 @@ class EmployeeOverride extends React.PureComponent {
       const allEqual = arr => arr.every(v => v === arr[0]); // https://stackoverflow.com/questions/14832603/check-if-all-values-of-array-are-equal
       let months = formattedData.map(item => item.month); // create an aray of all the months so we can see if they're the same
       let years = formattedData.map(item => item.year); // create an aray of all the years so we can see if they're the same
+
       if (!allEqual(months)) {
         return this.setState({
           loading: false,
@@ -169,6 +180,27 @@ class EmployeeOverride extends React.PureComponent {
         });
       }
 
+      // 5. make sure the COIDs are all equal
+      let coids = formattedData.map(item => item.companyAssignedId);
+      if (!allEqual(coids)) {
+        return this.setState({
+          loading: false,
+          employeeErrors: [
+            'The company ids (COID) do not all match for this CSV',
+          ],
+        });
+      }
+
+      // 6. Make sure the COID in the CSV matches the customer we're currently on (the page we're on)
+      if (coids[0] !== this.props.customer.assignedId) {
+        return this.setState({
+          loading: false,
+          employeeErrors: [
+            'The company ID you are trying to upload does not match the COID in the CSV',
+          ],
+        });
+      }
+
       // we want to query and see if any of these employees already have reports for this month
       let employeeTotalsExist = await client.query({
         query: checkIfEmployeeTotalsExist,
@@ -180,7 +212,7 @@ class EmployeeOverride extends React.PureComponent {
         },
       });
 
-      // if exists true, we already have data for this month
+      // if exists true, we already have data for this month and we need to show the confirmation modal
       if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
         return this.setState({
           confirmUpdateModal: true,
@@ -189,8 +221,12 @@ class EmployeeOverride extends React.PureComponent {
             employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
         });
       }
+
       // if we got other errors back, show those
-      if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors) {
+      if (
+        employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors &&
+        employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors.length > 0
+      ) {
         return this.setState({
           employeeErrors:
             employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
@@ -198,7 +234,8 @@ class EmployeeOverride extends React.PureComponent {
         });
       }
 
-      return console.log(employeeTotalsExist);
+      // if we get to this point without errors, it's safe to run the upload
+      return this.onCompleteUpload(formattedData);
     } catch (err) {
       console.log(err);
       this.setState({
@@ -270,6 +307,7 @@ class EmployeeOverride extends React.PureComponent {
               this.setState({
                 employeeFile: null,
                 employeeErrors: [],
+                loading: false,
               })
             }
           />
