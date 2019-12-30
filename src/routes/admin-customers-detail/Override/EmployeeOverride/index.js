@@ -82,17 +82,41 @@ class EmployeeOverride extends React.PureComponent {
       });
     } catch (err) {}
   };
+  getInvalidFields = results => {
+    let invalidFields = [];
+    results.forEach((item, i) => {
+      if (
+        !item.assignedId ||
+        item.assignedId === '' ||
+        item.assignedId === 'NULL' ||
+        item.assignedId === ' '
+      ) {
+        invalidFields.push(`EAID does not exist for row ${i + 1}`);
+      }
+    });
+    return invalidFields;
+  };
+  checkForDuplicateIDs = formattedData => {
+    let allIds = formattedData.map(item => item.assignedId);
+    const checkIfArrayIsUnique = myArray => {
+      return myArray.length === new Set(myArray).size;
+    };
+    // check for duplicates
+    return checkIfArrayIsUnique(allIds);
+  };
   onEmployeeUpload = async (results, file) => {
     this.setState({loading: true});
     try {
       let headersArray = results.data[0];
       let formattedData = [];
 
+      // make sure we have the right number of columns
       if (headersArray.length !== 36) {
         return this.setState({
           employeeErrors: [
             'This CSV does not have the correct number of columns',
           ],
+          loading: false,
         });
       }
 
@@ -104,18 +128,48 @@ class EmployeeOverride extends React.PureComponent {
         }
       });
 
-      // 1. Make sure each row has the same year/month as all the others
-      return console.log({
-        headersArray,
-        formattedData,
-      });
+      // 2. Make sure there are no null employee IDs
+      let invalidFields = this.getInvalidFields(formattedData);
 
-      // 2. Make sure there are no null employees
+      if (invalidFields.length > 0) {
+        return this.setState({
+          loading: false,
+          employeeErrors: invalidFields,
+        });
+      }
 
-      // 3. make sure we have the correct number of columns
+      // 3. make sure we don't have any duplicate employee IDs
+      let isUniqueArray = this.checkForDuplicateIDs(formattedData);
 
-      // 4. make sure we don't have any duplicate ecomployee IDs
+      if (!isUniqueArray) {
+        return this.setState({
+          loading: false,
+          employeeErrors: ['This spreadsheet has dupliate employee IDs'],
+        });
+      }
 
+      // 4. make sure each row has the same month/year
+      const allEqual = arr => arr.every(v => v === arr[0]); // https://stackoverflow.com/questions/14832603/check-if-all-values-of-array-are-equal
+      let months = formattedData.map(item => item.month); // create an aray of all the months so we can see if they're the same
+      let years = formattedData.map(item => item.year); // create an aray of all the years so we can see if they're the same
+      if (!allEqual(months)) {
+        return this.setState({
+          loading: false,
+          employeeErrors: [
+            'Not all months match in each row of your CSV. Please make sure all rows use the same month.',
+          ],
+        });
+      }
+      if (!allEqual(years)) {
+        return this.setState({
+          loading: false,
+          employeeErrors: [
+            'Not all years match in each row of your CSV. Please make sure all rows use the same year.',
+          ],
+        });
+      }
+
+      // we want to query and see if any of these employees already have reports for this month
       let employeeTotalsExist = await client.query({
         query: checkIfEmployeeTotalsExist,
         variables: {
