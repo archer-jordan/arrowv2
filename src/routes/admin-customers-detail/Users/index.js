@@ -138,6 +138,7 @@ class Users extends React.PureComponent {
         {' '}
         <Query
           query={customerAdminsQuery}
+          fetchPolicy="cache-and-network"
           variables={{customerId: this.props.customer.id}}
         >
           {({error, loading, data}) => {

@@ -13,7 +13,7 @@ import DownloadEmployees from './DownloadEmployees';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import compose from 'lodash/flowRight';
-import customerByIdQuery from 'ApolloClient/Queries/customerById';
+import customerAdminsQuery from 'ApolloClient/Queries/customerAdmins';
 import newEmployeesUpload from 'ApolloClient/Mutations/newEmployeesUpload';
 import employeesQuery from 'ApolloClient/Queries/employees';
 import saveEmployee from 'ApolloClient/Mutations/saveEmployee';
@@ -215,6 +215,10 @@ class Employees extends React.PureComponent {
               sortBy: this.state.sortBy,
             },
           },
+          {
+            query: customerAdminsQuery,
+            variables: {customerId: this.props.customer.id},
+          },
         ],
       });
       //if server check fails, we show the errors that we got back
@@ -264,8 +268,8 @@ class Employees extends React.PureComponent {
             },
           },
           {
-            query: customerByIdQuery,
-            variables: {id: this.props.customer.id},
+            query: customerAdminsQuery,
+            variables: {customerId: this.props.customer.id},
           },
         ],
       });
