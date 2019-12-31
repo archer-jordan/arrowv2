@@ -250,6 +250,9 @@ class Employees extends React.PureComponent {
     });
   };
   onSave = async values => {
+    this.setState({
+      loading: true,
+    });
     try {
       await this.props.saveEmployee({
         variables: {
@@ -276,6 +279,7 @@ class Employees extends React.PureComponent {
       message.success('Employee successfully updated');
       this.setState({
         selectedEmployee: null,
+        loading: false,
       });
     } catch (err) {
       ErrorHelpers.handleError(err);
