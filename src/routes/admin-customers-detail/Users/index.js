@@ -3,6 +3,7 @@ import compose from 'lodash/flowRight';
 import Button from 'components/common/Button';
 import message from 'components/common/message';
 import Loading from 'components/common/Loading';
+import ErrorBlock from 'components/common/ErrorBlock';
 import UserForm from 'components/forms/UserForm';
 import UsersTable from './UsersTable';
 // APOLLO
@@ -17,6 +18,7 @@ class Users extends React.PureComponent {
   state = {
     addNew: false,
     loading: false,
+    errors: [],
   };
   onCreateUser = async newValues => {
     this.setState({
@@ -79,15 +81,16 @@ class Users extends React.PureComponent {
       loading: true,
     });
     try {
-      let params = {
-        ...newValues,
-        roles: this.state.selected ? this.state.selected.roles : ['coAdmin'],
-        customerId: this.props.customer.id,
-      };
       await this.props.saveUser({
         variables: {
           id: this.state.selected.id,
-          params,
+          params: {
+            ...newValues,
+            roles: this.state.selected
+              ? this.state.selected.roles
+              : ['coAdmin'],
+            customerId: this.props.customer.id,
+          },
         },
         refetchQueries: [
           {
@@ -100,18 +103,27 @@ class Users extends React.PureComponent {
       this.setState({addNew: false, selected: false, loading: false});
     } catch (err) {
       console.log(err);
+      this.setState({
+        loading: false,
+        errors: [err.message],
+      });
     }
   };
   render() {
     // if user clicks "create user" button, we'll show the form for creating an user
     if (this.state.addNew) {
       return (
-        <UserForm
-          onSubmit={this.onCreateUser}
-          loading={this.state.loading}
-          makeEmployeeAnAdmin={this.makeEmployeeAnAdmin}
-          onCancel={() => this.setState({addNew: false})}
-        />
+        <React.Fragment>
+          <UserForm
+            onSubmit={this.onCreateUser}
+            loading={this.state.loading}
+            makeEmployeeAnAdmin={this.makeEmployeeAnAdmin}
+            onCancel={() => this.setState({addNew: false})}
+          />
+          {this.state.errors && this.state.errors.length > 0 && (
+            <ErrorBlock errors={this.state.errors} />
+          )}
+        </React.Fragment>
       );
     }
 
@@ -121,12 +133,17 @@ class Users extends React.PureComponent {
      */
     if (this.state.selected) {
       return (
-        <UserForm
-          onSubmit={this.onSaveUser}
-          loading={this.state.loading}
-          onCancel={() => this.setState({selected: false})}
-          {...this.state.selected}
-        />
+        <React.Fragment>
+          <UserForm
+            onSubmit={this.onSaveUser}
+            loading={this.state.loading}
+            onCancel={() => this.setState({selected: false})}
+            {...this.state.selected}
+          />
+          {this.state.errors && this.state.errors.length > 0 && (
+            <ErrorBlock errors={this.state.errors} />
+          )}
+        </React.Fragment>
       );
     }
 
@@ -136,6 +153,17 @@ class Users extends React.PureComponent {
     return (
       <div style={{width: 900, maxWidth: '100%'}}>
         {' '}
+        <Button
+          style={{
+            width: 120,
+            marginBottom: 16,
+            marginTop: 32,
+            marginLeft: '85%',
+          }}
+          onClick={() => this.setState({addNew: true})}
+        >
+          Create User
+        </Button>
         <Query
           query={customerAdminsQuery}
           fetchPolicy="cache-and-network"
@@ -152,12 +180,6 @@ class Users extends React.PureComponent {
             );
           }}
         </Query>
-        <Button
-          style={{width: 120, marginBottom: 8, marginTop: 32}}
-          onClick={() => this.setState({addNew: true})}
-        >
-          Create User
-        </Button>
       </div>
     );
   }

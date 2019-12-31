@@ -45,7 +45,9 @@ class UsersTable extends React.PureComponent {
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={false}
+          pagination={{
+            pageSize: 5,
+          }}
           rowKey="id"
           onRow={(record, rowIndex) => {
             return {
