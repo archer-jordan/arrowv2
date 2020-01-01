@@ -62,8 +62,8 @@ class AuthResetPassword extends React.PureComponent {
 
       // use the helper to check for errors
       let errors = GeneralHelpers.passwordCheck(
-        this.state.newPassword,
-        this.state.confirmNewPassword
+        this.state.password,
+        this.state.confirmPassword
       );
 
       // if any errors exist, stop here and set the errors state
