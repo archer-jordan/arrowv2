@@ -56,7 +56,10 @@ class CustomerOverride extends React.PureComponent {
     loading: false,
     companyErrors: [],
   };
-  onCompleteCustomerUpload = async (data = this.state.companyData) => {
+  onCompleteCustomerUpload = async (
+    data = this.state.companyData,
+    overwrite = false
+  ) => {
     // call the upload mutation
     try {
       let result = await this.props.customerTotalsUpload({
@@ -74,6 +77,16 @@ class CustomerOverride extends React.PureComponent {
       });
 
       if (!result.data.customerTotalsUpload.success) {
+        return this.setState({
+          companyErrors: result.data.customerTotalsUpload.errors,
+          loading: false,
+        });
+      }
+
+      if (
+        result.data.customerTotalsUpload.errors &&
+        result.data.customerTotalsUpload.errors.length > 0
+      ) {
         return this.setState({
           companyErrors: result.data.customerTotalsUpload.errors,
           loading: false,
@@ -101,6 +114,7 @@ class CustomerOverride extends React.PureComponent {
           companyErrors: [
             'This sheet does not have the correct number of columns',
           ],
+          loading: false,
         });
       }
 
@@ -152,7 +166,7 @@ class CustomerOverride extends React.PureComponent {
         <OverrideModal
           visible={this.state.confirmUpdateModal}
           onUpdate={() => {
-            this.onCompleteCustomerUpload(this.state.companyData);
+            this.onCompleteCustomerUpload(this.state.companyData, true);
             this.setState({
               confirmUpdateModal: false,
             });

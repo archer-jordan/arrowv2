@@ -72,11 +72,28 @@ class EmployeeOverride extends React.PureComponent {
         throw new Error('No data found...');
       }
       // update data
-      await this.props.uploadEmployeeReports({
+      let result = await this.props.uploadEmployeeReports({
         variables: {
           values,
         },
       });
+
+      if (!result.data.uploadEmployeeReports.success) {
+        return this.setState({
+          companyErrors: result.data.uploadEmployeeReports.errors,
+          loading: false,
+        });
+      }
+
+      if (
+        result.data.uploadEmployeeReports.errors &&
+        result.data.uploadEmployeeReports.errors.length > 0
+      ) {
+        return this.setState({
+          companyErrors: result.data.uploadEmployeeReports.errors,
+          loading: false,
+        });
+      }
 
       // reset all state
       this.setState({
@@ -99,6 +116,8 @@ class EmployeeOverride extends React.PureComponent {
         !item.assignedId ||
         item.assignedId === '' ||
         item.assignedId === 'NULL' ||
+        item.assignedId === 'Null' ||
+        item.assignedId === 'null' ||
         item.assignedId === ' '
       ) {
         invalidFields.push(`EAID does not exist for row ${i + 1}`);
