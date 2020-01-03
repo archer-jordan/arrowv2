@@ -150,7 +150,7 @@ class EmployeeForm extends React.PureComponent {
             <FormItem label="Hire Date">
               <DateInput
                 value={this.state.hireDate}
-                onChange={e => this.setState({hireDate: e.target.value})}
+                onChange={hireDate => this.setState({hireDate})}
               />
             </FormItem>
           </Col>
@@ -166,7 +166,7 @@ class EmployeeForm extends React.PureComponent {
             <FormItem label="Status">
               <EmployeeStatusType
                 value={this.state.status}
-                onChange={e => this.setState({status: e.target.value})}
+                onChange={status => this.setState({status})}
               />
             </FormItem>
           </Col>
@@ -174,7 +174,7 @@ class EmployeeForm extends React.PureComponent {
             <FormItem label="DOB">
               <DateInput
                 value={this.state.dob}
-                onChange={e => this.setState({dob: e.target.value})}
+                onChange={dob => this.setState({dob})}
               />
             </FormItem>
           </Col>{' '}
