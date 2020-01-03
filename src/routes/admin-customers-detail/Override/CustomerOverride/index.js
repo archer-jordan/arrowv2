@@ -59,7 +59,7 @@ class CustomerOverride extends React.PureComponent {
   onCompleteCustomerUpload = async (data = this.state.companyData) => {
     // call the upload mutation
     try {
-      await this.props.customerTotalsUpload({
+      let result = await this.props.customerTotalsUpload({
         variables: {
           values: data,
         },
@@ -72,6 +72,13 @@ class CustomerOverride extends React.PureComponent {
           },
         ],
       });
+
+      if (!result.data.customerTotalsUpload.success) {
+        return this.setState({
+          companyErrors: result.data.customerTotalsUpload.errors,
+          loading: false,
+        });
+      }
       // turn off loading
       this.setState({
         loading: false,
