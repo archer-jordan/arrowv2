@@ -21,6 +21,9 @@ export default gql`
       fringeDollars
       healthAndWelfare
       retirement
+      fringeDollarsLabel
+      healthAndWelfareLabel
+      retirementLabel
       benefits {
         label
         eligibility

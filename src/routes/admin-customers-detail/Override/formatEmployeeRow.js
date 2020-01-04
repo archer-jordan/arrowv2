@@ -147,8 +147,11 @@ const formatEmployeeRow = (headersArray, dataArray) => {
     hours: cleanValue(dataArray[8]),
     benefits,
     fringeDollars: cleanValue(dataArray[33]),
+    fringeDollarsLabel: headersArray[33],
     healthAndWelfare: cleanValue(dataArray[34]),
+    healthAndWelfareLabel: headersArray[34],
     retirement: cleanValue(dataArray[35]),
+    retirementLabel: headersArray[35],
   };
 };
 

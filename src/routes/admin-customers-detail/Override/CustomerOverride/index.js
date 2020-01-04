@@ -124,6 +124,7 @@ class CustomerOverride extends React.PureComponent {
       // verify if we already have data for this month
       const reportExists = await client.query({
         query: customerReportQuery,
+        fetchPolicy: 'network-only',
         variables: {
           customerId: this.props.customer.id,
           month: data.month,

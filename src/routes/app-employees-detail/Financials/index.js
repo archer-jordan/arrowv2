@@ -77,35 +77,43 @@ class Financials extends React.PureComponent {
             }}
           >
             {({loading, data, error}) => {
+              // if loading, show loading
               if (loading) return 'loading';
+              // if an error, show error
               if (error) return 'error';
+
+              // if no data, tell the user no data
               if (
                 !data.employeeReportByEmployeeId ||
                 !data.employeeReportByEmployeeId.benefits
               ) {
                 return 'No data';
               }
+              // if the report
               let report = data.employeeReportByEmployeeId;
+
+              // create an array that we'll use for the legend and the pie chart
               let dataArray = [
                 {
                   id: '2',
-                  label: 'Health & Welfare',
+                  label: report.healthAndWelfareLabel || 'Health & Welfare',
                   value: report.healthAndWelfare,
                   color: '#145D92',
                 },
                 {
                   id: '3',
-                  label: 'Retirement',
+                  label: report.retirementLabel || 'Retirement',
                   value: report.retirement,
                   color: '#5A89AB',
                 },
               ];
+
               return (
                 <Row gutter={16} style={{marginTop: 30}}>
                   <Col xs={24} md={10}>
                     {' '}
                     <FinancialRow
-                      label={'Fringe Dollars'}
+                      label={report.fringeDollarsLabel || 'Fringe Dollars'}
                       value={report.fringeDollars}
                       color={null}
                     />

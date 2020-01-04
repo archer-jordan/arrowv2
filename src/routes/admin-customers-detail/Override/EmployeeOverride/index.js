@@ -223,6 +223,7 @@ class EmployeeOverride extends React.PureComponent {
       // we want to query and see if any of these employees already have reports for this month
       let employeeTotalsExist = await client.query({
         query: checkIfEmployeeTotalsExist,
+        fetchPolicy: 'network-only',
         variables: {
           employeeAssignedIds: formattedData.map(item => item.assignedId),
           month: formattedData[0].month,
