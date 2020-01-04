@@ -121,6 +121,29 @@ class CustomerOverride extends React.PureComponent {
       // format the data
       const data = formatRow(results.data[0], results.data[1]);
 
+      // check to see if
+      let activeThisMonthErrors = [];
+
+      data.eligibility.forEach((item, i) => {
+        let activeIsMore =
+          parseInt(data.activeThisMonth, 10) >
+          parseInt(data.eligibility[i].employees, 10);
+
+        // throw error if activeThisMonth is smaller than employees in eligibility
+        if (!activeIsMore) {
+          activeThisMonthErrors.push(
+            `Active employees this month (${data.activeThisMonth}) is lower than employees eligible for ${data.eligibility[i].label} (${data.eligibility[i].employees}). Please check your CSV.`
+          );
+        }
+      });
+
+      if (activeThisMonthErrors && activeThisMonthErrors.length > 0) {
+        return this.setState({
+          companyErrors: activeThisMonthErrors,
+          loading: false,
+        });
+      }
+
       // verify if we already have data for this month
       const reportExists = await client.query({
         query: customerReportQuery,

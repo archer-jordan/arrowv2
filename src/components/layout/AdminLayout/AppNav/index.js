@@ -84,7 +84,10 @@ const AppNav = ({pathname}) => {
             <MobileCol>
               <NavItem
                 to={`/admin/customers`}
-                active={pathname && pathname.includes('/customers')}
+                active={
+                  (pathname && pathname.includes('/customers')) ||
+                  pathname === '/admin'
+                }
               >
                 CUSTOMERS
               </NavItem>

@@ -12,8 +12,9 @@ const Text = styled.div`
 `;
 
 const CaptionText = styled(Text)`
-  color: ${p => p.theme.colors.neutral7};
+  color: ${p => p.theme.colors.neutral6};
   font-weight: 500;
+  font-size: 14px;
 `;
 
 const DeleteText = styled(Text)`
@@ -43,7 +44,7 @@ class UsersTable extends React.PureComponent {
         render: (text, record) => <Text>{record.lastName}</Text>,
       },
       {
-        title: 'Created by',
+        title: 'Created',
         render: (text, record) => (
           <Text>
             {record.createdByEmail}{' '}
