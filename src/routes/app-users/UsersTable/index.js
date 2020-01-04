@@ -9,26 +9,29 @@ const Text = styled.div`
   font-family: ${p => p.theme.fontFamily};
 `;
 
-const DEFAULT_COLUMNS = [
-  {
-    title: 'Last Name',
-    dataIndex: 'id',
-    key: 'id',
-    render: (text, record) => <Text>{record.lastName}</Text>,
-  },
-  {
-    title: 'First Name',
-    render: (text, record) => <Text>{record.firstName}</Text>,
-  },
-  {
-    title: 'Email',
-    render: (text, record) => <Text>{record.email}</Text>,
-  },
-];
-
 class UsersTable extends React.PureComponent {
   render() {
     const {total, loading, dataSource, columns} = this.props;
+    const DEFAULT_COLUMNS = [
+      {
+        title: 'Last Name',
+        dataIndex: 'id',
+        key: 'id',
+        render: (text, record) => (
+          <Text onClick={() => this.props.onSelect(record)}>
+            {record.lastName}
+          </Text>
+        ),
+      },
+      {
+        title: 'First Name',
+        render: (text, record) => <Text>{record.firstName}</Text>,
+      },
+      {
+        title: 'Email',
+        render: (text, record) => <Text>{record.email}</Text>,
+      },
+    ];
     return (
       <div style={{position: 'relative'}}>
         <Table
@@ -38,6 +41,7 @@ class UsersTable extends React.PureComponent {
             pageSize: 5,
             total,
           }}
+          rowKey="id"
           loading={loading}
         />{' '}
       </div>
