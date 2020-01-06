@@ -17,6 +17,8 @@ import customerAdminsQuery from 'ApolloClient/Queries/customerAdmins';
 import usersQuery from 'ApolloClient/Queries/users';
 import {Query, graphql} from 'react-apollo';
 import saveUser from 'ApolloClient/Mutations/saveUser';
+import compose from 'lodash/flowRight';
+import createNewUser from 'ApolloClient/Mutations/createNewUser';
 
 const Container = styled.div`
   width: 950px;
@@ -85,7 +87,7 @@ class AppUsers extends React.PureComponent {
       let params = {
         ...newValues,
         roles: ['coAdmin'],
-        customerId: this.props.customer.id,
+        customerId: this.props.currentUser.company.id,
       };
       await this.props.createNewUser({
         variables: {
@@ -93,8 +95,11 @@ class AppUsers extends React.PureComponent {
         },
         refetchQueries: [
           {
-            query: customerByIdQuery,
-            variables: {id: this.props.customer.id},
+            query: usersQuery,
+            variables: {
+              customerId: this.props.currentUser.customerId,
+              searchText: this.state.searchText,
+            },
           },
         ],
       });
@@ -116,8 +121,11 @@ class AppUsers extends React.PureComponent {
         },
         refetchQueries: [
           {
-            query: customerAdminsQuery,
-            variables: {customerId: this.props.customer.id},
+            query: usersQuery,
+            variables: {
+              customerId: this.props.currentUser.customerId,
+              searchText: this.state.searchText,
+            },
           },
         ],
       });
@@ -252,4 +260,7 @@ class AppUsers extends React.PureComponent {
   }
 }
 
-export default graphql(saveUser, {name: 'saveUser'})(AppUsers);
+export default compose(
+  graphql(saveUser, {name: 'saveUser'}),
+  graphql(createNewUser, {name: 'createNewUser'})
+)(AppUsers);
