@@ -125,6 +125,22 @@ class EmployeeOverride extends React.PureComponent {
     });
     return invalidFields;
   };
+  getMissingCOIDS = results => {
+    let invalidFields = [];
+    results.forEach((item, i) => {
+      if (
+        !item.companyAssignedId ||
+        item.companyAssignedId === '' ||
+        item.companyAssignedId === 'NULL' ||
+        item.companyAssignedId === 'Null' ||
+        item.companyAssignedId === 'null' ||
+        item.companyAssignedId === ' '
+      ) {
+        invalidFields.push(`COID does not exist for row ${i + 1}`);
+      }
+    });
+    return invalidFields;
+  };
   checkForDuplicateIDs = formattedData => {
     let allIds = formattedData.map(item => item.assignedId);
     const checkIfArrayIsUnique = myArray => {
@@ -164,6 +180,16 @@ class EmployeeOverride extends React.PureComponent {
         return this.setState({
           loading: false,
           employeeErrors: invalidFields,
+        });
+      }
+
+      // Make sure there are no null company/customer IDs
+      let missingCOIDS = this.getMissingCOIDS(formattedData);
+
+      if (missingCOIDS.length > 0) {
+        return this.setState({
+          loading: false,
+          employeeErrors: missingCOIDS,
         });
       }
 
