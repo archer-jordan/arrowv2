@@ -71,12 +71,25 @@ const DrawerContent = ({pathname, onUrlChange, activeTab, currentUser}) => {
       {/* Only show the dashboard if the user is an employee */}
       {currentUser.roles.includes('coEmployee') && (
         <DrawerGroup>
-          <DrawerHeader
-            active={pathname && pathname.includes('/dashboard')}
-            onClick={() => onUrlChange('dashboard', RESET_TABS)}
+          <DrawerHeader>Dashboard</DrawerHeader>
+          <DrawerSubeader
+            active={activeTab === 'benefits'}
+            onClick={() => onUrlChange('dashboard', {tab: 'benefits'})}
           >
-            Dashboard
-          </DrawerHeader>
+            Benefits
+          </DrawerSubeader>
+          <DrawerSubeader
+            active={activeTab === 'financials'}
+            onClick={() => onUrlChange('dashboard', {tab: 'financials'})}
+          >
+            Financials
+          </DrawerSubeader>
+          <DrawerSubeader
+            active={activeTab === 'account'}
+            onClick={() => onUrlChange('dashboard', {tab: 'account'})}
+          >
+            Account
+          </DrawerSubeader>
         </DrawerGroup>
       )}
       <DrawerGroup>

@@ -16,6 +16,7 @@ import {Query} from 'react-apollo';
 const PieChartPlaceholder = styled.div`
   width: 550px;
   height: 350px;
+  max-width: 100%;
 `;
 
 const ColorCircle = styled.div`

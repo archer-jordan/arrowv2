@@ -105,14 +105,14 @@ const Header = ({month}) => (
       </ColumnTitle>
     </Col>
     <Col xs={6} xl={5}>
-      <ColumnTitle style={{marginLeft: 16}}>
+      <ColumnTitle style={{marginLeft: 8}}>
         {' '}
         REQUIRED <br />
         HOURS{' '}
       </ColumnTitle>
     </Col>
     <Col xs={6} xl={5} style={{display: 'flex', justifyContent: 'center'}}>
-      <ColumnTitle>
+      <ColumnTitle style={{marginLeft: 8}}>
         {moment(helpers.capitalize(month), 'MMMM')
           .add(1, 'months')
           .format('MMMM')
@@ -179,7 +179,13 @@ class Benefits extends React.PureComponent {
                 </Col>
                 <Col xs={24} xl={4}>
                   <HoursContainer>
-                    <BigValue style={{textAlign: 'center'}}>
+                    <BigValue
+                      style={{
+                        textAlign: 'center',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
                       {report.hours}
                       <MobileLabel>
                         {this.props.month.toUpperCase()} HOURS
