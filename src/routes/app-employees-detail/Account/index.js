@@ -13,7 +13,7 @@ const Label = styled(BigValue)`
   font-size: 16px;
   font-weight: 700;
   line-height: 16px;
-  height: 16px;
+  min-height: 16px;
   margin-bottom: 16px;
 `;
 

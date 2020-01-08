@@ -13,9 +13,13 @@ import helpers from 'lib/helpers/GeneralHelpers';
 
 const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
-  height: 24px;
+  min-height: 24px;
   line-height: 24px;
-  margin-bottom: 16px;
+  @media only screen and (max-width: 1200px) {
+    font-size: 18px;
+    min-height: 18px;
+    line-height: 18px;
+  }
 `;
 
 const Outline = styled.div`
@@ -24,18 +28,30 @@ const Outline = styled.div`
   height: 40px;
   padding: 8px 16px;
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
 `;
 
 const Label = styled(BigValue)`
   font-size: 16px;
   font-weight: 700;
   line-height: 16px;
-  height: 16px;
+  min-height: 16px;
   margin-bottom: 16px;
+  @media only screen and (max-width: 1200px) {
+    font-size: 18px;
+    min-height: 18px;
+    line-height: 18px;
+  }
 `;
 
 const Value = styled(Label)`
   font-weight: 400;
+  @media only screen and (max-width: 1200px) {
+    font-size: 18px;
+    min-height: 18px;
+    line-height: 18px;
+  }
 `;
 
 const DataItem = ({label = ' ', value = ''}) => (
