@@ -25,89 +25,117 @@ const RESET_TABS = {
   year: null,
 };
 
-const DrawerContent = ({pathname, onUrlChange, activeTab}) => (
-  <div>
-    <DrawerGroup>
-      <DrawerHeader>Reports</DrawerHeader>
-      <DrawerSubeader
-        active={activeTab === 'health'}
-        onClick={() => onUrlChange('reports', {tab: 'health'})}
-      >
-        Health & Welfare
-      </DrawerSubeader>
-      <DrawerSubeader
-        active={activeTab === 'eligibility'}
-        onClick={() => onUrlChange('reports', {tab: 'eligibility'})}
-      >
-        Eligibility
-      </DrawerSubeader>
-      <DrawerSubeader
-        active={activeTab === 'benefits'}
-        onClick={() => onUrlChange('reports', {tab: 'benefits'})}
-      >
-        Benefits
-      </DrawerSubeader>
-      <DrawerSubeader
-        active={activeTab === 'retirement'}
-        onClick={() => onUrlChange('reports', {tab: 'retirement'})}
-      >
-        Retirement
-      </DrawerSubeader>
-      <DrawerSubeader
-        active={activeTab === 'download'}
-        onClick={() => onUrlChange('reports', {tab: 'download'})}
-      >
-        Download XL
-      </DrawerSubeader>
-    </DrawerGroup>
-    <DrawerGroup>
+const DrawerContent = ({pathname, onUrlChange, activeTab, currentUser}) => {
+  let canViewReports =
+    currentUser.roles.includes('coAdmin') &&
+    currentUser.permissions.includes('viewCompanyData');
+  return (
+    <div>
       {' '}
-      <DrawerHeader>Account</DrawerHeader>
-      <DrawerSubeader
-        active={activeTab === 'profile'}
-        onClick={() => onUrlChange('account', {tab: 'profile'})}
-      >
-        Profile
-      </DrawerSubeader>
-      <DrawerSubeader
-        active={activeTab === 'plan'}
-        onClick={() => onUrlChange('account', {tab: 'plan'})}
-      >
-        Plan
-      </DrawerSubeader>
-      <DrawerSubeader
-        active={activeTab === 'password'}
-        onClick={() => onUrlChange('account', {tab: 'password'})}
-      >
-        Account
-      </DrawerSubeader>{' '}
-    </DrawerGroup>
-    <DrawerGroup>
-      <DrawerHeader
-        active={pathname.includes('employees')}
-        onClick={() => onUrlChange('employees', RESET_TABS)}
-      >
-        Employees
-      </DrawerHeader>
-    </DrawerGroup>
-    <DrawerGroup>
-      <DrawerHeader
-        active={pathname.includes('users')}
-        onClick={() => onUrlChange('users', RESET_TABS)}
-      >
-        Users
-      </DrawerHeader>
-    </DrawerGroup>
-    <DrawerGroup>
-      <DrawerHeader
-        active={pathname.includes('support')}
-        onClick={() => onUrlChange('support', RESET_TABS)}
-      >
-        Support
-      </DrawerHeader>
-    </DrawerGroup>
-    <DrawerHeader>Sign-out</DrawerHeader>
-  </div>
-);
+      {canViewReports || currentUser.roles.includes('superAdmin') ? (
+        <DrawerGroup>
+          {/* Only show the reports tab if the user is a superadmin OR a coAdmin+viewCompanyData */}
+          <DrawerHeader>Reports</DrawerHeader>
+          <DrawerSubeader
+            active={activeTab === 'health'}
+            onClick={() => onUrlChange('reports', {tab: 'health'})}
+          >
+            Health & Welfare
+          </DrawerSubeader>
+          <DrawerSubeader
+            active={activeTab === 'eligibility'}
+            onClick={() => onUrlChange('reports', {tab: 'eligibility'})}
+          >
+            Eligibility
+          </DrawerSubeader>
+          <DrawerSubeader
+            active={activeTab === 'benefits'}
+            onClick={() => onUrlChange('reports', {tab: 'benefits'})}
+          >
+            Benefits
+          </DrawerSubeader>
+          <DrawerSubeader
+            active={activeTab === 'retirement'}
+            onClick={() => onUrlChange('reports', {tab: 'retirement'})}
+          >
+            Retirement
+          </DrawerSubeader>
+          <DrawerSubeader
+            active={activeTab === 'download'}
+            onClick={() => onUrlChange('reports', {tab: 'download'})}
+          >
+            Download XL
+          </DrawerSubeader>
+        </DrawerGroup>
+      ) : null}
+      {/* Only show the dashboard if the user is an employee */}
+      {currentUser.roles.includes('coEmployee') && (
+        <DrawerGroup>
+          <DrawerHeader
+            active={pathname && pathname.includes('/dashboard')}
+            onClick={() => onUrlChange('dashboard', RESET_TABS)}
+          >
+            Dashboard
+          </DrawerHeader>
+        </DrawerGroup>
+      )}
+      <DrawerGroup>
+        {' '}
+        <DrawerHeader>Account</DrawerHeader>
+        <DrawerSubeader
+          active={activeTab === 'profile'}
+          onClick={() => onUrlChange('account', {tab: 'profile'})}
+        >
+          Profile
+        </DrawerSubeader>
+        <DrawerSubeader
+          active={activeTab === 'plan'}
+          onClick={() => onUrlChange('account', {tab: 'plan'})}
+        >
+          Plan
+        </DrawerSubeader>
+        <DrawerSubeader
+          active={activeTab === 'password'}
+          onClick={() => onUrlChange('account', {tab: 'password'})}
+        >
+          Account
+        </DrawerSubeader>{' '}
+      </DrawerGroup>
+      {((currentUser.roles.includes('coAdmin') &&
+        currentUser.permissions.includes('viewEmployeeData')) ||
+        currentUser.roles.includes('superAdmin')) && (
+        <DrawerGroup>
+          <DrawerHeader
+            active={pathname.includes('employees')}
+            onClick={() => onUrlChange('employees', RESET_TABS)}
+          >
+            Employees
+          </DrawerHeader>
+        </DrawerGroup>
+      )}
+      {((currentUser.roles.includes('coAdmin') &&
+        currentUser.permissions.includes('manageUsers')) ||
+        currentUser.roles.includes('superAdmin')) && (
+        <DrawerGroup>
+          <DrawerHeader
+            active={pathname.includes('users')}
+            onClick={() => onUrlChange('users', RESET_TABS)}
+          >
+            Users
+          </DrawerHeader>
+        </DrawerGroup>
+      )}
+      <DrawerGroup>
+        <DrawerHeader
+          active={pathname.includes('support')}
+          onClick={() => onUrlChange('support', RESET_TABS)}
+        >
+          Support
+        </DrawerHeader>
+      </DrawerGroup>
+      <DrawerHeader>Sign-out</DrawerHeader>
+    </div>
+  );
+};
 
 export default DrawerContent;
