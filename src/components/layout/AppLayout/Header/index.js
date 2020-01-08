@@ -119,6 +119,7 @@ const Header = ({history, location, currentUser}) => {
               setVisible={setVisible}
               onUrlChange={onUrlChange}
               currentUser={currentUser}
+              onLogout={onLogout}
             />
           </Drawer>
         </ShowMobileCol>

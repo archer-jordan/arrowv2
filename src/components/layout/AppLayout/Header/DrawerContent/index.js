@@ -21,11 +21,17 @@ const DrawerGroup = styled.div`
 
 const RESET_TABS = {
   tab: null,
-  month: null,
-  year: null,
+  //month: null,
+  //year: null,
 };
 
-const DrawerContent = ({pathname, onUrlChange, activeTab, currentUser}) => {
+const DrawerContent = ({
+  pathname,
+  onUrlChange,
+  activeTab,
+  currentUser,
+  onLogout,
+}) => {
   let canViewReports =
     currentUser.roles.includes('coAdmin') &&
     currentUser.permissions.includes('viewCompanyData');
@@ -146,7 +152,7 @@ const DrawerContent = ({pathname, onUrlChange, activeTab, currentUser}) => {
           Support
         </DrawerHeader>
       </DrawerGroup>
-      <DrawerHeader>Sign-out</DrawerHeader>
+      <DrawerHeader onClick={onLogout}>Sign-out</DrawerHeader>
     </div>
   );
 };
