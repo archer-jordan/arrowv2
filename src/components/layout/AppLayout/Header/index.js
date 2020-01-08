@@ -55,8 +55,13 @@ const ShowMobileCol = styled(Col)`
 `;
 
 const Header = ({history, location, currentUser}) => {
+  // setup variable to hide/show the drawer
   const [visisble, setVisible] = useState(false);
+
+  // see what current tab were on by grabbing the variable from the query string
   const {tab} = queryString.parse(location.search);
+
+  // simple function for updating the URL when changing routes
   const onUrlChange = (baseUrl, newValues) => {
     let oldParams = queryString.parse(location.search);
     let newParams = {
@@ -68,11 +73,14 @@ const Header = ({history, location, currentUser}) => {
     setVisible(false);
   };
 
+  // simple function for logging out
   const onLogout = async () => {
     await AuthHelpers.signOut(currentUser.id);
     await ApolloClient.resetStore();
     return history.push('/');
   };
+
+  // return actual header component
   return (
     <HeaderContainer>
       <Row
@@ -87,7 +95,12 @@ const Header = ({history, location, currentUser}) => {
       >
         {' '}
         <Col xs={6}>
-          <img src={logoWhiteSVG} alt="logo-white" height="40" onClick={() => history.push('/reports')} />
+          <img
+            src={logoWhiteSVG}
+            alt="logo-white"
+            height="40"
+            onClick={() => history.push('/reports')}
+          />
         </Col>
         <Col xs={10}></Col>
         <MobileCol xs={8} style={{textAlign: 'right'}}>
@@ -105,10 +118,11 @@ const Header = ({history, location, currentUser}) => {
               pathname={location.pathname}
               setVisible={setVisible}
               onUrlChange={onUrlChange}
+              currentUser={currentUser}
             />
           </Drawer>
         </ShowMobileCol>
-      </Row>{' '}
+      </Row>
     </HeaderContainer>
   );
 };
