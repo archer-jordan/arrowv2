@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku master",
+    "deploy-staging": "git push heroku staging:master"
   }
 }
