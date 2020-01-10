@@ -18,3 +18,11 @@ This repo contains both a frontend application (create-react-app) and a backend 
 - Once packages are installed and env variables are setup, you can run `yarn local` to start the node.js application
 - Your backend will run on `http://localhost:8080/graphql` (this should match your frontend .env file)
 - You should now see your frontend app is working/hitting an API
+
+### Working Locally & Deployment
+
+All local work should happen on the staging branch (or branches off of the staging branch). When you're ready to push changes from staging to production, do the following
+
+- push your local staging changes to the remote github branch
+- this will kick off netlify to rebuild the staging website automatically
+- next,
