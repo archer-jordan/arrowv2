@@ -1,0 +1,6 @@
+node_modules/
+notes.txt
+.eslintrc
+dump/
+.env
+.DS_Store

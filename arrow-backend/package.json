@@ -1,0 +1,34 @@
+{
+  "name": "arrow-backend",
+  "private": true,
+  "scripts": {
+    "babel-node": "babel-node --presets=env",
+    "start": "NODE_PATH=src/ yarn babel-node -- ./index.js",
+    "local": "NODE_PATH=src/ nodemon --exec yarn babel-node -- ./index.js",
+    "build": "babel src -d dist",
+    "deploy": "git push heroku master"
+  },
+  "dependencies": {
+    "@accounts/graphql-api": "^0.20.0",
+    "@accounts/mongo": "^0.20.0",
+    "@accounts/password": "^0.20.0",
+    "@accounts/server": "^0.20.0",
+    "@graphql-modules/core": "^0.7.10",
+    "apollo-server": "^2.4.8",
+    "aws-sdk": "^2.578.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "dotenv": "^8.0.0",
+    "graphql": "^14.2.1",
+    "graphql-toolkit": "^0.5.10",
+    "graphql-tools": "^4.0.5",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "mongoose": "^5.5.9",
+    "nodemailer": "^6.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
