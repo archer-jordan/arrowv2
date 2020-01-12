@@ -27,13 +27,14 @@ All local work should happen on the staging branch (or branches off of the stagi
 - this will kick off netlify to rebuild the staging website automatically
 - next, run `yarn deploy` from the top level folder `arrow` (you should be on your staging branch chcked out locally)
 - this will push your code to the "staging" backend server
-- you can now test the staging frontend (hosted on netfliy) pointing at the staging server (heroku)
+- you can now test the staging frontend (hosted on netfliy) pointing at the staging server (heroku) (https://staging.archerjordan.com/)
 
-If all looks well, and you want to push changes to production, do the following
+If all looks well, and you want to push your staging changes to the production site, do the following
 
-- Open up github, heroku and netlify in different tabs before you start and make sure you're logged in
-- Go to github and merge staging branch into master
-- This will kickoff netlify to automatically update the production site with the new frontend code
-- Hopefully you have heroku open, go to the arrow-api pipeline and you'll see a "promote to production" button under the `arrow-api-staging` app. Just click that button and it'll update the production server to use whatever is currently on staging (but it will use production environment variables).
+- Open up github, heroku and netlify in different tabs before you start (and make sure you're logged in to each)
+- Next, go to github and merge staging branch into master
+- This merge will kickoff netlify to automatically deploy the master branch to the production site (only the frontend code)
+- Hopefully you have heroku open in another tab, click to the "arrow-api" pipeline and you'll see two apps in the pipeline: `arrow-api-staging` and `arrow-api-production`
+- Click a "promote to production" button under the `arrow-api-staging` app. This will update the production server to use whatever is currently on staging (but it will use production environment variables).
 
-That's it. You just tested changes on staging and then updated the production site with them
+That's it. You just tested changes on the staging and then updated the production site with those changes. Congratulations, fam.
