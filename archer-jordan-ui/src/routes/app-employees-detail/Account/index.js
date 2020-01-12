@@ -10,7 +10,7 @@ import BigLabel from 'components/text/BigLabel';
 import TopContainer from 'components/common/TopContainer';
 
 const Label = styled(BigValue)`
-  font-size: 16px;
+  font-size: 18px !important;
   font-weight: 700;
   line-height: 16px;
   min-height: 16px;
