@@ -10,12 +10,13 @@ This repo contains both a frontend application (create-react-app) and a backend 
 - run `yarn install` (to install all the packages for the frontend app)
 - Make sure you have a .env file in your `archer-jordan-ui` folder (see `archer-jordan-ui/.env.example`)
 - Once packages are installed and env variables are setup, you can run `yarn start` to start the create-react-app
-- You should now have a frontend app (but it wont do much until you have a backend URL to hit)
+- You should now have a frontend app (but it wont do much until you have a backend endpoint running locally too)
 - To run the backend....
 - In another terminal, cd into `arrow-backend`
 - run `yarn install` to install the packages for the backend
 - Make sure you have a .env file in your `arrow-backend` folder (see `arrow-backend/.env.example`)
 - Once packages are installed and env variables are setup, you can run `yarn local` to start the node.js application
+- `yarn local` is the same script as npm start except it includes nodemon to restart on changes (heroku deployments will run the `yarn start` script)
 - Your backend will run on `http://localhost:8080/graphql` (this should match your frontend .env file)
 - You should now see your frontend app is working/hitting an API
 
