@@ -46,8 +46,8 @@ export const EmployeeSchema = gql`
   }
 
   enum EmployeeStatusEnum {
-    Active
-    Terminated
+    active
+    terminated
   }
 
   type Employee {
