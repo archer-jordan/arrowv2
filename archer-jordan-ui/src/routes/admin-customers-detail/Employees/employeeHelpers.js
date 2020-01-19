@@ -3,25 +3,39 @@ import {validate} from 'email-validator';
 
 export default {
   formatRow: row => {
+    // grab the keys of the object
+    let keys = Object.keys(row);
+
+    let cleanedRow = {};
+    // for each key, we want to trim it and add it as a key value pair to cleanedRow
+    keys.forEach(key => {
+      cleanedRow[key.trim()] = row[key];
+    });
+    // console.log({
+    //   row,
+    //   keys,
+    //   cleanedRow,
+    //   cleanedKeys: Object.keys(cleanedRow),
+    // });
     return {
-      firstName: row['First Name'],
-      lastName: row['Last Name'],
-      email: row['E-Mail'],
-      assignedId: row['EAID'],
-      assignedCustomerId: row['COID'],
-      gender: row['Gender'] === 'M' ? 'male' : 'female',
-      hireDate: moment(row['Hire Date YYYYMMDD'], 'YYYYMMDD')
+      firstName: cleanedRow['First Name'],
+      lastName: cleanedRow['Last Name'],
+      email: cleanedRow['E-Mail'],
+      assignedId: cleanedRow['EAID'],
+      assignedCustomerId: cleanedRow['COID'],
+      gender: cleanedRow['Gender'] === 'M' ? 'male' : 'female',
+      hireDate: moment(cleanedRow['Hire Date YYYYMMDD'], 'YYYYMMDD')
         .valueOf()
         .toString(),
-      dob: moment(row['Birth Date YYYYMMDD'], 'YYYYMMDD')
+      dob: moment(cleanedRow['Birth Date YYYYMMDD'], 'YYYYMMDD')
         .valueOf()
         .toString(),
-      street: row['Address'],
-      zip: row['Zip Code'],
-      state: row['State'],
-      ssn: row['SSN/Fed ID'],
-      city: row['City'],
-      status: row['Status'] && row['Status'].toLowerCase(),
+      street: cleanedRow['Address'],
+      zip: cleanedRow['Zip Code'],
+      state: cleanedRow['State'],
+      ssn: cleanedRow['SSN/Fed ID'],
+      city: cleanedRow['City'],
+      status: cleanedRow['Status'] && cleanedRow['Status'].toLowerCase(),
     };
   },
   checkForDuplicateIDs: formattedData => {
