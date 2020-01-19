@@ -250,6 +250,7 @@ class Employees extends React.PureComponent {
     });
     Papa.parse(file, {
       header: true,
+      skipEmptyLines: true,
       complete,
     });
   };
