@@ -296,6 +296,7 @@ class EmployeeOverride extends React.PureComponent {
     if (file && complete) {
       Papa.parse(file, {
         header: false,
+        skipEmptyLines: true,
         complete,
       });
     }
