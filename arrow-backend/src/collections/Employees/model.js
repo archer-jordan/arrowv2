@@ -15,7 +15,7 @@ const schema = new Mongo.Schema({
   },
   status: {
     type: String,
-    enum: ['Active', 'Terminated'],
+    enum: ['active', 'terminated'],
   },
   dob: String, // timestamp
   hireDate: String, // timestamp

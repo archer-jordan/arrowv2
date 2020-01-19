@@ -21,7 +21,7 @@ export default {
       state: row['State'],
       ssn: row['SSN/Fed ID'],
       city: row['City'],
-      status: row['Status'],
+      status: row['Status'] && row['Status'].toLowerCase(),
     };
   },
   checkForDuplicateIDs: formattedData => {
@@ -34,6 +34,7 @@ export default {
   },
   getInvalidFields: results => {
     let invalidFields = [];
+    console.log({results});
     results.data.forEach((item, i) => {
       if (
         !item['EAID'] ||

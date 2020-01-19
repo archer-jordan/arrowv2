@@ -76,6 +76,10 @@ class Employees extends React.PureComponent {
    * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
    */
   afterParseAdd = async (results, file) => {
+    console.log({
+      results,
+      file,
+    });
     try {
       // 1. make sure the spreadsheet has the correct number of columns
       if (results.meta.fields.length !== 15) {
