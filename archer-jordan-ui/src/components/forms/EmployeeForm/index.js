@@ -101,7 +101,7 @@ class EmployeeForm extends React.PureComponent {
       firstName: this.state.firstName,
       assignedId: this.state.assignedId,
       email: this.state.email,
-      status: this.state.status,
+      status: this.state.status && this.state.status.toLowerCase(),
       hireDate: this.state.hireDate.valueOf().toString(),
       dob: this.state.dob.valueOf().toString(),
       // location
