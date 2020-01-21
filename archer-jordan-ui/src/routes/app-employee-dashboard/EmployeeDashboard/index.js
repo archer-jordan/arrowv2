@@ -85,14 +85,6 @@ class EmployeeDashboard extends React.PureComponent {
             tab: 'financials',
           }),
       },
-      {
-        label: 'Account',
-        activeValue: 'account',
-        onClick: () =>
-          this.onParamChange({
-            tab: 'account',
-          }),
-      },
     ];
   };
   render() {
