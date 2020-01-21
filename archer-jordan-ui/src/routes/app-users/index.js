@@ -11,8 +11,6 @@ import TextInput from 'components/inputs/TextInput';
 import UsersTable from './UsersTable';
 import ErrorBlock from 'components/common/ErrorBlock';
 import UserForm from 'components/forms/UserForm';
-import customerByIdQuery from 'ApolloClient/Queries/customerById';
-import customerAdminsQuery from 'ApolloClient/Queries/customerAdmins';
 // APOLLO
 import usersQuery from 'ApolloClient/Queries/users';
 import {Query, graphql} from 'react-apollo';

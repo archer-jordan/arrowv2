@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'components/common/Button';
 import ContactForm from './ContactForm';
 import ContactsTable from './ContactsTable';
-import uid from 'uid-safe';
 import helpers from 'lib/helpers/GeneralHelpers';
 
 class Contacts extends React.PureComponent {

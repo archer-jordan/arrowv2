@@ -117,7 +117,7 @@ const DrawerContent = ({
           active={activeTab === 'password'}
           onClick={() => onUrlChange('account', {tab: 'password'})}
         >
-          Account
+          Password
         </DrawerSubeader>{' '}
       </DrawerGroup>
       {((currentUser.roles.includes('coAdmin') &&
