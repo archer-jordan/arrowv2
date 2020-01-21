@@ -1,22 +1,11 @@
 import React from 'react';
 import {validate} from 'email-validator';
-import styled from 'styled-components';
 import Input from 'components/inputs/Input';
 import FormItem from 'components/common/FormItem';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
-
 import Button from 'components/common/Button';
 import ErrorBlock from 'components/common/ErrorBlock';
-
-const RemoveBtn = styled.div`
-  text-align: right;
-  cursor: pointer;
-  color: #999;
-  &:hover {
-    color: #666;
-  }
-`;
 
 class ContactForm extends React.PureComponent {
   state = {
@@ -64,7 +53,7 @@ class ContactForm extends React.PureComponent {
         gutter={16}
       >
         {' '}
-         {/*<Col xs={12} />{' '}
+        {/*<Col xs={12} />{' '}
         <Col xs={12}>
           <Popconfirm
             title="Are you sure you want to delete this contact?"
