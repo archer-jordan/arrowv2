@@ -27,7 +27,7 @@ const createUser = async (root, args, context) => {
 
 const createNewUser = async (root, args, context) => {
   try {
-    // check if user is a super admin
+    // check if user has permission to create users
     if (!canManageUsers(context.user)) {
       throw new Error('You do not have permission to do that');
     }
