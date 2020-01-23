@@ -10,9 +10,33 @@ import SideNav from 'components/common/SideNav';
 import Benefits from './Benefits';
 import Financials from './Financials';
 import Account from './Account';
+import Select from 'components/inputs/SelectInput';
+// LIB
+import helpers from 'lib/helpers/GeneralHelpers';
 // APOLLO
 import employeeByIdQuery from 'ApolloClient/Queries/employeeById';
 import {Query} from 'react-apollo';
+import lib from 'babel-plugin-import';
+
+const {Option} = Select;
+
+const MobileDropdownNav = ({items, tab, onChange}) => (
+  <div
+    style={{
+      marginTop: 24,
+      marginBottom: 16,
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end',
+    }}
+  >
+    <Select value={tab} style={{width: 200}} onChange={onChange}>
+      {items.map(item => (
+        <Option key={item.activeValue}>{item.label}</Option>
+      ))}
+    </Select>
+  </div>
+);
 
 class AppEmployeesDetail extends React.PureComponent {
   state = {
@@ -119,10 +143,17 @@ class AppEmployeesDetail extends React.PureComponent {
             <div>
               <div>
                 <Link to="/employees">Employees</Link> / {employee.firstName}{' '}
-                {employee.lastName} / {tab}{' '}
+                {employee.lastName} / {helpers.capitalize(tab)}{' '}
               </div>
               <Row>
                 <Col xs={24} md={16} />
+                <Col xs={24} md={0}>
+                  <MobileDropdownNav
+                    items={this.getNavItems()}
+                    tab={tab}
+                    onChange={tab => this.onParamChange({tab})}
+                  />
+                </Col>
                 <Col xs={24}>
                   <MonthComponent
                     year={year}
