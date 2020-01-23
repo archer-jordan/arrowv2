@@ -18,6 +18,15 @@ const getAttachment = async (root, args, context) => {
       customerId: context.user.customerId, // If user is a coEmployee of coAdmin, set customerId to the one on their profile
     };
 
+    // make sure if the user is trying to view an CustomerPlan, that they are a super admin or coadmin
+    if (
+      query.type === 'CustomerPlan' &&
+      (!context.user.roles.includes('superAdmin') ||
+        !context.user.roles.includess('coAdmin'))
+    ) {
+      throw new Error('You must be an admin to view CustomerPlan');
+    }
+
     // if user is a super admin, we'll allow them to query by an argument passed inn from the client
     if (context.user.roles.includes('superAdmin')) {
       query.customerId = args.customerId;
