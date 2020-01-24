@@ -9,6 +9,15 @@ export default gql`
       customerId
       employeeId
       companyStatus
+      employee {
+        gender
+        dob
+        street
+        city
+        state
+        zip
+        hireDate
+      }
       company {
         id
         title

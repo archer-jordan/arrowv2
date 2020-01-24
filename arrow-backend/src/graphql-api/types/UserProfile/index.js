@@ -58,6 +58,11 @@ export const UserProfileResolvers = {
       let user = await Users.findOne({_id: root.createdBy});
       return user && user.emails && user.emails[0].address;
     },
+    employee: async root => {
+      if (root.employeeId) {
+        return await Employees.findOne({_id: root.employeeId});
+      }
+    },
     companyStatus: async root => {
       if (root.customerId) {
         let company = await Customers.findOne({_id: root.customerId});
@@ -117,6 +122,7 @@ export const UserProfileSchema = gql`
     company: Customer
     email: String
     createdByEmail: String
+    employee: Employee
     createdAt: String
     # emails: [EmailRecord]
     companyStatus: String
