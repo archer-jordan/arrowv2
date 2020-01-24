@@ -203,7 +203,7 @@ class Plan extends React.PureComponent {
         </Query>
 
         <SectionTitle style={{marginTop: 48}}>
-          PLAN INFORMATION ( FOR EMPLOYEES )
+          BENEFITS GUIDE ( FOR EMPLOYEES )
         </SectionTitle>
         <Query
           query={getAttachment}

@@ -57,33 +57,6 @@ class Plan extends React.PureComponent {
               }}
             </Query>
           )}
-        {/* We show this one if current user is a company employee */}
-        {this.props.currentUser &&
-          this.props.currentUser.roles &&
-          this.props.currentUser.roles.includes('coEmployee') && (
-            <Query
-              query={getAttachment}
-              variables={{
-                customerId: this.props.currentUser.customerId,
-                type: 'EmployeePlan',
-              }}
-            >
-              {({data, loading, error}) => {
-                if (loading) return <Icon type="loading" />;
-                if (error) return 'error';
-                if (!data.getAttachment || !data.getAttachment.url) return null;
-                return (
-                  <DownloadText
-                    href={data.getAttachment.url}
-                    download={data.getAttachment.filename}
-                    style={{width: 160}}
-                  >
-                    Download plan pdf
-                  </DownloadText>
-                );
-              }}
-            </Query>
-          )}
       </div>
     );
   }
