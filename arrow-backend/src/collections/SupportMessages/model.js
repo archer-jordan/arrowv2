@@ -9,6 +9,14 @@ const schema = new Mongo.Schema({
   message: String,
   userId: String,
   customerId: String,
+  messageType: {
+    type: String,
+    enum: ['software', 'benefits', 'data', 'account'],
+  },
+  status: {
+    type: String,
+    enum: ['open', 'closed'],
+  },
 });
 
 const SupportMessages = Mongo.model('SupportMessages', schema);

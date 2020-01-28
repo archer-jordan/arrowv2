@@ -64,6 +64,13 @@ export const QuerySchema = gql`
     count: Int
   }
 
+  type SupportMessagesResponse {
+    "An array of SupportMessage objects"
+    supportMessages: [SupportMessage]
+    "The total number of results your query returned. Used for pagination."
+    count: Int
+  }
+
   type ExistsCheckResponse {
     exists: Boolean
     errors: [String]
@@ -163,6 +170,13 @@ export const QuerySchema = gql`
     ): EmployeeReport
 
     "Returns a list of support messages"
-    supportMessages: [SupportMessage]
+    supportMessages(
+      skip: Int
+      limit: Int
+      status: String
+      customerId: String
+      searchText: String
+      messageType: String
+    ): SupportMessagesResponse
   }
 `;

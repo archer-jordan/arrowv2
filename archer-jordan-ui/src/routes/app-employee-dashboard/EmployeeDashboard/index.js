@@ -10,6 +10,7 @@ import Financials from '../../app-employees-detail/Financials'; // re-used from 
 import Account from '../../app-employees-detail/Account'; // re-used from app-employees-detail
 // COMPONENTS
 import Row from 'components/common/Row';
+import Loading from 'components/common/Loading';
 import Col from 'components/common/Col';
 import MonthComponent from 'components/common/MonthComponent';
 import SideNav from 'components/common/SideNav';
@@ -98,7 +99,7 @@ class EmployeeDashboard extends React.PureComponent {
         fetchPolicy="cache-and-network"
       >
         {({data, loading, error}) => {
-          if (loading) return 'loading';
+          if (loading) return <Loading />;
           if (error) {
             console.log(error.message);
             return 'error';

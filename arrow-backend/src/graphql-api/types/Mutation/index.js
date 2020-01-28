@@ -81,5 +81,7 @@ export const MutationSchema = gql`
     sendSupportMessage(params: SupportMessageParams): MutationResponse
 
     createSuperAdminUser(params: UserParams): UserProfile
+
+    updateSupportStatus(id: String!, status: String!): SupportMessage
   }
 `;

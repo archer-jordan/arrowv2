@@ -4,6 +4,7 @@ import moment from 'moment';
 import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
+import Loading from 'components/common/Loading';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
 import {Doughnut} from 'react-chartjs-2';
@@ -79,7 +80,7 @@ class Financials extends React.PureComponent {
           >
             {({loading, data, error}) => {
               // if loading, show loading
-              if (loading) return 'loading';
+              if (loading) return <Loading />;
               // if an error, show error
               if (error) return 'error';
 

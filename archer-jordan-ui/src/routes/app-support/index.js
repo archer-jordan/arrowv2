@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
+import Input from 'components/inputs/Input';
 import Icon from 'components/common/Icon';
+import ErrorBlock from 'components/common/ErrorBlock';
+import SupportTypeInput from 'components/inputs/SupportTypeInput';
 import TextAreaInput from 'components/inputs/TextAreaInput';
 // APOLLO CLIENT
 import {graphql} from 'react-apollo';
@@ -42,18 +45,45 @@ const SuccessState = () => (
   </FormContainer>
 );
 
+const getName = currentUser => {
+  if (!currentUser) return null;
+  if (currentUser.firstName && currentUser.lastName) {
+    return `${currentUser.firstName} ${currentUser.lastName}`;
+  }
+  if (currentUser.firstName) {
+    return `${currentUser.firstName}`;
+  }
+  return null;
+};
+
 class AppSupport extends React.PureComponent {
   state = {
     loading: false,
     complete: false,
-    name: this.props.currentUser && this.props.currentUser.firstName,
+    name: getName(this.props.currentUser),
     email: this.props.currentUser && this.props.currentUser.email,
+    messageType: this.props.messageType,
+    errors: [],
+    // form errors
+    emailError: null,
+    messageError: null,
   };
   onSubmit = async () => {
     try {
       this.setState({loading: true});
       // validate
-      if (!this.state.email) return null;
+      if (!this.state.email) {
+        return this.setState({
+          emailError: 'Please provide an email',
+          loading: false,
+        });
+      }
+      if (!this.state.messageType) {
+        return this.setState({
+          messageTypeError: 'Please tell us how we can help',
+          loading: false,
+        });
+      }
 
       // submit info to mutation
       await this.props.sendSupportMessage({
@@ -63,12 +93,17 @@ class AppSupport extends React.PureComponent {
             email: this.state.email,
             subject: this.state.subject,
             message: this.state.message,
+            customerId: this.props.currentUser.customerId,
+            userId: this.props.currentUser.id,
+            status: 'open',
+            messageType: this.state.messageType,
           },
         },
       });
 
       this.setState({loading: false, complete: true});
     } catch (err) {
+      this.setState({loading: false, errors: [err.message]});
       console.log(err);
     }
   };
@@ -83,8 +118,8 @@ class AppSupport extends React.PureComponent {
       <div>
         <FormContainer>
           <div>
-            <FormItem>
-              <TextInput
+            <FormItem label="Name">
+              <Input
                 label="Name"
                 dark
                 value={this.state.name}
@@ -92,8 +127,8 @@ class AppSupport extends React.PureComponent {
                 onChange={e => this.setState({name: e.target.value})}
               />
             </FormItem>
-            <FormItem>
-              <TextInput
+            <FormItem label="Email" error={this.state.emailError}>
+              <Input
                 label="Email"
                 dark
                 width={'400px'}
@@ -101,8 +136,8 @@ class AppSupport extends React.PureComponent {
                 onChange={e => this.setState({email: e.target.value})}
               />
             </FormItem>
-            <FormItem>
-              <TextInput
+            <FormItem label="Subject">
+              <Input
                 label="Subject"
                 value={this.state.subject}
                 dark
@@ -110,7 +145,17 @@ class AppSupport extends React.PureComponent {
                 width={'400px'}
               />
             </FormItem>
-            <div style={{marginBottom: 16}}>
+            <FormItem
+              label="How can we help you?"
+              error={this.state.messageTypeError}
+            >
+              <SupportTypeInput
+                value={this.state.messageType}
+                showAllOption={false}
+                onChange={messageType => this.setState({messageType})}
+              />
+            </FormItem>
+            <div style={{marginBottom: 16, marginTop: 24}}>
               <TextAreaInput
                 placeholder="What can we help you with? "
                 rows="6"
@@ -127,6 +172,9 @@ class AppSupport extends React.PureComponent {
               {this.state.loading ? '...' : 'Submit'}
             </Button>
           </div>
+          {this.state.errors && this.state.errors.length > 0 && (
+            <ErrorBlock errors={this.state.errors} />
+          )}
         </FormContainer>
       </div>
     );
