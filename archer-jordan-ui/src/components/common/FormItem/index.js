@@ -16,9 +16,21 @@ const Required = styled.span`
   line-height: 10px;
 `;
 
+const ErrorText = styled(HintText)`
+  color: ${p => p.theme.colors.red5};
+`;
+
 class FormItem extends React.PureComponent {
   render() {
-    const {label, colon, hint, children, containerProps, required} = this.props;
+    const {
+      label,
+      colon,
+      hint,
+      error,
+      children,
+      containerProps,
+      required,
+    } = this.props;
     return (
       <Container {...containerProps}>
         {label && (
@@ -30,6 +42,7 @@ class FormItem extends React.PureComponent {
         )}
         {children}
         {hint && <HintText>{hint}</HintText>}
+        {error && <ErrorText>{error}</ErrorText>}
       </Container>
     );
   }

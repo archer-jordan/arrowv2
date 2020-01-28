@@ -17,6 +17,7 @@ import createSuperAdminUser from './createSuperAdminUser';
 import deleteCustomer from './deleteCustomer';
 import deleteUser from './deleteUser';
 import makeEmployeeAnAdmin from './makeEmployeeAnAdmin';
+import updateSupportStatus from './updateSupportStatus';
 
 export const MutationResolvers = {
   Mutation: {
@@ -43,5 +44,6 @@ export const MutationResolvers = {
     deleteAttachment,
     uploadEmployeeReports,
     makeEmployeeAnAdmin,
+    updateSupportStatus,
   },
 };

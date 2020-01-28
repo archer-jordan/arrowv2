@@ -7,13 +7,24 @@ const sendSupportMessage = async (root, args, context) => {
   if (!context.user) throw new Error('You must be signed in to do that');
   //
   try {
-    const {name, email, subject, message} = args.params;
+    const {
+      name,
+      email,
+      subject,
+      message,
+      status,
+      messageType,
+      customerId,
+    } = args.params;
     // insert the document
     let doc = new SupportMessages({
       name,
       email,
       subject,
       message,
+      status,
+      messageType,
+      customerId,
       userId: context.user.id,
       createdAt: moment().valueOf(),
     });
