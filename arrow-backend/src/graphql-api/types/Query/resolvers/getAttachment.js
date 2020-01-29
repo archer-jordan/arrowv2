@@ -4,14 +4,21 @@ import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 
 const getAttachment = async (root, args, context) => {
   try {
-    if (!context.user)
+    if (!context.user) {
       throw new Error('You must be logged in to query getAttachment');
-    if (!context.user.id)
+    }
+
+    if (!context.user.id) {
       throw new Error('You must be logged in to query getAttachment');
-    if (!context.user.roles)
+    }
+
+    if (!context.user.roles) {
       throw new Error('You must have a role to query getAttachment');
-    if (context.user.roles.length === 0)
+    }
+
+    if (context.user.roles.length === 0) {
       throw new Error('You must have a role to query getAttachment');
+    }
 
     let query = {
       type: args.type,
@@ -21,8 +28,8 @@ const getAttachment = async (root, args, context) => {
     // make sure if the user is trying to view an CustomerPlan, that they are a super admin or coadmin
     if (
       query.type === 'CustomerPlan' &&
-      (!context.user.roles.includes('superAdmin') ||
-        !context.user.roles.includess('coAdmin'))
+      !context.user.roles.includes('superAdmin') &&
+      !context.user.roles.includes('coAdmin')
     ) {
       throw new Error('You must be an admin to view CustomerPlan');
     }
@@ -44,6 +51,7 @@ const getAttachment = async (root, args, context) => {
     return attachments[0];
   } catch (err) {
     console.log(err);
+    return err;
   }
 };
 
