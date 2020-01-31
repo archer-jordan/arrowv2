@@ -16,7 +16,6 @@ import helpers from 'lib/helpers/GeneralHelpers';
 // APOLLO
 import employeeByIdQuery from 'ApolloClient/Queries/employeeById';
 import {Query} from 'react-apollo';
-import lib from 'babel-plugin-import';
 
 const {Option} = Select;
 

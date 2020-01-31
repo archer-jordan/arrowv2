@@ -19,6 +19,10 @@ const CaptionText = styled(Text)`
 
 const DeleteText = styled(Text)`
   color: ${p => p.theme.colors.neutral6};
+  cursor: pointer;
+  &:hover {
+    color: ${p => p.theme.colors.neutral5};
+  }
 `;
 
 class UsersTable extends React.PureComponent {
@@ -58,7 +62,7 @@ class UsersTable extends React.PureComponent {
         ),
       },
       {
-        title: 'Delete',
+        title: 'Actions',
         render: (text, record) => (
           <Popconfirm
             title="Are you sure you want to delete this user?"

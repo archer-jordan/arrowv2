@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 //COMPONENTS
-import TextInput from 'components/inputs/TextInput';
 import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 import Input from 'components/inputs/Input';

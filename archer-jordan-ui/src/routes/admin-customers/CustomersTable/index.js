@@ -23,6 +23,10 @@ const PinkText = styled(Text)`
 
 const DeleteText = styled(Text)`
   color: ${p => p.theme.colors.neutral6};
+  &:hover {
+    cursor: pointer;
+    color: ${p => p.theme.colors.neutral5};
+  }
 `;
 
 class CustomersTable extends React.PureComponent {
@@ -101,8 +105,7 @@ class CustomersTable extends React.PureComponent {
         },
       },
       {
-        title: '',
-        sorter: () => {},
+        title: 'ACTIONS',
         render: (text, record) => (
           <Popconfirm
             title="Are you sure you want to delete this customer?"

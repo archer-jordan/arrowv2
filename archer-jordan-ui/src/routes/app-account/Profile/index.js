@@ -6,12 +6,6 @@ import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import BigValue from 'components/text/BigValue';
 
-// APOLLO
-import {Query} from 'react-apollo';
-import customerById from 'ApolloClient/Queries/customerById';
-// LIB
-import helpers from 'lib/helpers/GeneralHelpers';
-
 const ColumnHeadline = styled(BigValue)`
   font-size: 24px;
   min-height: 24px;
@@ -78,7 +72,7 @@ const RowContainer = styled(Row)`
 class Profile extends React.PureComponent {
   render() {
     const {currentUser} = this.props;
-    console.log(currentUser);
+
     return (
       <div>
         <RowContainer>
