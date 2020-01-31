@@ -1,31 +1,13 @@
 import React from 'react';
 import Select from '../SelectInput';
-import styled from 'styled-components';
+import DropdownStyleWrapper from '../DropdownStyleWrapper';
 
 const {Option} = Select;
-
-const Wrapper = styled.div`
-  .ant-select-selection {
-    height: 50px;
-    background: #f5f7fa;
-    border: 1px solid #f5f7fa;
-  }
-  .ant-select-selection__rendered {
-    height: 46px;
-    align-items: center;
-    display: flex;
-    background: #f5f7fa;
-  }
-  .ant-select-selection:focus,
-  .ant-select-selection:active {
-    border-color: #f5f7fa !important;
-  }
-`;
 
 class EmployeeStatusType extends React.PureComponent {
   render() {
     return (
-      <Wrapper>
+      <DropdownStyleWrapper>
         <Select
           value={this.props.value}
           style={{width: '100%'}}
@@ -34,7 +16,7 @@ class EmployeeStatusType extends React.PureComponent {
           <Option value="Terminated">Terminated</Option>
           <Option value="Active">Active</Option>
         </Select>
-      </Wrapper>
+      </DropdownStyleWrapper>
     );
   }
 }

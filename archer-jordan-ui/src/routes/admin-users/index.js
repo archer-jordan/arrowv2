@@ -6,6 +6,7 @@ import UsersTable from './UsersTable';
 import UserForm from 'components/forms/UserForm';
 import message from 'components/common/message';
 import Alert from 'components/common/Alert';
+import ErrorBlock from 'components/common/ErrorBlock';
 // APOLLO CLIENT
 import compose from 'lodash/flowRight';
 import {Query, graphql} from 'react-apollo';
@@ -26,6 +27,7 @@ class AdminUsers extends React.PureComponent {
   state = {
     addNew: false,
     loading: false,
+    errors: [],
   };
   onCreateUser = async newValues => {
     this.setState({
@@ -56,7 +58,7 @@ class AdminUsers extends React.PureComponent {
     } catch (err) {
       ErrorHelpers.handleError(err);
       // reset the state
-      this.setState({addNew: false, loading: false});
+      this.setState({errors: [err.message], loading: false});
     }
   };
   onDeleteUser = async id => {
@@ -90,6 +92,9 @@ class AdminUsers extends React.PureComponent {
             showPermissions={false}
             onCancel={() => this.setState({addNew: false})}
           />
+          {this.state.errors && this.state.errors.length > 0 && (
+            <ErrorBlock errors={this.state.errors} />
+          )}
         </Container>
       );
     }

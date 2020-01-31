@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   .ant-calendar-picker-input {
     height: 50px;
-    background: ${p => p.theme.colors.neutral10} !important;
+    background: #ebf2f7 !important;
     border: 0px;
   }
 `;
