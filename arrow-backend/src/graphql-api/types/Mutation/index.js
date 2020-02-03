@@ -80,8 +80,10 @@ export const MutationSchema = gql`
     "Send a support message. Sends an email to support and logs a record in SupportMessages DB."
     sendSupportMessage(params: SupportMessageParams): MutationResponse
 
+    "Only a super admin can call this resolver."
     createSuperAdminUser(params: UserParams): UserProfile
 
+    "Update a support ticket/request"
     updateSupportStatus(id: String!, status: String!): SupportMessage
   }
 `;

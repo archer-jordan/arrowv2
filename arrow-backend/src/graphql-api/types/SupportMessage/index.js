@@ -18,6 +18,7 @@ export const SupportMessageSchema = gql`
     data
     "update my info"
     account
+    other
   }
 
   enum SupportStatusEnum {

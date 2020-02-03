@@ -58,13 +58,17 @@ class MessagesTable extends React.PureComponent {
         render: (text, record) => <Text>{record.email}</Text>,
       },
       {
-        title: 'Subject',
-        render: (text, record) => <Text>{record.subject}</Text>,
+        title: 'REQUEST ID',
+        render: (text, record) => <Text>{record.id}</Text>,
       },
-      {
-        title: 'Message',
-        render: (text, record) => <Text>{record.message}</Text>,
-      },
+      // {
+      //   title: 'Subject',
+      //   render: (text, record) => <Text>{record.subject}</Text>,
+      // },
+      // {
+      //   title: 'Message',
+      //   render: (text, record) => <Text>{record.message}</Text>,
+      // },
       {
         title: 'Type',
         render: (text, record) => <Text>{record.messageType}</Text>,

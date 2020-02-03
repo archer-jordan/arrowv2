@@ -27,6 +27,14 @@ const createUser = async (root, args, context) => {
 
 const createNewUser = async (root, args, context) => {
   try {
+    // you can not create a super admin with this resolver. Throw an error if they try.
+    if (
+      args.params &&
+      args.params.roles &&
+      args.params.roles.includes('superAdmin')
+    ) {
+      throw new Error('You can no create a super admin');
+    }
     // check if user has permission to create users
     if (!canManageUsers(context.user)) {
       throw new Error('You do not have permission to do that');

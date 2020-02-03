@@ -17,10 +17,11 @@ class SupportTypeInput extends React.PureComponent {
             <Option value={null}>All Support Types</Option>
           )}
 
-          <Option value="software">Software: How to use it</Option>
-          <Option value="benefits">Benefits: How to access them</Option>
-          <Option value="data">Data: My monthly reports</Option>
-          <Option value="account">Account: Update my info</Option>
+          <Option value="software">Using the software</Option>
+          <Option value="benefits">Accessing my benefits</Option>
+          <Option value="data">My monthly reports</Option>
+          <Option value="account">My account</Option>
+          <Option value="other">Other</Option>
         </Select>
       </DropdownStyleWrapper>
     );

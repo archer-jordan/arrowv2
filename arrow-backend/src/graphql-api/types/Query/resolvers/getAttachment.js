@@ -1,6 +1,4 @@
 import Attachments from 'collections/Attachments/model';
-// MODULES
-import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 
 const getAttachment = async (root, args, context) => {
   try {
