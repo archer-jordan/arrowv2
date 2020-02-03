@@ -11,7 +11,7 @@ const schema = new Mongo.Schema({
   customerId: String,
   messageType: {
     type: String,
-    enum: ['software', 'benefits', 'data', 'account'],
+    enum: ['software', 'benefits', 'data', 'account', 'other'],
   },
   status: {
     type: String,

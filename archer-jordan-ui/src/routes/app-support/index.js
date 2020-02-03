@@ -22,6 +22,13 @@ const CompleteText = styled.div`
   font-size: 18px;
   text-align: center;
   margin-top: 16px;
+  color: ${p => p.theme.colors.neutral4};
+`;
+
+const Title = styled(CompleteText)`
+  font-weight: 600;
+  font-size: 18px;
+  color: ${p => p.theme.colors.neutral1};
 `;
 
 // Shown after a successful submit
@@ -38,8 +45,8 @@ const SuccessState = () => (
       <Icon type="check-circle" style={{fontSize: 70, color: '#57AE5B'}} />
     </div>
     <CompleteText>
-      We've received your message. <br />
-      Somebody will be in touch within one business day.{' '}
+      <Title>We've received your message. </Title>
+      Our team will be in touch within one business day.{' '}
     </CompleteText>
   </FormContainer>
 );
@@ -145,7 +152,7 @@ class AppSupport extends React.PureComponent {
               />
             </FormItem>
             <FormItem
-              label="How can we help you?"
+              label="I need help with..."
               error={this.state.messageTypeError}
             >
               <SupportTypeInput

@@ -6,6 +6,16 @@ const createSuperAdminUser = async (root, args, context) => {
   try {
     // check if user is a super admin
     userIsSuperAdmin(context.user);
+
+    // throw an error if user is trying to make a super admin with an email other than archerjordan.com
+    if (
+      args &&
+      args.params &&
+      !args.params.email.includes('archerjordan.com')
+    ) {
+      throw new Error('Super admins must have an archerjordan.com email');
+    }
+
     // create user object
     let user = {
       ...args.params,
