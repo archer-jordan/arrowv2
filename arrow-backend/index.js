@@ -5,9 +5,11 @@ import {AccountsModule} from '@accounts/graphql-api';
 import {ApolloServer} from 'apollo-server';
 import {merge} from 'lodash';
 import {typeDefs, CustomResolvers} from './src/graphql-api/index';
+import UserProfileHelpers from 'collections/Users/helpers';
+// modules
 import {db} from './src/modules/mongodb.js';
 import emailTransporter from './src/modules/email.js';
-import UserProfileHelpers from 'collections/Users/helpers';
+import './src/modules/cron';
 
 // Setup password
 const password = new AccountsPassword({
