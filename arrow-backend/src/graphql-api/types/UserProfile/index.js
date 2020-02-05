@@ -101,7 +101,8 @@ export const UserProfileSchema = gql`
     customerId: ID
     "If the user is an employee, this field will hold the database ID pointing to their employee record"
     employeeId: ID
-    roles: [RoleTypeEnum]
+    # decided to remove the ability to pass roles to the backend... that logic can only be determined on the backend
+    #roles: [RoleTypeEnum]
     permissions: [UserPermissionEnum]
   }
 

@@ -6,6 +6,7 @@ const createUser = async (root, args, context) => {
   //
   let user = {
     ...args.params,
+    roles: ['coAdmin'],
     emails: [{address: args.params.email}],
   };
 

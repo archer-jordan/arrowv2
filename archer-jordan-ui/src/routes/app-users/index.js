@@ -84,7 +84,6 @@ class AppUsers extends React.PureComponent {
     try {
       let params = {
         ...newValues,
-        roles: ['coAdmin'],
         customerId: this.props.currentUser.company.id,
       };
       await this.props.createNewUser({

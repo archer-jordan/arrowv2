@@ -27,7 +27,6 @@ class Users extends React.PureComponent {
     try {
       let params = {
         ...newValues,
-        roles: ['coAdmin'],
         customerId: this.props.customer.id,
       };
       await this.props.createNewUser({
@@ -86,9 +85,9 @@ class Users extends React.PureComponent {
           id: this.state.selected.id,
           params: {
             ...newValues,
-            roles: this.state.selected
-              ? this.state.selected.roles
-              : ['coAdmin'],
+            //roles: this.state.selected
+            //  ? this.state.selected.roles
+            //  : ['coAdmin'],
             customerId: this.props.customer.id,
           },
         },
@@ -151,19 +150,7 @@ class Users extends React.PureComponent {
      * By default we'll show the users table
      */
     return (
-      <div style={{width: 900, maxWidth: '100%'}}>
-        {' '}
-        <Button
-          style={{
-            width: 120,
-            marginBottom: 16,
-            marginTop: 32,
-            marginLeft: '85%',
-          }}
-          onClick={() => this.setState({addNew: true})}
-        >
-          Create User
-        </Button>
+      <div style={{width: 900, maxWidth: '100%', position: 'relative'}}>
         <Query
           query={customerAdminsQuery}
           fetchPolicy="cache-and-network"
@@ -179,7 +166,18 @@ class Users extends React.PureComponent {
               />
             );
           }}
-        </Query>
+        </Query>{' '}
+        <Button
+          style={{
+            width: 120,
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+          }}
+          onClick={() => this.setState({addNew: true})}
+        >
+          Create User
+        </Button>
       </div>
     );
   }
