@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@accounts/apollo-link": "^0.21.1",
+    "@accounts/client": "^0.21.1",
     "antd": "^3.26.6",
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
@@ -16,6 +18,7 @@
     "email-validator": "^2.0.4",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "numeral": "^2.0.6",
     "papaparse": "^5.1.0",

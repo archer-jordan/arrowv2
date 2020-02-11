@@ -23,6 +23,15 @@ const accountsServer = new AccountsServer(
     db: new MongoDBInterface(db),
     // We'll use secret for authentication
     tokenSecret: 'SECRET',
+    ambiguousErrorMessages: true,
+    tokenConfigs: {
+      accessToken: {
+        expiresIn: '60m',
+      },
+      refreshToken: {
+        expiresIn: '7d',
+      },
+    },
     // sets up how our account system will send emails
     sendMail: async ({
       from = `ARROW <${process.env.CONSTANTS_SEND_EMAIL}>`,
@@ -82,7 +91,7 @@ const server = new ApolloServer({
     let userProfile = await UserProfileHelpers.getById(result.user.id);
     /*
       return an object with 
-        (a) the result from accounts-js, 
+        (a) the result from accounts-js accountsGraphQL.context, 
         (b) a roles field, and 
         (c) the user object we got back
     */
