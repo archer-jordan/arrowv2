@@ -7,6 +7,8 @@ import apolloLogger from 'apollo-link-logger';
 import authLink from './links/authLink';
 import errorLink from './links/errorLink';
 import {createUploadLink} from 'apollo-upload-client';
+// import {accountsLink} from '@accounts/apollo-link';
+// import {AccountsClient} from '@accounts/client';
 
 // create apollo cache and setup normalization features with dataIdFromObject
 const cache = new InMemoryCache({});
@@ -25,6 +27,16 @@ console.log(
     ? 'http://localhost:3000/graphql'
     : process.env.REACT_APP_API_HOST
 );
+
+// const accounts = new AccountsClient(
+//   {
+//     // options
+//   },
+//   {
+//     service: 'graphql',
+//   }
+// );
+// const authLink = accountsLink(() => accounts);
 
 // normally we need apollo-http-link, but apollo-upload-client will handle that for us in addition to uploads
 let links = [authLink, errorLink, uploadLink];

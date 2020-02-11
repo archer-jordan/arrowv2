@@ -10,6 +10,7 @@ import ErrorBlock from 'components/common/ErrorBlock';
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 import GeneralHelpers from 'lib/helpers/GeneralHelpers';
+import constants from 'lib/constants';
 // APOLLO
 import resetPassword from 'ApolloClient/Mutations/resetPassword';
 import {graphql} from 'react-apollo';
@@ -89,8 +90,8 @@ class AuthResetPassword extends React.PureComponent {
       let {accessToken, refreshToken} = res.data.resetPassword.tokens;
 
       // set items in local storage
-      window.localStorage.setItem('arrow_access_token', accessToken);
-      window.localStorage.setItem('arrow_refresh_token', refreshToken);
+      window.localStorage.setItem(constants.authTokenName, accessToken);
+      window.localStorage.setItem(constants.refreshTokenName, refreshToken);
 
       // reload the page
       window.location.reload();

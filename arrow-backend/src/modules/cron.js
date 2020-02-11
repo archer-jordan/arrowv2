@@ -5,8 +5,8 @@ const WHITE_LIST_EMAILS = ['arcomito+admin@gmail.com'];
 
 const ADMIN_DOMAIN = '@archerjordan.com';
 
-// will run this chron job every 3 hours
-cron.schedule('0 0 */3 * * *', async () => {
+// will run this chron job every 2 hours
+cron.schedule('0 0 */2 * * *', async () => {
   console.log('running a task every minute');
 
   // find all super admin users
