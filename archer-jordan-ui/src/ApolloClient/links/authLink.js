@@ -111,13 +111,6 @@ const authLink = new ApolloLink((operation, forward) => {
             res.data.refreshTokens.tokens.refreshToken
           );
 
-          console.log({
-            oldRefresh: moment(jwtDecode(refreshToken).exp).format('hh:mm a'),
-            newRefresh: moment(
-              parseInt(res.data.refreshTokens.tokens.refreshToken)
-            ).format('hh:mm a'),
-          });
-
           operation.setContext(({headers = {}}) => ({
             headers: {
               ...headers,
