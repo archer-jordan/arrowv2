@@ -54,12 +54,20 @@ const authLink = new ApolloLink((operation, forward) => {
     const isAccessTokenExpired = token && isTokenExpired(token);
     const refreshToken = window.localStorage[constants.refreshTokenName];
     const isRefreshTokenExpired = refreshToken && isTokenExpired(refreshToken);
-
     /*
       IF THE TOKEN IS NOT EXPIRED, WE SIMPLY ADD THE TOKEN TO HEADERS AND FORWARD TO THE NEXT LINK
     */
+
+    if (!token && !refreshToken) {
+      operation.setContext(() => ({
+        headers: {
+          Authorization: null,
+        },
+      }));
+      return forward(operation);
+    }
+
     if (!isAccessTokenExpired) {
-      console.log('=======> token is okay');
       operation.setContext(() => ({
         headers: {
           Authorization: token,
