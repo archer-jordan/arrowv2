@@ -4,6 +4,7 @@ import constants from 'lib/constants';
 import client from '../index';
 import gql from 'graphql-tag';
 import {Observable} from 'apollo-link';
+import moment from 'moment';
 
 const isTokenExpired = token => {
   const currentTime = Date.now() / 1000;
@@ -59,6 +60,7 @@ const authLink = new ApolloLink((operation, forward) => {
     */
 
     if (!token && !refreshToken) {
+      console.log('neither token exists');
       operation.setContext(() => ({
         headers: {
           Authorization: null,
@@ -68,6 +70,7 @@ const authLink = new ApolloLink((operation, forward) => {
     }
 
     if (!isAccessTokenExpired) {
+      console.log('access token is good');
       operation.setContext(() => ({
         headers: {
           Authorization: token,
@@ -85,7 +88,9 @@ const authLink = new ApolloLink((operation, forward) => {
       refreshToken &&
       !isRefreshTokenExpired
     ) {
-      console.log('=======> token is expired but refresh token is still good');
+      console.log(
+        '=======> access token is expired but refresh token is still good'
+      );
       return new Observable(async observer => {
         // Call mutation to refresh token
         let res = await client.mutate({
@@ -106,6 +111,13 @@ const authLink = new ApolloLink((operation, forward) => {
             res.data.refreshTokens.tokens.refreshToken
           );
 
+          console.log({
+            oldRefresh: moment(jwtDecode(refreshToken).exp).format('hh:mm a'),
+            newRefresh: moment(
+              parseInt(res.data.refreshTokens.tokens.refreshToken)
+            ).format('hh:mm a'),
+          });
+
           operation.setContext(({headers = {}}) => ({
             headers: {
               ...headers,
@@ -122,8 +134,9 @@ const authLink = new ApolloLink((operation, forward) => {
           return forward(operation).subscribe(subscriber);
         }
 
-        // if tokens are not in the response, 'ets just remove the auth header and forward to the next link
+        // if tokens are not in the response, lets just remove the auth header and forward to the next link
         if (!tokensAreInResponse(res)) {
+          console.log('tokens are not in response');
           operation.setContext(({headers = {}}) => ({
             headers: {
               ...headers,
@@ -136,6 +149,13 @@ const authLink = new ApolloLink((operation, forward) => {
     }
   } catch (err) {
     console.log(err);
+    operation.setContext(({headers = {}}) => ({
+      headers: {
+        ...headers,
+        Authorization: null,
+      },
+    }));
+    return forward(operation);
   }
 });
 
