@@ -24,20 +24,12 @@ const accountsServer = new AccountsServer(
     // We'll use secret for authentication
     tokenSecret: 'SECRET',
     ambiguousErrorMessages: true,
-    // tokenConfigs: {
-    //   accessToken: {
-    //     expiresIn: '60m',
-    //   },
-    //   refreshToken: {
-    //     expiresIn: '7d',
-    //   },
-    // },
     tokenConfigs: {
       accessToken: {
-        expiresIn: '2m',
+        expiresIn: '60m',
       },
       refreshToken: {
-        expiresIn: '5m',
+        expiresIn: '7d',
       },
     },
     // sets up how our account system will send emails
