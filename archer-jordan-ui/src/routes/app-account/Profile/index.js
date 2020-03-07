@@ -95,7 +95,7 @@ class Profile extends React.PureComponent {
                 currentUser.employee.gender && (
                   <DataItem
                     label="Gender"
-                    value={currentUser.employee.gender}
+                    value={currentUser.employee.gender.toUpperCase()}
                   />
                 )}
               {currentUser &&
