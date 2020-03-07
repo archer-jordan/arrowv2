@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Papa from 'papaparse';
+import {debounce} from 'lodash';
 // COMPONENTS
 import EmployeeForm from 'components/forms/EmployeeForm';
 import EmployeesTable from 'components/common/EmployeesTable';
@@ -25,6 +26,7 @@ import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
 import helpers from 'lib/helpers/GeneralHelpers';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 import employeeHelpers from './employeeHelpers';
+import theme from 'lib/theme';
 
 const PinkText = styled.div`
   margin-top: 24px;
@@ -44,6 +46,39 @@ const SectionTitle = styled.div`
   background: ${p => p.theme.colors.primary1};
 `;
 
+const SearchInput = styled.input`
+  background: ${p => p.theme.colors.neutral10};
+  border-radius: 25px;
+  margin-bottom: 16px;
+  width: 380px;
+  height: 40px;
+  border: 0;
+  padding-left: 32px;
+  &:focus {
+    outline: 0;
+  }
+`;
+
+const Search = ({value, onChange}) => (
+  <div style={{position: 'relative', display: 'inline-block'}}>
+    <Icon
+      type="search"
+      style={{
+        color: theme.colors.neutral7,
+        position: 'absolute',
+        left: 8,
+        top: 14,
+        fontSize: 14,
+      }}
+    />
+    <SearchInput
+      value={value}
+      onChange={onChange}
+      placeholder="Search by name, email or employee ID"
+    />
+  </div>
+);
+
 /**
  * 1. Check if we have correct number of columns
  * 2. Check if all emails are valid
@@ -60,6 +95,7 @@ class Employees extends React.PureComponent {
     current: 1,
     sortBy: 'lastNameAscend',
     updateErrors: [],
+    searchText: undefined,
   };
 
   getFormatted = results => {
@@ -254,6 +290,9 @@ class Employees extends React.PureComponent {
       complete,
     });
   };
+  handleSearch = debounce(finalSearchText => {
+    this.setState({finalSearchText});
+  }, 250);
   onSave = async values => {
     this.setState({
       loading: true,
@@ -307,7 +346,19 @@ class Employees extends React.PureComponent {
 
     if (this.state.selectedEmployee) {
       return (
-        <React.Fragment>
+        <>
+          <div
+            style={{
+              cursor: 'pointer',
+              marginBottom: 16,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            onClick={() => this.setState({selectedEmployee: null})}
+          >
+            <Icon type="left" style={{fontSize: 13, marginRight: 4}} />
+            Back
+          </div>
           <EmployeeForm
             {...this.state.selectedEmployee}
             onSubmit={this.onSave}
@@ -320,7 +371,7 @@ class Employees extends React.PureComponent {
               <ErrorBlock errors={this.state.errors} />
             </div>
           )}
-        </React.Fragment>
+        </>
       );
     }
 
@@ -351,30 +402,43 @@ class Employees extends React.PureComponent {
               customerId: this.props.customer.id,
               skip: this.state.skip,
               sortBy: this.state.sortBy,
+              searchText: this.state.finalSearchText,
             }}
           >
             {({data, loading, error}) => {
               if (error) return 'error';
               return (
-                <EmployeesTable
-                  history={this.props.history}
-                  dataSource={!loading ? data.employees.employees : []}
-                  total={!loading ? data.employees.count : null}
-                  loading={loading}
-                  onRow={(record, rowIndex) => {
-                    return {
-                      onClick: () => this.setState({selectedEmployee: record}),
-                    };
-                  }}
-                  handleTableChange={this.handleTableChange}
-                  onPageChange={page =>
-                    this.setState({
-                      skip: page === 1 ? 0 : (page - 1) * 5,
-                      current: page,
-                    })
-                  }
-                  current={this.state.current}
-                />
+                <>
+                  <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Search
+                      onChange={e => {
+                        this.setState({searchText: e.target.value});
+                        this.handleSearch(e.target.value);
+                      }}
+                      value={this.state.searchText}
+                    />
+                  </div>
+                  <EmployeesTable
+                    history={this.props.history}
+                    dataSource={!loading ? data.employees.employees : []}
+                    total={!loading ? data.employees.count : null}
+                    loading={loading}
+                    onRow={(record, rowIndex) => {
+                      return {
+                        onClick: () =>
+                          this.setState({selectedEmployee: record}),
+                      };
+                    }}
+                    handleTableChange={this.handleTableChange}
+                    onPageChange={page =>
+                      this.setState({
+                        skip: page === 1 ? 0 : (page - 1) * 5,
+                        current: page,
+                      })
+                    }
+                    current={this.state.current}
+                  />
+                </>
               );
             }}
           </Query>

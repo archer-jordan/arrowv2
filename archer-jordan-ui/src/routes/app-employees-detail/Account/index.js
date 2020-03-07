@@ -34,6 +34,10 @@ const DataItem = ({label = 'First Name', value = 'John'}) => (
 
 class Account extends React.PureComponent {
   render() {
+    const {employee} = this.props;
+    // check if employee exists
+    if (!employee) return 'No data';
+    // return JSX
     return (
       <div>
         <TopContainer style={{justifyContent: 'flex-end'}}>
@@ -41,30 +45,29 @@ class Account extends React.PureComponent {
             {' '}
             <BigValue style={{textAlign: 'right'}}>
               {' '}
-              {this.props.employee.firstName} {this.props.employee.lastName}
+              {employee.firstName} {employee.lastName}
             </BigValue>
-            <BigLabel style={{textAlign: 'right'}}>
-              {this.props.employee.email}
-            </BigLabel>
+            <BigLabel style={{textAlign: 'right'}}>{employee.email}</BigLabel>
           </div>
         </TopContainer>
         <div style={{width: 350, maxWidth: '100%', marginTop: 24}}>
-          <DataItem label="Last Name" value={this.props.employee.lastName} />
-          <DataItem label="First Name" value={this.props.employee.firstName} />
-          <DataItem label="Gender" value={this.props.employee.gender} />
+          <DataItem label="Last Name" value={employee.lastName} />
+          <DataItem label="First Name" value={employee.firstName} />
+          <DataItem
+            label="Gender"
+            value={employee && employee.gender && employee.gender.toUpperCase()}
+          />
           <DataItem
             label="DOB"
-            value={moment(parseInt(this.props.employee.dob)).format('M/D/YYYY')}
+            value={moment(parseInt(employee.dob)).format('M/D/YYYY')}
           />
-          <DataItem label="Street" value={this.props.employee.street} />
-          <DataItem label="City" value={this.props.employee.city} />
-          <DataItem label="State" value={this.props.employee.state} />
-          <DataItem label="Zip" value={this.props.employee.zip} />
+          <DataItem label="Street" value={employee.street} />
+          <DataItem label="City" value={employee.city} />
+          <DataItem label="State" value={employee.state} />
+          <DataItem label="Zip" value={employee.zip} />
           <DataItem
             label="Hire Date"
-            value={moment(parseInt(this.props.employee.hireDate)).format(
-              'M/D/YYYY'
-            )}
+            value={moment(parseInt(employee.hireDate)).format('M/D/YYYY')}
           />
         </div>
       </div>

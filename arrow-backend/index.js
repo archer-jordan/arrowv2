@@ -22,7 +22,7 @@ const accountsServer = new AccountsServer(
     // sets up our mongoDB to work with our accounts system
     db: new MongoDBInterface(db),
     // We'll use secret for authentication
-    tokenSecret: 'SECRET',
+    tokenSecret: 'JrQJXK0A46X4rlXV1PAjobPypYPrPYCD',
     ambiguousErrorMessages: true,
     tokenConfigs: {
       accessToken: {
