@@ -58,6 +58,10 @@ const IconContainer = styled.div`
   justify-content: center;
 `;
 
+const HoursText = styled(BigValue)`
+  font-size: 36px;
+`;
+
 const BenefitRow = ({label, hours, eligibility}) => (
   <Row
     gutter={16}
@@ -180,7 +184,7 @@ class Benefits extends React.PureComponent {
                 </Col>
                 <Col xs={24} xl={4}>
                   <HoursContainer>
-                    <BigValue
+                    <HoursText
                       style={{
                         textAlign: 'center',
                         display: 'flex',
@@ -191,7 +195,7 @@ class Benefits extends React.PureComponent {
                       <MobileLabel>
                         {this.props.month.toUpperCase()} HOURS
                       </MobileLabel>
-                    </BigValue>
+                    </HoursText>
                   </HoursContainer>
                 </Col>
                 <Col xs={24} xl={0}>
