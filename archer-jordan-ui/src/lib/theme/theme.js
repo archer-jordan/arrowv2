@@ -2,22 +2,17 @@ export default {
   fontFamily: `'Lato', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   // COLORS
   colors: {
-    // primary
-    primary1: '#145d92',
-    primary2: '#01337D',
-    primary3: '#03449E',
-    primary4: '#0552B5',
-    primary5: '#0967D2',
-    primary6: '#2186EB',
-    primary7: '#47A3F3',
-    primary8: '#7CC4FA',
-    primary9: '#BAE3FF',
-    primary10: '#E6F6FF',
+    primary1: '#005364', // darker
+    primary2: '#04323f', // darkest
+    primary3: '#05B4BE', // light
+    primary4: '#00a0af', // lightest
+    primary5: '#018793', // medium
     // SUPPORT
-    support1: '#EB304A',
-    support2: '#F2495C',
-    support3: '#ea8d9a',
-    support4: '#dfb1b7',
+    support1: '#00C7D3',
+    support2: '#05B4BE',
+    // support3: '#ea8d9a',
+    // support4: '#dfb1b7',
+
     // Neutrals
     neutral1: '#1F2933',
     neutral2: '#323F4B',

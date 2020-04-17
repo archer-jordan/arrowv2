@@ -6,6 +6,7 @@ import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
 import FormItem from 'components/common/FormItem';
 import message from 'components/common/message';
+import Background from 'components/common/GradientBackground';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 // LIB
@@ -17,11 +18,6 @@ const FormContainer = styled.div`
   margin: auto;
   max-width: 100%;
   padding-top: 96px;
-`;
-
-const Background = styled.div`
-  background-image: linear-gradient(to top, #145d91, #0e3456);
-  height: 100%;
 `;
 
 const Logo = styled.img`
@@ -95,7 +91,7 @@ class AuthForgotPassword extends React.PureComponent {
                 <TextInput
                   label="Email"
                   value={this.state.email}
-                  onChange={e => this.setState({email: e.target.value})}
+                  onChange={(e) => this.setState({email: e.target.value})}
                 />
               </FormItem>
               <Button

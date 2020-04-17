@@ -1,12 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import Background from 'components/common/GradientBackground';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
-
-const Background = styled.div`
-  background-image: linear-gradient(to top, #145d91, #0e3456);
-  height: 100%;
-`;
 
 const FormContainer = styled.div`
   width: 350px;

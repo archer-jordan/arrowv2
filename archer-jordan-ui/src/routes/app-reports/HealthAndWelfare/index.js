@@ -7,6 +7,7 @@ import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
 import TopContainer from 'components/common/TopContainer';
 import {Doughnut} from 'react-chartjs-2';
+import theme from 'lib/theme';
 
 const PieChartPlaceholder = styled.div`
   width: 500px;
@@ -54,7 +55,12 @@ const ValueItem = ({label, value, color}) => (
   </ValueItemContainer>
 );
 
-const CHART_COLORS = ['#8CB3CD', '#0F3557', '#145D92', '#5A89AB'];
+const CHART_COLORS = [
+  theme.colors.primary5,
+  theme.colors.primary4,
+  theme.colors.primary3,
+  theme.colors.primary1,
+];
 
 const MobileWrapper = styled.div`
   @media only screen and (max-width: 414px) {
@@ -141,15 +147,15 @@ class HealthAndWelfare extends React.PureComponent {
                   tooltips: {
                     mode: 'label',
                     callbacks: {
-                      title: function(tooltipItem, data) {
+                      title: function (tooltipItem, data) {
                         return data.labels[tooltipItem[0].index];
                       },
 
-                      beforeLabel: function(tooltipItem, data) {
+                      beforeLabel: function (tooltipItem, data) {
                         return null;
                       },
 
-                      label: function(tooltipItem, data) {
+                      label: function (tooltipItem, data) {
                         let value = data.datasets[0].data[tooltipItem.index];
                         return ` $${numeral(value).format('0,0.00')}`;
                       },

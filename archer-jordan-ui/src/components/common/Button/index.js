@@ -16,7 +16,7 @@ const getBackgroundColor = ({grey, disabled, secondary, theme, danger}) => {
     return 'transparent';
   }
 
-  return '#ed3245';
+  return '#00C7D3';
 };
 
 const getTextColor = ({grey, danger, disabled, secondary, theme}) => {
@@ -30,7 +30,7 @@ const getTextColor = ({grey, danger, disabled, secondary, theme}) => {
     return theme.colors.neutral4;
   }
   if (secondary) {
-    return '#bc2837';
+    return theme.colors.primary3;
   }
   return '#fff';
 };
@@ -54,29 +54,30 @@ const getHoverBackgroundColor = ({
   if (secondary) {
     return 'transparent';
   }
-  return '#bc2837';
+  return '#05B4BE';
 };
 
 const ButtonContainer = styled.button`
-  width: ${p => {
+  width: ${(p) => {
     if (p.fullWidth) return '100%';
     if (p.style.width) return p.style.width;
     return '100%';
   }};
   height: 40px;
   border-radius: 35px;
-  background-color: ${props => getBackgroundColor(props)};
+  background-color: ${(props) => getBackgroundColor(props)};
   border: 0px;
   line-height: 40px;
   /* text-transform: uppercase; */
   letter-spacing: 0.025em;
-  border: ${p => (p.secondary && !p.disabled ? '2px solid #bc2837' : null)};
+  border: ${(p) =>
+    p.secondary && !p.disabled ? `2px solid ${p.theme.colors.primary3}` : null};
   align-items: center;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
   :hover {
     cursor: pointer;
-    background-color: ${props => getHoverBackgroundColor(props)};
+    background-color: ${(props) => getHoverBackgroundColor(props)};
   }
   :focus {
     outline: 0;
@@ -84,19 +85,19 @@ const ButtonContainer = styled.button`
 `;
 
 const ButtonText = styled.div`
-  height: 17px;
-  font-family: ${p => p.theme.fontFamily};
-  font-size: 14px;
-  font-weight: 500;
+  height: 19px;
+  font-family: ${(p) => p.theme.fontFamily};
+  font-size: 16px;
+  font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
   letter-spacing: 0.8px;
   text-align: center;
-  color: ${props => getTextColor(props)};
+  color: ${(props) => getTextColor(props)};
 `;
 
-const Button = props => (
+const Button = (props) => (
   <ButtonContainer
     {...props}
     disabled={props.disabled}

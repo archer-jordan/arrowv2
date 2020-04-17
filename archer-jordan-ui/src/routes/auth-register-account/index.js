@@ -6,6 +6,7 @@ import Button from 'components/common/Button';
 import FormItem from 'components/common/FormItem';
 import ErrorBlock from 'components/common/ErrorBlock';
 import message from 'components/common/message';
+import Background from 'components/common/GradientBackground';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 import constants from 'lib/constants';
@@ -20,11 +21,6 @@ const FormContainer = styled.div`
   margin: auto;
   max-width: 100%;
   padding-top: 96px;
-`;
-
-const Background = styled.div`
-  background-image: linear-gradient(to top, #145d91, #0e3456);
-  height: 100%;
 `;
 
 const Logo = styled.img`
@@ -53,7 +49,7 @@ class AuthResetPassword extends React.PureComponent {
     confirmPassword: null,
     errors: [],
   };
-  checkPassword = password => {
+  checkPassword = (password) => {
     return false;
   };
   onSubmit = async () => {
@@ -112,7 +108,7 @@ class AuthResetPassword extends React.PureComponent {
                 label="New Password"
                 type="password"
                 value={this.state.password}
-                onChange={e => this.setState({password: e.target.value})}
+                onChange={(e) => this.setState({password: e.target.value})}
               />
             </FormItem>
             <FormItem>
@@ -120,7 +116,9 @@ class AuthResetPassword extends React.PureComponent {
                 label="Confirm New Password"
                 type="password"
                 value={this.state.confirmPassword}
-                onChange={e => this.setState({confirmPassword: e.target.value})}
+                onChange={(e) =>
+                  this.setState({confirmPassword: e.target.value})
+                }
               />
             </FormItem>
             {this.state.errors && this.state.errors.length > 0 && (

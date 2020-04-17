@@ -10,6 +10,7 @@ import BigLabel from 'components/text/BigLabel';
 import {Doughnut} from 'react-chartjs-2';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
+import theme from 'lib/theme';
 // APOLLO
 import employeeReportByEmployeeId from 'ApolloClient/Queries/employeeReportByEmployeeId';
 import {Query} from 'react-apollo';
@@ -24,7 +25,7 @@ const ColorCircle = styled.div`
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  background: ${p => (p.color ? p.color : 'red')};
+  background: ${(p) => (p.color ? p.color : 'red')};
 `;
 
 const FinancialRowContainer = styled.div`
@@ -100,7 +101,7 @@ class Financials extends React.PureComponent {
                   id: '2',
                   label: report.healthAndWelfareLabel || 'Health & Welfare',
                   value: report.healthAndWelfare,
-                  color: '#145D92',
+                  color: theme.colors.primary1,
                 },
                 {
                   id: '3',
@@ -119,7 +120,7 @@ class Financials extends React.PureComponent {
                       value={report.fringeDollars}
                       color={null}
                     />
-                    {dataArray.map(item => {
+                    {dataArray.map((item) => {
                       return (
                         <FinancialRow
                           key={item.id}
@@ -141,12 +142,12 @@ class Financials extends React.PureComponent {
                           },
                         }}
                         data={{
-                          labels: dataArray.map(item => item.label), //['Eligible', 'Ineligble'],
+                          labels: dataArray.map((item) => item.label), //['Eligible', 'Ineligble'],
                           datasets: [
                             {
-                              data: dataArray.map(item => item.value),
+                              data: dataArray.map((item) => item.value),
                               backgroundColor: dataArray.map(
-                                item => item.color
+                                (item) => item.color
                               ),
                             },
                           ],

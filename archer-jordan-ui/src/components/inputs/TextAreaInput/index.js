@@ -7,11 +7,11 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   textarea {
-    background: #ebf2f7 !important;
+    background: #eae8e3 !important;
     border: 0px !important;
   }
   textarea::placeholder {
-    color: #a6c9dc !important;
+    color: ${(p) => p.theme.colors.neutral7} !important;
   }
 `;
 
@@ -25,7 +25,7 @@ export class TextAreaInput extends React.Component {
       <Wrapper>
         <TextArea
           {...this.props}
-          onChange={e => this.props.onChange(e.target.value)}
+          onChange={(e) => this.props.onChange(e.target.value)}
         />
       </Wrapper>
     );

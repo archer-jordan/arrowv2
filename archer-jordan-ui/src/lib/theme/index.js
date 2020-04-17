@@ -21,7 +21,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: #f2495c !important;
+    color: #C13142 !important;
   }
 
   #root {
@@ -70,7 +70,7 @@ export const GlobalStyle = createGlobalStyle`
   ==================================================== */
 
   th {
-    background: #145d92 !important;
+    background: ${theme.colors.primary1} !important;
 
   }
 

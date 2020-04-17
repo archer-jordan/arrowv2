@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 const SideNavItemContainer = styled.div`
   margin-bottom: 8px;
-  background: ${p => (p.active ? '#145d92' : 'inherit')};
-  color: ${p => (p.active ? '#fff' : '#1371A3')};
+  background: ${(p) => (p.active ? p.theme.colors.primary1 : 'inherit')};
+  color: ${(p) => (p.active ? '#fff' : p.theme.colors.primary2)};
   border-radius: 25px;
   min-width: 10px;
   height: 38px;
@@ -41,7 +41,7 @@ const Container = styled.div`
 const SideNav = ({items, tab}) => {
   return (
     <Container>
-      {items.map(item => (
+      {items.map((item) => (
         <SideNavItem
           key={item.label}
           label={item.label}
