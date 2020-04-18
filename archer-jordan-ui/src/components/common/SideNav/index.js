@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const SideNavItemContainer = styled.div`
   margin-bottom: 8px;
-  background: ${(p) => (p.active ? p.theme.colors.primary1 : 'inherit')};
+  background: ${(p) => (p.active ? p.theme.colors.primary4 : 'inherit')};
   color: ${(p) => (p.active ? '#fff' : p.theme.colors.primary2)};
   border-radius: 25px;
   min-width: 10px;
@@ -13,6 +13,11 @@ const SideNavItemContainer = styled.div`
   padding: 16px;
   padding-left: 16px;
   padding-right: 16px;
+  &:hover {
+    background: ${(p) =>
+      p.active ? p.theme.colors.primary4 : p.theme.colors.primary1};
+    color: #fff;
+  }
   justify-content: flex-start;
   cursor: pointer;
   transition: color 0.3s ease, background-color 0.3s ease,

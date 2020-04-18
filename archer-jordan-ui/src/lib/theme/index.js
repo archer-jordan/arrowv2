@@ -29,6 +29,10 @@ export const GlobalStyle = createGlobalStyle`
     width: 100vw;
   }
 
+  .ant-pagination-item-active {
+      border-color: ${theme.colors.primary1} !important;
+  }
+
   .ant-calendar-column-header-inner {
     color: #fff !important;
   }

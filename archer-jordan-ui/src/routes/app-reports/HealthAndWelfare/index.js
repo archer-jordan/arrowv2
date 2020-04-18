@@ -98,11 +98,11 @@ class HealthAndWelfare extends React.PureComponent {
         <TopContainer>
           <Row style={{width: '100%'}}>
             {' '}
-            <Col xs={24} md={9} lg={7}>
+            <Col xs={24} md={10} lg={8}>
               <BigValue>{numeral(report.totalHours).format('0,0.00')}</BigValue>
               <BigLabel>{report.labelForTotalHours || 'Total Hours'}</BigLabel>
             </Col>
-            <Col xs={24} md={8} lg={8}>
+            <Col xs={24} md={7} lg={7}>
               <MobileWrapper>
                 <BigValue>
                   ${numeral(report.totalFringe).format('0,0.00')}
@@ -112,7 +112,7 @@ class HealthAndWelfare extends React.PureComponent {
                 </BigLabel>
               </MobileWrapper>
             </Col>
-            <Col xs={24} md={7} lg={9} />
+            <Col xs={24} md={6} lg={9} />
           </Row>
         </TopContainer>{' '}
         <Caption style={{textAlign: 'right'}}>

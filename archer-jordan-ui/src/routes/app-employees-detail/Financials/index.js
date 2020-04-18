@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import numeral from 'numeral';
 import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
@@ -42,7 +43,9 @@ const FinancialRow = ({label, value, color}) => {
     <FinancialRowContainer>
       <div style={{display: 'inline-block', minWidth: 150}}>
         <BigLabel>{label}</BigLabel>
-        <BigValue style={{fontSize: 40}}>${value}</BigValue>
+        <BigValue style={{fontSize: 40}}>
+          ${numeral(value).format('0,0.00')}
+        </BigValue>
       </div>
       <div style={{display: 'inline-block', marginLeft: 16}}>
         {color && <ColorCircle color={color} />}
