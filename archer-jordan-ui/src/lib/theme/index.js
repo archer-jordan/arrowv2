@@ -21,12 +21,16 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: #f2495c !important;
+    color: #C13142 !important;
   }
 
   #root {
     height: 100%;
     width: 100vw;
+  }
+
+  .ant-pagination-item-active {
+      border-color: ${theme.colors.primary1} !important;
   }
 
   .ant-calendar-column-header-inner {
@@ -70,7 +74,7 @@ export const GlobalStyle = createGlobalStyle`
   ==================================================== */
 
   th {
-    background: #145d92 !important;
+    background: ${theme.colors.primary1} !important;
 
   }
 

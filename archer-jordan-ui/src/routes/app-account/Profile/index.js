@@ -18,7 +18,7 @@ const ColumnHeadline = styled(BigValue)`
 `;
 
 const Outline = styled.div`
-  background: #e5eff5;
+  background: #eae8e3;
   border-radius: 25px;
   height: 40px;
   padding: 8px 16px;
@@ -143,52 +143,6 @@ class Profile extends React.PureComponent {
                 )}
             </div>
           </Col>{' '}
-          {/* <Col xs={24}>
-            <Outline style={{marginTop: 32}}>
-              <ColumnHeadline>Company information</ColumnHeadline>
-            </Outline>
-            <Query
-              query={customerById}
-              variables={{id: this.props.currentUser.customerId}}
-            >
-              {({data, error, loading}) => {
-                if (loading) return <Loading />;
-                if (error) return 'Error';
-                let customer = data.customerById;
-                return (
-                  <div style={{paddingLeft: 16}}>
-                    {' '}
-                    {customer.title && (
-                      <DataItem label="Name" value={customer.title} />
-                    )}
-                    {customer.street && (
-                      <DataItem label="Address" value={customer.street} />
-                    )}
-                    {customer.city && (
-                      <DataItem label="City" value={customer.city} />
-                    )}
-                    {customer.state && (
-                      <DataItem label="State" value={customer.state} />
-                    )}
-                    {customer.zip && (
-                      <DataItem label="Zip" value={customer.zip} />
-                    )}
-                    {customer.companyType && (
-                      <DataItem
-                        label="Type"
-                        value={helpers.mapCompanyTypeToLabel(
-                          customer.companyType
-                        )}
-                      />
-                    )}
-                    {customer.ein && (
-                      <DataItem label="EIN #" value={customer.ein} />
-                    )}{' '}
-                  </div>
-                );
-              }}
-            </Query> 
-          </Col>*/}
         </RowContainer>
       </div>
     );

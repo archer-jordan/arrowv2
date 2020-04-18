@@ -7,6 +7,7 @@ import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
 import ErrorBlock from 'components/common/ErrorBlock';
 import FormItem from 'components/common/FormItem';
+import Background from 'components/common/GradientBackground';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
 // LIB
@@ -20,11 +21,6 @@ const FormContainer = styled.div`
   margin: auto;
   max-width: 100%;
   padding-top: 96px;
-`;
-
-const Background = styled.div`
-  background-image: linear-gradient(to top, #145d91, #0e3456);
-  height: 100%;
 `;
 
 const Logo = styled.img`
@@ -113,7 +109,7 @@ class AuthRegister extends React.PureComponent {
                 <TextInput
                   label="Email"
                   value={this.state.email}
-                  onChange={e => this.setState({email: e.target.value})}
+                  onChange={(e) => this.setState({email: e.target.value})}
                 />
               </FormItem>
               {this.state.errors && this.state.errors.length > 0 && (

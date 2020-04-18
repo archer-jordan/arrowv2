@@ -29,7 +29,7 @@ class AdminUsers extends React.PureComponent {
     loading: false,
     errors: [],
   };
-  onCreateUser = async newValues => {
+  onCreateUser = async (newValues) => {
     this.setState({
       loading: true,
     });
@@ -61,7 +61,7 @@ class AdminUsers extends React.PureComponent {
       this.setState({errors: [err.message], loading: false});
     }
   };
-  onDeleteUser = async id => {
+  onDeleteUser = async (id) => {
     try {
       // call our mutation
       await this.props.deleteUser({
@@ -103,7 +103,7 @@ class AdminUsers extends React.PureComponent {
         {/* ADD BUTTON */}
         <Button
           onClick={() => this.setState({addNew: true})}
-          style={{width: 140, marginBottom: 16}}
+          style={{width: 150, marginBottom: 16}}
         >
           + Add New User
         </Button>

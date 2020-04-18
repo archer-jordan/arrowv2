@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import MonthPicker from 'components/inputs/MonthPicker';
 
 const DateText = styled.div`
-  color: #1371a3;
+  color: ${(p) => p.theme.colors.primary2};
   text-align: right;
   font-size: 40px;
 `;
 
 const ChangeDate = styled.button`
-  color: ${p => p.theme.colors.support1};
+  color: ${(p) => p.theme.colors.support1};
   text-align: right;
   font-size: 16px;
   cursor: pointer;
@@ -58,7 +58,7 @@ class MonthComponent extends React.PureComponent {
               <MonthPicker
                 open={this.state.editDate}
                 value={month && moment(`${month} ${year}`, 'MMMM YYYY')}
-                onChange={value =>
+                onChange={(value) =>
                   this.props.onChange({
                     month: value.format('MMMM'),
                     year: value.format('YYYY'),

@@ -3,13 +3,13 @@ import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 
 const AppNavContainer = styled.div`
-  background: #0f3557;
-  font-family: ${p => p.theme.fontFamily};
+  background: ${(p) => p.theme.colors.primary2};
+  font-family: ${(p) => p.theme.fontFamily};
   border-bottom: 1px solid #efefef;
 `;
 
 const NavItemContainer = styled(Link)`
-  color: ${p => (p.active ? p.theme.colors.support1 : '#fff')} !important;
+  color: ${(p) => (p.active ? p.theme.colors.support1 : '#fff')} !important;
   text-align: center;
   cursor: pointer;
   letter-spacing: 1px;
@@ -18,7 +18,7 @@ const NavItemContainer = styled(Link)`
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
   &:hover {
-    color: ${p => p.theme.colors.support4} !important;
+    color: ${(p) => p.theme.colors.support4} !important;
   }
 `;
 
@@ -34,7 +34,7 @@ const ActiveBar = styled.div`
   width: 100%;
   position: relative;
   bottom: -16px;
-  background: ${p => (p.active ? p.theme.colors.support1 : 'transparent')};
+  background: ${(p) => (p.active ? p.theme.colors.support1 : 'transparent')};
 `;
 
 const NavItem = ({children, active, to}) => (

@@ -14,13 +14,13 @@ import AuthHelpers from 'lib/helpers/AuthHelpers';
 import ApolloClient from 'ApolloClient/index.js';
 
 const HeaderContainer = styled.div`
-  background: #145d92;
-  font-family: ${p => p.theme.fontFamily};
+  background: ${(p) => p.theme.colors.primary1};
+  font-family: ${(p) => p.theme.fontFamily};
 `;
 
 const Username = styled.div`
   color: #fff;
-  font-family: ${p => p.theme.fontFamily};
+  font-family: ${(p) => p.theme.fontFamily};
   font-weight: 400;
   margin-left: auto;
 `;
@@ -28,12 +28,12 @@ const Username = styled.div`
 const SignoutBtn = styled.button`
   border: 0px;
   background: transparent;
-  color: ${p => p.theme.colors.support1};
+  color: ${(p) => p.theme.colors.support1};
   margin: 0px;
   padding: 0px;
   font-size: 16px;
   margin-left: 8px;
-  font-family: ${p => p.theme.fontFamily};
+  font-family: ${(p) => p.theme.fontFamily};
   text-decoration: underline;
   cursor: pointer;
   font-weight: 400;

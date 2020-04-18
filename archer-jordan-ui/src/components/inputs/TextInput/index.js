@@ -4,19 +4,19 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   .group {
     position: relative;
-    margin-bottom: ${p => (p.marginBottom ? p.marginBottom : '32px')};
+    margin-bottom: ${(p) => (p.marginBottom ? p.marginBottom : '32px')};
   }
 
   input {
     font-size: 18px;
     padding: 10px 10px 10px 5px;
     display: block;
-    width: ${p => (p.width ? p.width : '246px')};
+    width: ${(p) => (p.width ? p.width : '246px')};
     border: none;
     border-radius: 0px;
-    color: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
+    color: ${(p) => (p.dark ? p.theme.colors.primary3 : '#fff')};
     max-width: 100%;
-    border-bottom: 2px solid #8cb3cd;
+    border-bottom: 2px solid #00c7d3;
   }
 
   input:focus {
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
 
   /* LABEL ======================================= */
   label {
-    color: #8cb3cd;
+    color: #00c7d3;
     font-size: 16px;
     font-weight: normal;
     position: absolute;
@@ -42,14 +42,14 @@ const Wrapper = styled.div`
   input:valid ~ label {
     top: -20px;
     font-size: 14px;
-    color: ${p => (p.dark ? p.theme.colors.primary2 : '#fff')};
+    color: ${(p) => (p.dark ? p.theme.colors.primary2 : '#fff')};
   }
 
   /* BOTTOM BARS ================================= */
   .bar {
     position: relative;
     display: block;
-    width: ${p => (p.width ? p.width : '246px')};
+    width: ${(p) => (p.width ? p.width : '246px')};
   }
   .bar:before,
   .bar:after {
@@ -59,7 +59,7 @@ const Wrapper = styled.div`
     bottom: 0px;
     max-width: 100%;
     position: absolute;
-    background: ${p => (p.dark ? p.theme.colors.primary3 : '#fff')};
+    background: ${(p) => (p.dark ? p.theme.colors.primary3 : '#fff')};
     transition: 0.2s ease all;
     -moz-transition: 0.2s ease all;
     -webkit-transition: 0.2s ease all;

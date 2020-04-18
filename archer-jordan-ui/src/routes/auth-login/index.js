@@ -1,16 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import { validate } from "email-validator";
+import React from 'react';
+import styled from 'styled-components';
+import {validate} from 'email-validator';
 //COMPONENTS
-import TextInput from "components/inputs/TextInput";
-import Button from "components/common/Button";
-import FormItem from "components/common/FormItem";
-import ErrorBlock from "components/common/ErrorBlock";
+import TextInput from 'components/inputs/TextInput';
+import Button from 'components/common/Button';
+import FormItem from 'components/common/FormItem';
+import ErrorBlock from 'components/common/ErrorBlock';
+import Background from 'components/common/GradientBackground';
 // LIB
-import logoWhiteSVG from "lib/media/arrow-logo-white.png";
-import AuthHelpers from "lib/helpers/AuthHelpers";
+import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import AuthHelpers from 'lib/helpers/AuthHelpers';
 // APOLLO
-import ApolloClient from "ApolloClient/index.js";
+import ApolloClient from 'ApolloClient/index.js';
 
 const FormContainer = styled.div`
   width: 250px;
@@ -19,10 +20,10 @@ const FormContainer = styled.div`
   padding-top: 96px;
 `;
 
-const Background = styled.div`
-  background-image: linear-gradient(to top, #145d91, #0e3456);
-  height: 100%;
-`;
+// const Background = styled.div`
+//   background-image: linear-gradient(336deg, #004759, #0095a3);
+//   height: 100%;
+// `;
 
 const Logo = styled.img`
   display: block;
@@ -32,7 +33,7 @@ const Logo = styled.img`
 `;
 
 const TextButton = styled.button`
-  color: #8cb3cd;
+  color: #fff;
   font-size: 16px;
   padding: 0px;
   background: transparent;
@@ -46,46 +47,46 @@ const TextButton = styled.button`
 class AuthLogin extends React.PureComponent {
   state = {
     loading: false,
-    errors: []
+    errors: [],
   };
   onSubmit = async () => {
     // reset errors
-    this.setState({ errors: [] });
+    this.setState({errors: []});
 
     // check that user added an email
     if (!this.state.email) {
-      return this.setState({ errors: ["Please provide an email"] });
+      return this.setState({errors: ['Please provide an email']});
     }
     // check if its a valid email
     if (!validate(this.state.email)) {
-      return this.setState({ errors: ["That is not a valid email"] });
+      return this.setState({errors: ['That is not a valid email']});
     }
     // check that they give a password
     if (!this.state.password) {
-      return this.setState({ errors: ["Please provide a password"] });
+      return this.setState({errors: ['Please provide a password']});
     }
 
-    this.setState({ loading: true });
+    this.setState({loading: true});
     try {
       await AuthHelpers.handleLogin({
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       });
     } catch (err) {
-      let errMessage = err.message.replace("GraphQL", "");
-      if (err && err.message.includes("Incorrect password [403]")) {
-        errMessage = "You have entered an invalid username or password";
+      let errMessage = err.message.replace('GraphQL', '');
+      if (err && err.message.includes('Incorrect password [403]')) {
+        errMessage = 'You have entered an invalid username or password';
       }
       return this.setState({
         loading: false,
-        errors: [errMessage]
+        errors: [errMessage],
       });
     }
     await ApolloClient.resetStore();
   };
 
-  onSuccessfulLogin = ({ access_token, refresh_token }) => {
-    this.setState({ loading: false });
+  onSuccessfulLogin = ({access_token, refresh_token}) => {
+    this.setState({loading: false});
     setTimeout(() => window.location.reload(), 800);
   };
 
@@ -94,14 +95,14 @@ class AuthLogin extends React.PureComponent {
       <Background>
         <div>
           <FormContainer>
-            {" "}
+            {' '}
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
               <FormItem>
                 <TextInput
                   label="email address"
                   value={this.state.email}
-                  onChange={e => this.setState({ email: e.target.value })}
+                  onChange={(e) => this.setState({email: e.target.value})}
                 />
               </FormItem>
               <FormItem>
@@ -109,7 +110,7 @@ class AuthLogin extends React.PureComponent {
                   label="password"
                   type="password"
                   value={this.state.password}
-                  onChange={e => this.setState({ password: e.target.value })}
+                  onChange={(e) => this.setState({password: e.target.value})}
                 />
               </FormItem>
               {this.state.errors && this.state.errors.length > 0 && (
@@ -119,23 +120,25 @@ class AuthLogin extends React.PureComponent {
               )}
               <Button
                 onClick={this.onSubmit}
-                style={{ width: 100 }}
+                style={{width: 100}}
                 disabled={this.state.loading}
               >
-                {this.state.loading ? "..." : "login"}
+                {this.state.loading ? '...' : 'login'}
               </Button>
               <FormItem>
                 <TextButton
                   onClick={() => this.props.history.push(`/forgot-password`)}
                 >
-                  Forgot your password?
+                  <span style={{color: '#00BFCB'}}>I forgot my</span>{' '}
+                  <span style={{textDecoration: 'underline'}}>password</span>
                 </TextButton>
               </FormItem>
               <FormItem>
                 <TextButton
                   onClick={() => this.props.history.push(`/register`)}
                 >
-                  First time logging-in?
+                  <span style={{color: '#00BFCB'}}>First time user?</span>
+                  <span style={{textDecoration: 'underline'}}> click here</span>
                 </TextButton>
               </FormItem>
             </div>
