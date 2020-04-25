@@ -2,6 +2,8 @@ export default {
   fontFamily: `'Lato', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   // COLORS
   colors: {
+    tan: '#eae8e3',
+    //
     primary1: '#005364', // darker
     primary2: '#04323f', // darkest
     primary3: '#05B4BE', // light

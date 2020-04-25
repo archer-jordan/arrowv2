@@ -21,7 +21,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: #C13142 !important;
+    color: #00a0af !important;
   }
 
   #root {
@@ -43,11 +43,11 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${theme.fontFamily} !important;
   }
   .ant-calendar-month-panel-selected-cell .ant-calendar-month-panel-month {
-    background: #e5eff5 !important;
+    background: ${theme.colors.tan} !important;
     /* ${theme.colors.primary2} !important; */
   }
   .ant-calendar-month-panel-month:hover {
-    background: #e5eff5 !important;
+    background: ${theme.colors.tan}  !important;
   }
   .ant-calendar-header a:hover {
     color: ${theme.colors.primary1} !important;

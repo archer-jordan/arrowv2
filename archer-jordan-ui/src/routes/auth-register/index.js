@@ -31,7 +31,7 @@ const Logo = styled.img`
 `;
 
 const Text = styled.div`
-  color: #8cb3cd;
+  color: #fff;
   font-size: 16px;
   padding: 0px;
   background: transparent;

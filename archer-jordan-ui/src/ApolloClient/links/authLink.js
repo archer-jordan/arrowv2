@@ -106,13 +106,18 @@ const authLink = new ApolloLink((operation, forward) => {
       );
       return new Observable(async (observer) => {
         // Call mutation to refresh token
-        let res = await client.mutate({
-          mutation: refreshTokensMutation,
-          variables: {
-            accessToken: token,
-            refreshToken,
-          },
-        });
+        let res;
+        try {
+          res = await client.mutate({
+            mutation: refreshTokensMutation,
+            variables: {
+              accessToken: token,
+              refreshToken,
+            },
+          });
+        } catch (err) {
+          console.log('=====> error trying to refresh');
+        }
 
         if (tokensAreInResponse(res)) {
           window.localStorage.setItem(
@@ -154,7 +159,8 @@ const authLink = new ApolloLink((operation, forward) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    console.log('====> caught an error');
+    console.log(err && err.message);
     operation.setContext(({headers = {}}) => ({
       headers: {
         ...headers,

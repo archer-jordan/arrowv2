@@ -25,7 +25,7 @@ const BenefitType = styled(BigLabel)`
 
 const HoursContainer = styled.div`
   width: 100%;
-  background: #e5eff5;
+  background: ${(p) => p.theme.colors.tan};
   max-width: 100%;
   border-radius: 15px;
   padding: 24px;
@@ -202,7 +202,7 @@ class Benefits extends React.PureComponent {
                   <Header month={this.props.month} />
                 </Col>
                 <Col xs={24} xl={20}>
-                  {report.benefits.map(item => (
+                  {report.benefits.map((item) => (
                     <BenefitRow key={item.label} {...item} />
                   ))}
                 </Col>
