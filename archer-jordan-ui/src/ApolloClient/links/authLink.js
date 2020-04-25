@@ -116,6 +116,7 @@ const authLink = new ApolloLink((operation, forward) => {
             },
           });
 
+          // if we get the token back, we'll set the new tokens and retry whatever response failed
           if (tokensAreInResponse(res)) {
             window.localStorage.setItem(
               constants.authTokenName,
@@ -157,18 +158,12 @@ const authLink = new ApolloLink((operation, forward) => {
           console.log('=====> error trying to refresh');
           window.localStorage.removeItem(constants.authTokenName);
           window.localStorage.removeItem(constants.refreshTokenName);
-          operation.setContext(({headers = {}}) => ({
-            headers: {
-              ...headers,
-              Authorization: null,
-            },
-          }));
-          return forward(operation);
+          window.location.reload();
         }
       });
     }
   } catch (err) {
-    console.log('====> caught an error');
+    console.log('====> caught an error in final catch');
     console.log(err && err.message);
     operation.setContext(({headers = {}}) => ({
       headers: {
