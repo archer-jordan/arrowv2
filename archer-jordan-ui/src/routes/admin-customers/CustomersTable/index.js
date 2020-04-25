@@ -13,19 +13,19 @@ import {graphql} from 'react-apollo';
 const Text = styled.span`
   font-weight: 600;
   color: #0f466a;
-  font-family: ${p => p.theme.fontFamily};
+  font-family: ${(p) => p.theme.fontFamily};
 `;
 
 const PinkText = styled(Text)`
-  color: ${p => p.theme.colors.support1};
+  color: ${(p) => p.theme.colors.support1};
   cursor: pointer;
 `;
 
 const DeleteText = styled(Text)`
-  color: ${p => p.theme.colors.neutral6};
+  color: ${(p) => p.theme.colors.neutral6};
   &:hover {
     cursor: pointer;
-    color: ${p => p.theme.colors.neutral5};
+    color: ${(p) => p.theme.colors.neutral5};
   }
 `;
 
@@ -33,7 +33,7 @@ class CustomersTable extends React.PureComponent {
   state = {
     impersonating: false,
   };
-  onImpersonateCustomer = async customerId => {
+  onImpersonateCustomer = async (customerId) => {
     try {
       this.setState({
         impersonating: customerId,
@@ -68,7 +68,7 @@ class CustomersTable extends React.PureComponent {
     const columns = [
       {
         title: 'Company Name',
-        key: 'title',
+        key: 'id',
         sorter: () => {},
         render: (text, record) => (
           <PinkText
@@ -80,19 +80,17 @@ class CustomersTable extends React.PureComponent {
       },
       {
         title: 'ID',
-        key: 'assignedId',
         sorter: () => {},
         render: (text, record) => <Text>{record.assignedId || 'N/A'}</Text>,
       },
       {
         title: 'Status',
-        key: 'status',
         sorter: () => {},
         render: (text, record) => <Text>{record.status}</Text>,
       },
       {
         title: '',
-        render: record => {
+        render: (record) => {
           return (
             <PinkText onClick={() => this.onImpersonateCustomer(record.id)}>
               {this.state.impersonating === record.id ? (
@@ -147,10 +145,10 @@ class CustomersTable extends React.PureComponent {
         onRow={(record, rowIndex) => {
           return {
             //onClick: event => {}, // click row
-            onDoubleClick: event => {}, // double click row
-            onContextMenu: event => {}, // right button click row
-            onMouseEnter: event => {}, // mouse enter row
-            onMouseLeave: event => {}, // mouse leave row
+            onDoubleClick: (event) => {}, // double click row
+            onContextMenu: (event) => {}, // right button click row
+            onMouseEnter: (event) => {}, // mouse enter row
+            onMouseLeave: (event) => {}, // mouse leave row
           };
         }}
       />

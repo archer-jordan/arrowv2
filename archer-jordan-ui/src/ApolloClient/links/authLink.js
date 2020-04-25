@@ -4,9 +4,8 @@ import constants from 'lib/constants';
 import client from '../index';
 import gql from 'graphql-tag';
 import {Observable} from 'apollo-link';
-import moment from 'moment';
 
-const isTokenExpired = token => {
+const isTokenExpired = (token) => {
   const currentTime = Date.now() / 1000;
   const decodedToken = jwtDecode(token);
   return decodedToken.exp < currentTime;
@@ -26,7 +25,7 @@ const refreshTokensMutation = gql`
 
 const WHITE_LIST_OPERATIONS = ['refreshTokens'];
 
-const tokensAreInResponse = res => {
+const tokensAreInResponse = (res) => {
   return (
     res.data.refreshTokens.tokens.accessToken &&
     res.data.refreshTokens.tokens.refreshToken
@@ -105,7 +104,7 @@ const authLink = new ApolloLink((operation, forward) => {
       console.log(
         '=======> access token is expired but refresh token is still good'
       );
-      return new Observable(async observer => {
+      return new Observable(async (observer) => {
         // Call mutation to refresh token
         let res = await client.mutate({
           mutation: refreshTokensMutation,

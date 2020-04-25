@@ -76,7 +76,7 @@ const server = new ApolloServer({
   introspection: process.env.NODE_ENV === 'local',
   playground: process.env.NODE_ENV === 'local',
   debug: process.env.NODE_ENV === 'local',
-  context: async req => {
+  context: async (req) => {
     // use accounts-js to find the user via the incoming req
     let result = await accountsGraphQL.context(req);
 

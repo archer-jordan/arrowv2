@@ -13,7 +13,7 @@ import AuthHelpers from 'lib/helpers/AuthHelpers';
 // APOLLO
 import ApolloClient from 'ApolloClient/index.js';
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   width: 250px;
   margin: auto;
   max-width: 100%;
@@ -49,7 +49,11 @@ class AuthLogin extends React.PureComponent {
     loading: false,
     errors: [],
   };
-  onSubmit = async () => {
+  onSubmit = async (e) => {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
     // reset errors
     this.setState({errors: []});
 
@@ -94,7 +98,7 @@ class AuthLogin extends React.PureComponent {
     return (
       <Background>
         <div>
-          <FormContainer>
+          <FormContainer onSubmit={this.onSubmit}>
             {' '}
             <Logo src={logoWhiteSVG} alt="logo" />
             <div>
@@ -121,6 +125,7 @@ class AuthLogin extends React.PureComponent {
               <Button
                 onClick={this.onSubmit}
                 style={{width: 100}}
+                type="submit"
                 disabled={this.state.loading}
               >
                 {this.state.loading ? '...' : 'login'}
