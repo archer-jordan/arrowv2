@@ -76,7 +76,11 @@ class AppRoutes extends React.Component {
 
     // all other errors (that are not in our white listed errors list) just print to screen for now, unless it's a white listed error
     if (errorExists) {
-      return <div>Error</div>;
+      return (
+        <div>
+          Something went wrong... If this continues please contact support.
+        </div>
+      );
     }
 
     // if user is not a super admin and their company status is not active, show a message
