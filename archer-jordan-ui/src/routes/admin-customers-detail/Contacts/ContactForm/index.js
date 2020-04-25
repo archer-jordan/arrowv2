@@ -70,7 +70,7 @@ class ContactForm extends React.PureComponent {
           <FormItem label="First Name">
             <Input
               value={this.state.firstName}
-              onChange={e => this.setState({firstName: e.target.value})}
+              onChange={(e) => this.setState({firstName: e.target.value})}
             />
           </FormItem>
         </Col>{' '}
@@ -78,7 +78,7 @@ class ContactForm extends React.PureComponent {
           <FormItem label="Last Name">
             <Input
               value={this.state.lastName}
-              onChange={e => this.setState({lastName: e.target.value})}
+              onChange={(e) => this.setState({lastName: e.target.value})}
             />
           </FormItem>{' '}
         </Col>{' '}
@@ -86,7 +86,7 @@ class ContactForm extends React.PureComponent {
           <FormItem label="Role or Title">
             <Input
               value={this.state.title}
-              onChange={e => this.setState({title: e.target.value})}
+              onChange={(e) => this.setState({title: e.target.value})}
             />
           </FormItem>{' '}
         </Col>{' '}
@@ -94,7 +94,7 @@ class ContactForm extends React.PureComponent {
           <FormItem label="Email Address">
             <Input
               value={this.state.email}
-              onChange={e => this.setState({email: e.target.value})}
+              onChange={(e) => this.setState({email: e.target.value})}
             />
           </FormItem>{' '}
         </Col>{' '}
@@ -102,7 +102,7 @@ class ContactForm extends React.PureComponent {
           <FormItem label="Phone">
             <Input
               value={this.state.phone}
-              onChange={e => this.setState({phone: e.target.value})}
+              onChange={(e) => this.setState({phone: e.target.value})}
             />
           </FormItem>
         </Col>
@@ -116,7 +116,11 @@ class ContactForm extends React.PureComponent {
         <Col xs={12} />
         <Col xs={24}>
           <FormItem>
-            <Button grey style={{width: 140}} onClick={this.props.onCancel}>
+            <Button
+              grey
+              style={{width: 100, marginRight: 16}}
+              onClick={this.props.onCancel}
+            >
               Cancel
             </Button>
             <Button style={{width: 140}} onClick={this.onSave}>

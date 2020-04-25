@@ -154,7 +154,8 @@ const authLink = new ApolloLink((operation, forward) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    console.log('====> caught an error');
+    console.log(err && err.message);
     operation.setContext(({headers = {}}) => ({
       headers: {
         ...headers,

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const TopContainer = styled.div`
   width: 100%;
-  background: #eae8e3;
+  background: ${(p) => p.theme.colors.tan};
   max-width: 100%;
   border-radius: 15px;
   padding: 24px;

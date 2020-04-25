@@ -78,7 +78,7 @@ const Header = ({history, location, currentUser}) => {
           <img
             src={logoWhiteSVG}
             alt="logo-white"
-            height="40"
+            height="64"
             onClick={() => history.push('/admin/customers')}
             style={{cursor: 'pointer'}}
           />

@@ -104,13 +104,13 @@ class Financials extends React.PureComponent {
                   id: '2',
                   label: report.healthAndWelfareLabel || 'Health & Welfare',
                   value: report.healthAndWelfare,
-                  color: theme.colors.primary1,
+                  color: theme.colors.primary5,
                 },
                 {
                   id: '3',
                   label: report.retirementLabel || 'Retirement',
                   value: report.retirement,
-                  color: '#5A89AB',
+                  color: theme.colors.primary4,
                 },
               ];
 
