@@ -115,51 +115,55 @@ const authLink = new ApolloLink((operation, forward) => {
               refreshToken,
             },
           });
+
+          // if we get the token back, we'll set the new tokens and retry whatever response failed
+          if (tokensAreInResponse(res)) {
+            window.localStorage.setItem(
+              constants.authTokenName,
+              res.data.refreshTokens.tokens.accessToken
+            );
+            window.localStorage.setItem(
+              constants.refreshTokenName,
+              res.data.refreshTokens.tokens.refreshToken
+            );
+
+            operation.setContext(({headers = {}}) => ({
+              headers: {
+                ...headers,
+                Authorization: res.data.refreshTokens.tokens.accessToken,
+              },
+            }));
+
+            const subscriber = {
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer),
+            };
+            // Retry last failed request
+            return forward(operation).subscribe(subscriber);
+          }
+
+          // if tokens are not in the response, lets just remove the auth header and forward to the next link
+          if (!tokensAreInResponse(res)) {
+            console.log('tokens are not in response');
+            operation.setContext(({headers = {}}) => ({
+              headers: {
+                ...headers,
+                Authorization: null,
+              },
+            }));
+            return forward(operation);
+          }
         } catch (err) {
           console.log('=====> error trying to refresh');
-        }
-
-        if (tokensAreInResponse(res)) {
-          window.localStorage.setItem(
-            constants.authTokenName,
-            res.data.refreshTokens.tokens.accessToken
-          );
-          window.localStorage.setItem(
-            constants.refreshTokenName,
-            res.data.refreshTokens.tokens.refreshToken
-          );
-
-          operation.setContext(({headers = {}}) => ({
-            headers: {
-              ...headers,
-              Authorization: res.data.refreshTokens.tokens.accessToken,
-            },
-          }));
-
-          const subscriber = {
-            next: observer.next.bind(observer),
-            error: observer.error.bind(observer),
-            complete: observer.complete.bind(observer),
-          };
-          // Retry last failed request
-          return forward(operation).subscribe(subscriber);
-        }
-
-        // if tokens are not in the response, lets just remove the auth header and forward to the next link
-        if (!tokensAreInResponse(res)) {
-          console.log('tokens are not in response');
-          operation.setContext(({headers = {}}) => ({
-            headers: {
-              ...headers,
-              Authorization: null,
-            },
-          }));
-          return forward(operation);
+          window.localStorage.removeItem(constants.authTokenName);
+          window.localStorage.removeItem(constants.refreshTokenName);
+          window.location.reload();
         }
       });
     }
   } catch (err) {
-    console.log('====> caught an error');
+    console.log('====> caught an error in final catch');
     console.log(err && err.message);
     operation.setContext(({headers = {}}) => ({
       headers: {
