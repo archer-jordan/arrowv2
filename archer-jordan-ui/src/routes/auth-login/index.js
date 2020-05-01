@@ -133,12 +133,11 @@ class AuthLogin extends React.PureComponent {
               <FormItem>
                 <TextButton
                   onClick={() => this.props.history.push(`/forgot-password`)}
+                  style={{marginBottom: 8}}
                 >
                   <span style={{color: '#00BFCB'}}>I forgot my</span>{' '}
                   <span style={{textDecoration: 'underline'}}>password</span>
                 </TextButton>
-              </FormItem>
-              <FormItem>
                 <TextButton
                   onClick={() => this.props.history.push(`/register`)}
                 >
