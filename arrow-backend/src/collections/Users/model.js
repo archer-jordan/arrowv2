@@ -6,6 +6,8 @@ const schema = new Mongo.Schema({
   firstName: String,
   lastName: String,
   phone: String,
+  numLoginAttempts: Number, // numer of login attempts, used to limit too many attempts
+  lastLoginAttempt: Number, // timestamp
   services: {
     password: {
       reset: [
