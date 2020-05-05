@@ -1,6 +1,6 @@
 import AccountsPassword from '@accounts/password';
 import MongoDBInterface from '@accounts/mongo';
-import AccountsServer from '@accounts/server';
+import AccountsServer, {ServerHooks} from '@accounts/server';
 import {AccountsModule} from '@accounts/graphql-api';
 import {ApolloServer} from 'apollo-server';
 import {merge} from 'lodash';
@@ -10,6 +10,8 @@ import UserProfileHelpers from 'collections/Users/helpers';
 import {db} from './src/modules/mongodb.js';
 import emailTransporter from './src/modules/email.js';
 import './src/modules/cron';
+// modules
+import accountsHelpers from './src/modules/accounts';
 
 // Setup password
 const password = new AccountsPassword({
@@ -59,6 +61,12 @@ const accountsServer = new AccountsServer(
     password,
   }
 );
+
+/********************************************
+ * SERVER HOOKS
+ ********************************************/
+accountsServer.on(ServerHooks.LoginError, accountsHelpers.loginError);
+accountsServer.on(ServerHooks.ValidateLogin, accountsHelpers.validateLogin);
 
 // init accounts module
 export const accountsGraphQL = AccountsModule.forRoot({accountsServer});
