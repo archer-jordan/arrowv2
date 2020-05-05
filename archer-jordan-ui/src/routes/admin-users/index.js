@@ -10,7 +10,7 @@ import ErrorBlock from 'components/common/ErrorBlock';
 // APOLLO CLIENT
 import compose from 'lodash/flowRight';
 import {Query, graphql} from 'react-apollo';
-import usersQuery from 'ApolloClient/Queries/users';
+import adminUsers from 'ApolloClient/Queries/adminUsers';
 import createSuperAdminUser from 'ApolloClient/Mutations/createSuperAdminUser';
 import deleteUser from 'ApolloClient/Mutations/deleteUser';
 // LIB
@@ -46,8 +46,7 @@ class AdminUsers extends React.PureComponent {
         // refresh the users table after
         refetchQueries: [
           {
-            query: usersQuery,
-            variables: {roles: ['superAdmin']},
+            query: adminUsers,
           },
         ],
       });
@@ -71,8 +70,7 @@ class AdminUsers extends React.PureComponent {
         // refresh the users table after
         refetchQueries: [
           {
-            query: usersQuery,
-            variables: {roles: ['superAdmin']},
+            query: adminUsers,
           },
         ],
       });
@@ -108,13 +106,15 @@ class AdminUsers extends React.PureComponent {
           + Add New User
         </Button>
         {/* USERS TABLE */}
-        <Query query={usersQuery} variables={{roles: ['superAdmin']}}>
+        <Query query={adminUsers}>
           {({loading, data, error}) => {
             if (error) return 'error';
             return (
               <UsersTable
-                dataSource={(data && data.users && data.users.users) || []}
-                total={(data && data.users && data.users.count) || 0}
+                dataSource={
+                  (data && data.adminUsers && data.adminUsers.users) || []
+                }
+                total={(data && data.adminUsers && data.adminUsers.count) || 0}
                 loading={loading}
                 onDeleteUser={this.onDeleteUser}
               />

@@ -5,13 +5,13 @@ import Users from 'collections/Users/model';
 
 export const UserProfileResolvers = {
   UserProfile: {
-    id: root => {
+    id: (root) => {
       // in some cases we'll already have masked _id for id, so check if id exists and return that if it does exist
       if (root.id) return root.id;
       // if id doesn't exist yet, we'll return _id as id
       if (root._id) return root._id;
     },
-    firstName: async root => {
+    firstName: async (root) => {
       if (root.roles.includes('coEmployee') && root.employeeId) {
         let employee = await Employees.findOne({_id: root.employeeId});
         if (employee && employee.firstName) {
@@ -26,7 +26,7 @@ export const UserProfileResolvers = {
       }
       return root.firstName;
     },
-    lastName: async root => {
+    lastName: async (root) => {
       if (root.roles.includes('coEmployee') && root.employeeId) {
         let employee = await Employees.findOne({_id: root.employeeId});
         if (employee && employee.lastName) {
@@ -46,7 +46,7 @@ export const UserProfileResolvers = {
         return emails[0].address;
       }
     },
-    company: async root => {
+    company: async (root) => {
       if (root.customerId) {
         let company = await Customers.findOne({_id: root.customerId});
         return company;
@@ -58,15 +58,15 @@ export const UserProfileResolvers = {
       let user = await Users.findOne({_id: root.createdBy});
       return user && user.emails && user.emails[0].address;
     },
-    employee: async root => {
+    employee: async (root) => {
       if (root.employeeId) {
         return await Employees.findOne({_id: root.employeeId});
       }
     },
-    companyStatus: async root => {
+    companyStatus: async (root) => {
       if (root.customerId) {
         let company = await Customers.findOne({_id: root.customerId});
-        return company.status;
+        return company && company.status;
       }
     },
   },
