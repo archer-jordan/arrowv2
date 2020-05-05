@@ -17,6 +17,7 @@ import supportMessages from './resolvers/supportMessages';
 import employeeIdAlreadyExists from './resolvers/employeeIdAlreadyExists';
 import checkIfEmployeeTotalsExist from './resolvers/checkIfEmployeeTotalsExist';
 import customerAdmins from './resolvers/customerAdmins';
+import adminUsers from './resolvers/adminUsers';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -39,6 +40,7 @@ export const QueryResolvers = {
     emailAlreadyExists,
     customerIdAlreadyExists,
     customerAdmins,
+    adminUsers,
   },
 };
 
@@ -152,7 +154,7 @@ export const QuerySchema = gql`
       customerId: String
       roles: [String]
     ): UsersResponse
-
+    adminUsers(searchText: String): UsersResponse
     "Returns a single attachment"
     getAttachment(customerId: ID, type: AttachmentType): Attachment
 

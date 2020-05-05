@@ -11,7 +11,7 @@ const createSuperAdminUser = async (root, args, context) => {
     if (
       args &&
       args.params &&
-      !args.params.email.includes('archerjordan.com')
+      !args.params.email.includes('@archerjordan.com')
     ) {
       throw new Error('Super admins must have an archerjordan.com email');
     }
@@ -21,9 +21,7 @@ const createSuperAdminUser = async (root, args, context) => {
       ...args.params,
       emails: [{address: args.params.email}],
       roles: ['superAdmin'],
-      createdAt: moment()
-        .valueOf()
-        .toString(),
+      createdAt: moment().valueOf().toString(),
       createdBy: context.user.id,
     };
     // save document
