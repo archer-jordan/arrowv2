@@ -20,7 +20,7 @@ class Users extends React.PureComponent {
     loading: false,
     errors: [],
   };
-  onCreateUser = async newValues => {
+  onCreateUser = async (newValues) => {
     this.setState({
       loading: true,
     });
@@ -46,7 +46,7 @@ class Users extends React.PureComponent {
       console.log(err);
     }
   };
-  makeEmployeeAnAdmin = async email => {
+  makeEmployeeAnAdmin = async (email) => {
     this.setState({
       loading: true,
       addNew: false,
@@ -75,7 +75,7 @@ class Users extends React.PureComponent {
       loading: false,
     });
   };
-  onSaveUser = async newValues => {
+  onSaveUser = async (newValues) => {
     this.setState({
       loading: true,
     });
@@ -162,7 +162,7 @@ class Users extends React.PureComponent {
             return (
               <UsersTable
                 dataSource={data.customerAdmins}
-                onClick={selected => this.setState({selected})}
+                onClick={(selected) => this.setState({selected})}
               />
             );
           }}
@@ -170,9 +170,7 @@ class Users extends React.PureComponent {
         <Button
           style={{
             width: 120,
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
+            marginTop: 16,
           }}
           onClick={() => this.setState({addNew: true})}
         >
