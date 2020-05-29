@@ -23,6 +23,7 @@ export const MutationSchema = gql`
   }
 
   extend type Mutation {
+    deleteEmployee(employeeId: ID!): MutationResponse
     "Create a user account"
     createNewUser(params: UserParams): UserProfile
 
