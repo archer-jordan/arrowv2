@@ -11,6 +11,7 @@ import message from 'components/common/message';
 import Icon from 'components/common/Icon';
 import ErrorBlock from 'components/common/ErrorBlock';
 import DownloadEmployees from './DownloadEmployees';
+import Popconfirm from 'components/common/Popconfirm';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import compose from 'lodash/flowRight';
@@ -22,6 +23,7 @@ import updateEmployeesUpload from 'ApolloClient/Mutations/updateEmployeesUpload'
 import checkEmployeesCSV from 'ApolloClient/Mutations/checkEmployeesCSV';
 import singleUpload from 'ApolloClient/Mutations/singleUpload';
 import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
+import deleteEmployee from 'ApolloClient/Mutations/deleteEmployee';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
@@ -32,9 +34,9 @@ const PinkText = styled.div`
   margin-top: 24px;
   margin-bottom: 8px;
   cursor: pointer;
-  color: ${p => p.theme.colors.support2};
+  color: ${(p) => p.theme.colors.support2};
   &:hover {
-    color: ${p => p.theme.colors.support1};
+    color: ${(p) => p.theme.colors.support1};
   }
 `;
 
@@ -43,11 +45,11 @@ const SectionTitle = styled.div`
   padding: 8px 16px;
   border-radius: 25px;
   margin-bottom: 24px;
-  background: ${p => p.theme.colors.primary1};
+  background: ${(p) => p.theme.colors.primary1};
 `;
 
 const SearchInput = styled.input`
-  background: ${p => p.theme.colors.neutral10};
+  background: ${(p) => p.theme.colors.neutral10};
   border-radius: 25px;
   margin-bottom: 16px;
   width: 380px;
@@ -79,6 +81,19 @@ const Search = ({value, onChange}) => (
   </div>
 );
 
+const DeleteBtn = styled.button`
+  border: 0px;
+  background: transparent;
+  color: ${(p) => p.theme.colors.red6};
+  cursor: pointer;
+  &:hover {
+    color: ${(p) => p.theme.colors.red3};
+  }
+  &:focus {
+    outline: 0;
+  }
+`;
+
 /**
  * 1. Check if we have correct number of columns
  * 2. Check if all emails are valid
@@ -96,11 +111,12 @@ class Employees extends React.PureComponent {
     sortBy: 'lastNameAscend',
     updateErrors: [],
     searchText: undefined,
+    deleting: false,
   };
 
-  getFormatted = results => {
+  getFormatted = (results) => {
     let formattedData = [];
-    results.data.forEach(item => {
+    results.data.forEach((item) => {
       if (item['EAID']) {
         formattedData.push(employeeHelpers.formatRow(item));
       }
@@ -162,7 +178,7 @@ class Employees extends React.PureComponent {
       // Do server check to see if these people already exist
       let mutationResult = await this.props.checkEmployeesCSV({
         variables: {
-          values: formattedData.map(item => ({
+          values: formattedData.map((item) => ({
             companyAssignedId: item.assignedCustomerId,
             employeeAssignedId: item.assignedId,
           })),
@@ -290,10 +306,10 @@ class Employees extends React.PureComponent {
       complete,
     });
   };
-  handleSearch = debounce(finalSearchText => {
+  handleSearch = debounce((finalSearchText) => {
     this.setState({finalSearchText});
   }, 250);
-  onSave = async values => {
+  onSave = async (values) => {
     this.setState({
       loading: true,
     });
@@ -335,6 +351,39 @@ class Employees extends React.PureComponent {
     if (sorter.order) {
       let sortBy = `${sorter.columnKey}${helpers.capitalize(sorter.order)}`;
       this.setState({sortBy});
+    }
+  };
+  onDeleteEmployee = async (employeeId) => {
+    try {
+      this.setState({
+        deleting: true,
+      });
+      await this.props.deleteEmployee({
+        variables: {
+          employeeId,
+        },
+        refetchQueries: [
+          {
+            query: employeesQuery,
+            fetchPolicy: 'network-only',
+            variables: {
+              customerId: this.props.customer.id,
+              skip: this.state.skip,
+              sortBy: this.state.sortBy,
+              searchText: this.state.finalSearchText,
+            },
+          },
+        ],
+      });
+      message.success(`Employee was deleted`);
+      this.setState({
+        deleting: false,
+      });
+    } catch (err) {
+      this.setState({
+        deleting: false,
+      });
+      console.log(err);
     }
   };
   render() {
@@ -411,7 +460,7 @@ class Employees extends React.PureComponent {
                 <>
                   <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Search
-                      onChange={e => {
+                      onChange={(e) => {
                         this.setState({searchText: e.target.value});
                         this.handleSearch(e.target.value);
                       }}
@@ -423,14 +472,32 @@ class Employees extends React.PureComponent {
                     dataSource={!loading ? data.employees.employees : []}
                     total={!loading ? data.employees.count : null}
                     loading={loading}
-                    onRow={(record, rowIndex) => {
-                      return {
-                        onClick: () =>
-                          this.setState({selectedEmployee: record}),
-                      };
-                    }}
+                    onClickEmployee={(selectedEmployee) =>
+                      this.setState({selectedEmployee})
+                    }
+                    extraColumns={[
+                      {
+                        title: '',
+                        width: 50,
+                        render: (text, record) => (
+                          <Popconfirm
+                            title="Are you SURE? All data will be lost forever."
+                            okText="Yes, I'm sure."
+                            onConfirm={() => {
+                              if (!this.state.deleting) {
+                                this.onDeleteEmployee(record.id);
+                              }
+                            }}
+                          >
+                            <DeleteBtn disabled={this.state.deleting}>
+                              {!this.state.deleting ? 'Delete' : '...'}
+                            </DeleteBtn>
+                          </Popconfirm>
+                        ),
+                      },
+                    ]}
                     handleTableChange={this.handleTableChange}
-                    onPageChange={page =>
+                    onPageChange={(page) =>
                       this.setState({
                         skip: page === 1 ? 0 : (page - 1) * 5,
                         current: page,
@@ -465,7 +532,7 @@ class Employees extends React.PureComponent {
           name="file"
           errors={this.state.errors || []}
           loading={this.state.loading}
-          onChange={file => this.handleUpload(file, this.afterParseAdd)}
+          onChange={(file) => this.handleUpload(file, this.afterParseAdd)}
           buttonText="Upload New Employees"
         />
         <SectionTitle style={{marginTop: 48}}>
@@ -485,7 +552,7 @@ class Employees extends React.PureComponent {
           name="file-update"
           errors={this.state.updateErrors || []}
           loading={this.state.loading}
-          onChange={file => this.handleUpload(file, this.afterParseUpdate)}
+          onChange={(file) => this.handleUpload(file, this.afterParseUpdate)}
           buttonText="Upload Employee Updates"
         />
         <PinkText onClick={() => this.setState({editManually: true})}>
@@ -503,5 +570,6 @@ export default compose(
   graphql(checkEmployeesCSV, {name: 'checkEmployeesCSV'}),
   graphql(updateEmployeesUpload, {name: 'updateEmployeesUpload'}),
   graphql(singleUpload, {name: 'singleUpload'}),
-  graphql(saveAttachment, {name: 'saveAttachment'})
+  graphql(saveAttachment, {name: 'saveAttachment'}),
+  graphql(deleteEmployee, {name: 'deleteEmployee'})
 )(Employees);

@@ -18,6 +18,7 @@ import deleteCustomer from './deleteCustomer';
 import deleteUser from './deleteUser';
 import makeEmployeeAnAdmin from './makeEmployeeAnAdmin';
 import updateSupportStatus from './updateSupportStatus';
+import deleteEmployee from './deleteEmployee';
 
 export const MutationResolvers = {
   Mutation: {
@@ -45,5 +46,6 @@ export const MutationResolvers = {
     uploadEmployeeReports,
     makeEmployeeAnAdmin,
     updateSupportStatus,
+    deleteEmployee,
   },
 };

@@ -29,8 +29,8 @@ class AppEmployees extends React.PureComponent {
       searchText: this.state.searchString,
     });
   };
-  cleanData = data => {
-    return data.map(item => {
+  cleanData = (data) => {
+    return data.map((item) => {
       return {
         'Employee ID': item.assignedId,
         'Last Name': item.lastName,
@@ -125,7 +125,7 @@ class AppEmployees extends React.PureComponent {
                 width={'700px'}
                 value={this.state.searchString}
                 label="search by name, email or ID#"
-                onChange={e => this.setState({searchString: e.target.value})}
+                onChange={(e) => this.setState({searchString: e.target.value})}
               />
               {this.state.searchText && (
                 <div
@@ -179,14 +179,14 @@ class AppEmployees extends React.PureComponent {
                 loading={loading}
                 onRow={this.onRow}
                 handleTableChange={this.handleTableChange}
-                onPageChange={page =>
+                onPageChange={(page) =>
                   this.setState({
                     skip: page === 1 ? 0 : (page - 1) * 5,
                     current: page,
                   })
                 }
                 current={this.state.current}
-                onEdit={selectedEmployee => this.setState({selectedEmployee})}
+                onEdit={(selectedEmployee) => this.setState({selectedEmployee})}
               />
             );
           }}
