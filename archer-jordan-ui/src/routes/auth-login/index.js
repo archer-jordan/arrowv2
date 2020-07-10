@@ -8,7 +8,7 @@ import FormItem from 'components/common/FormItem';
 import ErrorBlock from 'components/common/ErrorBlock';
 import Background from 'components/common/GradientBackground';
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import logoWhiteSVG from 'lib/media/arrow-cs-logo.png';
 import AuthHelpers from 'lib/helpers/AuthHelpers';
 // APOLLO
 import ApolloClient from 'ApolloClient/index.js';
