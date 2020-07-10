@@ -9,7 +9,7 @@ import ErrorBlock from 'components/common/ErrorBlock';
 import FormItem from 'components/common/FormItem';
 import Background from 'components/common/GradientBackground';
 // LIB
-import logoWhiteSVG from 'lib/media/arrow-logo-white.png';
+import logoWhiteSVG from 'lib/media/arrow-cs-logo.png';
 // LIB
 import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 // APOLLO
@@ -26,7 +26,7 @@ const FormContainer = styled.div`
 const Logo = styled.img`
   display: block;
   margin: auto;
-  height: 75px;
+  width: 250px;
   margin-bottom: 32px;
 `;
 

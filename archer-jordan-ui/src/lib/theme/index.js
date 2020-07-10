@@ -22,12 +22,14 @@ export const GlobalStyle = createGlobalStyle`
 
   a {
     color: #00a0af !important;
+    cursor: pointer !important;
   }
 
   #root {
     height: 100%;
     width: 100vw;
   }
+
 
   .ant-pagination-item-active {
       border-color: ${theme.colors.primary1} !important;
