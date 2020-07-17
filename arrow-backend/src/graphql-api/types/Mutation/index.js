@@ -23,6 +23,9 @@ export const MutationSchema = gql`
   }
 
   extend type Mutation {
+    deleteAdminDoc(id: ID!): MutationResponse
+    uploadAdminDoc(file: Upload!): AdminDoc
+
     deleteEmployee(employeeId: ID!): MutationResponse
     "Create a user account"
     createNewUser(params: UserParams): UserProfile

@@ -33,6 +33,7 @@ import AppEmployeeDashboardRoute from 'routes/app-employee-dashboard';
 import AppEmployeesDetailRoute from 'routes/app-employees-detail';
 // ADMIN
 import AdminCustomers from 'routes/admin-customers';
+import AdminDocs from 'routes/admin-docs';
 import AdminVendors from 'routes/admin-vendors';
 import AdminUsers from 'routes/admin-users';
 import AdminSupport from 'routes/admin-support';
@@ -202,6 +203,14 @@ class AppRoutes extends React.Component {
             currentUser={currentUser}
             component={AdminCustomers}
           />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
+            path="/admin/docs"
+            currentUser={currentUser}
+            component={AdminDocs}
+          />
+
           <AdminRoute
             exact
             layout={AdminLayout}

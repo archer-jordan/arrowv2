@@ -18,6 +18,7 @@ import employeeIdAlreadyExists from './resolvers/employeeIdAlreadyExists';
 import checkIfEmployeeTotalsExist from './resolvers/checkIfEmployeeTotalsExist';
 import customerAdmins from './resolvers/customerAdmins';
 import adminUsers from './resolvers/adminUsers';
+import adminDocs from './resolvers/adminDocs';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -41,6 +42,7 @@ export const QueryResolvers = {
     customerIdAlreadyExists,
     customerAdmins,
     adminUsers,
+    adminDocs,
   },
 };
 
@@ -94,6 +96,8 @@ export const QuerySchema = gql`
   }
 
   extend type Query {
+    "Search through admin uploads. Must be a super admin."
+    adminDocs(searchText: String): [AdminDoc]
     "Returns the currently signed in user or null if user is not signed in"
     currentUser: UserProfile
 
