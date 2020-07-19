@@ -163,7 +163,11 @@ export const QuerySchema = gql`
     getAttachment(customerId: ID, type: AttachmentType): Attachment
 
     "Returns multiple attachments"
-    getAttachments(customerId: ID, type: AttachmentType): [Attachment]
+    getAttachments(
+      customerId: ID
+      type: AttachmentType
+      searchText: String
+    ): [Attachment]
 
     "Given a customer ID (database ID), this query returns a list of that customer's reports (CustomerReport)"
     customerReportsByCustomerId(customerId: ID!): [CustomerReport]

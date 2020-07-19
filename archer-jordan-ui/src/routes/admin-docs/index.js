@@ -196,7 +196,17 @@ export default () => {
             })}
           </>
         )}
-        {!loading && docs && docs.length === 0 && (
+        {/* empty state for when a search returns no results */}
+        {!loading && docs && docs.length === 0 && searchText && (
+          <>
+            <EmptyState
+              title="No results..."
+              subtitle={`We can't find any docs that match your search`}
+            />
+          </>
+        )}
+        {/* empty state for when there are no results at all */}
+        {!loading && docs && docs.length === 0 && !searchText && (
           <>
             <EmptyState
               title="No documents yet..."

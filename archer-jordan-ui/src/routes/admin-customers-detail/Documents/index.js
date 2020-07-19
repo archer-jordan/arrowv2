@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {debounce} from 'lodash';
 // COMPONENTS
 import Icon from 'components/common/Icon';
+import EmptyState from 'components/common/EmptyState';
 import FileRow from 'components/common/FileRow';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
@@ -21,6 +23,12 @@ const UploadButton = styled.input`
   z-index: -1;
 `;
 
+const ActionsContainer = styled.div`
+  display: flex;
+  position: relative;
+  margin-bottom: 32px;
+`;
+
 const Label = styled.label`
   font-weight: 600;
   color: ${(p) => p.theme.colors.support2};
@@ -36,9 +44,23 @@ const Label = styled.label`
   }
 `;
 
+const SearchInput = styled.input`
+  border-radius: 25px;
+  background: ${(p) => p.theme.colors.neutral10};
+  border: 0px;
+  height: 48px;
+  min-width: 300px;
+  padding-left: 16px;
+  &:focus {
+    outline: 0;
+  }
+`;
+
 class Documents extends React.PureComponent {
   state = {
     loading: false,
+    searchText: '',
+    finalSearchText: undefined,
   };
   onUpload = async (event, type) => {
     try {
@@ -99,6 +121,7 @@ class Documents extends React.PureComponent {
             variables: {
               customerId: this.props.customer.id,
               type,
+              searchText: this.state.finalSearchText,
             },
           },
         ],
@@ -107,24 +130,60 @@ class Documents extends React.PureComponent {
       console.log(err);
     }
   };
+  debounceSearch = debounce((searchText) => {
+    this.setState({finalSearchText: searchText});
+  }, 250);
   render() {
+    let variables = {
+      customerId: this.props.customer.id,
+      type: 'CustomerUpload',
+      searchText: this.state.finalSearchText,
+    };
     return (
       <div>
+        <ActionsContainer>
+          <div style={{marginRight: 24}}>
+            <SearchInput
+              placeholder="Search docs"
+              value={this.state.searchText}
+              onChange={(e) => {
+                this.setState({searchText: e.target.value});
+                this.debounceSearch(e.target.value);
+              }}
+            />
+          </div>
+          <div style={{marginTop: 12}}></div>
+          <div style={{position: 'absolute', right: 0}}>
+            {!this.state.loading ? (
+              <>
+                <UploadButton
+                  name="compay-upload"
+                  type="file"
+                  id="compay-upload"
+                  onChange={(e) => this.onUpload(e, 'CustomerUpload')}
+                />
+                <Label htmlFor="compay-upload">Upload New File</Label>
+              </>
+            ) : (
+              <Icon type="loading" />
+            )}
+          </div>
+        </ActionsContainer>
+        {console.log({variables})}
         <Query
           query={getAttachments}
-          pollInterval={600000} // every ten minutes
-          variables={{
-            customerId: this.props.customer.id,
-            type: 'CustomerUpload',
-          }}
+          //pollInterval={600000} // every ten minutes
+          variables={variables}
         >
           {({data, loading, error}) => {
             if (loading) return <Icon type="loading" />;
             if (error) return 'error';
+            const docs = data && data.getAttachments;
             return (
               <React.Fragment>
-                {data.getAttachments &&
-                  data.getAttachments.map((file) => {
+                {docs &&
+                  docs.length > 0 &&
+                  docs.map((file) => {
                     return (
                       <FileRow
                         key={file.id}
@@ -136,20 +195,28 @@ class Documents extends React.PureComponent {
                       />
                     );
                   })}
-
-                {!this.state.loading ? (
-                  <div style={{marginTop: 32}}>
-                    <UploadButton
-                      name="compay-upload"
-                      type="file"
-                      id="compay-upload"
-                      onChange={(e) => this.onUpload(e, 'CustomerUpload')}
-                    />
-                    <Label htmlFor="compay-upload">Upload New File</Label>
-                  </div>
-                ) : (
-                  <Icon type="loading" />
-                )}
+                {!loading &&
+                  docs &&
+                  docs.length === 0 &&
+                  this.state.searchText && (
+                    <>
+                      <EmptyState
+                        title="No results..."
+                        subtitle={`We can't find any docs that match your search`}
+                      />
+                    </>
+                  )}
+                {!loading &&
+                  docs &&
+                  docs.length === 0 &&
+                  !this.state.searchText && (
+                    <>
+                      <EmptyState
+                        title="No documents yet..."
+                        subtitle={`Click "Upload New File" to add your first document`}
+                      />
+                    </>
+                  )}
               </React.Fragment>
             );
           }}
