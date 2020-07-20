@@ -159,26 +159,33 @@ class Documents extends React.PureComponent {
               }}
             />
           </div>
-          <div style={{width: 150}}>
-            {' '}
-            <MultiSelectInput
-              options={[
-                {
-                  label: 'Newest',
-                  id: 'ascCreatedAt',
-                },
-                {
-                  label: 'Oldest',
-                  id: 'descCreatedAt',
-                },
-                {
-                  label: 'By Filename',
-                  id: 'ascFilename',
-                },
-              ]}
-              value={this.state.sortBy}
-              onChange={(sortBy) => this.setState({sortBy})}
-            />
+          <div style={{width: 350, display: 'flex'}}>
+            <div
+              style={{marginRight: 8, display: 'flex', alignItems: 'center'}}
+            >
+              {' '}
+              Sort by:{' '}
+            </div>{' '}
+            <div style={{minWidth: 200}}>
+              <MultiSelectInput
+                options={[
+                  {
+                    label: 'Newest',
+                    id: 'ascCreatedAt',
+                  },
+                  {
+                    label: 'Oldest',
+                    id: 'descCreatedAt',
+                  },
+                  {
+                    label: 'By Filename',
+                    id: 'ascFilename',
+                  },
+                ]}
+                value={this.state.sortBy}
+                onChange={(sortBy) => this.setState({sortBy})}
+              />
+            </div>{' '}
           </div>
           <div style={{position: 'absolute', right: 0}}>
             {!this.state.loading ? (

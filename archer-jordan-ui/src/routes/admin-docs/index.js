@@ -171,25 +171,31 @@ export default () => {
             }}
           />
         </div>
-        <div style={{minWidth: 150}}>
-          <MultiSelectInput
-            options={[
-              {
-                label: 'Newest',
-                id: 'ascCreatedAt',
-              },
-              {
-                label: 'Oldest',
-                id: 'descCreatedAt',
-              },
-              {
-                label: 'By Filename',
-                id: 'ascFilename',
-              },
-            ]}
-            value={sortBy}
-            onChange={(sortBy) => setSortBy(sortBy)}
-          />
+        <div style={{width: 350, display: 'flex'}}>
+          <div style={{marginRight: 8, display: 'flex', alignItems: 'center'}}>
+            {' '}
+            Sort by:{' '}
+          </div>{' '}
+          <div style={{minWidth: 200}}>
+            <MultiSelectInput
+              options={[
+                {
+                  label: 'Newest',
+                  id: 'ascCreatedAt',
+                },
+                {
+                  label: 'Oldest',
+                  id: 'descCreatedAt',
+                },
+                {
+                  label: 'By Filename',
+                  id: 'ascFilename',
+                },
+              ]}
+              value={sortBy}
+              onChange={(sortBy) => setSortBy(sortBy)}
+            />{' '}
+          </div>
         </div>
         <div style={{position: 'absolute', right: 0}}>
           <UploadButton
