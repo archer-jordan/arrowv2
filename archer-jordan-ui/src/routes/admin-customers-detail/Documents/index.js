@@ -189,14 +189,13 @@ class Documents extends React.PureComponent {
                   id="compay-upload"
                   onChange={(e) => this.onUpload(e, 'CustomerUpload')}
                 />
-                <Label htmlFor="compay-upload">Upload New File</Label>
+                <Label htmlFor="compay-upload">+ Upload New File</Label>
               </>
             ) : (
               <Icon type="loading" />
             )}
           </div>
         </ActionsContainer>
-        {console.log({variables})}
         <Query
           query={getAttachments}
           //pollInterval={600000} // every ten minutes
