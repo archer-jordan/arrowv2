@@ -35,7 +35,7 @@ const DownloadText = styled.a`
   cursor: pointer;
 `;
 
-const MAX_STRING_LENGTH = 60;
+const MAX_STRING_LENGTH = 50;
 
 export default ({filename, url, onDelete}) => (
   <Row
