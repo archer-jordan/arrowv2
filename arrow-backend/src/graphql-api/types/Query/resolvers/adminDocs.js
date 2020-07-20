@@ -13,9 +13,17 @@ export default async (root, args, context) => {
       query.filename = regex;
     }
     // setup options for query
-    let options = {
-      sort: {createdAt: -1},
-    };
+    let options = {};
+
+    if (args.sortBy && args.sortBy === 'ascCreatedAt') {
+      options.sort = {createdAt: -1};
+    }
+    if (args.sortBy && args.sortBy === 'descCreatedAt') {
+      options.sort = {createdAt: 1};
+    }
+    if (args.sortBy && args.sortBy === 'ascFilename') {
+      options.sort = {filename: 1};
+    }
     // query documents
     let docs = await AdminDocs.find(query, null, options);
     // return the result

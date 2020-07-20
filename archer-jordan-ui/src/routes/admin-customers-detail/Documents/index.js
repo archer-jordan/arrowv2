@@ -5,6 +5,7 @@ import {debounce} from 'lodash';
 import Icon from 'components/common/Icon';
 import EmptyState from 'components/common/EmptyState';
 import FileRow from 'components/common/FileRow';
+import MultiSelectInput from 'components/inputs/MultiSelectInput';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
@@ -46,7 +47,8 @@ const Label = styled.label`
 
 const SearchInput = styled.input`
   border-radius: 25px;
-  background: ${(p) => p.theme.colors.neutral10};
+  /* background: ${(p) => p.theme.colors.neutral10}; */
+  background: #eae8e3;
   border: 0px;
   height: 48px;
   min-width: 300px;
@@ -61,6 +63,7 @@ class Documents extends React.PureComponent {
     loading: false,
     searchText: '',
     finalSearchText: undefined,
+    sortBy: 'ascCreatedAt',
   };
   onUpload = async (event, type) => {
     try {
@@ -138,6 +141,7 @@ class Documents extends React.PureComponent {
       customerId: this.props.customer.id,
       type: 'CustomerUpload',
       searchText: this.state.finalSearchText,
+      sortBy: this.state.sortBy,
     };
     return (
       <div>
@@ -152,7 +156,27 @@ class Documents extends React.PureComponent {
               }}
             />
           </div>
-          <div style={{marginTop: 12}}></div>
+          <div style={{width: 150}}>
+            {' '}
+            <MultiSelectInput
+              options={[
+                {
+                  label: 'Newest',
+                  id: 'ascCreatedAt',
+                },
+                {
+                  label: 'Oldest',
+                  id: 'descCreatedAt',
+                },
+                {
+                  label: 'By Filename',
+                  id: 'ascFilename',
+                },
+              ]}
+              value={this.state.sortBy}
+              onChange={(sortBy) => this.setState({sortBy})}
+            />
+          </div>
           <div style={{position: 'absolute', right: 0}}>
             {!this.state.loading ? (
               <>

@@ -7,11 +7,13 @@ export default gql`
     $customerId: ID!
     $type: AttachmentType
     $searchText: String
+    $sortBy: DocSortByEnum
   ) {
     getAttachments(
       customerId: $customerId
       type: $type
       searchText: $searchText
+      sortBy: $sortBy
     ) {
       ...attachmentFragment
     }

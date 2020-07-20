@@ -95,9 +95,15 @@ export const QuerySchema = gql`
     hireDateDescend
   }
 
+  enum DocSortByEnum {
+    ascCreatedAt
+    descCreatedAt
+    ascFilename
+  }
+
   extend type Query {
     "Search through admin uploads. Must be a super admin."
-    adminDocs(searchText: String): [AdminDoc]
+    adminDocs(searchText: String, sortBy: DocSortByEnum): [AdminDoc]
     "Returns the currently signed in user or null if user is not signed in"
     currentUser: UserProfile
 
@@ -167,6 +173,7 @@ export const QuerySchema = gql`
       customerId: ID
       type: AttachmentType
       searchText: String
+      sortBy: DocSortByEnum
     ): [Attachment]
 
     "Given a customer ID (database ID), this query returns a list of that customer's reports (CustomerReport)"

@@ -11,6 +11,7 @@ import DELETE_ADMIN_DOC from 'ApolloClient/Mutations/deleteAdminDoc';
 import UPLOAD_ADMIN_DOC from 'ApolloClient/Mutations/uploadAdminDoc';
 import ADMIN_DOCS from 'ApolloClient/Queries/adminDocs';
 import {useMutation, useQuery} from 'react-apollo';
+import MultiSelectInput from '../../components/inputs/MultiSelectInput';
 
 const Container = styled.div`
   width: 1100px;
@@ -21,7 +22,8 @@ const Container = styled.div`
 
 const SearchInput = styled.input`
   border-radius: 25px;
-  background: ${(p) => p.theme.colors.neutral10};
+  /* background: ${(p) => p.theme.colors.neutral10}; */
+  background: #eae8e3;
   border: 0px;
   height: 48px;
   min-width: 300px;
@@ -83,11 +85,13 @@ export default () => {
   const [searchText, setSearchText] = useState(undefined);
   const [finalSearchText, setFinalSearchText] = useState(undefined);
   const [uploading, setUploading] = useState(false);
+  const [sortBy, setSortBy] = useState('ascCreatedAt');
   const [uploadAdminDoc] = useMutation(UPLOAD_ADMIN_DOC);
   const [deleteAdminDoc] = useMutation(DELETE_ADMIN_DOC);
   const {data, loading, error} = useQuery(ADMIN_DOCS, {
     variables: {
       searchText: finalSearchText,
+      sortBy,
     },
     pollInterval: 100000,
   });
@@ -105,6 +109,7 @@ export default () => {
             query: ADMIN_DOCS,
             variables: {
               searchText: finalSearchText,
+              sortBy,
             },
           },
         ],
@@ -127,6 +132,7 @@ export default () => {
             query: ADMIN_DOCS,
             variables: {
               searchText: finalSearchText,
+              sortBy,
             },
           },
         ],
@@ -165,7 +171,26 @@ export default () => {
             }}
           />
         </div>
-        <div style={{marginTop: 12}}>Filters go here</div>
+        <div style={{minWidth: 150}}>
+          <MultiSelectInput
+            options={[
+              {
+                label: 'Newest',
+                id: 'ascCreatedAt',
+              },
+              {
+                label: 'Oldest',
+                id: 'descCreatedAt',
+              },
+              {
+                label: 'By Filename',
+                id: 'ascFilename',
+              },
+            ]}
+            value={sortBy}
+            onChange={(sortBy) => setSortBy(sortBy)}
+          />
+        </div>
         <div style={{position: 'absolute', right: 0}}>
           <UploadButton
             name="compay-upload"
