@@ -97,6 +97,8 @@ class Documents extends React.PureComponent {
               variables: {
                 customerId: this.props.customer.id,
                 type,
+                sortBy: this.state.sortBy,
+                searchText: this.state.finalSearchText,
               },
             },
           ],
@@ -124,6 +126,7 @@ class Documents extends React.PureComponent {
             variables: {
               customerId: this.props.customer.id,
               type,
+              sortBy: this.state.sortBy,
               searchText: this.state.finalSearchText,
             },
           },
