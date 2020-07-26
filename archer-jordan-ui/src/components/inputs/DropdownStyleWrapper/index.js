@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export default styled.div`
+  width: 100%;
   .ant-select-selection {
     height: 50px;
     background: #eae8e3;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {debounce} from 'lodash';
 // COMPONENTS
 import Icon from 'components/common/Icon';
-import EmptyState from 'components/common/EmptyState';
+import TextInput from 'components/inputs/TextInput';
 import FileRow from 'components/common/FileRow';
 import MultiSelectInput from 'components/inputs/MultiSelectInput';
 // APOLLO
@@ -36,25 +36,12 @@ const Label = styled.label`
   padding: 6px 10px;
   border-radius: 25px;
   border: 2px solid ${(p) => p.theme.colors.support2};
-  background: transparent;
+  background: ${(p) => p.theme.colors.support2};
+  color: #fff;
   display: inline-block;
   cursor: pointer;
   &:hover {
     border: 2px solid ${(p) => p.theme.colors.support1};
-    color: ${(p) => p.theme.colors.support1};
-  }
-`;
-
-const SearchInput = styled.input`
-  border-radius: 25px;
-  /* background: ${(p) => p.theme.colors.neutral10}; */
-  background: #eae8e3;
-  border: 0px;
-  height: 48px;
-  min-width: 300px;
-  padding-left: 16px;
-  &:focus {
-    outline: 0;
   }
 `;
 
@@ -150,13 +137,23 @@ class Documents extends React.PureComponent {
       <div>
         <ActionsContainer>
           <div style={{marginRight: 24}}>
-            <SearchInput
+            {/* <SearchInput
               placeholder="Search docs"
               value={this.state.searchText}
               onChange={(e) => {
                 this.setState({searchText: e.target.value});
                 this.debounceSearch(e.target.value);
               }}
+            /> */}
+            <TextInput
+              dark
+              width={'400px'}
+              onChange={(e) => {
+                this.setState({searchText: e.target.value});
+                this.debounceSearch(e.target.value);
+              }}
+              label="Search docs"
+              value={this.state.searchText}
             />
           </div>
           <div style={{width: 350, display: 'flex'}}>
@@ -166,7 +163,7 @@ class Documents extends React.PureComponent {
               {' '}
               Sort by:{' '}
             </div>{' '}
-            <div style={{minWidth: 200}}>
+            <div style={{minWidth: 200, display: 'flex', alignItems: 'center'}}>
               <MultiSelectInput
                 options={[
                   {
@@ -228,7 +225,7 @@ class Documents extends React.PureComponent {
                       />
                     );
                   })}
-                {!loading &&
+                {/* {!loading &&
                   docs &&
                   docs.length === 0 &&
                   this.state.searchText && (
@@ -238,8 +235,8 @@ class Documents extends React.PureComponent {
                         subtitle={`We can't find any docs that match your search`}
                       />
                     </>
-                  )}
-                {!loading &&
+                  )} */}
+                {/* {!loading &&
                   docs &&
                   docs.length === 0 &&
                   !this.state.searchText && (
@@ -249,7 +246,7 @@ class Documents extends React.PureComponent {
                         subtitle={`Click "Upload New File" to add your first document`}
                       />
                     </>
-                  )}
+                  )} */}
               </React.Fragment>
             );
           }}

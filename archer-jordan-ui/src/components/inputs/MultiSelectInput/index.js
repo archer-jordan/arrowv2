@@ -6,7 +6,7 @@ const {Option} = Select;
 
 export default ({value, options, onChange}) => (
   <DropdownStyleWrapper>
-    <Select value={value} style={{width: '100%'}} onChange={onChange}>
+    <Select style={{width: '100%'}} value={value} onChange={onChange}>
       {options.map((option) => {
         return <Option value={option.id}>{option.label}</Option>;
       })}

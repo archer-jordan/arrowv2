@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 import {debounce} from 'lodash';
 // COMPONENTS
-import EmptyState from 'components/common/EmptyState';
+import TextInput from 'components/inputs/TextInput';
 import Icon from 'components/common/Icon';
 import message from 'components/common/message';
 import FileRow from 'components/common/FileRow';
@@ -18,19 +18,6 @@ const Container = styled.div`
   margin: auto;
   max-width: 100%;
   margin-top: 40px;
-`;
-
-const SearchInput = styled.input`
-  border-radius: 25px;
-  /* background: ${(p) => p.theme.colors.neutral10}; */
-  background: #eae8e3;
-  border: 0px;
-  height: 48px;
-  min-width: 300px;
-  padding-left: 16px;
-  &:focus {
-    outline: 0;
-  }
 `;
 
 const ListContainer = styled.div`
@@ -59,12 +46,12 @@ const Label = styled.label`
   padding: 6px 10px;
   border-radius: 25px;
   border: 2px solid ${(p) => p.theme.colors.support2};
-  background: transparent;
+  background: ${(p) => p.theme.colors.support2};
   display: inline-block;
+  color: #fff;
   cursor: pointer;
   &:hover {
     border: 2px solid ${(p) => p.theme.colors.support1};
-    color: ${(p) => p.theme.colors.support1};
   }
 `;
 
@@ -161,14 +148,24 @@ export default () => {
       )}
       {/* Row holding search, filters, upload button */}
       <ActionsContainer>
-        <div style={{marginRight: 24}}>
-          <SearchInput
+        <div style={{marginRight: 24, width: 400}}>
+          {/* <SearchInput
             placeholder="Search docs"
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value);
               debounceSearch(e.target.value);
             }}
+          /> */}
+          <TextInput
+            dark
+            width={'400px'}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+              debounceSearch(e.target.value);
+            }}
+            label="Search docs"
+            value={searchText}
           />
         </div>
         <div style={{width: 350, display: 'flex'}}>
@@ -176,7 +173,7 @@ export default () => {
             {' '}
             Sort by:{' '}
           </div>{' '}
-          <div style={{minWidth: 200}}>
+          <div style={{minWidth: 200, display: 'flex', alignItems: 'center'}}>
             <MultiSelectInput
               options={[
                 {
@@ -228,23 +225,23 @@ export default () => {
           </>
         )}
         {/* empty state for when a search returns no results */}
-        {!loading && docs && docs.length === 0 && searchText && (
+        {/* {!loading && docs && docs.length === 0 && searchText && (
           <>
             <EmptyState
               title="No results..."
               subtitle={`We can't find any docs that match your search`}
             />
           </>
-        )}
+        )} */}
         {/* empty state for when there are no results at all */}
-        {!loading && docs && docs.length === 0 && !searchText && (
+        {/* {!loading && docs && docs.length === 0 && !searchText && (
           <>
             <EmptyState
               title="No documents yet..."
               subtitle={`Click "Upload New File" to add your first document`}
             />
           </>
-        )}
+        )} */}
       </ListContainer>
     </Container>
   );
