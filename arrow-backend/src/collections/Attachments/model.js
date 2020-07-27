@@ -18,12 +18,14 @@ const schema = new Mongo.Schema({
   type: {
     type: String,
     enum: [
-      'EmployeeUploads',
-      'CustomerReportUploads',
-      'EmployeeReportsUploads',
-      'CustomerUpload',
-      'CustomerPlan',
-      'EmployeePlan',
+      // 'EmployeeUploads',
+      // 'CustomerReportUploads',
+      // 'EmployeeReportsUploads',
+      // 'CustomerUpload',
+      // 'CustomerPlan',
+      // 'EmployeePlan',
+      'EmployeeDoc',
+      'CompanyAdminDoc',
     ],
   },
 });

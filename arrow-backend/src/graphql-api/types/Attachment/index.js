@@ -39,18 +39,22 @@ export const AttachmentSchema = gql`
   }
 
   enum AttachmentType {
-    "the source csv after you add or update employee uploads"
-    EmployeeUploads
-    "the source csv after you update customer reports"
-    CustomerReportUploads
-    "the source csv after you update employee reports"
-    EmployeeReportsUploads
-    "general uploads for a customer… CRM-esque feature"
-    CustomerUpload
-    "A customer plan upload for the company"
-    CustomerPlan
-    "A customer plan upload for employees"
-    EmployeePlan
+    # "the source csv after you add or update employee uploads"
+    # EmployeeUploads
+    # "the source csv after you update customer reports"
+    # CustomerReportUploads
+    # "the source csv after you update employee reports"
+    # EmployeeReportsUploads
+    # "general uploads for a customer… CRM-esque feature"
+    # CustomerUpload
+    # "A customer plan upload for the company"
+    # CustomerPlan
+    # "A customer plan upload for employees"
+    # EmployeePlan
+    "Documents viewable by employees"
+    EmployeeDoc
+    "Documents viewable by company employees"
+    CompanyAdminDoc
   }
 
   type Attachment {

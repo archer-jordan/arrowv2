@@ -42,7 +42,7 @@ import AdminCustomerDetail from 'routes/admin-customers-detail';
 import logoWhite from 'lib/media/arrow-logo-white.png';
 
 const Background = styled.div`
-  background-image: linear-gradient(to top, #145d91, #0e3456);
+  background-image: ${(p) => p.theme.colors.gradientBackground};
   height: 100%;
   text-align: center;
   display: flex;

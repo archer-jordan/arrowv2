@@ -10,7 +10,7 @@ import {graphql, Query} from 'react-apollo';
 import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
 import singleUpload from 'ApolloClient/Mutations/singleUpload';
 import deleteAttachment from 'ApolloClient/Mutations/deleteAttachment';
-import getAttachment from 'ApolloClient/Queries/getAttachment';
+import getAttachments from 'ApolloClient/Queries/getAttachments';
 
 import compose from 'lodash/flowRight';
 
@@ -19,7 +19,7 @@ const SectionTitle = styled.div`
   padding: 8px 16px;
   border-radius: 25px;
   margin-bottom: 24px;
-  background: ${p => p.theme.colors.primary1};
+  background: ${(p) => p.theme.colors.primary1};
 `;
 
 const UploadButton = styled.input`
@@ -33,16 +33,16 @@ const UploadButton = styled.input`
 
 const Label = styled.label`
   font-weight: 600;
-  color: ${p => p.theme.colors.support2};
+  color: ${(p) => p.theme.colors.support2};
   padding: 6px 10px;
   border-radius: 25px;
-  border: 2px solid ${p => p.theme.colors.support2};
+  border: 2px solid ${(p) => p.theme.colors.support2};
   background: transparent;
   display: inline-block;
   cursor: pointer;
   &:hover {
-    border: 2px solid ${p => p.theme.colors.support1};
-    color: ${p => p.theme.colors.support1};
+    border: 2px solid ${(p) => p.theme.colors.support1};
+    color: ${(p) => p.theme.colors.support1};
   }
 `;
 
@@ -56,7 +56,7 @@ const ButtonText = styled.div`
   font-weight: 600;
   letter-spacing: 1px;
   text-align: right;
-  color: ${p => p.theme.colors.support1};
+  color: ${(p) => p.theme.colors.support1};
   cursor: pointer;
 `;
 
@@ -66,7 +66,7 @@ const DownloadText = styled.a`
   font-weight: 600;
   letter-spacing: 1px;
   text-align: right;
-  color: ${p => p.theme.colors.support1};
+  color: ${(p) => p.theme.colors.support1};
   cursor: pointer;
 `;
 
@@ -124,7 +124,7 @@ class Plan extends React.PureComponent {
           },
           refetchQueries: [
             {
-              query: getAttachment,
+              query: getAttachments,
               variables: {
                 customerId: this.props.customer.id,
                 type,
@@ -151,7 +151,7 @@ class Plan extends React.PureComponent {
         },
         refetchQueries: [
           {
-            query: getAttachment,
+            query: getAttachments,
             variables: {
               customerId: this.props.customer.id,
               type,
@@ -166,77 +166,82 @@ class Plan extends React.PureComponent {
   render() {
     return (
       <div>
-        <SectionTitle>PLAN INFORMATION ( FOR COMPANY ADMINS )</SectionTitle>
+        <SectionTitle>FOR COMPANY ADMINS</SectionTitle>
+        {!this.state.loading ? (
+          <div>
+            <UploadButton
+              name="compay-upload"
+              type="file"
+              id="compay-upload"
+              onChange={(e) => this.onUpload(e, 'CompanyAdminDoc')}
+            />
+            <Label htmlFor="compay-upload">Upload Plan</Label>
+          </div>
+        ) : (
+          <Icon type="loading" />
+        )}
         <Query
-          query={getAttachment}
+          query={getAttachments}
           pollInterval={600000} // every ten minutes
-          variables={{customerId: this.props.customer.id, type: 'CustomerPlan'}}
+          variables={{
+            customerId: this.props.customer.id,
+            type: 'CompanyAdminDoc',
+          }}
         >
           {({data, loading, error}) => {
             if (loading) return <Icon type="loading" />;
             if (error) return 'error';
-            if (!data.getAttachment) {
-              return !this.state.loading ? (
-                <div>
-                  <UploadButton
-                    name="compay-upload"
-                    type="file"
-                    id="compay-upload"
-                    onChange={e => this.onUpload(e, 'CustomerPlan')}
-                  />
-                  <Label htmlFor="compay-upload">Upload Plan</Label>
-                </div>
-              ) : (
-                <Icon type="loading" />
-              );
+            if (data.getAttachments && data.getAttachments.length === 0) {
+              return null;
             }
-            return (
-              <FileRow
-                filename={data.getAttachment.filename}
-                url={data.getAttachment.url}
-                onDelete={() =>
-                  this.onDelete(data.getAttachment.id, 'CustomerPlan')
-                }
-              />
-            );
+            return data.getAttachments.map((file) => {
+              return (
+                <FileRow
+                  filename={file.filename}
+                  url={file.url}
+                  key={file.id}
+                  onDelete={() => this.onDelete(file.id, 'CompanyAdminDoc')}
+                />
+              );
+            });
           }}
         </Query>
 
-        <SectionTitle style={{marginTop: 48}}>
-          BENEFITS GUIDE ( FOR EMPLOYEES )
-        </SectionTitle>
+        <SectionTitle style={{marginTop: 48}}>FOR EMPLOYEES</SectionTitle>
+        {!this.state.loading ? (
+          <div>
+            <UploadButton
+              name="employee-upload"
+              type="file"
+              id="employee-upload"
+              onChange={(e) => this.onUpload(e, 'EmployeeDoc')}
+            />
+            <Label htmlFor="employee-upload">Upload Plan</Label>
+          </div>
+        ) : (
+          <Icon type="loading" />
+        )}
         <Query
-          query={getAttachment}
+          query={getAttachments}
           pollInterval={600000} // every ten minutes
-          variables={{customerId: this.props.customer.id, type: 'EmployeePlan'}}
+          variables={{customerId: this.props.customer.id, type: 'EmployeeDoc'}}
         >
           {({data, loading, error}) => {
             if (loading) return <Icon type="loading" />;
             if (error) return 'error';
-            if (!data.getAttachment) {
-              return !this.state.loading ? (
-                <div>
-                  <UploadButton
-                    name="compay-upload"
-                    type="file"
-                    id="compay-upload"
-                    onChange={e => this.onUpload(e, 'EmployeePlan')}
-                  />
-                  <Label htmlFor="compay-upload">Upload Plan</Label>
-                </div>
-              ) : (
-                <Icon type="loading" />
-              );
+            if (data.getAttachments && data.getAttachments.length === 0) {
+              return null;
             }
-            return (
-              <FileRow
-                filename={data.getAttachment.filename}
-                url={data.getAttachment.url}
-                onDelete={() =>
-                  this.onDelete(data.getAttachment.id, 'EmployeePlan')
-                }
-              />
-            );
+            return data.getAttachments.map((file) => {
+              return (
+                <FileRow
+                  filename={file.filename}
+                  url={file.url}
+                  key={file.id}
+                  onDelete={() => this.onDelete(file.id, 'EmployeeDoc')}
+                />
+              );
+            });
           }}
         </Query>
       </div>

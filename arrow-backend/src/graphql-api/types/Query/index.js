@@ -19,6 +19,7 @@ import checkIfEmployeeTotalsExist from './resolvers/checkIfEmployeeTotalsExist';
 import customerAdmins from './resolvers/customerAdmins';
 import adminUsers from './resolvers/adminUsers';
 import adminDocs from './resolvers/adminDocs';
+import getCustomerAttachments from './resolvers/getCustomerAttachments';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -43,6 +44,7 @@ export const QueryResolvers = {
     customerAdmins,
     adminUsers,
     adminDocs,
+    getCustomerAttachments,
   },
 };
 
@@ -102,6 +104,8 @@ export const QuerySchema = gql`
   }
 
   extend type Query {
+    getCustomerAttachments(type: AttachmentType!): [Attachment]
+
     "Search through admin uploads. Must be a super admin."
     adminDocs(searchText: String, sortBy: DocSortByEnum): [AdminDoc]
     "Returns the currently signed in user or null if user is not signed in"

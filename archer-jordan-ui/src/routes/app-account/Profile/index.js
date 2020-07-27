@@ -62,7 +62,7 @@ const DataItem = ({label = ' ', value = ''}) => (
 
 const RowContainer = styled(Row)`
   max-width: 100%;
-  min-height: 500px;
+  min-height: 300px;
   width: 700px;
   @media only screen and (max-width: 414px) {
     padding: 0px;
