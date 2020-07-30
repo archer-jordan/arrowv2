@@ -184,7 +184,7 @@ class Documents extends React.PureComponent {
               />
             </div>{' '}
           </div>
-          <div style={{position: 'absolute', right: 0}}>
+          <div style={{position: 'absolute', right: 0, top: 16}}>
             {!this.state.loading ? (
               <>
                 <UploadButton
