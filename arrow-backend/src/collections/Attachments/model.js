@@ -21,7 +21,7 @@ const schema = new Mongo.Schema({
       // 'EmployeeUploads',
       // 'CustomerReportUploads',
       // 'EmployeeReportsUploads',
-      // 'CustomerUpload',
+      'CustomerUpload',
       // 'CustomerPlan',
       // 'EmployeePlan',
       'EmployeeDoc',

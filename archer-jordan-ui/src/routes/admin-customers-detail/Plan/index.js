@@ -180,7 +180,7 @@ class Plan extends React.PureComponent {
               id="compay-upload"
               onChange={(e) => this.onUpload(e, 'CompanyAdminDoc')}
             />
-            <Label htmlFor="compay-upload">Upload Plan</Label>
+            <Label htmlFor="compay-upload">Upload File</Label>
           </div>
         ) : (
           <Icon type="loading" />
@@ -227,7 +227,7 @@ class Plan extends React.PureComponent {
               id="employee-upload"
               onChange={(e) => this.onUpload(e, 'EmployeeDoc')}
             />
-            <Label htmlFor="employee-upload">Upload Plan</Label>
+            <Label htmlFor="employee-upload">Upload File</Label>
           </div>
         ) : (
           <Icon type="loading" />

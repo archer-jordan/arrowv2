@@ -19,6 +19,7 @@ const saveAttachment = async (root, {id, params}, context) => {
     return await Attachments.findOne({_id: doc._id});
   } catch (err) {
     console.log(err);
+    return err;
   }
 };
 

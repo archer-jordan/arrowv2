@@ -75,7 +75,7 @@ class Documents extends React.PureComponent {
               url,
               key,
               customerId: this.props.customer.id,
-              type,
+              type: 'CustomerUpload',
             },
           },
           refetchQueries: [
@@ -83,9 +83,9 @@ class Documents extends React.PureComponent {
               query: getAttachments,
               variables: {
                 customerId: this.props.customer.id,
-                type,
-                sortBy: this.state.sortBy,
+                type: 'CustomerUpload',
                 searchText: this.state.finalSearchText,
+                sortBy: this.state.sortBy,
               },
             },
           ],
@@ -112,9 +112,9 @@ class Documents extends React.PureComponent {
             query: getAttachments,
             variables: {
               customerId: this.props.customer.id,
-              type,
-              sortBy: this.state.sortBy,
+              type: 'CustomerUpload',
               searchText: this.state.finalSearchText,
+              sortBy: this.state.sortBy,
             },
           },
         ],
@@ -137,14 +137,6 @@ class Documents extends React.PureComponent {
       <div>
         <ActionsContainer>
           <div style={{marginRight: 24}}>
-            {/* <SearchInput
-              placeholder="Search docs"
-              value={this.state.searchText}
-              onChange={(e) => {
-                this.setState({searchText: e.target.value});
-                this.debounceSearch(e.target.value);
-              }}
-            /> */}
             <TextInput
               dark
               width={'400px'}
