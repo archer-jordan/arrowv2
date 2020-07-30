@@ -45,8 +45,8 @@ export const AttachmentSchema = gql`
     # CustomerReportUploads
     # "the source csv after you update employee reports"
     # EmployeeReportsUploads
-    # "general uploads for a customer… CRM-esque feature"
-    # CustomerUpload
+    "general uploads for a customer… CRM-esque feature"
+    CustomerUpload
     # "A customer plan upload for the company"
     # CustomerPlan
     # "A customer plan upload for employees"
