@@ -166,9 +166,14 @@ class Plan extends React.PureComponent {
   render() {
     return (
       <div>
-        <SectionTitle>FOR COMPANY ADMINS</SectionTitle>
+        <SectionTitle>
+          FOR COMPANY ADMINS{' '}
+          <span style={{fontWeight: 300, marginLeft: 4}}>
+            (viewable only by company admins)
+          </span>
+        </SectionTitle>
         {!this.state.loading ? (
-          <div>
+          <div style={{marginBottom: 24, marginLeft: 48}}>
             <UploadButton
               name="compay-upload"
               type="file"
@@ -196,20 +201,26 @@ class Plan extends React.PureComponent {
             }
             return data.getAttachments.map((file) => {
               return (
-                <FileRow
-                  filename={file.filename}
-                  url={file.url}
-                  key={file.id}
-                  onDelete={() => this.onDelete(file.id, 'CompanyAdminDoc')}
-                />
+                <div style={{marginTop: 8}} key={file.id}>
+                  <FileRow
+                    filename={file.filename}
+                    url={file.url}
+                    onDelete={() => this.onDelete(file.id, 'CompanyAdminDoc')}
+                  />
+                </div>
               );
             });
           }}
         </Query>
 
-        <SectionTitle style={{marginTop: 48}}>FOR EMPLOYEES</SectionTitle>
+        <SectionTitle style={{marginTop: 48}}>
+          FOR EMPLOYEES{' '}
+          <span style={{fontWeight: 300, marginLeft: 4}}>
+            (viewable by employees AND company admins)
+          </span>
+        </SectionTitle>
         {!this.state.loading ? (
-          <div>
+          <div style={{marginBottom: 24, marginLeft: 48}}>
             <UploadButton
               name="employee-upload"
               type="file"
@@ -234,12 +245,13 @@ class Plan extends React.PureComponent {
             }
             return data.getAttachments.map((file) => {
               return (
-                <FileRow
-                  filename={file.filename}
-                  url={file.url}
-                  key={file.id}
-                  onDelete={() => this.onDelete(file.id, 'EmployeeDoc')}
-                />
+                <div style={{marginTop: 8}} key={file.id}>
+                  <FileRow
+                    filename={file.filename}
+                    url={file.url}
+                    onDelete={() => this.onDelete(file.id, 'EmployeeDoc')}
+                  />
+                </div>
               );
             });
           }}
