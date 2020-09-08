@@ -30,12 +30,8 @@ class AppAccount extends React.PureComponent {
     switch (tab) {
       case 'profile':
         return 'Profile';
-      // case 'plan':
-      //   return 'Plan';
       case 'password':
         return 'Password';
-      // case 'benefits':
-      //   return 'Benefits Guide';
       case 'documents':
         return 'Documents';
       default:
@@ -43,8 +39,6 @@ class AppAccount extends React.PureComponent {
     }
   };
   getNavItems = () => {
-    const {currentUser} = this.props;
-
     let items = [
       {
         label: 'Profile',
@@ -62,14 +56,6 @@ class AppAccount extends React.PureComponent {
             tab: 'password',
           }),
       },
-      // {
-      //   label: 'Benefits Guide',
-      //   activeValue: 'benefits',
-      //   onClick: () =>
-      //     this.onParamChange({
-      //       tab: 'benefits',
-      //     }),
-      // },
       {
         label: 'Documents',
         activeValue: 'documents',
@@ -79,23 +65,6 @@ class AppAccount extends React.PureComponent {
           }),
       },
     ];
-
-    // only super admin or compnay admin see the plan tab
-    // if (
-    //   currentUser &&
-    //   currentUser.roles &&
-    //   (currentUser.roles.includes('coAdmin') ||
-    //     currentUser.roles.includes('superAdmin'))
-    // ) {
-    //   items.splice(2, 0, {
-    //     label: 'Plan Information',
-    //     activeValue: 'plan',
-    //     onClick: () =>
-    //       this.onParamChange({
-    //         tab: 'plan',
-    //       }),
-    //   });
-    // }
 
     return items;
   };
@@ -122,16 +91,8 @@ class AppAccount extends React.PureComponent {
                 switch (tab) {
                   case 'profile':
                     return <Profile {...sharedProps} />;
-                    {
-                      /* case 'plan':
-                    return <Plan {...sharedProps} />; */
-                    }
                   case 'password':
                     return <Password {...sharedProps} />;
-                    {
-                      /* case 'benefits':
-                    return <BenefitsGuide {...sharedProps} />; */
-                    }
                   case 'documents':
                     return <Documents {...sharedProps} />;
                   default:
