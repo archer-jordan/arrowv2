@@ -21,6 +21,8 @@ import updateSupportStatus from './updateSupportStatus';
 import deleteEmployee from './deleteEmployee';
 import uploadAdminDoc from './uploadAdminDoc';
 import deleteAdminDoc from './deleteAdminDoc';
+import saveSystemSettings from './saveSystemSettings';
+import referralSignup from './referralSignup';
 
 export const MutationResolvers = {
   Mutation: {
@@ -51,5 +53,7 @@ export const MutationResolvers = {
     deleteEmployee,
     uploadAdminDoc,
     deleteAdminDoc,
+    saveSystemSettings,
+    referralSignup,
   },
 };

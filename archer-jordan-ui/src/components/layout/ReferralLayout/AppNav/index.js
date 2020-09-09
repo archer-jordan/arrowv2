@@ -21,7 +21,7 @@ const MobileCol = styled.div`
 `;
 
 const RightContainer = styled.div`
-  flex: 3;
+  flex: 1;
   justify-content: flex-end;
   display: flex;
   @media only screen and (max-width: 414px) {
@@ -29,7 +29,7 @@ const RightContainer = styled.div`
   }
 `;
 
-const AppNav = ({pathname}) => {
+const AppNav = ({pathname, currentUser}) => {
   return (
     <React.Fragment>
       <AppNavContainer>
@@ -45,50 +45,20 @@ const AppNav = ({pathname}) => {
         >
           {' '}
           <div style={{flex: 1}}>
-            <CompanyName>ARCHER JORDAN ADMIN</CompanyName>
+            <CompanyName>REFERRAL PARTNERS</CompanyName>
           </div>
           <RightContainer>
             <MobileCol>
-              <NavItem
-                to={`/admin/customers`}
-                active={
-                  (pathname && pathname.includes('/customers')) ||
-                  pathname === '/admin'
-                }
-              >
-                CUSTOMERS
+              <NavItem to={`/referral`} active={pathname === '/referral'}>
+                PROFILE
               </NavItem>
             </MobileCol>
             <MobileCol>
               <NavItem
-                to={`/admin/users`}
-                active={pathname && pathname.includes('/users')}
+                to={`/referral/accounts`}
+                active={pathname && pathname.includes('/accounts')}
               >
-                USERS
-              </NavItem>
-            </MobileCol>
-            <MobileCol>
-              <NavItem
-                to={`/admin/support`}
-                active={pathname && pathname.includes('/support')}
-              >
-                SUPPORT
-              </NavItem>
-            </MobileCol>
-            <MobileCol>
-              <NavItem
-                to={`/admin/docs`}
-                active={pathname && pathname.includes('/docs')}
-              >
-                ACT DOCS
-              </NavItem>
-            </MobileCol>
-            <MobileCol>
-              <NavItem
-                to={`/admin/partners`}
-                active={pathname && pathname.includes('/partners')}
-              >
-                Referral Partners
+                ACCOUNTS
               </NavItem>
             </MobileCol>
           </RightContainer>

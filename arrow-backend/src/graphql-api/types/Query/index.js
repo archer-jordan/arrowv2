@@ -20,6 +20,7 @@ import customerAdmins from './resolvers/customerAdmins';
 import adminUsers from './resolvers/adminUsers';
 import adminDocs from './resolvers/adminDocs';
 import getCustomerAttachments from './resolvers/getCustomerAttachments';
+import systemSettings from './resolvers/systemSettings';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -45,6 +46,7 @@ export const QueryResolvers = {
     adminUsers,
     adminDocs,
     getCustomerAttachments,
+    systemSettings,
   },
 };
 
@@ -104,6 +106,7 @@ export const QuerySchema = gql`
   }
 
   extend type Query {
+    systemSettings: SystemSetting
     getCustomerAttachments(type: AttachmentType!): [Attachment]
 
     "Search through admin uploads. Must be a super admin."

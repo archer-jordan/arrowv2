@@ -4,3 +4,4 @@ notes.txt
 dump/
 .env
 .DS_Store
+migrate-mongo-config.js

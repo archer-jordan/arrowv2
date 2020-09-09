@@ -2,6 +2,7 @@ import {gql} from 'apollo-server';
 import Customers from 'collections/Customers/model';
 import Employees from 'collections/Employees/model';
 import Users from 'collections/Users/model';
+import ReferralPartners from 'collections/ReferralPartners/model';
 
 export const UserProfileResolvers = {
   UserProfile: {
@@ -69,6 +70,12 @@ export const UserProfileResolvers = {
         return company && company.status;
       }
     },
+    referralProfile: async (root) => {
+      if (root.roles && root.roles.includes('referral')) {
+        let referral = await ReferralPartners.findOne({userId: root._id});
+        return referral;
+      }
+    },
   },
 };
 
@@ -80,6 +87,8 @@ export const UserProfileSchema = gql`
     coAdmin
     "Arrow admin user"
     superAdmin
+    "Referral Partner"
+    referral
   }
 
   enum UserPermissionEnum {
@@ -127,5 +136,6 @@ export const UserProfileSchema = gql`
     createdAt: String
     # emails: [EmailRecord]
     companyStatus: String
+    referralProfile: ReferralPartner
   }
 `;

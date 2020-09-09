@@ -1,13 +1,13 @@
 export default {
-  cleanTypenameFromArray: arrayValue => {
-    return arrayValue.map(value => {
+  cleanTypenameFromArray: (arrayValue) => {
+    return arrayValue.map((value) => {
       if (value && value.__typename) {
         delete value.__typename;
       }
       return value;
     });
   },
-  capitalize: s => {
+  capitalize: (s) => {
     if (typeof s !== 'string') return '';
     return s.charAt(0).toUpperCase() + s.slice(1);
   },
@@ -41,7 +41,13 @@ export default {
 
     return null;
   },
-  mapCompanyTypeToLabel: companyType => {
+  centsToDollars: (value) => {
+    return (value / 100).toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+  },
+  mapCompanyTypeToLabel: (companyType) => {
     if (!companyType) return '';
     switch (companyType) {
       case 'cCorp':

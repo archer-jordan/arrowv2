@@ -6,7 +6,9 @@
     "start": "NODE_PATH=src/ yarn babel-node -- ./index.js",
     "local": "NODE_PATH=src/ nodemon --exec yarn babel-node -- ./index.js",
     "build": "babel src -d dist",
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku master",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down"
   },
   "dependencies": {
     "@accounts/graphql-api": "^0.20.0",
@@ -19,6 +21,7 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "dataloader": "^2.0.0",
     "dotenv": "^8.0.0",
     "graphql": "^14.2.1",
     "graphql-toolkit": "^0.5.10",

@@ -5,7 +5,6 @@ import Col from 'components/common/Col';
 // COMPONENTS
 import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
-// import Plan from './Plan';
 import Profile from './Profile';
 import Password from './Password';
 import Documents from './Documents';

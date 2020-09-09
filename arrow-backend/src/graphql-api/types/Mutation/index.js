@@ -23,6 +23,11 @@ export const MutationSchema = gql`
   }
 
   extend type Mutation {
+    referralSignup(email: String!): MutationResponse
+    saveSystemSettings(
+      minimumReferralHours: Int
+      referralRate: Int
+    ): SystemSetting
     deleteAdminDoc(id: ID!): MutationResponse
     uploadAdminDoc(file: Upload!): AdminDoc
 

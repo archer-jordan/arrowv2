@@ -12,6 +12,7 @@ import PageNotFound from 'routes/public-not-found';
 import PublicLayout from 'components/layout/PublicLayout';
 import AppLayout from 'components/layout/AppLayout';
 import AdminLayout from 'components/layout/AdminLayout';
+import ReferralLayout from 'components/layout/ReferralLayout';
 // COMPONENTS
 import Loading from 'components/common/Loading';
 // AUTH
@@ -37,7 +38,12 @@ import AdminDocs from 'routes/admin-docs';
 import AdminVendors from 'routes/admin-vendors';
 import AdminUsers from 'routes/admin-users';
 import AdminSupport from 'routes/admin-support';
+import AdminPartners from 'routes/admin-partners';
 import AdminCustomerDetail from 'routes/admin-customers-detail';
+// REFERRAL
+import ReferralSignup from 'routes/referral-signup';
+import ReferralHome from 'routes/referral-home';
+import ReferralRegister from 'routes/referral-register-partner';
 // LIB
 import logoWhite from 'lib/media/arrow-logo-white.png';
 
@@ -88,6 +94,7 @@ class AppRoutes extends React.Component {
     if (
       currentUser &&
       !currentUser.roles.includes('superAdmin') &&
+      !currentUser.roles.includes('referral') &&
       currentUser.companyStatus !== 'active'
     ) {
       return (
@@ -185,6 +192,13 @@ class AppRoutes extends React.Component {
           <AdminRoute
             exact
             layout={AdminLayout}
+            path="/admin/partners"
+            currentUser={currentUser}
+            component={AdminPartners}
+          />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
             path="/admin/support"
             currentUser={currentUser}
             component={AdminSupport}
@@ -239,6 +253,31 @@ class AppRoutes extends React.Component {
             currentUser={currentUser}
             component={ResetPassword}
           />
+          {/* REFERRAL PARTNERS */}
+
+          <ProtectedRoute
+            exact
+            layout={ReferralLayout}
+            path="/referral"
+            currentUser={currentUser}
+            component={ReferralHome}
+          />
+
+          <PublicRoute
+            exact
+            layout={PublicLayout}
+            path="/referral-signup"
+            currentUser={currentUser}
+            component={ReferralSignup}
+          />
+          <PublicRoute
+            exact
+            layout={PublicLayout}
+            path="/register-partner/:token"
+            currentUser={currentUser}
+            component={ReferralRegister}
+          />
+
           <PublicRoute
             exact
             layout={PublicLayout}
@@ -246,6 +285,7 @@ class AppRoutes extends React.Component {
             currentUser={currentUser}
             component={AuthLoginRoute}
           />
+
           <Route
             render={() => (
               <PublicLayout showFooter={false} showHeader={false}>
