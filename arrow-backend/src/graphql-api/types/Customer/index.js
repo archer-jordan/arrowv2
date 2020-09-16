@@ -3,7 +3,7 @@ import Users from 'collections/Users/model';
 
 export const CustomerResolvers = {
   Customer: {
-    id: root => root._id,
+    id: (root) => root._id,
     adminUsers: async (root, args, context) => {
       let roles = ['coAdmin'];
       return await Users.find({customerId: root._id, roles: {$in: roles}});
@@ -77,6 +77,9 @@ export const CustomerSchema = gql`
     city: String
     # attachments
     contacts: [Contact]
+    referralPartnerId: String
+    referralStartDate: String
+    referralEndDate: String
     adminUsers: [UserProfile]
   }
 `;

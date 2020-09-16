@@ -3,6 +3,7 @@ import Users from 'collections/Users/model';
 import moment from 'moment';
 import {generateRandomToken} from '@accounts/server';
 import emailTransporter from 'modules/email.js';
+import SystemSettings from '../../../../collections/SystemSettings/model';
 
 export default async (root, args) => {
   try {
@@ -43,11 +44,17 @@ export default async (root, args) => {
     };
     let userDoc = new Users(user);
     await userDoc.save();
+
+    // grab the current system settings for referral pay rate and hours
+    let currentSettings = await SystemSettings.find()[0];
+
     // create ReferralPartner record
     let referralPartner = {
       userId: userDoc._id,
       applicationSubmittedDate: moment().valueOf(),
       status: 'pending',
+      minimumReferralHours: currentSettings.minimumReferralHours,
+      referralRate: currentSettings.referralRate,
     };
     let partnerDoc = new ReferralPartners(referralPartner);
     await partnerDoc.save();

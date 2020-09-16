@@ -20,8 +20,10 @@ export default {
 
     // if they reached the limit, then we should throw an error and not validate their login
     if (failedAttempts > MAX_ATTEMPTS && lastAttempt > isTimeLocked) {
+      // to do: figure out the minutes left they'll be locked out and put in in the error message
+      // let minutes = lastAttempt
       throw new Error(
-        `For security measures, your account has been locked due to many failed login attempts. Please wait 15 minutes.`
+        `For security measures, your account has been locked due to many failed login attempts. Please wait 15 minutes before trying to log in again.`
       );
     } else {
       // if the user has no issues with max attempts, we reset numLoginAttempts

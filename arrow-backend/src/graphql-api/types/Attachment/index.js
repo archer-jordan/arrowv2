@@ -14,6 +14,7 @@ export const AttachmentResolvers = {
       // 'EmployeePlan',
       try {
         if (!context.user || !context.user.id) return null;
+        if (!root.key) return null;
         const params = {
           Bucket: process.env.AWS_BUCKET_NAME,
           Key: root.key,
@@ -36,25 +37,18 @@ export const AttachmentSchema = gql`
     customerId: String
     key: String!
     type: AttachmentType
+    encoding: String
   }
 
   enum AttachmentType {
-    # "the source csv after you add or update employee uploads"
-    # EmployeeUploads
-    # "the source csv after you update customer reports"
-    # CustomerReportUploads
-    # "the source csv after you update employee reports"
-    # EmployeeReportsUploads
     "general uploads for a customer… CRM-esque feature"
     CustomerUpload
-    # "A customer plan upload for the company"
-    # CustomerPlan
-    # "A customer plan upload for employees"
-    # EmployeePlan
     "Documents viewable by employees"
     EmployeeDoc
     "Documents viewable by company employees"
     CompanyAdminDoc
+    "Documents related to a referral partner"
+    ReferralPartnerDoc
   }
 
   type Attachment {

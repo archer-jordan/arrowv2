@@ -32,6 +32,9 @@ const schema = new Mongo.Schema({
       email: String,
     },
   ],
+  referralPartnerId: String, // the ReferralPartner _id for this customer (if one exists)
+  referralStartDate: String,
+  referralEndDate: String,
 });
 
 // ADD INDEXES
