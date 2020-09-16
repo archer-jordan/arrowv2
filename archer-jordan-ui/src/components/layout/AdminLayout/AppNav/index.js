@@ -1,27 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import styled from 'styled-components';
+import NavItem from 'components/common/NavItem';
 
 const AppNavContainer = styled.div`
   background: ${(p) => p.theme.colors.primary2};
   font-family: ${(p) => p.theme.fontFamily};
   border-bottom: 1px solid #efefef;
-`;
-
-const NavItemContainer = styled.div`
-  text-align: center;
-  cursor: pointer;
-  letter-spacing: 1px;
-  font-size: 16px !important;
-  text-decoration: none;
-  transition: color 0.3s ease, background-color 0.3s ease,
-    border-color 0.3s ease, width 0.3s ease, opacity 0.3s ease;
-  a {
-    color: ${(p) => (p.active ? p.theme.colors.support1 : '#fff')} !important;
-  }
-  a:hover {
-    color: ${(p) => p.theme.colors.support4} !important;
-  }
 `;
 
 const CompanyName = styled.div`
@@ -31,30 +15,13 @@ const CompanyName = styled.div`
   text-transform: uppercase;
 `;
 
-const ActiveBar = styled.div`
-  height: 6px;
-  width: 100%;
-  position: relative;
-  bottom: -16px;
-  background: ${(p) => (p.active ? p.theme.colors.support1 : 'transparent')};
-`;
-
-const NavItem = ({children, active, to}) => (
-  <div>
-    <NavItemContainer active={active}>
-      <Link to={to}>{children}</Link>
-    </NavItemContainer>
-    <ActiveBar active={active} />
-  </div>
-);
-
 const MobileCol = styled.div`
   display: inline-flex !important;
   margin-left: 24px;
 `;
 
 const RightContainer = styled.div`
-  flex: 1;
+  flex: 3;
   justify-content: flex-end;
   display: flex;
   @media only screen and (max-width: 414px) {
@@ -108,6 +75,22 @@ const AppNav = ({pathname}) => {
                 SUPPORT
               </NavItem>
             </MobileCol>
+            <MobileCol>
+              <NavItem
+                to={`/admin/docs`}
+                active={pathname && pathname.includes('/docs')}
+              >
+                ACT DOCS
+              </NavItem>
+            </MobileCol>
+            {/* <MobileCol>
+              <NavItem
+                to={`/admin/partners`}
+                active={pathname && pathname.includes('/partners')}
+              >
+                REFERRAL PARTNERS
+              </NavItem>
+            </MobileCol> */}
           </RightContainer>
         </div>
         {/* */}

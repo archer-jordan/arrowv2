@@ -20,6 +20,15 @@ import {
   SupportMessageSchema,
   SupportMessageResolvers,
 } from './types/SupportMessage';
+import {AdminDocSchema, AdminDocResolvers} from './types/AdminDoc';
+import {
+  SystemSettingSchema,
+  SystemSettingResolvers,
+} from './types/SystemSetting';
+import {
+  ReferralPartnerSchema,
+  ReferralPartnerResolvers,
+} from './types/ReferralPartner';
 
 // merges all of our types into a typeDefs
 export const typeDefs = gql`
@@ -32,6 +41,9 @@ export const typeDefs = gql`
   ${AttachmentSchema}
   ${EmployeeReportSchema}
   ${SupportMessageSchema}
+  ${AdminDocSchema}
+  ${SystemSettingSchema}
+  ${ReferralPartnerSchema}
 `;
 
 // merges all our resolvers
@@ -44,5 +56,7 @@ export const CustomResolvers = merge(
   CustomerReportResolvers,
   AttachmentResolvers,
   EmployeeReportResolvers,
-  SupportMessageResolvers
+  SupportMessageResolvers,
+  AdminDocResolvers,
+  ReferralPartnerResolvers
 );

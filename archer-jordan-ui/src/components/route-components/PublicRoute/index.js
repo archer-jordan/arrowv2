@@ -4,7 +4,7 @@ import {Route, Redirect} from 'react-router-dom';
 
 // EXPORTED COMPONENT
 // ==============================
-const PublicRoute = props => {
+const PublicRoute = (props) => {
   const {
     currentUser,
     redirectOnAuth,
@@ -17,6 +17,15 @@ const PublicRoute = props => {
     ...rest
   } = props;
 
+  if (
+    currentUser &&
+    currentUser.roles &&
+    currentUser.roles.includes('referral') &&
+    redirectOnAuth
+  ) {
+    return <Redirect to="/referral" />;
+  }
+
   if (currentUser && currentUser.id && redirectOnAuth) {
     return <Redirect to="/reports" />;
   }
@@ -25,7 +34,7 @@ const PublicRoute = props => {
     <Route
       {...rest}
       path={path}
-      render={args => (
+      render={(args) => (
         <Layout
           currentUser={currentUser}
           backgroundColor={backgroundColor}

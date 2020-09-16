@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import {debounce} from 'lodash';
 // COMPONENTS
 import Icon from 'components/common/Icon';
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import Popconfirm from 'components/common/Popconfirm';
+import TextInput from 'components/inputs/TextInput';
+import FileRow from 'components/common/FileRow';
+import MultiSelectInput from 'components/inputs/MultiSelectInput';
 // APOLLO
 import {graphql, Query} from 'react-apollo';
 import saveAttachment from 'ApolloClient/Mutations/saveAttachment';
@@ -23,83 +24,33 @@ const UploadButton = styled.input`
   z-index: -1;
 `;
 
+const ActionsContainer = styled.div`
+  display: flex;
+  position: relative;
+  margin-bottom: 32px;
+`;
+
 const Label = styled.label`
   font-weight: 600;
-  color: ${p => p.theme.colors.support2};
+  color: ${(p) => p.theme.colors.support2};
   padding: 6px 10px;
   border-radius: 25px;
-  border: 2px solid ${p => p.theme.colors.support2};
-  background: transparent;
+  border: 2px solid ${(p) => p.theme.colors.support2};
+  background: ${(p) => p.theme.colors.support2};
+  color: #fff;
   display: inline-block;
   cursor: pointer;
   &:hover {
-    border: 2px solid ${p => p.theme.colors.support1};
-    color: ${p => p.theme.colors.support1};
+    border: 2px solid ${(p) => p.theme.colors.support1};
   }
 `;
-
-const Filename = styled.div`
-  font-size: 18px;
-`;
-
-const ButtonText = styled.div`
-  font-size: 18px;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-align: right;
-  color: ${p => p.theme.colors.neutral8};
-  cursor: pointer;
-  &:hover {
-    color: ${p => p.theme.colors.neutral7};
-  }
-`;
-
-const DownloadText = styled.a`
-  font-size: 18px;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-align: right;
-  color: ${p => p.theme.colors.support3};
-  &:hover {
-    color: ${p => p.theme.colors.support1};
-  }
-  cursor: pointer;
-`;
-
-const FileRow = ({filename, url, onDelete}) => (
-  <Row
-    style={{
-      width: '80%',
-      marginTop: 16,
-      height: 40,
-      borderBottom: '1px solid #efefef',
-    }}
-  >
-    <Col xs={16}>
-      <Filename>{filename}</Filename>
-    </Col>
-    <Col xs={4}>
-      <DownloadText href={url} download={filename}>
-        Download
-      </DownloadText>
-    </Col>
-    <Col xs={4}>
-      {' '}
-      <Popconfirm
-        title="Are you sure you want to delete this?"
-        onConfirm={onDelete}
-      >
-        <ButtonText>Delete</ButtonText>{' '}
-      </Popconfirm>
-    </Col>
-  </Row>
-);
 
 class Documents extends React.PureComponent {
   state = {
     loading: false,
+    searchText: '',
+    finalSearchText: undefined,
+    sortBy: 'ascCreatedAt',
   };
   onUpload = async (event, type) => {
     try {
@@ -124,7 +75,7 @@ class Documents extends React.PureComponent {
               url,
               key,
               customerId: this.props.customer.id,
-              type,
+              type: 'CustomerUpload',
             },
           },
           refetchQueries: [
@@ -132,7 +83,9 @@ class Documents extends React.PureComponent {
               query: getAttachments,
               variables: {
                 customerId: this.props.customer.id,
-                type,
+                type: 'CustomerUpload',
+                searchText: this.state.finalSearchText,
+                sortBy: this.state.sortBy,
               },
             },
           ],
@@ -159,7 +112,9 @@ class Documents extends React.PureComponent {
             query: getAttachments,
             variables: {
               customerId: this.props.customer.id,
-              type,
+              type: 'CustomerUpload',
+              searchText: this.state.finalSearchText,
+              sortBy: this.state.sortBy,
             },
           },
         ],
@@ -168,24 +123,89 @@ class Documents extends React.PureComponent {
       console.log(err);
     }
   };
+  debounceSearch = debounce((searchText) => {
+    this.setState({finalSearchText: searchText});
+  }, 250);
   render() {
+    let variables = {
+      customerId: this.props.customer.id,
+      type: 'CustomerUpload',
+      searchText: this.state.finalSearchText,
+      sortBy: this.state.sortBy,
+    };
     return (
       <div>
+        <ActionsContainer>
+          <div style={{marginRight: 24}}>
+            <TextInput
+              dark
+              width={'400px'}
+              onChange={(e) => {
+                this.setState({searchText: e.target.value});
+                this.debounceSearch(e.target.value);
+              }}
+              label="Search docs"
+              value={this.state.searchText}
+            />
+          </div>
+          <div style={{width: 350, display: 'flex'}}>
+            <div
+              style={{marginRight: 8, display: 'flex', alignItems: 'center'}}
+            >
+              {' '}
+              Sort by:{' '}
+            </div>{' '}
+            <div style={{minWidth: 200, display: 'flex', alignItems: 'center'}}>
+              <MultiSelectInput
+                options={[
+                  {
+                    label: 'Newest',
+                    id: 'ascCreatedAt',
+                  },
+                  {
+                    label: 'Oldest',
+                    id: 'descCreatedAt',
+                  },
+                  {
+                    label: 'By Filename',
+                    id: 'ascFilename',
+                  },
+                ]}
+                value={this.state.sortBy}
+                onChange={(sortBy) => this.setState({sortBy})}
+              />
+            </div>{' '}
+          </div>
+          <div style={{position: 'absolute', right: 0, top: 18}}>
+            {!this.state.loading ? (
+              <>
+                <UploadButton
+                  name="compay-upload"
+                  type="file"
+                  id="compay-upload"
+                  onChange={(e) => this.onUpload(e, 'CustomerUpload')}
+                />
+                <Label htmlFor="compay-upload">+ Upload New File</Label>
+              </>
+            ) : (
+              <Icon type="loading" />
+            )}
+          </div>
+        </ActionsContainer>
         <Query
           query={getAttachments}
-          pollInterval={600000} // every ten minutes
-          variables={{
-            customerId: this.props.customer.id,
-            type: 'CustomerUpload',
-          }}
+          //pollInterval={600000} // every ten minutes
+          variables={variables}
         >
           {({data, loading, error}) => {
             if (loading) return <Icon type="loading" />;
             if (error) return 'error';
+            const docs = data && data.getAttachments;
             return (
               <React.Fragment>
-                {data.getAttachments &&
-                  data.getAttachments.map(file => {
+                {docs &&
+                  docs.length > 0 &&
+                  docs.map((file) => {
                     return (
                       <FileRow
                         key={file.id}
@@ -197,20 +217,28 @@ class Documents extends React.PureComponent {
                       />
                     );
                   })}
-
-                {!this.state.loading ? (
-                  <div style={{marginTop: 32}}>
-                    <UploadButton
-                      name="compay-upload"
-                      type="file"
-                      id="compay-upload"
-                      onChange={e => this.onUpload(e, 'CustomerUpload')}
-                    />
-                    <Label htmlFor="compay-upload">Upload New File</Label>
-                  </div>
-                ) : (
-                  <Icon type="loading" />
-                )}
+                {/* {!loading &&
+                  docs &&
+                  docs.length === 0 &&
+                  this.state.searchText && (
+                    <>
+                      <EmptyState
+                        title="No results..."
+                        subtitle={`We can't find any docs that match your search`}
+                      />
+                    </>
+                  )} */}
+                {/* {!loading &&
+                  docs &&
+                  docs.length === 0 &&
+                  !this.state.searchText && (
+                    <>
+                      <EmptyState
+                        title="No documents yet..."
+                        subtitle={`Click "Upload New File" to add your first document`}
+                      />
+                    </>
+                  )} */}
               </React.Fragment>
             );
           }}

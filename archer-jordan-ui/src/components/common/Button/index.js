@@ -68,8 +68,9 @@ const ButtonContainer = styled.button`
   background-color: ${(props) => getBackgroundColor(props)};
   border: 0px;
   line-height: 40px;
-  /* text-transform: uppercase; */
   letter-spacing: 0.025em;
+  padding-right: 4px;
+  padding-left: 4px;
   border: ${(p) =>
     p.secondary && !p.disabled ? `2px solid ${p.theme.colors.primary3}` : null};
   align-items: center;

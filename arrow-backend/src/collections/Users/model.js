@@ -31,7 +31,7 @@ const schema = new Mongo.Schema({
   createdAt: Number,
   roles: {
     type: [String],
-    enum: ['coEmployee', 'coAdmin', 'superAdmin'],
+    enum: ['coEmployee', 'coAdmin', 'superAdmin', 'referral'],
   },
   permissions: {
     type: [String],

@@ -6,10 +6,10 @@ const schema = new Mongo.Schema({
   customerId: String,
   month: String,
   year: String,
-  activeThisMonth: String,
+  activeThisMonth: Number,
   // totals
-  totalHours: String,
-  totalFringe: String,
+  totalHours: Number,
+  totalFringe: Number,
   totalHealthAndWelfare: String,
   totalVHS: String,
   totalEmployees: String,

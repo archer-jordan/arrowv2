@@ -10,7 +10,7 @@ export default () => {
   return (
     <div style={{opacity: 0, display: 'none'}}>
       {imagesToLoad.map((src, i) => (
-        <img src={src} alt={`preload-img-${i}`} rel="preload" />
+        <img key={i} src={src} alt={`preload-img-${i}`} rel="preload" />
       ))}
     </div>
   );

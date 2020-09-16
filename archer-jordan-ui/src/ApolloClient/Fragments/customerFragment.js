@@ -11,6 +11,7 @@ export default gql`
     naics
     sic
     status
+    referralPartnerId
     # location
     street
     zip

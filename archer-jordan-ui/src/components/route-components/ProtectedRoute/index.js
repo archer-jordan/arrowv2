@@ -33,7 +33,7 @@ class ProtectedRoute extends React.Component {
       <Route
         {...rest}
         path={path}
-        render={args => (
+        render={(args) => (
           <div style={{height: '100%'}}>
             {currentUser && currentUser.id ? (
               <Layout {...args} {...this.props}>

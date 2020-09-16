@@ -1,13 +1,17 @@
+import {PARTNER_TYPE_OPTIONS} from 'components/inputs/PartnerTypeInput';
+
 export default {
-  cleanTypenameFromArray: arrayValue => {
-    return arrayValue.map(value => {
+  cleanTypenameFromArray: (arrayValue) => {
+    // given an array of objects, this will remove the __typename field
+    // this is needed because most/all mutations will not accept values with __typename as a field
+    return arrayValue.map((value) => {
       if (value && value.__typename) {
         delete value.__typename;
       }
       return value;
     });
   },
-  capitalize: s => {
+  capitalize: (s) => {
     if (typeof s !== 'string') return '';
     return s.charAt(0).toUpperCase() + s.slice(1);
   },
@@ -41,7 +45,26 @@ export default {
 
     return null;
   },
-  mapCompanyTypeToLabel: companyType => {
+  centsToDollars: (value) => {
+    // given a dollar amount in cents, this will return dollars
+    return (value / 100).toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+  },
+  mapPartnerTypeToLabel: (partnerType) => {
+    // given a raw partnerType value (which is in camel case), this will return the human-readable label
+    let item = PARTNER_TYPE_OPTIONS.filter(
+      (item) => item.value === partnerType
+    )[0];
+    if (item) {
+      return item.label;
+    } else {
+      return null;
+    }
+  },
+  mapCompanyTypeToLabel: (companyType) => {
+    // given a raw companyType value (which is in camel case), this will return the human-readable label
     if (!companyType) return '';
     switch (companyType) {
       case 'cCorp':

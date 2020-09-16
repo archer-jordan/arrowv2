@@ -5,13 +5,12 @@ import Col from 'components/common/Col';
 // COMPONENTS
 import Breadcrumb from 'components/common/Breadcrumb';
 import SideNav from 'components/common/SideNav';
-import Plan from './Plan';
 import Profile from './Profile';
 import Password from './Password';
-import BenefitsGuide from './BenefitsGuide';
+import Documents from './Documents';
 
 class AppAccount extends React.PureComponent {
-  onParamChange = newValues => {
+  onParamChange = (newValues) => {
     let oldParams = queryString.parse(this.props.location.search);
     let newParams = {
       ...oldParams,
@@ -26,23 +25,19 @@ class AppAccount extends React.PureComponent {
       return this.onParamChange({tab: 'profile'});
     }
   }
-  getTab = tab => {
+  getTab = (tab) => {
     switch (tab) {
       case 'profile':
         return 'Profile';
-      case 'plan':
-        return 'Plan';
       case 'password':
         return 'Password';
-      case 'benefits':
-        return 'Benefits Guide';
+      case 'documents':
+        return 'Documents';
       default:
         return null;
     }
   };
   getNavItems = () => {
-    const {currentUser} = this.props;
-
     let items = [
       {
         label: 'Profile',
@@ -61,31 +56,14 @@ class AppAccount extends React.PureComponent {
           }),
       },
       {
-        label: 'Benefits Guide',
-        activeValue: 'benefits',
+        label: 'Documents',
+        activeValue: 'documents',
         onClick: () =>
           this.onParamChange({
-            tab: 'benefits',
+            tab: 'documents',
           }),
       },
     ];
-
-    // only super admin or compnay admin see the plan tab
-    if (
-      currentUser &&
-      currentUser.roles &&
-      (currentUser.roles.includes('coAdmin') ||
-        currentUser.roles.includes('superAdmin'))
-    ) {
-      items.splice(2, 0, {
-        label: 'Plan Information',
-        activeValue: 'plan',
-        onClick: () =>
-          this.onParamChange({
-            tab: 'plan',
-          }),
-      });
-    }
 
     return items;
   };
@@ -112,12 +90,10 @@ class AppAccount extends React.PureComponent {
                 switch (tab) {
                   case 'profile':
                     return <Profile {...sharedProps} />;
-                  case 'plan':
-                    return <Plan {...sharedProps} />;
                   case 'password':
                     return <Password {...sharedProps} />;
-                  case 'benefits':
-                    return <BenefitsGuide {...sharedProps} />;
+                  case 'documents':
+                    return <Documents {...sharedProps} />;
                   default:
                     return <div {...sharedProps} />;
                 }

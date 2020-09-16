@@ -18,6 +18,9 @@ import employeeIdAlreadyExists from './resolvers/employeeIdAlreadyExists';
 import checkIfEmployeeTotalsExist from './resolvers/checkIfEmployeeTotalsExist';
 import customerAdmins from './resolvers/customerAdmins';
 import adminUsers from './resolvers/adminUsers';
+import adminDocs from './resolvers/adminDocs';
+import getCustomerAttachments from './resolvers/getCustomerAttachments';
+import systemSettings from './resolvers/systemSettings';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -41,6 +44,9 @@ export const QueryResolvers = {
     customerIdAlreadyExists,
     customerAdmins,
     adminUsers,
+    adminDocs,
+    getCustomerAttachments,
+    systemSettings,
   },
 };
 
@@ -93,7 +99,18 @@ export const QuerySchema = gql`
     hireDateDescend
   }
 
+  enum DocSortByEnum {
+    ascCreatedAt
+    descCreatedAt
+    ascFilename
+  }
+
   extend type Query {
+    systemSettings: SystemSetting
+    getCustomerAttachments(type: AttachmentType!): [Attachment]
+
+    "Search through admin uploads. Must be a super admin."
+    adminDocs(searchText: String, sortBy: DocSortByEnum): [AdminDoc]
     "Returns the currently signed in user or null if user is not signed in"
     currentUser: UserProfile
 
@@ -159,7 +176,12 @@ export const QuerySchema = gql`
     getAttachment(customerId: ID, type: AttachmentType): Attachment
 
     "Returns multiple attachments"
-    getAttachments(customerId: ID, type: AttachmentType): [Attachment]
+    getAttachments(
+      customerId: ID
+      type: AttachmentType
+      searchText: String
+      sortBy: DocSortByEnum
+    ): [Attachment]
 
     "Given a customer ID (database ID), this query returns a list of that customer's reports (CustomerReport)"
     customerReportsByCustomerId(customerId: ID!): [CustomerReport]
