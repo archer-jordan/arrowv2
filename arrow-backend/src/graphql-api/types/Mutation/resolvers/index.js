@@ -23,6 +23,8 @@ import uploadAdminDoc from './uploadAdminDoc';
 import deleteAdminDoc from './deleteAdminDoc';
 import saveSystemSettings from './saveSystemSettings';
 import referralSignup from './referralSignup';
+import saveReferralPartner from './saveReferralPartner';
+import updateCustomerReferralPartner from './updateCustomerReferralPartner';
 
 export const MutationResolvers = {
   Mutation: {
@@ -55,5 +57,7 @@ export const MutationResolvers = {
     deleteAdminDoc,
     saveSystemSettings,
     referralSignup,
+    saveReferralPartner,
+    updateCustomerReferralPartner,
   },
 };

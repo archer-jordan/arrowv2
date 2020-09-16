@@ -23,6 +23,14 @@ export const MutationSchema = gql`
   }
 
   extend type Mutation {
+    "Used to update the referral partner that is attached to a given customer"
+    updateCustomerReferralPartner(
+      customerId: ID!
+      referralPartnerId: ID!
+      referralStartDate: String!
+      referralEndDate: String!
+    ): MutationResponse
+    saveReferralPartner(id: ID!, params: ReferralPartnerParams): ReferralPartner
     referralSignup(email: String!): MutationResponse
     saveSystemSettings(
       minimumReferralHours: Int

@@ -2,6 +2,41 @@ import EmployeeReports from 'collections/EmployeeReports/model';
 import Customers from 'collections/Customers/model';
 import Employees from 'collections/Employees/model';
 import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
+import moment from 'moment';
+import ReferralPartners from 'collections/ReferralPartners/model';
+
+const runReferralPartnerReports = async ({dataRows, customer}) => {
+  // referralStartDate: String,
+  // referralEndDate: String,
+  let start = moment(parseInt(customer.referralStartDate)).valueOf();
+  let end = moment(parseInt(customer.referralEndDate)).valueOf();
+  // 1. See if we are still inside the referral period (ie we still owe the referral partner money)
+
+  // 2. find the referral partner
+  let partner = await ReferralPartners.findOne({
+    _id: customer.referralPartnerId,
+  });
+  // 3. figure out how many employees qualify
+  let qualifiedEmployees = [];
+
+  dataRows.forEach((item) => {
+    if (item.hours) {
+    }
+  });
+};
+
+// assignedId: String
+// companyAssignedId: String
+// month: String
+// year: String
+// hours: String
+// fringeDollars: String
+// healthAndWelfare: String
+// retirement: String
+// benefits: [EmployeeReportBenefitInput]
+// fringeDollarsLabel: String
+// healthAndWelfareLabel: String
+// retirementLabel: String
 
 const uploadEmployeeReports = async (root, args, context) => {
   try {
@@ -80,7 +115,12 @@ const uploadEmployeeReports = async (root, args, context) => {
       }
     }
 
-    // if we loop through okay, return sucess
+    // check if customer has a referral partner, and if so, then we will generate a partner report
+    // if (customer.referralPartnerId) {
+    //   runReferralPartnerReports({dataRows: args.values, customer});
+    // }
+
+    // if our loop through each row of data is successful, return sucess=true
     return {
       success: true,
     };

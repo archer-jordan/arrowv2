@@ -21,6 +21,7 @@ import adminUsers from './resolvers/adminUsers';
 import adminDocs from './resolvers/adminDocs';
 import getCustomerAttachments from './resolvers/getCustomerAttachments';
 import systemSettings from './resolvers/systemSettings';
+import referralPartnerById from './resolvers/referralPartnerById';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -47,6 +48,7 @@ export const QueryResolvers = {
     adminDocs,
     getCustomerAttachments,
     systemSettings,
+    referralPartnerById,
   },
 };
 
@@ -106,6 +108,7 @@ export const QuerySchema = gql`
   }
 
   extend type Query {
+    referralPartnerById(id: ID!): ReferralPartner
     systemSettings: SystemSetting
     getCustomerAttachments(type: AttachmentType!): [Attachment]
 
@@ -170,6 +173,7 @@ export const QuerySchema = gql`
       searchText: String
       customerId: String
       roles: [String]
+      limit: Int
     ): UsersResponse
     adminUsers(searchText: String): UsersResponse
     "Returns a single attachment"

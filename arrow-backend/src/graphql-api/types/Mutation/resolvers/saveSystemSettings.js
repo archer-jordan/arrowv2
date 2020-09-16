@@ -1,5 +1,4 @@
 import SystemSettings from 'collections/SystemSettings/model';
-import moment from 'moment';
 import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 
 const saveSystemSettings = async (root, args, context) => {

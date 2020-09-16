@@ -7,6 +7,11 @@ const attachmentSchema = {
   url: String,
   mimetype: String,
   key: String,
+  partnerUserId: String, // the user id of the referral partner, we use this so we can ensure only the original uploader can view the document (or a super admin)
+  type: {
+    type: String,
+    defaul: 'ReferralPartnerDoc', // will allow us to make sure that referral partners can only see referral docs
+  },
 };
 
 const schema = new Mongo.Schema({
@@ -21,7 +26,7 @@ const schema = new Mongo.Schema({
     type: String,
     enum: [
       'lifeAndHealthBroker',
-      'propertyAndCasualaty',
+      'propertyAndCasualty',
       'investmentAdvisor',
       'cpa',
       'attorney',
@@ -30,8 +35,8 @@ const schema = new Mongo.Schema({
       'other',
     ],
   },
-  // minimumReferralHours: Number,
-  // referralRate: Number,
+  minimumReferralHours: Number,
+  referralRate: Number,
   w9Doc: attachmentSchema,
   achDoc: attachmentSchema,
   parterAgreementDoc: attachmentSchema,
@@ -39,6 +44,11 @@ const schema = new Mongo.Schema({
     type: String,
     enum: ['approved', 'pending'],
   },
+  // addresses
+  address: String,
+  city: String,
+  state: String,
+  zip: String,
 });
 
 const ReferralPartners = Mongo.model('ReferralPartners', schema);

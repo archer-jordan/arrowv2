@@ -1,10 +1,24 @@
 import s3 from 'modules/s3';
 import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 
-const singleUpload = async (parent, args, context) => {
+const singleUpload = async (parent, args, {user}) => {
   try {
     // check if user is a super admin
-    userIsSuperAdmin(context.user);
+    if (!user || !user.id) {
+      throw new Error('You must be logged in to do that');
+    }
+
+    if (!user.roles) {
+      throw new Error('You do not have the relevant role to do that');
+    }
+
+    // if a user is not a superAdmin AND not a referral partner, than they can't upload documents
+    if (
+      !user.roles.includes('referral') &&
+      !user.roles.includes('superAdmin')
+    ) {
+      throw new Error('You do not have the relevant role to do that');
+    }
 
     // https://www.apollographql.com/docs/apollo-server/data/file-uploads/
     const file = await args.file;

@@ -37,20 +37,30 @@ const generateQuery = ({customerId, searchText, roles = []}) => {
     let orQuery = {
       $or: [{firstName: regex}, {lastName: regex}, {'emails.address': regex}],
     };
+
     query = {
       $and: [query, orQuery],
     };
   }
-
   return query;
 };
 
-const usersQuery = async (root, {customerId, searchText, roles}, context) => {
+const usersQuery = async (
+  root,
+  {customerId, searchText, roles, limit},
+  context
+) => {
   try {
+    let option = {};
+
+    if (limit) {
+      option.limit = limit;
+    }
+
     // make sure user has permission... will throw error if they dont
     checkIfUserHasPersmission({user: context.user, customerId});
 
-    let query = generateQuery({customerId, searchText});
+    let query = generateQuery({customerId, searchText, roles});
 
     // if super admin is trying to see all super admins, we'll do this query
     if (context.user.roles.includes('superAdmin') && roles) {
@@ -63,7 +73,7 @@ const usersQuery = async (root, {customerId, searchText, roles}, context) => {
       };
     }
 
-    let users = await Users.find(query);
+    let users = await Users.find(query, null, option);
     let count = await Users.countDocuments(query);
 
     return {
