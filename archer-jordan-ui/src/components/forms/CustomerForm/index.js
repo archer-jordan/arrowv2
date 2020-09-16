@@ -14,7 +14,7 @@ import customerIdAlreadyExists from 'ApolloClient/Queries/customerIdAlreadyExist
 import {Query} from 'react-apollo';
 
 const RedText = styled.div`
-  color: ${p => p.theme.colors.red2};
+  color: ${(p) => p.theme.colors.red2};
 `;
 
 const GreenText = styled.div`
@@ -83,7 +83,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="ID" required>
               <Input
                 value={this.state.assignedId}
-                onChange={e => this.setState({assignedId: e.target.value})}
+                onChange={(e) => this.setState({assignedId: e.target.value})}
               />
               {!this.props.editing &&
                 this.state.assignedId !== this.props.assignedId && (
@@ -147,7 +147,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="Company Name" required>
               <Input
                 value={this.state.title}
-                onChange={e => this.setState({title: e.target.value})}
+                onChange={(e) => this.setState({title: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -155,7 +155,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="Company Type">
               <CompanyTypeInpput
                 value={this.state.companyType}
-                onChange={companyType => this.setState({companyType})}
+                onChange={(companyType) => this.setState({companyType})}
               />
             </FormItem>
           </Col>
@@ -163,7 +163,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="Company Address">
               <Input
                 value={this.state.street}
-                onChange={e => this.setState({street: e.target.value})}
+                onChange={(e) => this.setState({street: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -171,7 +171,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="EIN">
               <Input
                 value={this.state.ein}
-                onChange={e => this.setState({ein: e.target.value})}
+                onChange={(e) => this.setState({ein: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -179,7 +179,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="City">
               <Input
                 value={this.state.city}
-                onChange={e => this.setState({city: e.target.value})}
+                onChange={(e) => this.setState({city: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -187,7 +187,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="NAICS">
               <Input
                 value={this.state.naics}
-                onChange={e => this.setState({naics: e.target.value})}
+                onChange={(e) => this.setState({naics: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -195,7 +195,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="State">
               <Input
                 value={this.state.state}
-                onChange={e => this.setState({state: e.target.value})}
+                onChange={(e) => this.setState({state: e.target.value})}
               />
             </FormItem>
           </Col>{' '}
@@ -203,7 +203,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="Zip">
               <Input
                 value={this.state.zip}
-                onChange={e => this.setState({zip: e.target.value})}
+                onChange={(e) => this.setState({zip: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -211,7 +211,7 @@ class CustomerForm extends React.PureComponent {
             <FormItem label="SIC">
               <Input
                 value={this.state.sic}
-                onChange={e => this.setState({sic: e.target.value})}
+                onChange={(e) => this.setState({sic: e.target.value})}
               />
             </FormItem>
           </Col>
@@ -233,7 +233,7 @@ class CustomerForm extends React.PureComponent {
           )}
           <Button
             disabled={this.props.loading || this.isDisabled()}
-            style={{width: 140}}
+            style={{width: 160}}
             onClick={this.onSubmit}
           >
             {!this.props.loading ? this.props.buttonText : '...'}

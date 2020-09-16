@@ -69,8 +69,8 @@ const ButtonContainer = styled.button`
   border: 0px;
   line-height: 40px;
   letter-spacing: 0.025em;
-  padding-right: 8px;
-  padding-left: 8px;
+  padding-right: 4px;
+  padding-left: 4px;
   border: ${(p) =>
     p.secondary && !p.disabled ? `2px solid ${p.theme.colors.primary3}` : null};
   align-items: center;

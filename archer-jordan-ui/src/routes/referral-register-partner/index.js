@@ -108,7 +108,7 @@ export default ({match, history}) => {
               <ErrorBlock errors={errors} />
             </FormItem>
           )}
-          <Button onClick={onSubmit} style={{width: 150}}>
+          <Button disabled={loading} onClick={onSubmit} style={{width: 150}}>
             {!loading ? ' Set password' : '...'}
           </Button>
           <FormItem>

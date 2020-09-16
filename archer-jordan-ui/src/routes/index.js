@@ -39,11 +39,13 @@ import AdminVendors from 'routes/admin-vendors';
 import AdminUsers from 'routes/admin-users';
 import AdminSupport from 'routes/admin-support';
 import AdminPartners from 'routes/admin-partners';
+import AdminPartnersDetail from 'routes/admin-partners-detail';
 import AdminCustomerDetail from 'routes/admin-customers-detail';
 // REFERRAL
 import ReferralSignup from 'routes/referral-signup';
 import ReferralHome from 'routes/referral-home';
 import ReferralRegister from 'routes/referral-register-partner';
+import ReferralAccounts from 'routes/referral-accounts';
 // LIB
 import logoWhite from 'lib/media/arrow-logo-white.png';
 
@@ -192,6 +194,13 @@ class AppRoutes extends React.Component {
           <AdminRoute
             exact
             layout={AdminLayout}
+            path="/admin/partners/:id"
+            currentUser={currentUser}
+            component={AdminPartnersDetail}
+          />
+          <AdminRoute
+            exact
+            layout={AdminLayout}
             path="/admin/partners"
             currentUser={currentUser}
             component={AdminPartners}
@@ -258,11 +267,17 @@ class AppRoutes extends React.Component {
           <ProtectedRoute
             exact
             layout={ReferralLayout}
+            path="/referral/accounts"
+            currentUser={currentUser}
+            component={ReferralAccounts}
+          />
+          <ProtectedRoute
+            exact
+            layout={ReferralLayout}
             path="/referral"
             currentUser={currentUser}
             component={ReferralHome}
           />
-
           <PublicRoute
             exact
             layout={PublicLayout}
@@ -270,6 +285,7 @@ class AppRoutes extends React.Component {
             currentUser={currentUser}
             component={ReferralSignup}
           />
+
           <PublicRoute
             exact
             layout={PublicLayout}

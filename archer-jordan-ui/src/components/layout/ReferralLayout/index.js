@@ -12,7 +12,7 @@ const Container = styled.div`
   max-width: 90%;
   padding-top: 16px;
   padding-bottom: 56px;
-  min-height: calc(100vh - 289px);
+  min-height: calc(100vh - 288px);
 `;
 
 export default ({currentUser, children}) => {

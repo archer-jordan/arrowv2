@@ -15,7 +15,8 @@ import Status from './Status';
 import Users from './Users';
 import Override from './Override';
 import Documents from './Documents';
-import Plan from './Plan';
+import Files from './Files';
+import Referral from './Referral';
 // APOLLO
 import {Query, graphql} from 'react-apollo';
 import customerByIdQuery from 'ApolloClient/Queries/customerById';
@@ -25,7 +26,7 @@ class AdminCustomerDetail extends React.PureComponent {
   state = {
     editDate: false,
   };
-  onParamChange = newValues => {
+  onParamChange = (newValues) => {
     let oldParams = queryString.parse(this.props.location.search);
     let newParams = {
       ...oldParams,
@@ -43,16 +44,18 @@ class AdminCustomerDetail extends React.PureComponent {
   componentWillMount() {
     this.checkParams();
   }
-  getTab = tab => {
+  getTab = (tab) => {
     switch (tab) {
       case 'profile':
         return 'Profile';
+      case 'referral':
+        return 'Referral';
       case 'contacts':
         return 'Contacts';
       case 'status':
         return 'Status';
-      case 'plan':
-        return 'Plan';
+      case 'files':
+        return 'Files';
       case 'users':
         return 'Users';
       case 'documents':
@@ -77,6 +80,14 @@ class AdminCustomerDetail extends React.PureComponent {
             tab: 'profile',
           }),
       },
+      // {
+      //   label: 'Referral',
+      //   activeValue: 'referral',
+      //   onClick: () =>
+      //     this.onParamChange({
+      //       tab: 'referral',
+      //     }),
+      // },
       {
         label: 'Contacts',
         activeValue: 'contacts',
@@ -94,11 +105,11 @@ class AdminCustomerDetail extends React.PureComponent {
           }),
       },
       {
-        label: 'Plan',
-        activeValue: 'plan',
+        label: 'Files',
+        activeValue: 'files',
         onClick: () =>
           this.onParamChange({
-            tab: 'plan',
+            tab: 'files',
           }),
       },
       {
@@ -143,7 +154,7 @@ class AdminCustomerDetail extends React.PureComponent {
       },
     ];
   };
-  onSaveChanges = async newValues => {
+  onSaveChanges = async (newValues) => {
     try {
       this.props.saveCustomer({
         variables: {
@@ -211,10 +222,12 @@ class AdminCustomerDetail extends React.PureComponent {
                             return <Contacts {...sharedProps} />;
                           case 'override':
                             return <Override {...sharedProps} />;
-                          case 'plan':
-                            return <Plan {...sharedProps} />;
+                          case 'files':
+                            return <Files {...sharedProps} />;
                           case 'documents':
                             return <Documents {...sharedProps} />;
+                          case 'referral':
+                            return <Referral {...sharedProps} />;
                           default:
                             return <div {...sharedProps} />;
                         }

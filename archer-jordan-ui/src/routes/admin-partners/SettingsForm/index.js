@@ -105,7 +105,9 @@ export default () => {
         </ReferralText>
       </div>
       <div>
-        <Button onClick={() => setEditing(true)}>EDIT SETTINGS</Button>
+        <Button style={{width: 160}} onClick={() => setEditing(true)}>
+          EDIT SETTINGS
+        </Button>
       </div>
     </SettingsContainer>
   );

@@ -27,7 +27,7 @@ class AdminHome extends React.PureComponent {
     sortBy: 'titleAscend',
     deleting: false,
   };
-  onCreateCustomer = async values => {
+  onCreateCustomer = async (values) => {
     try {
       this.setState({
         loading: true,
@@ -71,7 +71,7 @@ class AdminHome extends React.PureComponent {
       this.setState({sortBy});
     }
   };
-  onDeleteCustomer = async customerId => {
+  onDeleteCustomer = async (customerId) => {
     try {
       this.setState({
         deleting: customerId,
@@ -119,7 +119,7 @@ class AdminHome extends React.PureComponent {
             <TextInput
               dark
               width={'700px'}
-              onChange={e => this.setState({searchText: e.target.value})}
+              onChange={(e) => this.setState({searchText: e.target.value})}
               label="search by name or ID#"
               value={this.state.searchText}
             />
@@ -148,9 +148,10 @@ class AdminHome extends React.PureComponent {
                 dataSource={!loading ? data.customers.customers : []}
                 total={!loading ? data.customers.count : null}
                 handleTableChange={this.handleTableChange}
+                loading={loading}
                 onDeleteCustomer={this.onDeleteCustomer}
                 deleting={this.state.deleting}
-                onPageChange={page =>
+                onPageChange={(page) =>
                   this.setState({
                     skip: page === 1 ? 0 : (page - 1) * 5,
                     current: page,

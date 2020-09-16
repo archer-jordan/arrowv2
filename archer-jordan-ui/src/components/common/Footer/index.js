@@ -43,7 +43,7 @@ export default () => {
       <Col style={{justifyContent: 'flex-end', textAlign: 'right'}}>
         {' '}
         <div>
-          <Caption>@ {new Date().getFullYear()} Archer Jordan</Caption>
+          <Caption>© {new Date().getFullYear()} Archer Jordan</Caption>
           <div style={{marginTop: 4}}>
             <Link to="/terms">Terms & Conditions</Link>
             <span style={{color: '#fff'}}>{' | '}</span>

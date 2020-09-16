@@ -3,7 +3,12 @@ import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 
 const NavItemContainer = styled(Link)`
-  color: ${(p) => (p.active ? p.theme.colors.support1 : '#fff')} !important;
+  color: ${(p) => {
+    if (p.active === 'true') {
+      return p.theme.colors.support1;
+    }
+    return '#fff';
+  }} !important;
   text-align: center;
   cursor: pointer;
   letter-spacing: 1px;
@@ -26,7 +31,7 @@ const ActiveBar = styled.div`
 
 export default ({children, active, to}) => (
   <div>
-    <NavItemContainer active={active} to={to}>
+    <NavItemContainer active={active.toString()} to={to}>
       {children}
     </NavItemContainer>
     <ActiveBar active={active} />

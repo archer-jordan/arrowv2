@@ -6,12 +6,12 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   .ant-calendar-picker-input {
     height: 50px;
-    background: #ebf2f7 !important;
+    background: #eae8e3 !important;
     border: 0px;
   }
 `;
 
-export default props => {
+export default (props) => {
   return (
     <Wrapper>
       <DatePicker {...props} />
