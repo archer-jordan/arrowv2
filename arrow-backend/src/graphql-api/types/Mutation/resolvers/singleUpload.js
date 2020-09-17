@@ -37,7 +37,7 @@ const singleUpload = async (parent, args, {user}) => {
       filename,
       mimetype,
       encoding,
-      key: result['key'], //'Screen Shot 2019-11-25 at 11.27.07 AM (2).png'
+      key: result['key'] || result['Key'], //'Screen Shot 2019-11-25 at 11.27.07 AM (2).png' // why Key and key? See: https://github.com/aws/aws-sdk-js/issues/918
       url: result['Location'], // 'https://arrow-bucket-test.s3.amazonaws.com/EmployeeUpdates.csv'
     };
   } catch (err) {
