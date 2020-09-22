@@ -13,11 +13,15 @@ export default () => {
     },
   });
 
-  let profiles =
-    data &&
-    data.referralPartners &&
-    data.referralPartners.users &&
-    data.referralPartners.users.map((user) => user.referralProfile);
+  let profiles = [];
+
+  if (data && data.referralPartners && data.referralPartners.users) {
+    data.referralPartners.users.forEach((user) => {
+      if (user.referralProfile) {
+        profiles.push(user.referralProfile);
+      }
+    });
+  }
 
   return (
     <>

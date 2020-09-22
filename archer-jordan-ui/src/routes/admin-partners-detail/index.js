@@ -105,11 +105,25 @@ export default ({match}) => {
           </DataThin>
         </DataBold>
         <DataBold>
+          Name:{' '}
+          <DataThin>
+            {profile.firstName} {profile.lastName}
+          </DataThin>
+        </DataBold>
+        <DataBold>
           Email: <DataThin>{profile.email}</DataThin>
         </DataBold>
         <DataBold>
           Phone: <DataThin>{profile.phone}</DataThin>
         </DataBold>
+        <DataBold>
+          Minimum Hours: <DataThin>{profile.minimumReferralHours}</DataThin>
+        </DataBold>
+        <DataBold>
+          Rate:{' '}
+          <DataThin>{helpers.centsToDollars(profile.referralRate)}</DataThin>
+        </DataBold>
+
         <DataBold>
           Address:{' '}
           <DataThin>

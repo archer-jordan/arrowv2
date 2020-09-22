@@ -37,6 +37,12 @@ export default ({customer}) => {
           referralStartDate: moment(parseInt(customerObj.referralStartDate)),
           referralEndDate: moment(parseInt(customerObj.referralEndDate)),
           defaultReferralPartner: `${data.referralPartnerById.email}`,
+          defaultReferral: {
+            id: data.referralPartnerById.id,
+            email: `${data.referralPartnerById.email}`,
+            firstName: `${data.referralPartnerById.firstName}`,
+            lastName: `${data.referralPartnerById.lastName}`,
+          },
         });
       }
     },
@@ -83,6 +89,7 @@ export default ({customer}) => {
       <PartnersSearchInput
         value={values.referralPartnerId}
         defaultSearch={values.defaultReferralPartner}
+        defaultValue={values.defaultReferral}
         onChange={(newValue) =>
           setValues({...values, referralPartnerId: newValue})
         }

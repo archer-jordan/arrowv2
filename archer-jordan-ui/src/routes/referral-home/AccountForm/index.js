@@ -33,9 +33,10 @@ export default ({values, loading, onChange, onSubmit}) => {
       <DataBold>
         Application Submitted:{' '}
         <DataThin>
-          {moment(parseInt(values.applicationSubmittedDate)).format(
-            'MM/DD/YYYY'
-          )}
+          {values.applicationSubmittedDate &&
+            moment(parseInt(values.applicationSubmittedDate)).format(
+              'MM/DD/YYYY'
+            )}
         </DataThin>
       </DataBold>
       <DataBold>
@@ -109,6 +110,7 @@ export default ({values, loading, onChange, onSubmit}) => {
         <FormItem required>
           <ParterTypeInput
             value={values.partnerType}
+            placeholder={`What type of partner are you?`}
             onChange={(newValue) => onChange({partnerType: newValue})}
           />
         </FormItem>

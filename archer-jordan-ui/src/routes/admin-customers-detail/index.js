@@ -80,14 +80,14 @@ class AdminCustomerDetail extends React.PureComponent {
             tab: 'profile',
           }),
       },
-      // {
-      //   label: 'Referral',
-      //   activeValue: 'referral',
-      //   onClick: () =>
-      //     this.onParamChange({
-      //       tab: 'referral',
-      //     }),
-      // },
+      {
+        label: 'Referral',
+        activeValue: 'referral',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'referral',
+          }),
+      },
       {
         label: 'Contacts',
         activeValue: 'contacts',
