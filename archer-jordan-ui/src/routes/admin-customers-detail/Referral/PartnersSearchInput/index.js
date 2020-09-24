@@ -6,7 +6,7 @@ import REFERRAL_PARTNERS from 'ApolloClient/Queries/referralPartners';
 
 const {Option} = Select;
 
-export default ({value, onChange, defaultSearch}) => {
+export default ({value, onChange, defaultValue, defaultSearch}) => {
   const [searchText, setSearchText] = useState(defaultSearch || '');
   const {data, loading, networkStatus} = useQuery(REFERRAL_PARTNERS, {
     variables: {
@@ -20,19 +20,23 @@ export default ({value, onChange, defaultSearch}) => {
     setSearchText(defaultSearch);
   }, [defaultSearch]);
 
-  let options =
-    (data &&
-      data.referralPartners &&
-      data.referralPartners.users &&
-      data.referralPartners.users.map((user) => user.referralProfile)) ||
-    [];
+  let options = [];
+
+  if (defaultValue) {
+    options.push(defaultValue);
+  }
+
+  if (data && data.referralPartners && data.referralPartners.users) {
+    data.referralPartners.users.forEach((user) => {
+      if (user.referralProfile) {
+        options.push(user.referralProfile);
+      }
+    });
+  }
 
   // if this is the first time loading, wait to load the input
   if (loading && networkStatus === 1) return <div style={{height: 48}} />;
 
-  console.log({data, options});
-
-  return null;
   return (
     <DropdownStyleWrapper>
       <Select

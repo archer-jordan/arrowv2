@@ -81,6 +81,8 @@ export default () => {
       setEmailSent(true);
       console.log('onSubmit');
     } catch (err) {
+      setLoading(false);
+      setErrors([err.message]);
       console.log(err);
     }
   };

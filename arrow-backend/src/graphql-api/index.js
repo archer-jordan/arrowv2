@@ -29,6 +29,10 @@ import {
   ReferralPartnerSchema,
   ReferralPartnerResolvers,
 } from './types/ReferralPartner';
+import {
+  ReferralReportSchema,
+  ReferralReportResolvers,
+} from './types/ReferralReport';
 
 // merges all of our types into a typeDefs
 export const typeDefs = gql`
@@ -44,6 +48,7 @@ export const typeDefs = gql`
   ${AdminDocSchema}
   ${SystemSettingSchema}
   ${ReferralPartnerSchema}
+  ${ReferralReportSchema}
 `;
 
 // merges all our resolvers
@@ -58,5 +63,7 @@ export const CustomResolvers = merge(
   EmployeeReportResolvers,
   SupportMessageResolvers,
   AdminDocResolvers,
-  ReferralPartnerResolvers
+  ReferralPartnerResolvers,
+  SystemSettingResolvers,
+  ReferralReportResolvers
 );
