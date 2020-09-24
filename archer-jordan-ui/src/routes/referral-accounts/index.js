@@ -1,13 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import moment from 'moment';
+import styled from 'styled-components';
 // COMPONENTS
 import Loading from 'components/common/Loading';
 import Table from 'components/common/Table';
 // APOLLO
 import REFERRAL_PROFILE from 'ApolloClient/Queries/referralProfile';
 import {useQuery} from 'react-apollo';
+import ReportsDetail from './ReportsDetail';
+
+const ViewReports = styled.button`
+  border: 0px;
+  background: transparent;
+  cursor: pointer;
+  text-transform: uppercase;
+  color: ${(p) => p.theme.colors.primary3};
+  &:focus {
+    outline: 0;
+  }
+`;
 
 export default () => {
+  const [viewReports, setViewReports] = useState(null); // holds the customer ID for which we want to see reprots for
   const {loading, error, data} = useQuery(REFERRAL_PROFILE);
   if (loading) return <Loading />;
   if (error) return 'error';
@@ -16,6 +30,10 @@ export default () => {
     data.currentUser &&
     data.currentUser.referralProfile &&
     data.currentUser.referralProfile.customers;
+
+  if (viewReports) {
+    return <ReportsDetail partnerId={data.currentUser.referralProfile.id} />;
+  }
 
   const columns = [
     {
@@ -35,7 +53,11 @@ export default () => {
     },
     {
       title: 'Reports',
-      render: () => 'View Reports',
+      render: () => (
+        <ViewReports onClick={() => setViewReports(true)}>
+          View Reports
+        </ViewReports>
+      ),
     },
   ];
   return (
@@ -43,6 +65,7 @@ export default () => {
       <Table
         dataSource={customers}
         columns={columns}
+        loading={loading}
         pagination={{
           pageSize: 5,
           total: customers.length || 0,

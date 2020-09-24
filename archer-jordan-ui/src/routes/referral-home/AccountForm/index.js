@@ -28,6 +28,7 @@ const Container = styled.div`
 `;
 
 export default ({values, loading, onChange, onSubmit}) => {
+  if (!values) return null;
   return (
     <Container>
       <DataBold>

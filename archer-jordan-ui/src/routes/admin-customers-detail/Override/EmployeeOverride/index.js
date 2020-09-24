@@ -29,16 +29,16 @@ const UploadButton = styled.input`
 
 const Label = styled.label`
   font-weight: 600;
-  color: ${p => p.theme.colors.support2};
+  color: ${(p) => p.theme.colors.support2};
   padding: 6px 10px;
   border-radius: 25px;
-  border: 2px solid ${p => p.theme.colors.support2};
+  border: 2px solid ${(p) => p.theme.colors.support2};
   background: transparent;
   display: inline-block;
   cursor: pointer;
   &:hover {
-    border: 2px solid ${p => p.theme.colors.support1};
-    color: ${p => p.theme.colors.support1};
+    border: 2px solid ${(p) => p.theme.colors.support1};
+    color: ${(p) => p.theme.colors.support1};
   }
 `;
 
@@ -47,17 +47,17 @@ const SectionTitle = styled.div`
   padding: 8px 16px;
   border-radius: 25px;
   margin-bottom: 24px;
-  background: ${p => p.theme.colors.primary1};
+  background: ${(p) => p.theme.colors.primary1};
 `;
 
 const Content = ({month, year}) => (
-  <React.Fragment>
+  <>
     <Title>A report already exists</Title>
     <Caption>
       At least one employee already has a report for {month}/{year}, would you
       like to override each employees report with the current CSV?
     </Caption>
-  </React.Fragment>
+  </>
 );
 
 class EmployeeOverride extends React.PureComponent {
@@ -109,7 +109,7 @@ class EmployeeOverride extends React.PureComponent {
       });
     }
   };
-  getInvalidFields = results => {
+  getInvalidFields = (results) => {
     let invalidFields = [];
     results.forEach((item, i) => {
       if (
@@ -125,7 +125,7 @@ class EmployeeOverride extends React.PureComponent {
     });
     return invalidFields;
   };
-  getMissingCOIDS = results => {
+  getMissingCOIDS = (results) => {
     let invalidFields = [];
     results.forEach((item, i) => {
       if (
@@ -141,9 +141,9 @@ class EmployeeOverride extends React.PureComponent {
     });
     return invalidFields;
   };
-  checkForDuplicateIDs = formattedData => {
-    let allIds = formattedData.map(item => item.assignedId);
-    const checkIfArrayIsUnique = myArray => {
+  checkForDuplicateIDs = (formattedData) => {
+    let allIds = formattedData.map((item) => item.assignedId);
+    const checkIfArrayIsUnique = (myArray) => {
       return myArray.length === new Set(myArray).size;
     };
     // check for duplicates
@@ -204,9 +204,9 @@ class EmployeeOverride extends React.PureComponent {
       }
 
       // 4. make sure each row has the same month/year
-      const allEqual = arr => arr.every(v => v === arr[0]); // https://stackoverflow.com/questions/14832603/check-if-all-values-of-array-are-equal
-      let months = formattedData.map(item => item.month); // create an aray of all the months so we can see if they're the same
-      let years = formattedData.map(item => item.year); // create an aray of all the years so we can see if they're the same
+      const allEqual = (arr) => arr.every((v) => v === arr[0]); // https://stackoverflow.com/questions/14832603/check-if-all-values-of-array-are-equal
+      let months = formattedData.map((item) => item.month); // create an aray of all the months so we can see if they're the same
+      let years = formattedData.map((item) => item.year); // create an aray of all the years so we can see if they're the same
 
       if (!allEqual(months)) {
         return this.setState({
@@ -226,7 +226,7 @@ class EmployeeOverride extends React.PureComponent {
       }
 
       // 5. make sure the COIDs are all equal
-      let coids = formattedData.map(item => item.companyAssignedId);
+      let coids = formattedData.map((item) => item.companyAssignedId);
       if (!allEqual(coids)) {
         return this.setState({
           loading: false,
@@ -251,7 +251,7 @@ class EmployeeOverride extends React.PureComponent {
         query: checkIfEmployeeTotalsExist,
         fetchPolicy: 'network-only',
         variables: {
-          employeeAssignedIds: formattedData.map(item => item.assignedId),
+          employeeAssignedIds: formattedData.map((item) => item.assignedId),
           month: formattedData[0].month,
           year: formattedData[0].year,
           customerId: this.props.customer.id,
@@ -303,7 +303,7 @@ class EmployeeOverride extends React.PureComponent {
   };
   render() {
     return (
-      <React.Fragment>
+      <>
         <OverrideModal
           visible={this.state.confirmUpdateModal}
           onUpdate={() => {
@@ -374,14 +374,15 @@ class EmployeeOverride extends React.PureComponent {
         )}
         {this.state.employeeErrors && this.state.employeeErrors.length > 0 && (
           <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
-            {this.state.employeeErrors.slice(0, 4).map(item => (
+            {this.state.employeeErrors.slice(0, 4).map((item) => (
               <ErrorBlock key={item} error={item} />
             ))}
             {/* We don't want to render 1,000 error blocks if there were many errors. So show the first 4 and tell how many are left over */}
             {this.state.employeeErrors.length > 4 && (
               <ErrorBlock
-                error={`And ${this.state.employeeErrors.length -
-                  4} more errors`}
+                error={`And ${
+                  this.state.employeeErrors.length - 4
+                } more errors`}
               />
             )}
           </div>
@@ -393,7 +394,7 @@ class EmployeeOverride extends React.PureComponent {
               name="employee-file"
               type="file"
               id="employee-file"
-              onChange={event => {
+              onChange={(event) => {
                 this.setState({
                   employeeFile: event.target.files[0],
                   employeeErrors: [],
@@ -403,7 +404,7 @@ class EmployeeOverride extends React.PureComponent {
             <Label htmlFor="employee-file">Select New File</Label>
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
