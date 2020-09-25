@@ -7,22 +7,47 @@ import ReferralPartners from 'collections/ReferralPartners/model';
 import ReferralReports from 'collections/ReferralReports/model';
 
 const runReferralPartnerReports = async ({dataRows, customer}) => {
-  // referralStartDate: String,
-  // referralEndDate: String,
-  let start = moment(parseInt(customer.referralStartDate)).valueOf();
-  let end = moment(parseInt(customer.referralEndDate)).valueOf();
-  // 1. See if we are still inside the referral period (ie we still owe the referral partner money)
-  // TODO: make sure we still owe this person referral money but checking the star tand end date of their referral agreement
+  /**
+   * 1. See if we are still inside the referral period (ie we still owe the referral partner money)
+   * if today is past the referralEndDate for the referral contract
+   * (ie today timestamp is greater than referralEndDate timestamp),
+   * or the referral contract has not yet started (ie today is less than start date)
+   * then we don't want to generate a referral report for them (because we dont have to pay them anything)
+   */
+  let start = moment(parseInt(customer.referralStartDate))
+    .startOf('day')
+    .valueOf();
+  let end = moment(parseInt(customer.referralEndDate)).endOf('day').valueOf();
+  let today = moment().endOf('day').valueOf();
+
+  if (today > end) {
+    console.log('Contract is not active: its over');
+    return null;
+  }
+
+  if (today < start) {
+    console.log('Contract is not active: it has not started');
+    return null;
+  }
+
   // 2. find the referral partner
   let partner = await ReferralPartners.findOne({
     _id: customer.referralPartnerId,
   });
 
+  if (!partner || !partner._id) {
+    console.log('Partner no longer exists');
+    return null;
+  }
+
   // 3. figure out how many employees qualify
   let qualifiedEmployees = [];
 
   dataRows.forEach((employee) => {
-    // if the employee's hours for this month are greater than the required hours for this partners agreement, then we'll add them to the qualifiedEmployees array
+    /**
+     * if the employee's hours for this month are greater than the required
+     * hours for this partners agreement, then we'll add them to the qualifiedEmployees array
+     */
     if (employee.hours >= partner.minimumReferralHours) {
       qualifiedEmployees.push(employee);
     }

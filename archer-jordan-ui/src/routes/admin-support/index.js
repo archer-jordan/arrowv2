@@ -8,6 +8,7 @@ import Col from 'components/common/Col';
 import TextInput from 'components/inputs/TextInput';
 import CustomerDropdown from 'components/inputs/CustomerDropdown';
 import SupportTypeInput from 'components/inputs/SupportTypeInput';
+import MessageDetail from './MessageDetail';
 // APOLLO
 import {Query} from 'react-apollo';
 import supportMessages from 'ApolloClient/Queries/supportMessages';
@@ -23,13 +24,13 @@ const Container = styled.div`
 
 const TabWrapper = styled.div`
   .ant-tabs-nav .ant-tabs-tab-active {
-    color: ${p => p.theme.colors.primary5} !important;
+    color: ${(p) => p.theme.colors.primary5} !important;
   }
   .ant-tabs-ink-bar {
-    background-color: ${p => p.theme.colors.primary5} !important;
+    background-color: ${(p) => p.theme.colors.primary5} !important;
   }
   .ant-tabs-tab:hover {
-    color: ${p => p.theme.colors.primary4} !important;
+    color: ${(p) => p.theme.colors.primary4} !important;
   }
 `;
 
@@ -42,6 +43,7 @@ class AdminSupport extends React.PureComponent {
     customerId: null,
     messageType: null,
     current: 1,
+    viewMessageDetail: null, // will hold a message object if one is selected
   };
   render() {
     let variables = {
@@ -69,12 +71,23 @@ class AdminSupport extends React.PureComponent {
       variables.searchText = this.state.searchText;
     }
 
+    if (this.state.viewMessageDetail) {
+      return (
+        <Container>
+          <MessageDetail
+            goBack={() => this.setState({viewMessageDetail: null})}
+            supportMessage={this.state.viewMessageDetail}
+          />
+        </Container>
+      );
+    }
+
     return (
       <Container>
         <TabWrapper>
           <Tabs
             defaultActiveKey={this.state.tab}
-            onChange={tab => {
+            onChange={(tab) => {
               this.setState({
                 tab,
                 skip: 0,
@@ -92,7 +105,7 @@ class AdminSupport extends React.PureComponent {
             <TextInput
               dark
               width={'450px'}
-              onChange={e => this.setState({searchText: e.target.value})}
+              onChange={(e) => this.setState({searchText: e.target.value})}
               label="Search by email or ticket ID"
               value={this.state.searchText}
               marginBottom="8px"
@@ -101,7 +114,7 @@ class AdminSupport extends React.PureComponent {
           <Col xs={5}>
             <CustomerDropdown
               value={this.state.customerId}
-              onChange={customerId => {
+              onChange={(customerId) => {
                 this.setState({customerId});
               }}
             />
@@ -109,7 +122,7 @@ class AdminSupport extends React.PureComponent {
           <Col xs={7}>
             <SupportTypeInput
               value={this.state.messageType}
-              onChange={messageType => {
+              onChange={(messageType) => {
                 this.setState({messageType});
               }}
             />
@@ -124,12 +137,15 @@ class AdminSupport extends React.PureComponent {
             if (error) return 'error';
             return (
               <MessagesTable
+                onSelect={(message) =>
+                  this.setState({viewMessageDetail: message})
+                }
                 dataSource={
                   (data && data.supportMessages.supportMessages) || []
                 }
                 total={!loading ? data.supportMessages.count : null}
                 current={this.state.current}
-                onPageChange={page =>
+                onPageChange={(page) =>
                   this.setState({
                     skip: page === 1 ? 0 : (page - 1) * PAGE_SIZE,
                     current: page,

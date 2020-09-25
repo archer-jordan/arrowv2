@@ -64,7 +64,7 @@ const AppNav = ({pathname}) => {
                 to={`/admin/users`}
                 active={pathname && pathname.includes('/users')}
               >
-                USERS
+                SUPERADMINS
               </NavItem>
             </MobileCol>
             <MobileCol>

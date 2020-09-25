@@ -7,6 +7,7 @@ import Col from 'components/common/Col';
 import Loading from 'components/common/Loading';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
+import EmptyState from 'components/common/EmptyState';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
 import checkSVG from 'lib/media/check-circle.svg';
@@ -159,7 +160,12 @@ class Benefits extends React.PureComponent {
             !data.employeeReportByEmployeeId ||
             !data.employeeReportByEmployeeId.benefits
           ) {
-            return 'No data';
+            return (
+              <EmptyState
+                title="No data for this month"
+                subtitle={`Please select a different month by clicking "change month"`}
+              />
+            );
           }
 
           let report = data.employeeReportByEmployeeId;

@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import numeral from 'numeral';
+// COMPONENTS
 import TopContainer from 'components/common/TopContainer';
 import Row from 'components/common/Row';
 import Col from 'components/common/Col';
 import Loading from 'components/common/Loading';
+import EmptyState from 'components/common/EmptyState';
 import BigValue from 'components/text/BigValue';
 import BigLabel from 'components/text/BigLabel';
 import {Doughnut} from 'react-chartjs-2';
@@ -93,7 +95,12 @@ class Financials extends React.PureComponent {
                 !data.employeeReportByEmployeeId ||
                 !data.employeeReportByEmployeeId.benefits
               ) {
-                return 'No data';
+                return (
+                  <EmptyState
+                    title="No data for this month"
+                    subtitle={`Please select a different month by clicking "change month"`}
+                  />
+                );
               }
               // if the report
               let report = data.employeeReportByEmployeeId;
