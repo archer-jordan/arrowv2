@@ -31,11 +31,20 @@ const schema = new Mongo.Schema({
   createdAt: Number,
   roles: {
     type: [String],
-    enum: ['coEmployee', 'coAdmin', 'superAdmin', 'referral'],
+    enum: [
+      'coEmployee', // the employees of a given customer (ie company)
+      'coAdmin', // a company admin => the users for a given customer (ie company) who have "top-level" access to settings/data assocaited with that company (e.g. CEOs, Head ofHR dept, etc)
+      'superAdmin', // an archer jordan employee who has access to our back-end/back-office administration dashboard/data
+      'referral', // a referral partner who has access to a referral partner dashboard showing their earnings from making sales references, etc
+    ],
   },
   permissions: {
     type: [String],
-    enum: ['viewCompanyData', 'viewEmployeeData', 'manageUsers'],
+    enum: [
+      'viewCompanyData', //
+      'viewEmployeeData', //
+      'manageUsers', //
+    ],
   },
 });
 

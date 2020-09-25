@@ -4,10 +4,10 @@ import styled from 'styled-components';
 // COMPONENTS
 import Loading from 'components/common/Loading';
 import Table from 'components/common/Table';
+import PartnerReportsTable from 'components/common/PartnerReportsTable';
 // APOLLO
 import REFERRAL_PROFILE from 'ApolloClient/Queries/referralProfile';
 import {useQuery} from 'react-apollo';
-import ReportsDetail from './ReportsDetail';
 
 const ViewReports = styled.button`
   border: 0px;
@@ -32,7 +32,9 @@ export default () => {
     data.currentUser.referralProfile.customers;
 
   if (viewReports) {
-    return <ReportsDetail partnerId={data.currentUser.referralProfile.id} />;
+    return (
+      <PartnerReportsTable partnerId={data.currentUser.referralProfile.id} />
+    );
   }
 
   const columns = [

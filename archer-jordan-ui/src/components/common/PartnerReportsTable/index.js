@@ -5,7 +5,7 @@ import moment from 'moment';
 import helpers from 'lib/helpers/GeneralHelpers';
 // COMPONENTS
 import Table from 'components/common/Table';
-import MonthComponent from 'components/common/MonthComponent/index';
+import MonthComponent from 'components/common/MonthComponent';
 // APOLLO
 import {useQuery} from 'react-apollo';
 import REFERRAL_REPORTS from 'ApolloClient/Queries/referralReports';

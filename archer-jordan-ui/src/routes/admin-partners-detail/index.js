@@ -6,6 +6,7 @@ import moment from 'moment';
 import Loading from 'components/common/Loading';
 import Button from 'components/common/Button';
 import Icon from 'components/common/Icon';
+import PartnerReportsTable from 'components/common/PartnerReportsTable';
 import CompaniesTable from './CompaniesTable';
 import Select from 'components/inputs/SelectInput';
 import DropdownStyleWrapper from 'components/inputs/DropdownStyleWrapper';
@@ -44,6 +45,7 @@ const LoadingOverlay = styled.div`
 `;
 
 export default ({match}) => {
+  const [viewReports, setViewReports] = useState(null); //
   const [saving, setSaving] = useState(false);
   const [saveReferralPartner] = useMutation(SAVE_REFERRAL_PARTNER);
   const {data, loading, error} = useQuery(REFERRAL_PARTNER_BY_ID, {
@@ -181,9 +183,16 @@ export default ({match}) => {
             />
           </div>
         )}
-        <Button style={{width: 200, marginTop: 24}} secondary>
-          PARTNER VIEW
-        </Button>
+        {viewReports && <PartnerReportsTable partnerId={profile.id} />}
+        {!viewReports && (
+          <Button
+            style={{width: 200, marginTop: 24}}
+            secondary
+            onClick={() => setViewReports(true)}
+          >
+            VIEW REPORTS
+          </Button>
+        )}
       </div>
     </>
   );
