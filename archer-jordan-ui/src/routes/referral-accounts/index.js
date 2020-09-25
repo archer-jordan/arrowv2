@@ -71,7 +71,6 @@ export default () => {
           total: customers.length || 0,
         }}
         rowKey="id"
-        loading={loading}
       />
     </div>
   );

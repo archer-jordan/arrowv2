@@ -5,13 +5,6 @@ export default async (
   {customerId, referralPartnerId, referralStartDate, referralEndDate}
 ) => {
   try {
-    console.log({
-      customerId,
-      referralPartnerId,
-      referralStartDate,
-      referralEndDate,
-    });
-
     await Customers.updateOne(
       {
         _id: customerId,

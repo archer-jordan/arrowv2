@@ -1,18 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import styled from 'styled-components';
 import moment from 'moment';
 // COMPONENTS
-import Table from 'antd/lib/table';
-import 'antd/lib/table/style/css';
+import Table from 'components/common/Table';
 // LIB
 import helpers from 'lib/helpers/GeneralHelpers';
-
-const Text = styled.span`
-  font-weight: 600;
-  color: #0f466a;
-  font-family: ${(p) => p.theme.fontFamily};
-`;
 
 export default ({handleTableChange, current, total, loading, dataSource}) => {
   const columns = [

@@ -5,6 +5,7 @@ import PartnersSearchInput from './PartnersSearchInput';
 import Row from 'components/common/Row';
 import DatePicker from 'components/inputs/DatePicker';
 import Col from 'components/common/Col';
+import message from 'components/common/message';
 import Button from 'components/common/Button';
 import ErrorBlock from 'components/common/ErrorBlock';
 // APOLLO
@@ -77,6 +78,7 @@ export default ({customer}) => {
         ],
       });
       setSaving(false);
+      message.success(`Setting saved`);
     } catch (err) {
       setSaving(false);
       console.log(err);

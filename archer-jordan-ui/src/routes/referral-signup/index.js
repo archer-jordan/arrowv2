@@ -10,8 +10,6 @@ import FormItem from 'components/common/FormItem';
 import Background from 'components/common/GradientBackground';
 // LIB
 import logoWhiteSVG from 'lib/media/arrow-cs-logo.png';
-// LIB
-import ErrorHelpers from 'lib/helpers/ErrorHelpers';
 // APOLLO
 import {useMutation} from 'react-apollo';
 import REFERRAL_SIGNUP from 'ApolloClient/Mutations/referralSignup';

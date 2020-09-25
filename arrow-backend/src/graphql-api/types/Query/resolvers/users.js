@@ -35,12 +35,7 @@ const generateQuery = ({customerId, searchText, roles = []}) => {
   if (searchText) {
     let regex = new RegExp(searchText, 'i');
     let orQuery = {
-      $or: [
-        {firstName: regex},
-        {lastName: regex},
-        {'emails.address': regex},
-        {_id: regex},
-      ],
+      $or: [{firstName: regex}, {lastName: regex}, {'emails.address': regex}],
     };
 
     query = {
