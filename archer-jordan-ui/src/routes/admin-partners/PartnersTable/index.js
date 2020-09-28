@@ -20,8 +20,8 @@ export default ({handleTableChange, current, total, loading, dataSource}) => {
       render: (record) => record.firstName,
     },
     {
-      title: 'PARTNER VIEW',
-      render: () => 'Partner View',
+      title: 'EMAIL',
+      render: (record) => record.email,
     },
     {
       title: 'STATUS',

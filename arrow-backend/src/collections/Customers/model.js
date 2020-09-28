@@ -35,6 +35,13 @@ const schema = new Mongo.Schema({
   referralPartnerId: String, // the ReferralPartner _id for this customer (if one exists)
   referralStartDate: String,
   referralEndDate: String,
+  //
+  planType: {
+    type: String,
+    enum: ['arrowCare', 'arrowCarePlus'],
+  },
+  enrollmentWindowStart: String,
+  enrollmentWindowEnd: String,
 });
 
 // ADD INDEXES

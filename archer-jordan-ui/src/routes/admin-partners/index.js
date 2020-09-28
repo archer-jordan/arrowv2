@@ -1,10 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
 // COMPONENTS
 import SettingsForm from './SettingsForm';
 import PartnersTable from './PartnersTable';
 // APOLLO
 import {useQuery} from 'react-apollo';
 import REFERRAL_PARTNERS from 'ApolloClient/Queries/referralPartners';
+
+const Container = styled.div`
+  width: 900px;
+  margin: auto;
+  max-width: 100%;
+  margin-top: 40px;
+`;
 
 export default () => {
   const {data, loading} = useQuery(REFERRAL_PARTNERS, {
@@ -24,7 +32,7 @@ export default () => {
   }
 
   return (
-    <>
+    <Container>
       <SettingsForm />
       <div style={{marginTop: 32}}>
         <PartnersTable
@@ -35,6 +43,6 @@ export default () => {
           loading={loading}
         />
       </div>
-    </>
+    </Container>
   );
 };

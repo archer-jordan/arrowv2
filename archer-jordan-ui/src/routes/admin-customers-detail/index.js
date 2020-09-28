@@ -13,6 +13,7 @@ import Employees from './Employees';
 import Contacts from './Contacts';
 import Status from './Status';
 import Users from './Users';
+import Plan from './Plan';
 import Override from './Override';
 import Documents from './Documents';
 import Files from './Files';
@@ -62,6 +63,8 @@ class AdminCustomerDetail extends React.PureComponent {
         return 'Documents';
       case 'employees':
         return 'Employees';
+      case 'plan':
+        return 'Plan';
       case 'override':
         return 'Override';
       case 'database':
@@ -121,6 +124,14 @@ class AdminCustomerDetail extends React.PureComponent {
           }),
       },
       {
+        label: 'Plan',
+        activeValue: 'plan',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'plan',
+          }),
+      },
+      {
         label: 'Documents',
         activeValue: 'documents',
         onClick: () =>
@@ -164,7 +175,7 @@ class AdminCustomerDetail extends React.PureComponent {
           },
         },
       });
-      message.success('Customer saved!');
+      message.success('Your changes were saved!');
     } catch (err) {
       console.log(err);
     }
@@ -222,6 +233,8 @@ class AdminCustomerDetail extends React.PureComponent {
                             return <Contacts {...sharedProps} />;
                           case 'override':
                             return <Override {...sharedProps} />;
+                          case 'plan':
+                            return <Plan {...sharedProps} />;
                           case 'files':
                             return <Files {...sharedProps} />;
                           case 'documents':

@@ -27,6 +27,13 @@ export const CustomerSchema = gql`
     archived
   }
 
+  enum PlanTypeEnum {
+    "Arrow Care (default plan)'"
+    arrowCare
+    "Arrow Care Plus"
+    arrowCarePlus
+  }
+
   type Contact {
     id: String
     firstName: String
@@ -59,6 +66,9 @@ export const CustomerSchema = gql`
     city: String
     status: CustomerStatusEnum
     contacts: [ContactInput]
+    planType: PlanTypeEnum
+    enrollmentWindowStart: String
+    enrollmentWindowEnd: String
   }
 
   type Customer {
@@ -81,5 +91,8 @@ export const CustomerSchema = gql`
     referralStartDate: String
     referralEndDate: String
     adminUsers: [UserProfile]
+    planType: PlanTypeEnum
+    enrollmentWindowStart: String
+    enrollmentWindowEnd: String
   }
 `;

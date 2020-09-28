@@ -5,9 +5,9 @@ import moment from 'moment';
 import employeeByIdQuery from 'ApolloClient/Queries/employeeById';
 import {Query} from 'react-apollo';
 // COMPONENTS
+import Enrollment from './Enrollment';
 import Benefits from '../../app-employees-detail/Benefits'; // re-used from app-employees-detail
 import Financials from '../../app-employees-detail/Financials'; // re-used from app-employees-detail
-import Account from '../../app-employees-detail/Account'; // re-used from app-employees-detail
 // COMPONENTS
 import Row from 'components/common/Row';
 import Loading from 'components/common/Loading';
@@ -19,7 +19,7 @@ class EmployeeDashboard extends React.PureComponent {
   state = {
     editDate: false,
   };
-  onParamChange = newValues => {
+  onParamChange = (newValues) => {
     let oldParams =
       this.props.location &&
       this.props.location.search &&
@@ -37,24 +37,16 @@ class EmployeeDashboard extends React.PureComponent {
       this.props.location.search &&
       queryString.parse(this.props.location.search);
     if (!oldParams || (!oldParams.tab && oldParams.tab !== 'null')) {
-      let month = moment()
-        .format('MMMM')
-        .toLowerCase();
-      let year = moment()
-        .format('YYYY')
-        .toLowerCase();
+      let month = moment().format('MMMM').toLowerCase();
+      let year = moment().format('YYYY').toLowerCase();
       return this.onParamChange({month, year, tab: 'benefits'});
     }
     if (
       (!oldParams.year && oldParams.year !== 'null') ||
       (!oldParams.month && oldParams.month !== 'null')
     ) {
-      let month = moment()
-        .format('MMMM')
-        .toLowerCase();
-      let year = moment()
-        .format('YYYY')
-        .toLowerCase();
+      let month = moment().format('MMMM').toLowerCase();
+      let year = moment().format('YYYY').toLowerCase();
       return this.onParamChange({month, year});
     }
   };
@@ -84,6 +76,14 @@ class EmployeeDashboard extends React.PureComponent {
         onClick: () =>
           this.onParamChange({
             tab: 'financials',
+          }),
+      },
+      {
+        label: 'Enrollment',
+        activeValue: 'enrollment',
+        onClick: () =>
+          this.onParamChange({
+            tab: 'enrollment',
           }),
       },
     ];
@@ -136,10 +136,8 @@ class EmployeeDashboard extends React.PureComponent {
                           return <Financials {...sharedProps} />;
                         case 'benefits':
                           return <Benefits {...sharedProps} />;
-                        case 'account':
-                          return <Account {...sharedProps} />;
-                        case 'password':
-                          return <div {...sharedProps} />;
+                        case 'enrollment':
+                          return <Enrollment {...sharedProps} />;
                         default:
                           return <div {...sharedProps} />;
                       }

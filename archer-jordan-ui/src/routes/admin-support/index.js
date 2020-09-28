@@ -16,7 +16,7 @@ import supportMessages from 'ApolloClient/Queries/supportMessages';
 const {TabPane} = Tabs;
 
 const Container = styled.div`
-  width: 1100px;
+  width: 900px;
   margin: auto;
   max-width: 100%;
   margin-top: 40px;

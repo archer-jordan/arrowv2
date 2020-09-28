@@ -17,5 +17,8 @@ export default gql`
     zip
     state
     city
+    planType
+    enrollmentWindowStart
+    enrollmentWindowEnd
   }
 `;
