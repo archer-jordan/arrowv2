@@ -27,22 +27,24 @@ export default ({customer}) => {
     },
     skip: !customer.referralPartnerId,
     onCompleted: (data) => {
-      if (data.referralPartnerById && data.referralPartnerById.customers) {
+      let partner = data.referralPartnerById && data.referralPartnerById;
+
+      if (partner && partner.customers) {
         // A referral partner may have multiple customers/companies assocaited with them.
         // Here we filter through the list and find the customer we're currently viewing
-        let customerObj = data.referralPartnerById.customers.filter(
+        let customerObj = partner.customers.filter(
           (item) => item.id === customer.id
         )[0];
         setValues({
-          referralPartnerId: data.referralPartnerById.id,
+          referralPartnerId: partner.id,
           referralStartDate: moment(parseInt(customerObj.referralStartDate)),
           referralEndDate: moment(parseInt(customerObj.referralEndDate)),
-          defaultReferralPartner: `${data.referralPartnerById.email}`,
+          defaultReferralPartner: `${partner.email}`,
           defaultReferral: {
-            id: data.referralPartnerById.id,
-            email: `${data.referralPartnerById.email}`,
-            firstName: `${data.referralPartnerById.firstName}`,
-            lastName: `${data.referralPartnerById.lastName}`,
+            id: partner.id,
+            email: `${partner.email}`,
+            firstName: `${partner.firstName}`,
+            lastName: `${partner.lastName}`,
           },
         });
       }

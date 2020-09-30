@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
+// COMPONENTS
 import Select from 'components/inputs/SelectInput';
+import Icon from 'components/common/Icon';
 import DropdownStyleWrapper from 'components/inputs/DropdownStyleWrapper';
+// APOLLO
 import {useQuery} from 'react-apollo';
 import REFERRAL_PARTNERS from 'ApolloClient/Queries/referralPartners';
 
@@ -35,7 +38,12 @@ export default ({value, onChange, defaultValue, defaultSearch}) => {
   }
 
   // if this is the first time loading, wait to load the input
-  if (loading && networkStatus === 1) return <div style={{height: 48}} />;
+  if (loading && networkStatus === 1)
+    return (
+      <div style={{height: 48, display: 'flex', alignItems: 'center'}}>
+        <Icon type="loading" />
+      </div>
+    );
 
   return (
     <DropdownStyleWrapper>
