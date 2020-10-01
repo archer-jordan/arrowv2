@@ -8,7 +8,7 @@ const schema = new Mongo.Schema({
   date: Date, // date the report was created
   month: String,
   year: String,
-  employeesMeta: String, // holds a stringified array of the "employee reports" that qualified for this report
+  employeesMeta: String, // holds a stringified array of the "employee reports" that qualified for this report... just storing for sake of tracking down bugs or for looking back on what this report was based on
   hours: Number, // the hours for that month
   eligibleEmployees: Number, // the number of employees who met the minimum hours
   rate: Number, // the rate paid, originally will be $12 per employee

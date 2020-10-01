@@ -18,8 +18,8 @@ const newEmployeesUpload = async (root, args, context) => {
         errors: ['Customer does not exist'],
       };
     }
-    // for each over each employee
-    args.employees.forEach(async item => {
+    // for each over each row of employee data
+    args.employees.forEach(async (item) => {
       let newEmployee = new Employees({...item, customerId: args.customerId});
       await newEmployee.save();
 
@@ -33,7 +33,7 @@ const newEmployeesUpload = async (root, args, context) => {
       }
 
       if (userByEmail && userByEmail._id) {
-        // if user by this email exists, then let's add an employee ID to them and update their roles to include employee role
+        // if user by this email exists, then let's add an the new employee ID to the record and also update their roles to include employee role
         await Users.updateOne(
           {
             _id: userByEmail._id,

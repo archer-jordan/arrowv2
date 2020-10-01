@@ -128,16 +128,14 @@ class Employees extends React.PureComponent {
    * afterParse is called when adding new employees, right after papaparse finishes parsing the CSV
    */
   afterParseAdd = async (results, file) => {
-    console.log({
-      results,
-      file,
-    });
+    const REQUIRED_NUMBER_OF_COLUMNS = 15;
+
     try {
       // 1. make sure the spreadsheet has the correct number of columns
-      if (results.meta.fields.length !== 15) {
+      if (results.meta.fields.length !== REQUIRED_NUMBER_OF_COLUMNS) {
         return this.setState({
           errors: [
-            `This spreadsheet contains ${results.meta.fields.length} columns, not the required 15`,
+            `This spreadsheet contains ${results.meta.fields.length} columns, not the required ${REQUIRED_NUMBER_OF_COLUMNS}`,
           ],
           loading: false,
         });

@@ -99,7 +99,7 @@ export default ({customer}) => {
         }
       />
       <Row style={{marginTop: 24}}>
-        <Col xs={12}>
+        <Col xs={10}>
           <DatePicker
             placeholder="Payment start date"
             value={values.referralStartDate}
@@ -107,8 +107,11 @@ export default ({customer}) => {
               setValues({...values, referralStartDate: newValue})
             }
           />
+        </Col>{' '}
+        <Col xs={2} style={{paddingTop: 8}}>
+          to
         </Col>
-        <Col xs={12}>
+        <Col xs={10}>
           <DatePicker
             placeholder="Payment end date"
             value={values.referralEndDate}
@@ -118,7 +121,6 @@ export default ({customer}) => {
           />
         </Col>
       </Row>
-
       <Button
         disabled={saving}
         onClick={onSaveChanges}
