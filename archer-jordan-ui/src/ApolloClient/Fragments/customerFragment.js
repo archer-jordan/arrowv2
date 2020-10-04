@@ -20,5 +20,7 @@ export default gql`
     planType
     enrollmentWindowStart
     enrollmentWindowEnd
+    minimumReferralHours
+    referralRate
   }
 `;

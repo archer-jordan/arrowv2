@@ -35,8 +35,6 @@ const schema = new Mongo.Schema({
       'other',
     ],
   },
-  minimumReferralHours: Number,
-  referralRate: Number,
   w9Doc: attachmentSchema,
   achDoc: attachmentSchema,
   parterAgreementDoc: attachmentSchema,

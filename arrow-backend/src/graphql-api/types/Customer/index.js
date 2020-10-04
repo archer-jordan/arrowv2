@@ -69,6 +69,8 @@ export const CustomerSchema = gql`
     planType: PlanTypeEnum
     enrollmentWindowStart: String
     enrollmentWindowEnd: String
+    minimumReferralHours: Int
+    referralRate: Int
   }
 
   type Customer {
@@ -94,5 +96,7 @@ export const CustomerSchema = gql`
     planType: PlanTypeEnum
     enrollmentWindowStart: String
     enrollmentWindowEnd: String
+    minimumReferralHours: Int
+    referralRate: Int
   }
 `;

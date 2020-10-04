@@ -29,6 +29,8 @@ export const MutationSchema = gql`
       referralPartnerId: ID!
       referralStartDate: String!
       referralEndDate: String!
+      minimumReferralHours: Int
+      referralRate: Int
     ): MutationResponse
     saveReferralPartner(id: ID!, params: ReferralPartnerParams): ReferralPartner
     referralSignup(email: String!): MutationResponse

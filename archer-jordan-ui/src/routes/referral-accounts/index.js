@@ -31,11 +31,11 @@ export default () => {
     data.currentUser.referralProfile &&
     data.currentUser.referralProfile.customers;
 
-  if (viewReports) {
-    return (
-      <PartnerReportsTable partnerId={data.currentUser.referralProfile.id} />
-    );
-  }
+  if (loading) return null;
+  if (error) return error;
+  return (
+    <PartnerReportsTable partnerId={data.currentUser.referralProfile.id} />
+  );
 
   const columns = [
     {
@@ -44,12 +44,12 @@ export default () => {
       render: ({title}) => title,
     },
     {
-      title: 'Start Date',
+      title: 'Start',
       render: ({referralStartDate}) =>
         moment(parseInt(referralStartDate)).format('MM/DD/YYYY'),
     },
     {
-      title: 'Stop Date',
+      title: 'Stop',
       render: ({referralEndDate}) =>
         moment(parseInt(referralEndDate)).format('MM/DD/YYYY'),
     },

@@ -16,8 +16,6 @@ export default gql`
     city
     state
     zip
-    minimumReferralHours
-    referralRate
     w9Doc {
       id: filename
       filename

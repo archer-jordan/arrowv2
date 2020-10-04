@@ -35,6 +35,8 @@ const schema = new Mongo.Schema({
   referralPartnerId: String, // the ReferralPartner _id for this customer (if one exists)
   referralStartDate: String,
   referralEndDate: String,
+  minimumReferralHours: Number,
+  referralRate: Number,
   //
   planType: {
     type: String,

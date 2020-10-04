@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 // COMPONENTS
-import SettingsForm from './SettingsForm';
 import PartnersTable from './PartnersTable';
+import InvitePartner from './InvitePartner';
 // APOLLO
 import {useQuery} from 'react-apollo';
 import REFERRAL_PARTNERS from 'ApolloClient/Queries/referralPartners';
@@ -33,7 +33,7 @@ export default () => {
 
   return (
     <Container>
-      <SettingsForm />
+      <InvitePartner />
       <div style={{marginTop: 32}}>
         <PartnersTable
           total={

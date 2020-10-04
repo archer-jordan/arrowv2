@@ -119,14 +119,6 @@ export default ({match}) => {
           Phone: <DataThin>{profile.phone}</DataThin>
         </DataBold>
         <DataBold>
-          Minimum Hours: <DataThin>{profile.minimumReferralHours}</DataThin>
-        </DataBold>
-        <DataBold>
-          Rate:{' '}
-          <DataThin>{helpers.centsToDollars(profile.referralRate)}</DataThin>
-        </DataBold>
-
-        <DataBold>
           Address:{' '}
           <DataThin>
             {profile.address} {profile.city}, {profile.state} {profile.zip}
@@ -140,7 +132,8 @@ export default ({match}) => {
             </DataThin>
           )}
         </DataBold>
-        <DataBold>
+        <DataBold>Attachments</DataBold>
+        {/* <DataBold>
           W9:{' '}
           {profile.w9Doc && (
             <a href={profile.w9Doc.url} download>
@@ -148,7 +141,7 @@ export default ({match}) => {
             </a>
           )}
         </DataBold>
-        <DataBold>
+       <DataBold>
           ACH Authorization Form:{' '}
           {profile.achDoc && (
             <a href={profile.achDoc.url} download>
@@ -163,7 +156,7 @@ export default ({match}) => {
               {profile.parterAgreementDoc.filename}
             </a>
           )}
-        </DataBold>
+        </DataBold> */}
         <DataBold>Status:</DataBold>
         <DropdownStyleWrapper>
           <Select

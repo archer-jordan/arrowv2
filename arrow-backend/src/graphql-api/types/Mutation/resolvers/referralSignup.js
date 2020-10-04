@@ -3,7 +3,7 @@ import Users from 'collections/Users/model';
 import moment from 'moment';
 import {generateRandomToken} from '@accounts/server';
 import emailTransporter from 'modules/email.js';
-import SystemSettingsHelpers from 'collections/SystemSettings/helpers';
+import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 
 const setUser = ({email, token}) => {
   return {
@@ -56,25 +56,27 @@ const sendInviteEmail = async ({token, email}) => {
   });
 };
 
-export default async (root, {email}) => {
+export default async (root, {email}, context) => {
   try {
+    // check if user is a super admin
+    userIsSuperAdmin(context.user);
+
     // check if the user already exists
     await checkIfUserExists({email});
+
     // create user account
     let token = await generateRandomToken();
+
     // update the user
     let user = setUser({email, token});
     let userDoc = new Users(user);
     await userDoc.save();
-    // grab the current system settings for referral pay rate and hours
-    let currentSettings = await SystemSettingsHelpers.getCurrentSetting();
+
     // create ReferralPartner record
     let partnerDoc = new ReferralPartners({
       userId: userDoc._id,
       applicationSubmittedDate: moment().valueOf(),
       status: 'pending',
-      minimumReferralHours: currentSettings.minimumReferralHours,
-      referralRate: currentSettings.referralRate,
     });
     //
     await partnerDoc.save();

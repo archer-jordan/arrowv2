@@ -56,8 +56,6 @@ export const ReferralPartnerSchema = gql`
     city: String
     state: String
     zip: String
-    minimumReferralHours: Int
-    referralRate: Int
   }
 
   type ReferralPartner {
@@ -74,8 +72,6 @@ export const ReferralPartnerSchema = gql`
     status: ReferralPartnerStatus
     address: String
     city: String
-    minimumReferralHours: Int
-    referralRate: Int
     state: String
     zip: String
     customers: [Customer]

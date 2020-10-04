@@ -115,13 +115,13 @@ export default ({values, loading, onChange, onSubmit}) => {
             onChange={(newValue) => onChange({partnerType: newValue})}
           />
         </FormItem>
-        <UploadInput
+        {/*  <UploadInput
           label="W9"
           onChange={(newValue) => onChange({w9Doc: newValue})}
           file={values.w9Doc}
           templateUrl="https://www.irs.gov/pub/irs-pdf/fw9.pdf"
         />
-        <UploadInput
+     <UploadInput
           label="ACH Authorization Form"
           file={values.achDoc}
           onChange={(newValue) => onChange({achDoc: newValue})}
@@ -130,7 +130,7 @@ export default ({values, loading, onChange, onSubmit}) => {
           label="Partner Agreement"
           file={values.parterAgreementDoc}
           onChange={(newValue) => onChange({parterAgreementDoc: newValue})}
-        />
+        /> */}
         <FormItem>
           <Button
             disabled={loading}

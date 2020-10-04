@@ -48,7 +48,7 @@ const runReferralPartnerReports = async ({dataRows, customer}) => {
      * if the employee's hours for this month are greater than the required
      * hours for this partners agreement, then we'll add them to the qualifiedEmployees array
      */
-    if (employee.hours >= partner.minimumReferralHours) {
+    if (parseInt(employee.hours) >= customer.minimumReferralHours) {
       qualifiedEmployees.push(employee);
     }
   });
@@ -62,7 +62,7 @@ const runReferralPartnerReports = async ({dataRows, customer}) => {
     year: dataRows[0].year,
     eligibleEmployees: qualifiedEmployees.length, // the number of employees who met the minimum hours
     employeesMeta: JSON.stringify(qualifiedEmployees), // stringify the array of employees who qualified... just for information purposes if we want to inspect later
-    rate: partner.referralRate, // the rate paid, originally will be $12 per employee
+    rate: customer.referralRate, // the rate paid, originally will be $12 per employee
   };
 
   let reportExists = await ReferralReports.findOne({

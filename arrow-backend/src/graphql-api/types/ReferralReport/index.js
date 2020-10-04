@@ -10,6 +10,9 @@ export const ReferralReportResolvers = {
       });
       return cust.title;
     },
+    customer: async (root) => {
+      return await Customers.findOne({_id: root.customerId});
+    },
   },
 };
 
@@ -29,5 +32,6 @@ export const ReferralReportSchema = gql`
     eligibleEmployees: Int
     " the rate paid, originally will be $12 per employee"
     rate: Int
+    customer: Customer
   }
 `;

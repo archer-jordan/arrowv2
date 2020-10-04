@@ -42,7 +42,6 @@ import AdminPartners from 'routes/admin-partners';
 import AdminPartnersDetail from 'routes/admin-partners-detail';
 import AdminCustomerDetail from 'routes/admin-customers-detail';
 // REFERRAL
-import ReferralSignup from 'routes/referral-signup';
 import ReferralHome from 'routes/referral-home';
 import ReferralRegister from 'routes/referral-register-partner';
 import ReferralAccounts from 'routes/referral-accounts';
@@ -278,14 +277,6 @@ class AppRoutes extends React.Component {
             currentUser={currentUser}
             component={ReferralHome}
           />
-          <PublicRoute
-            exact
-            layout={PublicLayout}
-            path="/referral-signup"
-            currentUser={currentUser}
-            component={ReferralSignup}
-          />
-
           <PublicRoute
             exact
             layout={PublicLayout}

@@ -9,6 +9,13 @@ export default gql`
       hours
       eligibleEmployees
       rate
+      customer {
+        id
+        referralStartDate
+        referralEndDate
+        minimumReferralHours
+        referralRate
+      }
     }
   }
 `;

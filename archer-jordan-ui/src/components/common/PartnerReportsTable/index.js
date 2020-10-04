@@ -40,16 +40,47 @@ export default ({partnerId}) => {
     );
     return helpers.centsToDollars(amounts.reduce((a, b) => a + b, 0));
   };
-
+  // id
+  // companyName
+  // enrollmentWindowStart
+  // enrollmentWindowEnd
+  // minimumReferralHours
+  // referralRate
   const columns = [
     {
       key: 'id',
       title: 'Company',
-      width: '65%',
+      width: '25%',
       render: ({companyName}) => companyName,
     },
     {
-      title: 'Eligible Employees',
+      title: 'Start',
+      render: ({customer}) =>
+        moment(parseInt(customer.referralStartDate)).format('MM/DD/YYYY'),
+      width: '12.5%',
+    },
+    {
+      title: 'Stop',
+      render: ({customer}) =>
+        moment(parseInt(customer.referralEndDate)).format('MM/DD/YYYY'),
+      width: '12.5%',
+    },
+    {
+      title: 'Minimum Eligibility',
+      render: ({customer}) => {
+        return `${customer.minimumReferralHours} hours /employee / mo.`;
+      },
+      width: '20%',
+    },
+    {
+      title: 'Rate',
+      render: ({rate}) => {
+        return helpers.centsToDollars(rate);
+      },
+      width: '10%',
+    },
+    {
+      title: 'Eligible',
       render: ({eligibleEmployees}) => {
         return (
           <div style={{textAlign: 'right', paddingRight: 24}}>
@@ -57,10 +88,10 @@ export default ({partnerId}) => {
           </div>
         );
       },
-      width: '20%',
+      width: '10%',
     },
     {
-      title: 'Your Payout',
+      title: 'Payout',
       render: ({eligibleEmployees, rate}) => {
         return (
           <div style={{textAlign: 'right', paddingRight: 24}}>
@@ -68,7 +99,7 @@ export default ({partnerId}) => {
           </div>
         );
       },
-      width: '15%',
+      width: '10%',
     },
   ];
 

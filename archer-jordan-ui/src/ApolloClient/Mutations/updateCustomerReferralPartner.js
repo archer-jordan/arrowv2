@@ -7,12 +7,16 @@ export default gql`
     $referralPartnerId: ID!
     $referralStartDate: String!
     $referralEndDate: String!
+    $minimumReferralHours: Int
+    $referralRate: Int
   ) {
     updateCustomerReferralPartner(
       customerId: $customerId
       referralPartnerId: $referralPartnerId
       referralStartDate: $referralStartDate
       referralEndDate: $referralEndDate
+      minimumReferralHours: $minimumReferralHours
+      referralRate: $referralRate
     ) {
       success
       errors
