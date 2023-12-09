@@ -1,26 +1,26 @@
-import React from 'react';
-import queryString from 'query-string';
-import {Link} from 'react-router-dom';
+import React from "react";
+import queryString from "query-string";
+import { Link } from "react-router-dom";
 // COMPONENTS
-import Row from 'components/common/Row';
-import message from 'components/common/message';
-import Col from 'components/common/Col';
-import Breadcrumb from 'components/common/Breadcrumb';
-import SideNav from 'components/common/SideNav';
-import Loading from 'components/common/Loading';
-import Profile from './Profile';
-import Employees from './Employees';
-import Contacts from './Contacts';
-import Status from './Status';
-import Users from './Users';
-import Override from './Override';
-import Documents from './Documents';
-import Files from './Files';
-import Referral from './Referral';
+import Row from "components/common/Row";
+import message from "components/common/message";
+import Col from "components/common/Col";
+import Breadcrumb from "components/common/Breadcrumb";
+import SideNav from "components/common/SideNav";
+import Loading from "components/common/Loading";
+import Profile from "./Profile";
+import Employees from "./Employees";
+import Contacts from "./Contacts";
+import Status from "./Status";
+import Users from "./Users";
+import Override from "./Override";
+import Documents from "./Documents";
+import Files from "./Files";
+import Referral from "./Referral";
 // APOLLO
-import {Query, graphql} from 'react-apollo';
-import customerByIdQuery from 'ApolloClient/Queries/customerById';
-import saveCustomer from 'ApolloClient/Mutations/saveCustomer';
+import { Query, graphql } from "react-apollo";
+import customerByIdQuery from "ApolloClient/Queries/customerById";
+import saveCustomer from "ApolloClient/Mutations/saveCustomer";
 
 class AdminCustomerDetail extends React.PureComponent {
   state = {
@@ -37,8 +37,8 @@ class AdminCustomerDetail extends React.PureComponent {
   };
   checkParams = () => {
     let oldParams = queryString.parse(this.props.location.search);
-    if (!oldParams.tab && oldParams.tab !== 'null') {
-      return this.onParamChange({tab: 'profile'});
+    if (!oldParams.tab && oldParams.tab !== "null") {
+      return this.onParamChange({ tab: "profile" });
     }
   };
   componentWillMount() {
@@ -46,26 +46,26 @@ class AdminCustomerDetail extends React.PureComponent {
   }
   getTab = (tab) => {
     switch (tab) {
-      case 'profile':
-        return 'Profile';
-      case 'referral':
-        return 'Referral';
-      case 'contacts':
-        return 'Contacts';
-      case 'status':
-        return 'Status';
-      case 'files':
-        return 'Files';
-      case 'users':
-        return 'Users';
-      case 'documents':
-        return 'Documents';
-      case 'employees':
-        return 'Employees';
-      case 'override':
-        return 'Override';
-      case 'database':
-        return 'Database';
+      case "profile":
+        return "Profile";
+      case "referral":
+        return "Referral";
+      case "contacts":
+        return "Contacts";
+      case "status":
+        return "Status";
+      case "files":
+        return "Files";
+      case "users":
+        return "Users";
+      case "documents":
+        return "Documents";
+      case "employees":
+        return "Employees";
+      case "override":
+        return "Override";
+      case "database":
+        return "Database";
       default:
         return null;
     }
@@ -73,11 +73,11 @@ class AdminCustomerDetail extends React.PureComponent {
   getNavItems = () => {
     return [
       {
-        label: 'Profile',
-        activeValue: 'profile',
+        label: "Profile",
+        activeValue: "profile",
         onClick: () =>
           this.onParamChange({
-            tab: 'profile',
+            tab: "profile",
           }),
       },
       // {
@@ -89,67 +89,67 @@ class AdminCustomerDetail extends React.PureComponent {
       //     }),
       // },
       {
-        label: 'Contacts',
-        activeValue: 'contacts',
+        label: "Contacts",
+        activeValue: "contacts",
         onClick: () =>
           this.onParamChange({
-            tab: 'contacts',
+            tab: "contacts",
           }),
       },
       {
-        label: 'Status',
-        activeValue: 'status',
+        label: "Status",
+        activeValue: "status",
         onClick: () =>
           this.onParamChange({
-            tab: 'status',
+            tab: "status",
           }),
       },
       {
-        label: 'Files',
-        activeValue: 'files',
+        label: "Files",
+        activeValue: "files",
         onClick: () =>
           this.onParamChange({
-            tab: 'files',
+            tab: "files",
           }),
       },
       {
-        label: 'Users',
-        activeValue: 'users',
+        label: "Users",
+        activeValue: "users",
         onClick: () =>
           this.onParamChange({
-            tab: 'users',
+            tab: "users",
           }),
       },
       {
-        label: 'Documents',
-        activeValue: 'documents',
+        label: "Documents",
+        activeValue: "documents",
         onClick: () =>
           this.onParamChange({
-            tab: 'documents',
+            tab: "documents",
           }),
       },
       {
-        label: 'Employees',
-        activeValue: 'employees',
+        label: "Employees",
+        activeValue: "employees",
         onClick: () =>
           this.onParamChange({
-            tab: 'employees',
+            tab: "employees",
           }),
       },
       {
-        label: 'Override',
-        activeValue: 'override',
+        label: "Override",
+        activeValue: "override",
         onClick: () =>
           this.onParamChange({
-            tab: 'override',
+            tab: "override",
           }),
       },
       {
-        label: 'Database',
-        activeValue: 'database',
+        label: "Database",
+        activeValue: "database",
         onClick: () =>
           this.onParamChange({
-            tab: 'database',
+            tab: "database",
           }),
       },
     ];
@@ -164,26 +164,26 @@ class AdminCustomerDetail extends React.PureComponent {
           },
         },
       });
-      message.success('Customer saved!');
+      message.success("Customer saved!");
     } catch (err) {
       console.log(err);
     }
   };
   render() {
-    const {location, history} = this.props;
-    const {tab} = queryString.parse(location.search);
+    const { location, history } = this.props;
+    const { tab } = queryString.parse(location.search);
 
     // TODO: which query we use depends if it's an admin or a regular employee
 
     return (
-      <div style={{padding: 8}}>
+      <div style={{ padding: 8 }}>
         <Query
           query={customerByIdQuery}
-          variables={{id: this.props.match.params.id}}
+          variables={{ id: this.props.match.params.id }}
         >
-          {({loading, data, error}) => {
+          {({ loading, data, error }) => {
             if (loading) return <Loading />;
-            if (error) return 'error...';
+            if (error) return "error...";
             const customer = data.customerById;
             const sharedProps = {
               history,
@@ -196,37 +196,37 @@ class AdminCustomerDetail extends React.PureComponent {
               <React.Fragment>
                 <Breadcrumb
                   crumbs={[
-                    <Link to="/admin/customers">Customers</Link>,
+                    <Link to='/admin/customers'>Customers</Link>,
                     customer.title,
                     this.getTab(tab),
                   ]}
                 />
-                <Row gutter={32} style={{marginTop: 32}}>
+                <Row gutter={32} style={{ marginTop: 32 }}>
                   <Col xs={24} md={4}>
                     <SideNav items={this.getNavItems()} tab={tab} />
                   </Col>
                   <Col xs={24} md={20}>
-                    {' '}
+                    {" "}
                     <div>
                       {(() => {
                         switch (tab) {
-                          case 'profile':
+                          case "profile":
                             return <Profile {...sharedProps} />;
-                          case 'employees':
+                          case "employees":
                             return <Employees {...sharedProps} />;
-                          case 'users':
+                          case "users":
                             return <Users {...sharedProps} />;
-                          case 'status':
+                          case "status":
                             return <Status {...sharedProps} />;
-                          case 'contacts':
+                          case "contacts":
                             return <Contacts {...sharedProps} />;
-                          case 'override':
+                          case "override":
                             return <Override {...sharedProps} />;
-                          case 'files':
+                          case "files":
                             return <Files {...sharedProps} />;
-                          case 'documents':
+                          case "documents":
                             return <Documents {...sharedProps} />;
-                          case 'referral':
+                          case "referral":
                             return <Referral {...sharedProps} />;
                           default:
                             return <div {...sharedProps} />;
@@ -244,6 +244,6 @@ class AdminCustomerDetail extends React.PureComponent {
   }
 }
 
-export default graphql(saveCustomer, {name: 'saveCustomer'})(
+export default graphql(saveCustomer, { name: "saveCustomer" })(
   AdminCustomerDetail
 );

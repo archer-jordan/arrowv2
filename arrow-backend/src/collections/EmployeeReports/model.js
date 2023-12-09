@@ -1,5 +1,5 @@
-import Mongo from 'modules/mongodb';
-import baseFields from '../shared-models/base-fields';
+import Mongo from "modules/mongodb";
+import baseFields from "../shared-models/base-fields";
 
 const schema = new Mongo.Schema({
   ...baseFields,
@@ -18,7 +18,7 @@ const schema = new Mongo.Schema({
   // benefits
   benefits: [
     {
-      eligibility: Boolean,
+      eligibility: String,
       hours: String,
       label: String,
     },
@@ -26,8 +26,8 @@ const schema = new Mongo.Schema({
 });
 
 // create indexes
-schema.index({customerId: 1, employeeId: 1});
+schema.index({ customerId: 1, employeeId: 1 });
 
-const EmployeeReports = Mongo.model('EmployeeReports', schema);
+const EmployeeReports = Mongo.model("EmployeeReports", schema);
 
 export default EmployeeReports;

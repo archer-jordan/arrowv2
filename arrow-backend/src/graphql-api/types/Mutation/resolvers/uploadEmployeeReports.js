@@ -1,11 +1,11 @@
-import EmployeeReports from 'collections/EmployeeReports/model';
-import Customers from 'collections/Customers/model';
-import Employees from 'collections/Employees/model';
-import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
-import moment from 'moment';
-import ReferralPartners from 'collections/ReferralPartners/model';
+import EmployeeReports from "collections/EmployeeReports/model";
+import Customers from "collections/Customers/model";
+import Employees from "collections/Employees/model";
+import userIsSuperAdmin from "modules/helpers/userIsSuperAdmin";
+import moment from "moment";
+import ReferralPartners from "collections/ReferralPartners/model";
 
-const runReferralPartnerReports = async ({dataRows, customer}) => {
+const runReferralPartnerReports = async ({ dataRows, customer }) => {
   // referralStartDate: String,
   // referralEndDate: String,
   let start = moment(parseInt(customer.referralStartDate)).valueOf();
@@ -39,6 +39,7 @@ const runReferralPartnerReports = async ({dataRows, customer}) => {
 // retirementLabel: String
 
 const uploadEmployeeReports = async (root, args, context) => {
+  console.log(args);
   try {
     // check if user is a super admin
     userIsSuperAdmin(context.user);
@@ -76,6 +77,7 @@ const uploadEmployeeReports = async (root, args, context) => {
 
     for (i = 0; i < args.values.length; i++) {
       let item = args.values[i];
+      console.log(item.benefits);
       let employee = await Employees.findOne({
         assignedId: item.assignedId,
         customerId: customer._id,
@@ -107,7 +109,7 @@ const uploadEmployeeReports = async (root, args, context) => {
       // if it exists, update it
       if (reportExists && reportExists._id) {
         // update existing
-        await EmployeeReports.updateOne(query, {$set: report});
+        await EmployeeReports.updateOne(query, { $set: report });
       } else {
         // else if it doesn't exist yet, insert a new one
         let doc = new EmployeeReports(report);

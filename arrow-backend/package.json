@@ -5,6 +5,7 @@
     "babel-node": "babel-node --presets=env",
     "start": "NODE_PATH=src/ yarn babel-node -- ./index.js",
     "local": "NODE_PATH=src/ nodemon --exec yarn babel-node -- ./index.js",
+    "dev": "NODE_PATH=src/ nodemon --exec yarn babel-node -- ./index.js",
     "build": "babel src -d dist",
     "deploy": "git push heroku master",
     "migrate:up": "migrate-mongo up",

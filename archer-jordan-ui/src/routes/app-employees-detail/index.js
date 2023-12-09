@@ -1,36 +1,36 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import moment from 'moment';
-import queryString from 'query-string';
+import React from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import queryString from "query-string";
 // COMPONENTS
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import MonthComponent from 'components/common/MonthComponent';
-import SideNav from 'components/common/SideNav';
-import Benefits from './Benefits';
-import Financials from './Financials';
-import Account from './Account';
-import Select from 'components/inputs/SelectInput';
+import Row from "components/common/Row";
+import Col from "components/common/Col";
+import MonthComponent from "components/common/MonthComponent";
+import SideNav from "components/common/SideNav";
+import Benefits from "./Benefits";
+import Financials from "./Financials";
+import Account from "./Account";
+import Select from "components/inputs/SelectInput";
 // LIB
-import helpers from 'lib/helpers/GeneralHelpers';
+import helpers from "lib/helpers/GeneralHelpers";
 // APOLLO
-import employeeByIdQuery from 'ApolloClient/Queries/employeeById';
-import {Query} from 'react-apollo';
+import employeeByIdQuery from "ApolloClient/Queries/employeeById";
+import { Query } from "react-apollo";
 
-const {Option} = Select;
+const { Option } = Select;
 
-const MobileDropdownNav = ({items, tab, onChange}) => (
+const MobileDropdownNav = ({ items, tab, onChange }) => (
   <div
     style={{
       marginTop: 24,
       marginBottom: 16,
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'flex-end',
+      width: "100%",
+      display: "flex",
+      justifyContent: "flex-end",
     }}
   >
-    <Select value={tab} style={{width: 200}} onChange={onChange}>
-      {items.map(item => (
+    <Select value={tab} style={{ width: 200 }} onChange={onChange}>
+      {items.map((item) => (
         <Option key={item.activeValue}>{item.label}</Option>
       ))}
     </Select>
@@ -41,7 +41,7 @@ class AppEmployeesDetail extends React.PureComponent {
   state = {
     editDate: false,
   };
-  onParamChange = newValues => {
+  onParamChange = (newValues) => {
     let oldParams =
       this.props.location &&
       this.props.location.search &&
@@ -58,26 +58,18 @@ class AppEmployeesDetail extends React.PureComponent {
       this.props.location &&
       this.props.location.search &&
       queryString.parse(this.props.location.search);
-    if (!oldParams || (!oldParams.tab && oldParams.tab !== 'null')) {
-      let month = moment()
-        .format('MMMM')
-        .toLowerCase();
-      let year = moment()
-        .format('YYYY')
-        .toLowerCase();
-      return this.onParamChange({month, year, tab: 'benefits'});
+    if (!oldParams || (!oldParams.tab && oldParams.tab !== "null")) {
+      let month = moment().subtract(1, "months").format("MMMM").toLowerCase();
+      let year = moment().format("YYYY").toLowerCase();
+      return this.onParamChange({ month, year, tab: "benefits" });
     }
     if (
-      (!oldParams.year && oldParams.year !== 'null') ||
-      (!oldParams.month && oldParams.month !== 'null')
+      (!oldParams.year && oldParams.year !== "null") ||
+      (!oldParams.month && oldParams.month !== "null")
     ) {
-      let month = moment()
-        .format('MMMM')
-        .toLowerCase();
-      let year = moment()
-        .format('YYYY')
-        .toLowerCase();
-      return this.onParamChange({month, year});
+      let month = moment().subtract(1, "months").format("MMMM").toLowerCase();
+      let year = moment().format("YYYY").toLowerCase();
+      return this.onParamChange({ month, year });
     }
   };
   componentWillMount() {
@@ -86,45 +78,45 @@ class AppEmployeesDetail extends React.PureComponent {
   getNavItems = () => {
     return [
       {
-        label: 'Benefits',
-        activeValue: 'benefits',
+        label: "Benefits",
+        activeValue: "benefits",
         onClick: () =>
           this.onParamChange({
-            tab: 'benefits',
+            tab: "benefits",
           }),
       },
       {
-        label: 'Financials',
-        activeValue: 'financials',
+        label: "Financials",
+        activeValue: "financials",
         onClick: () =>
           this.onParamChange({
-            tab: 'financials',
+            tab: "financials",
           }),
       },
       {
-        label: 'Account',
-        activeValue: 'account',
+        label: "Account",
+        activeValue: "account",
         onClick: () =>
           this.onParamChange({
-            tab: 'account',
+            tab: "account",
           }),
       },
     ];
   };
   render() {
-    const {location, history} = this.props;
+    const { location, history } = this.props;
 
     let employeeId = this.props.employeeId || this.props.match.params.id;
 
-    const {tab, month, year} = queryString.parse(location.search);
+    const { tab, month, year } = queryString.parse(location.search);
 
     return (
       <Query
         query={employeeByIdQuery}
-        variables={{id: employeeId}}
-        fetchPolicy="cache-and-network"
+        variables={{ id: employeeId }}
+        fetchPolicy='cache-and-network'
       >
-        {({error, loading, data}) => {
+        {({ error, loading, data }) => {
           if (loading) return null;
           if (error) return null;
           let employee = data.employeeById;
@@ -141,8 +133,8 @@ class AppEmployeesDetail extends React.PureComponent {
           return (
             <div>
               <div>
-                <Link to="/employees">Employees</Link> / {employee.firstName}{' '}
-                {employee.lastName} / {helpers.capitalize(tab)}{' '}
+                <Link to='/employees'>Employees</Link> / {employee.firstName}{" "}
+                {employee.lastName} / {helpers.capitalize(tab)}{" "}
               </div>
               <Row>
                 <Col xs={24} md={16} />
@@ -150,7 +142,7 @@ class AppEmployeesDetail extends React.PureComponent {
                   <MobileDropdownNav
                     items={this.getNavItems()}
                     tab={tab}
-                    onChange={tab => this.onParamChange({tab})}
+                    onChange={(tab) => this.onParamChange({ tab })}
                   />
                 </Col>
                 <Col xs={24}>
@@ -164,17 +156,17 @@ class AppEmployeesDetail extends React.PureComponent {
                   <SideNav items={this.getNavItems()} tab={tab} />
                 </Col>
                 <Col xs={24} md={18}>
-                  {' '}
+                  {" "}
                   <div>
                     {(() => {
                       switch (tab) {
-                        case 'financials':
+                        case "financials":
                           return <Financials {...sharedProps} />;
-                        case 'benefits':
+                        case "benefits":
                           return <Benefits {...sharedProps} />;
-                        case 'account':
+                        case "account":
                           return <Account {...sharedProps} />;
-                        case 'password':
+                        case "password":
                           return <div {...sharedProps} />;
                         default:
                           return <div {...sharedProps} />;
