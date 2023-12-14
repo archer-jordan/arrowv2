@@ -76,6 +76,8 @@ const BenefitRow = ({ label, hours, eligibility }) => {
     eligibility = null;
   } else if (eligibility && eligibility === "N") {
     eligibility = null;
+  } else if (eligibility && eligibility === "Y") {
+    eligibility = "true";
   }
   return (
     <Row
