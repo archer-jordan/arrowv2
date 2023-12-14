@@ -35,6 +35,7 @@ const schema = new Mongo.Schema({
       'other',
     ],
   },
+  attachments: [attachmentSchema],
   w9Doc: attachmentSchema,
   achDoc: attachmentSchema,
   parterAgreementDoc: attachmentSchema,
