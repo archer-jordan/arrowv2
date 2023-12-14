@@ -57,7 +57,7 @@ const Content = ({ month, year }) => (
       At least one employee already has a report for {month}/{year}, would you
       like to override each employees report with the current CSV?
     </Caption>
-  </>
+  </React.Fragment>
 );
 
 class EmployeeOverride extends React.PureComponent {
