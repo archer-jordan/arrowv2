@@ -1,34 +1,16 @@
-import EmployeeReports from 'collections/EmployeeReports/model';
-import Customers from 'collections/Customers/model';
-import Employees from 'collections/Employees/model';
-import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
-import moment from 'moment';
-import ReferralPartners from 'collections/ReferralPartners/model';
-import ReferralReports from 'collections/ReferralReports/model';
+import EmployeeReports from "collections/EmployeeReports/model";
+import Customers from "collections/Customers/model";
+import Employees from "collections/Employees/model";
+import userIsSuperAdmin from "modules/helpers/userIsSuperAdmin";
+import moment from "moment";
+import ReferralPartners from "collections/ReferralPartners/model";
 
-const runReferralPartnerReports = async ({dataRows, customer}) => {
-  /**
-   * 1. See if we are still inside the referral period (ie we still owe the referral partner money)
-   * if today is past the referralEndDate for the referral contract
-   * (ie today timestamp is greater than referralEndDate timestamp),
-   * or the referral contract has not yet started (ie today is less than start date)
-   * then we don't want to generate a referral report for them (because we dont have to pay them anything)
-   */
-  let start = moment(parseInt(customer.referralStartDate))
-    .startOf('day')
-    .valueOf();
-  let end = moment(parseInt(customer.referralEndDate)).endOf('day').valueOf();
-  let today = moment().endOf('day').valueOf();
-
-  if (today > end) {
-    console.log('Contract is not active: its over');
-    return null;
-  }
-
-  if (today < start) {
-    console.log('Contract is not active: it has not started');
-    return null;
-  }
+const runReferralPartnerReports = async ({ dataRows, customer }) => {
+  // referralStartDate: String,
+  // referralEndDate: String,
+  let start = moment(parseInt(customer.referralStartDate)).valueOf();
+  let end = moment(parseInt(customer.referralEndDate)).valueOf();
+  // 1. See if we are still inside the referral period (ie we still owe the referral partner money)
 
   // 2. find the referral partner
   let partner = await ReferralPartners.findOne({
@@ -36,7 +18,7 @@ const runReferralPartnerReports = async ({dataRows, customer}) => {
   });
 
   if (!partner || !partner._id) {
-    console.log('Partner no longer exists');
+    console.log("Partner no longer exists");
     return null;
   }
 
@@ -102,6 +84,7 @@ const runReferralPartnerReports = async ({dataRows, customer}) => {
 // retirementLabel: String
 
 const uploadEmployeeReports = async (root, args, context) => {
+  console.log(args);
   try {
     // check if user is a super admin
     userIsSuperAdmin(context.user);
@@ -151,6 +134,7 @@ const uploadEmployeeReports = async (root, args, context) => {
      * */
     for (i = 0; i < args.values.length; i++) {
       let item = args.values[i];
+      console.log(item.benefits);
       let employee = await Employees.findOne({
         assignedId: item.assignedId,
         customerId: customer._id,
@@ -182,7 +166,7 @@ const uploadEmployeeReports = async (root, args, context) => {
       // if it exists, update it
       if (reportExists && reportExists._id) {
         // update existing
-        await EmployeeReports.updateOne(query, {$set: report});
+        await EmployeeReports.updateOne(query, { $set: report });
       } else {
         // else if it doesn't exist yet, insert a new one
         let doc = new EmployeeReports(report);
@@ -192,7 +176,7 @@ const uploadEmployeeReports = async (root, args, context) => {
 
     // check if customer has a referral partner, and if so, then we will generate a partner report
     if (customer.referralPartnerId) {
-      runReferralPartnerReports({dataRows: args.values, customer});
+      runReferralPartnerReports({ dataRows: args.values, customer });
     }
 
     // if our loop through each row of data is successful, return sucess=true

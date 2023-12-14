@@ -1,28 +1,28 @@
-import React from 'react';
-import queryString from 'query-string';
-import moment from 'moment';
-import {Redirect} from 'react-router-dom';
+import React from "react";
+import queryString from "query-string";
+import moment from "moment";
+import { Redirect } from "react-router-dom";
 // COMPONENTS
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import Loading from 'components/common/Loading';
-import Breadcrumb from 'components/common/Breadcrumb';
-import MonthComponent from 'components/common/MonthComponent';
-import HealthAndWelfare from './HealthAndWelfare';
-import Eligibility from './Eligibility';
-import Retirement from './Retirement';
-import Benefits from './Benefits';
-import Downloads from './Downloads';
-import SideNav from 'components/common/SideNav';
+import Row from "components/common/Row";
+import Col from "components/common/Col";
+import Loading from "components/common/Loading";
+import Breadcrumb from "components/common/Breadcrumb";
+import MonthComponent from "components/common/MonthComponent";
+import HealthAndWelfare from "./HealthAndWelfare";
+import Eligibility from "./Eligibility";
+import Retirement from "./Retirement";
+import Benefits from "./Benefits";
+import Downloads from "./Downloads";
+import SideNav from "components/common/SideNav";
 // APOLLO
-import {Query} from 'react-apollo';
-import customerReport from 'ApolloClient/Queries/customerReport';
+import { Query } from "react-apollo";
+import customerReport from "ApolloClient/Queries/customerReport";
 // LIB
-import helpers from 'lib/helpers/GeneralHelpers';
+import helpers from "lib/helpers/GeneralHelpers";
 
 class AppReports extends React.PureComponent {
   state = {};
-  onParamChange = newValues => {
+  onParamChange = (newValues) => {
     let oldParams = queryString.parse(this.props.location.search);
     let newParams = {
       ...oldParams,
@@ -33,43 +33,35 @@ class AppReports extends React.PureComponent {
   };
   checkParams = () => {
     let oldParams = queryString.parse(this.props.location.search);
-    if (!oldParams.tab && oldParams.tab !== 'null') {
-      let month = moment()
-        .format('MMMM')
-        .toLowerCase();
-      let year = moment()
-        .format('YYYY')
-        .toLowerCase();
-      return this.onParamChange({month, year, tab: 'health'});
+    if (!oldParams.tab && oldParams.tab !== "null") {
+      let month = moment().subtract(1, "months").format("MMMM").toLowerCase();
+      let year = moment().format("YYYY").toLowerCase();
+      return this.onParamChange({ month, year, tab: "health" });
     }
     if (
-      (!oldParams.year && oldParams.year !== 'null') ||
-      (!oldParams.month && oldParams.month !== 'null')
+      (!oldParams.year && oldParams.year !== "null") ||
+      (!oldParams.month && oldParams.month !== "null")
     ) {
-      let month = moment()
-        .format('MMMM')
-        .toLowerCase();
-      let year = moment()
-        .format('YYYY')
-        .toLowerCase();
-      return this.onParamChange({month, year});
+      let month = moment().subtract(1, "months").format("MMMM").toLowerCase();
+      let year = moment().format("YYYY").toLowerCase();
+      return this.onParamChange({ month, year });
     }
   };
   componentWillMount() {
     this.checkParams();
   }
-  getTab = tab => {
+  getTab = (tab) => {
     switch (tab) {
-      case 'health':
-        return 'Health & Welfare';
-      case 'eligibility':
-        return 'Eligibility';
-      case 'benefits':
-        return 'Benefits';
-      case 'retirement':
-        return 'Retirement';
-      case 'download':
-        return 'Download XL';
+      case "health":
+        return "Health & Welfare";
+      case "eligibility":
+        return "Eligibility";
+      case "benefits":
+        return "Benefits";
+      case "retirement":
+        return "Retirement";
+      case "download":
+        return "Download XL";
       default:
         return null;
     }
@@ -78,43 +70,43 @@ class AppReports extends React.PureComponent {
     // an array of data that will build our sidenav items
     let navItems = [
       {
-        label: 'Health & Welfare',
-        activeValue: 'health',
+        label: "Health & Welfare",
+        activeValue: "health",
         onClick: () =>
           this.onParamChange({
-            tab: 'health',
+            tab: "health",
           }),
       },
       {
-        label: 'Eligibility',
-        activeValue: 'eligibility',
+        label: "Eligibility",
+        activeValue: "eligibility",
         onClick: () =>
           this.onParamChange({
-            tab: 'eligibility',
+            tab: "eligibility",
           }),
       },
       {
-        label: 'Benefits',
-        activeValue: 'benefits',
+        label: "Benefits",
+        activeValue: "benefits",
         onClick: () =>
           this.onParamChange({
-            tab: 'benefits',
+            tab: "benefits",
           }),
       },
       {
-        label: 'Retirement',
-        activeValue: 'retirement',
+        label: "Retirement",
+        activeValue: "retirement",
         onClick: () =>
           this.onParamChange({
-            tab: 'retirement',
+            tab: "retirement",
           }),
       },
       {
-        label: 'Downloads',
-        activeValue: 'download',
+        label: "Downloads",
+        activeValue: "download",
         onClick: () =>
           this.onParamChange({
-            tab: 'download',
+            tab: "download",
           }),
       },
     ];
@@ -126,40 +118,40 @@ class AppReports extends React.PureComponent {
       !this.state.queryData.customerReport.labelForTotalRetirement &&
       !this.state.queryData.customerReport.totalRetirement
     ) {
-      navItems = navItems.filter(item => item.activeValue !== 'retirement');
+      navItems = navItems.filter((item) => item.activeValue !== "retirement");
     }
 
     // return the nav options
     return navItems;
   };
   render() {
-    const {location, history} = this.props;
+    const { location, history } = this.props;
 
     // if the user is not a company admin and is just a coEmployee, then redirect them to the dashboard
     if (
-      !this.props.currentUser.roles.includes('coAdmin') &&
-      this.props.currentUser.roles.includes('coEmployee')
+      !this.props.currentUser.roles.includes("coAdmin") &&
+      this.props.currentUser.roles.includes("coEmployee")
     ) {
-      return <Redirect to="/dashboard" />;
+      return <Redirect to='/dashboard' />;
     }
 
     // If user is a company admin but does not have persmission to view company data, we will re-route them
     if (
-      this.props.currentUser.roles.includes('coAdmin') &&
-      !this.props.currentUser.permissions.includes('viewCompanyData')
+      this.props.currentUser.roles.includes("coAdmin") &&
+      !this.props.currentUser.permissions.includes("viewCompanyData")
     ) {
-      return <Redirect to="/account?tab=profile" />;
+      return <Redirect to='/account?tab=profile' />;
     }
 
-    const {tab, month, year} = queryString.parse(location.search);
+    const { tab, month, year } = queryString.parse(location.search);
 
     return (
-      <div style={{padding: 8}}>
-        <Breadcrumb crumbs={['Reports', this.getTab(tab)]} />
+      <div style={{ padding: 8 }}>
+        <Breadcrumb crumbs={["Reports", this.getTab(tab)]} />
         <Row>
           <Col xs={24} md={16} />
           <Col xs={24}>
-            {' '}
+            {" "}
             <MonthComponent
               year={year}
               month={month}
@@ -175,24 +167,24 @@ class AppReports extends React.PureComponent {
             {this.props.currentUser.customerId && year && month && (
               <Query
                 query={customerReport}
-                fetchPolicy="cache-and-network"
+                fetchPolicy='cache-and-network'
                 variables={{
                   customerId: this.props.currentUser.customerId,
-                  month: moment(helpers.capitalize(month), 'MMMM').format('M'),
+                  month: moment(helpers.capitalize(month), "MMMM").format("M"),
                   year: year,
                 }}
-                onCompleted={queryData => this.setState({queryData})} // story the query result so that we can check it in getNavItems
+                onCompleted={(queryData) => this.setState({ queryData })} // story the query result so that we can check it in getNavItems
               >
-                {({loading, data, error}) => {
+                {({ loading, data, error }) => {
                   // display spinner if loading
                   if (loading) return <Loading />;
                   // display error if error comes back
                   if (error) {
-                    return 'Error... please contact support if this issue persists';
+                    return "Error... please contact support if this issue persists";
                   }
                   // display no result if no results come back
                   if (!data.customerReport) {
-                    return 'No results for this time period...';
+                    return "No results for this time period...";
                   }
 
                   const sharedProps = {
@@ -204,15 +196,15 @@ class AppReports extends React.PureComponent {
                     <div>
                       {(() => {
                         switch (tab) {
-                          case 'retirement':
+                          case "retirement":
                             return <Retirement {...sharedProps} />;
-                          case 'benefits':
+                          case "benefits":
                             return <Benefits {...sharedProps} />;
-                          case 'download':
+                          case "download":
                             return <Downloads {...sharedProps} />;
-                          case 'eligibility':
+                          case "eligibility":
                             return <Eligibility {...sharedProps} />;
-                          case 'health':
+                          case "health":
                             return <HealthAndWelfare {...sharedProps} />;
                           default:
                             return <HealthAndWelfare {...sharedProps} />;

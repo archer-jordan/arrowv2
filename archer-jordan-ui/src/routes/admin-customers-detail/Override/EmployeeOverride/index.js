@@ -1,22 +1,22 @@
-import React from 'react';
-import styled from 'styled-components';
-import Papa from 'papaparse';
-import formatEmployeeRow from '../formatEmployeeRow';
+import React from "react";
+import styled from "styled-components";
+import Papa from "papaparse";
+import formatEmployeeRow from "../formatEmployeeRow";
 // COMPONENTS
-import Button from 'components/common/Button';
-import ErrorBlock from 'components/common/ErrorBlock';
-import Alert from 'components/common/Alert';
-import Filename from '../Filename';
-import Title from 'components/text/Title';
-import Caption from 'components/text/Caption';
-import Icon from 'components/common/Icon';
-import OverrideModal from '../OverideModal';
+import Button from "components/common/Button";
+import ErrorBlock from "components/common/ErrorBlock";
+import Alert from "components/common/Alert";
+import Filename from "../Filename";
+import Title from "components/text/Title";
+import Caption from "components/text/Caption";
+import Icon from "components/common/Icon";
+import OverrideModal from "../OverideModal";
 // APOLLO
-import {graphql} from 'react-apollo';
-import client from 'ApolloClient/index.js';
-import uploadEmployeeReports from 'ApolloClient/Mutations/uploadEmployeeReports';
-import checkIfEmployeeTotalsExist from 'ApolloClient/Queries/checkIfEmployeeTotalsExist';
-import compose from 'lodash/flowRight';
+import { graphql } from "react-apollo";
+import client from "ApolloClient/index.js";
+import uploadEmployeeReports from "ApolloClient/Mutations/uploadEmployeeReports";
+import checkIfEmployeeTotalsExist from "ApolloClient/Queries/checkIfEmployeeTotalsExist";
+import compose from "lodash/flowRight";
 
 const UploadButton = styled.input`
   width: 0.1px;
@@ -50,8 +50,8 @@ const SectionTitle = styled.div`
   background: ${(p) => p.theme.colors.primary1};
 `;
 
-const Content = ({month, year}) => (
-  <>
+const Content = ({ month, year }) => (
+  <React.Fragment>
     <Title>A report already exists</Title>
     <Caption>
       At least one employee already has a report for {month}/{year}, would you
@@ -69,7 +69,7 @@ class EmployeeOverride extends React.PureComponent {
     try {
       // make sure we have a value parameter
       if (!values) {
-        throw new Error('No data found...');
+        throw new Error("No data found...");
       }
       // update data
       let result = await this.props.uploadEmployeeReports({
@@ -114,11 +114,11 @@ class EmployeeOverride extends React.PureComponent {
     results.forEach((item, i) => {
       if (
         !item.assignedId ||
-        item.assignedId === '' ||
-        item.assignedId === 'NULL' ||
-        item.assignedId === 'Null' ||
-        item.assignedId === 'null' ||
-        item.assignedId === ' '
+        item.assignedId === "" ||
+        item.assignedId === "NULL" ||
+        item.assignedId === "Null" ||
+        item.assignedId === "null" ||
+        item.assignedId === " "
       ) {
         invalidFields.push(`EAID does not exist for row ${i + 1}`);
       }
@@ -130,11 +130,11 @@ class EmployeeOverride extends React.PureComponent {
     results.forEach((item, i) => {
       if (
         !item.companyAssignedId ||
-        item.companyAssignedId === '' ||
-        item.companyAssignedId === 'NULL' ||
-        item.companyAssignedId === 'Null' ||
-        item.companyAssignedId === 'null' ||
-        item.companyAssignedId === ' '
+        item.companyAssignedId === "" ||
+        item.companyAssignedId === "NULL" ||
+        item.companyAssignedId === "Null" ||
+        item.companyAssignedId === "null" ||
+        item.companyAssignedId === " "
       ) {
         invalidFields.push(`COID does not exist for row ${i + 1}`);
       }
@@ -150,7 +150,7 @@ class EmployeeOverride extends React.PureComponent {
     return checkIfArrayIsUnique(allIds);
   };
   onEmployeeUpload = async (results, file) => {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     try {
       let headersArray = results.data[0];
       let formattedData = [];
@@ -159,7 +159,7 @@ class EmployeeOverride extends React.PureComponent {
       if (headersArray.length !== 36) {
         return this.setState({
           employeeErrors: [
-            'This CSV does not have the correct number of columns',
+            "This CSV does not have the correct number of columns",
           ],
           loading: false,
         });
@@ -167,7 +167,7 @@ class EmployeeOverride extends React.PureComponent {
 
       results.data.forEach((item, i) => {
         // 0 index item is the header row, which we don't want to include in formatted data
-        if (i !== 0 && item[0] !== null && item[0] !== '') {
+        if (i !== 0 && item[0] !== null && item[0] !== "") {
           let formattedItem = formatEmployeeRow(headersArray, item);
           formattedData.push(formattedItem);
         }
@@ -199,7 +199,7 @@ class EmployeeOverride extends React.PureComponent {
       if (!isUniqueArray) {
         return this.setState({
           loading: false,
-          employeeErrors: ['This spreadsheet has dupliate employee IDs'],
+          employeeErrors: ["This spreadsheet has dupliate employee IDs"],
         });
       }
 
@@ -212,7 +212,7 @@ class EmployeeOverride extends React.PureComponent {
         return this.setState({
           loading: false,
           employeeErrors: [
-            'Not all months match in each row of your CSV. Please make sure all rows use the same month.',
+            "Not all months match in each row of your CSV. Please make sure all rows use the same month.",
           ],
         });
       }
@@ -220,7 +220,7 @@ class EmployeeOverride extends React.PureComponent {
         return this.setState({
           loading: false,
           employeeErrors: [
-            'Not all years match in each row of your CSV. Please make sure all rows use the same year.',
+            "Not all years match in each row of your CSV. Please make sure all rows use the same year.",
           ],
         });
       }
@@ -231,7 +231,7 @@ class EmployeeOverride extends React.PureComponent {
         return this.setState({
           loading: false,
           employeeErrors: [
-            'The company ids (COID) do not all match for this CSV',
+            "The company ids (COID) do not all match for this CSV",
           ],
         });
       }
@@ -241,7 +241,7 @@ class EmployeeOverride extends React.PureComponent {
         return this.setState({
           loading: false,
           employeeErrors: [
-            'The company ID you are trying to upload does not match the COID in the CSV',
+            "The company ID you are trying to upload does not match the COID in the CSV",
           ],
         });
       }
@@ -249,7 +249,7 @@ class EmployeeOverride extends React.PureComponent {
       // we want to query and see if any of these employees already have reports for this month
       let employeeTotalsExist = await client.query({
         query: checkIfEmployeeTotalsExist,
-        fetchPolicy: 'network-only',
+        fetchPolicy: "network-only",
         variables: {
           employeeAssignedIds: formattedData.map((item) => item.assignedId),
           month: formattedData[0].month,
@@ -336,12 +336,12 @@ class EmployeeOverride extends React.PureComponent {
           }
         />
         {/* EMPLOYEE TOTALS  */}
-        <SectionTitle style={{marginTop: 40}}>Emloyee Totals</SectionTitle>
+        <SectionTitle style={{ marginTop: 40 }}>Emloyee Totals</SectionTitle>
         {this.state.employeeSuccess && (
           <Alert
-            message="Upload Success"
-            description="Your employee totals were successfully uploaded"
-            type="success"
+            message='Upload Success'
+            description='Your employee totals were successfully uploaded'
+            type='success'
             closable
             showIcon
           />
@@ -360,11 +360,11 @@ class EmployeeOverride extends React.PureComponent {
           />
         )}
         {/* LOADING SPINNER */}
-        {this.state.loading && <Icon type="loading" />}
+        {this.state.loading && <Icon type='loading' />}
         {/* EMPLOYEE CONFIRM UPLOAD BUTTON */}
         {this.state.employeeFile && !this.state.loading && (
           <Button
-            style={{marginTop: 32, marginLeft: 16, width: 100}}
+            style={{ marginTop: 32, marginLeft: 16, width: 100 }}
             onClick={() =>
               this.handleUpload(this.state.employeeFile, this.onEmployeeUpload)
             }
@@ -373,7 +373,7 @@ class EmployeeOverride extends React.PureComponent {
           </Button>
         )}
         {this.state.employeeErrors && this.state.employeeErrors.length > 0 && (
-          <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
+          <div style={{ marginTop: 16, width: 500, maxWidth: "100%" }}>
             {this.state.employeeErrors.slice(0, 4).map((item) => (
               <ErrorBlock key={item} error={item} />
             ))}
@@ -389,19 +389,19 @@ class EmployeeOverride extends React.PureComponent {
         )}
         {/* EMPLOYEE SELECT FILE BUTTON */}
         {!this.state.employeeFile && (
-          <div style={{marginTop: 32}}>
+          <div style={{ marginTop: 32 }}>
             <UploadButton
-              name="employee-file"
-              type="file"
-              id="employee-file"
+              name='employee-file'
+              type='file'
+              id='employee-file'
               onChange={(event) => {
                 this.setState({
                   employeeFile: event.target.files[0],
                   employeeErrors: [],
                 });
               }}
-            />{' '}
-            <Label htmlFor="employee-file">Select New File</Label>
+            />{" "}
+            <Label htmlFor='employee-file'>Select New File</Label>
           </div>
         )}
       </>
@@ -410,5 +410,5 @@ class EmployeeOverride extends React.PureComponent {
 }
 
 export default compose(
-  graphql(uploadEmployeeReports, {name: 'uploadEmployeeReports'})
+  graphql(uploadEmployeeReports, { name: "uploadEmployeeReports" })
 )(EmployeeOverride);

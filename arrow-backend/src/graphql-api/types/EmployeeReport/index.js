@@ -1,8 +1,8 @@
-import {gql} from 'apollo-server';
+import { gql } from "apollo-server";
 
 export const EmployeeReportResolvers = {
   EmployeeReport: {
-    id: root => root._id,
+    id: (root) => root._id,
   },
 };
 
@@ -10,13 +10,13 @@ export const EmployeeReportSchema = gql`
   input EmployeeReportBenefitInput {
     label: String
     hours: String
-    eligibility: Boolean
+    eligibility: String
   }
 
   type EmployeeReportBenefit {
     label: String
     hours: String
-    eligibility: Boolean
+    eligibility: String
   }
 
   input EmployeeReportParams {

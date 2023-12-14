@@ -1,5 +1,5 @@
-import EmployeeReports from 'collections/EmployeeReports/model';
-import Employees from 'collections/Employees/model';
+import EmployeeReports from "collections/EmployeeReports/model";
+import Employees from "collections/Employees/model";
 
 const checkIfEmployeeTotalsExist = async (root, args, context) => {
   try {
@@ -7,7 +7,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
     let i;
 
     if (!args.employeeAssignedIds || !args.employeeAssignedIds.length) {
-      throw new Error('No data provided to checkIfEmployeeTotalsExist');
+      throw new Error("No data provided to checkIfEmployeeTotalsExist");
     }
 
     for (i = 0; i < args.employeeAssignedIds.length; i++) {
@@ -42,11 +42,11 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
     }
     // return exists true if we have errors
     if (errors && errors.length && errors.length > 0) {
-      return {exists: true, errors};
+      return { exists: true, errors };
     }
 
     // if all is well, return exists false (i.e. no reports exists for these employees yet) and an empty errors array
-    return {exists: false, errors: []};
+    return { exists: false, errors: [] };
   } catch (err) {
     console.log(err);
     return err;

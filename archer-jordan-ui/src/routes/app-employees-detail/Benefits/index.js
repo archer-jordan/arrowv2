@@ -1,21 +1,29 @@
-import React from 'react';
-import moment from 'moment';
-import styled from 'styled-components';
-import TopContainer from 'components/common/TopContainer';
-import Row from 'components/common/Row';
-import Col from 'components/common/Col';
-import Loading from 'components/common/Loading';
-import BigValue from 'components/text/BigValue';
-import BigLabel from 'components/text/BigLabel';
-import EmptyState from 'components/common/EmptyState';
+import React from "react";
+import moment from "moment";
+import styled from "styled-components";
+import TopContainer from "components/common/TopContainer";
+import Row from "components/common/Row";
+import Col from "components/common/Col";
+import Loading from "components/common/Loading";
+import BigValue from "components/text/BigValue";
+import BigLabel from "components/text/BigLabel";
 // LIB
-import helpers from 'lib/helpers/GeneralHelpers';
-import checkSVG from 'lib/media/check-circle.svg';
+import helpers from "lib/helpers/GeneralHelpers";
+import checkSVG from "lib/media/check-circle.svg";
 // APOLLO
-import employeeReportByEmployeeId from 'ApolloClient/Queries/employeeReportByEmployeeId';
-import {Query} from 'react-apollo';
+import employeeReportByEmployeeId from "ApolloClient/Queries/employeeReportByEmployeeId";
+import { Query } from "react-apollo";
 
 const BenefitType = styled(BigLabel)`
+  font-weight: 500;
+  font-size: 18px;
+  color: #0f466a;
+  @media only screen and (max-width: 1200px) {
+    font-size: 16px;
+  }
+`;
+
+const EligibilityType = styled(BigLabel)`
   font-weight: 500;
   font-size: 18px;
   color: #0f466a;
@@ -63,31 +71,42 @@ const HoursText = styled(BigValue)`
   font-size: 36px;
 `;
 
-const BenefitRow = ({label, hours, eligibility}) => (
-  <Row
-    gutter={16}
-    style={{
-      height: 72,
-      paddingTop: 16,
-      borderBottom: '1px solid #efefef',
-      width: '100%',
-    }}
-  >
-    <Col xs={14} xl={13}>
-      <BenefitType>{label}</BenefitType>
-    </Col>
-    <Col xs={6} xl={6}>
-      <RequiredHours>{hours}</RequiredHours>
-    </Col>
-    <Col xs={4} xl={5}>
-      {eligibility ? (
-        <IconContainer>
-          <EligibleIcon src={checkSVG} alt="check-circle" />
-        </IconContainer>
-      ) : null}
-    </Col>
-  </Row>
-);
+const BenefitRow = ({ label, hours, eligibility }) => {
+  if (eligibility && eligibility === "false") {
+    eligibility = null;
+  } else if (eligibility && eligibility === "N") {
+    eligibility = null;
+  } else if (eligibility && eligibility === "Y") {
+    eligibility = "true";
+  }
+  return (
+    <Row
+      gutter={16}
+      style={{
+        height: 72,
+        paddingTop: 16,
+        borderBottom: "1px solid #efefef",
+        width: "100%",
+      }}
+    >
+      <Col xs={14} xl={13}>
+        <BenefitType>{label}</BenefitType>
+      </Col>
+      <Col xs={6} xl={6}>
+        <RequiredHours>{hours}</RequiredHours>
+      </Col>
+      <Col xs={4} xl={5}>
+        {eligibility && eligibility !== "true" && eligibility !== "N" ? (
+          <EligibilityType>{eligibility}</EligibilityType>
+        ) : eligibility && eligibility === "true" ? (
+          <IconContainer>
+            <EligibleIcon src={checkSVG} alt='check-circle' />{" "}
+          </IconContainer>
+        ) : null}
+      </Col>
+    </Row>
+  );
+};
 
 const ColumnTitle = styled.div`
   font-weight: 500;
@@ -95,36 +114,32 @@ const ColumnTitle = styled.div`
   color: #0f466a;
 `;
 
-const Header = ({month}) => (
-  <Row gutter={16} style={{marginTop: 16, marginBottom: 24}}>
+const Header = ({ month }) => (
+  <Row gutter={16} style={{ marginTop: 16, marginBottom: 24 }}>
     <Col xs={0} xl={4}>
-      <ColumnTitle style={{marginLeft: 8}}>
+      <ColumnTitle style={{ marginLeft: 8 }}>
         {month.toUpperCase()} <br />
         HOURS
       </ColumnTitle>
     </Col>
     <Col xs={12} xl={10}>
       <ColumnTitle>
-        {' '}
+        {" "}
         BENEFIT
-        <br /> TYPE{' '}
+        <br /> TYPE{" "}
       </ColumnTitle>
     </Col>
     <Col xs={6} xl={5}>
-      <ColumnTitle style={{marginLeft: 8}}>
-        {' '}
+      <ColumnTitle style={{ marginLeft: 8 }}>
+        {" "}
         REQUIRED <br />
-        HOURS{' '}
+        HOURS{" "}
       </ColumnTitle>
     </Col>
-    <Col xs={6} xl={5} style={{display: 'flex', justifyContent: 'center'}}>
-      <ColumnTitle style={{marginLeft: 8}}>
-        {moment(helpers.capitalize(month), 'MMMM')
-          .add(1, 'months')
-          .format('MMMM')
-          .toUpperCase()}
-        <br />
-        ELIGIBILITY{' '}
+    <Col xs={6} xl={5} style={{ display: "flex", justifyContent: "center" }}>
+      <ColumnTitle style={{ marginLeft: 8 }}>
+        ELIGIBILITY <br />
+        EXPIRATION DATE{" "}
       </ColumnTitle>
     </Col>
   </Row>
@@ -143,48 +158,43 @@ class Benefits extends React.PureComponent {
     return (
       <Query
         query={employeeReportByEmployeeId}
-        fetchPolicy="cache-and-network"
+        fetchPolicy='cache-and-network'
         variables={{
-          month: moment(helpers.capitalize(this.props.month), 'MMMM').format(
-            'M'
+          month: moment(helpers.capitalize(this.props.month), "MMMM").format(
+            "M"
           ),
           year: this.props.year,
           employeeId: this.props.employeeId,
         }}
       >
-        {({loading, data, error}) => {
+        {({ loading, data, error }) => {
           if (loading) return <Loading />;
-          if (error) return 'error';
+          if (error) return "error";
 
           if (
             !data.employeeReportByEmployeeId ||
             !data.employeeReportByEmployeeId.benefits
           ) {
-            return (
-              <EmptyState
-                title="No data for this month"
-                subtitle={`Please select a different month by clicking "change month"`}
-              />
-            );
+            return "No data";
           }
 
           let report = data.employeeReportByEmployeeId;
 
           return (
             <div>
-              <TopContainer style={{justifyContent: 'flex-end'}}>
+              <TopContainer style={{ justifyContent: "flex-end" }}>
                 <div>
-                  {' '}
-                  <BigValue style={{textAlign: 'right'}}>
-                    {this.props.employee.firstName}{' '}
+                  {" "}
+                  <BigValue style={{ textAlign: "right" }}>
+                    {this.props.employee.firstName}{" "}
                     {this.props.employee.lastName}
                   </BigValue>
-                  <BigLabel style={{textAlign: 'right'}}>
+                  <BigLabel style={{ textAlign: "right" }}>
                     {this.props.employee.email}
                   </BigLabel>
                 </div>
               </TopContainer>
-              <Row gutter={16} style={{marginTop: 16}}>
+              <Row gutter={16} style={{ marginTop: 16 }}>
                 <Col xs={0} xl={24}>
                   <Header month={this.props.month} />
                 </Col>
@@ -192,9 +202,9 @@ class Benefits extends React.PureComponent {
                   <HoursContainer>
                     <HoursText
                       style={{
-                        textAlign: 'center',
-                        display: 'flex',
-                        alignItems: 'center',
+                        textAlign: "center",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
                       {report.hours}

@@ -1,8 +1,8 @@
-import React from 'react';
-import Table from 'antd/lib/table';
-import 'antd/lib/table/style/css';
-import moment from 'moment';
-import styled from 'styled-components';
+import React from "react";
+import Table from "antd/lib/table";
+import "antd/lib/table/style/css";
+import moment from "moment";
+import styled from "styled-components";
 
 const Text = styled.div`
   font-weight: 600;
@@ -31,51 +31,53 @@ class EmployeesTable extends React.PureComponent {
 
     const columns = [
       {
-        title: 'ID',
-        key: 'assignedId',
+        title: "ID",
+        key: "assignedId",
         sorter: () => {},
         width: 25,
-        render: (text, record) => (
-          <TextLink onClick={() => onClickEmployee(record)}>
-            {record.assignedId}
-          </TextLink>
-        ),
+        render: (text, record) => {
+          return (
+            <TextLink onClick={() => onClickEmployee(record)}>
+              {record.assignedId}
+            </TextLink>
+          );
+        },
       },
       {
-        title: 'Last Name',
-        key: 'lastName',
+        title: "Last Name",
+        key: "lastName",
         sorter: () => {},
         width: 100,
         render: (text, record) => <Text>{record.lastName}</Text>,
       },
       {
-        title: 'First Name',
-        key: 'firstName',
+        title: "First Name",
+        key: "firstName",
         sorter: () => {},
         width: 100,
         render: (text, record) => <Text>{record.firstName}</Text>,
       },
       {
-        title: 'Hire Date',
+        title: "Hire Date",
         width: 100,
-        key: 'hireDate',
+        key: "hireDate",
         sorter: () => {},
         render: (record) => (
           <Text>
             {record.hireDate
-              ? moment(parseInt(record.hireDate)).format('M-D-YYYY')
-              : 'N/A'}
+              ? moment(parseInt(record.hireDate)).format("M-D-YYYY")
+              : "N/A"}
           </Text>
         ),
       },
     ];
 
     return (
-      <div style={{position: 'relative'}}>
+      <div style={{ position: "relative" }}>
         <Table
           dataSource={dataSource}
           columns={[...columns, ...extraColumns]}
-          rowKey="id"
+          rowKey='id'
           pagination={{
             pageSize: 5,
             total,
@@ -85,7 +87,7 @@ class EmployeesTable extends React.PureComponent {
           loading={loading}
           onChange={this.props.handleTableChange}
           onRow={this.props.onRow}
-        />{' '}
+        />{" "}
       </div>
     );
   }

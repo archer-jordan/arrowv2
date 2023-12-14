@@ -1,6 +1,6 @@
-const valueExists = value => {
+const valueExists = (value) => {
   if (value && value.length === 0) return null;
-  if (value && value === 'null') return null;
+  if (value && value === "null") return null;
   if (!value) return null;
   return value;
 };
@@ -76,8 +76,8 @@ const valueExists = value => {
 // 30: "* including H&W, VHS, Administrative Costs"
 // 31: "75123.56"
 
-const cleanValue = value => {
-  return value && valueExists(value) && valueExists(value).replace(/,/g, '');
+const cleanValue = (value) => {
+  return value && valueExists(value) && valueExists(value).replace(/,/g, "");
 };
 
 const formatRow = (headersArray, dataArray) => {
@@ -169,10 +169,10 @@ const formatRow = (headersArray, dataArray) => {
   ];
 
   // remove any empty benefits
-  benefits = benefits.filter(item => item.value);
+  benefits = benefits.filter((item) => item.value);
 
   // remove any empty eligibility
-  eligibility = eligibility.filter(item => item.employees);
+  eligibility = eligibility.filter((item) => item.employees);
 
   // return an object with the structure we'd like
   return {

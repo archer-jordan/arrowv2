@@ -5,6 +5,7 @@
 // 4: "MONTH"
 // 5: "YEAR"
 // 6: "Last Name"
+import moment from "moment";
 // 7: "First Name"
 // 8: "JULY HOURS"
 // benefits 1
@@ -43,89 +44,105 @@
 // 34: "HEALTH & WELFARE"
 // 35: "RETIREMENT"
 
-const valueExists = value => {
+const valueExists = (value) => {
   if (value && value.length === 0) return null;
-  if (value && value === 'null') return null;
+  if (value && value === "null") return null;
   if (!value) return null;
   return value;
 };
 
+const isValidDate = (dateString) => {
+  const dateObject = new Date(dateString);
+  return !isNaN(dateObject.getTime());
+};
+
+const generateMonthEligible = (dateInput) => {
+  let monthElig = dateInput;
+  if (monthElig && isValidDate(monthElig)) {
+    monthElig = moment(monthElig).format("MM/DD/YYYY");
+  } else if (monthElig && !isValidDate(monthElig)) {
+    monthElig = "N";
+  } else if (!monthElig) {
+    monthElig = "N";
+  }
+  return monthElig;
+};
+
 // basically remove any commas from the value, if it exists
-const cleanValue = value => {
-  return value && valueExists(value) && valueExists(value).replace(/,/g, '');
+const cleanValue = (value) => {
+  return value && valueExists(value) && valueExists(value).replace(/,/g, "");
 };
 
 const generateBenefits = (headersArray, dataArray) => {
   let benefits = [];
-
   // benefits 1
-  if (dataArray[9] && dataArray[9] !== '') {
+  if (dataArray[9] && dataArray[9] !== "") {
     benefits.push({
       label: dataArray[9],
       hours: cleanValue(dataArray[10]),
-      eligibility: dataArray[11] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[11]),
     });
   }
 
   // benefits 2
-  if (dataArray[12] && dataArray[12] !== '') {
+  if (dataArray[12] && dataArray[12] !== "") {
     benefits.push({
       label: dataArray[12],
       hours: cleanValue(dataArray[13]),
-      eligibility: dataArray[14] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[14]),
     });
   }
 
   // benefits 3
-  if (dataArray[15] && dataArray[15] !== '') {
+  if (dataArray[15] && dataArray[15] !== "") {
     benefits.push({
       label: dataArray[15],
       hours: cleanValue(dataArray[16]),
-      eligibility: dataArray[17] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[17]),
     });
   }
 
   // benefits 4
-  if (dataArray[18] && dataArray[18] !== '') {
+  if (dataArray[18] && dataArray[18] !== "") {
     benefits.push({
       label: dataArray[18],
       hours: dataArray[19],
-      eligibility: dataArray[20] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[20]),
     });
   }
 
   // benefits 5
-  if (dataArray[21] && dataArray[21] !== '') {
+  if (dataArray[21] && dataArray[21] !== "") {
     benefits.push({
       label: dataArray[21],
       hours: cleanValue(dataArray[22]),
-      eligibility: dataArray[23] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[23]),
     });
   }
 
-  //   // benefits 6
-  if (dataArray[24] && dataArray[24] !== '') {
+  // benefits 6
+  if (dataArray[24] && dataArray[24] !== "") {
     benefits.push({
       label: dataArray[24],
       hours: cleanValue(dataArray[25]),
-      eligibility: dataArray[26] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[26]),
     });
   }
 
   // benefits 7
-  if (dataArray[27] && dataArray[27] !== '') {
+  if (dataArray[27] && dataArray[27] !== "") {
     benefits.push({
       label: dataArray[27],
       hours: cleanValue(dataArray[28]),
-      eligibility: dataArray[29] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[29]),
     });
   }
   // benefits 8
-  if (dataArray[30] && dataArray[30] !== '') {
+  if (dataArray[30] && dataArray[30] !== "") {
     benefits.push({
       label: dataArray[30],
       hours: cleanValue(dataArray[31]),
-      eligibility: dataArray[32] === 'Y' ? true : false,
+      eligibility: generateMonthEligible(dataArray[32]),
     });
   }
 
@@ -135,7 +152,7 @@ const generateBenefits = (headersArray, dataArray) => {
 };
 
 const formatEmployeeRow = (headersArray, dataArray) => {
-  let {benefits} = generateBenefits(headersArray, dataArray);
+  let { benefits } = generateBenefits(headersArray, dataArray);
 
   return {
     // employee/customer ID

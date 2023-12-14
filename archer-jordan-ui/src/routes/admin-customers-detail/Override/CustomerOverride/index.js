@@ -1,23 +1,23 @@
-import React from 'react';
-import styled from 'styled-components';
-import Papa from 'papaparse';
-import formatRow from '../formatRow';
+import React from "react";
+import styled from "styled-components";
+import Papa from "papaparse";
+import formatRow from "../formatRow";
 // COMPONENTS
-import Icon from 'components/common/Icon';
-import Filename from '../Filename';
-import Button from 'components/common/Button';
-import ErrorBlock from 'components/common/ErrorBlock';
-import OverrideModal from '../OverideModal';
-import Title from 'components/text/Title';
-import Caption from 'components/text/Caption';
-import Alert from 'components/common/Alert';
+import Icon from "components/common/Icon";
+import Filename from "../Filename";
+import Button from "components/common/Button";
+import ErrorBlock from "components/common/ErrorBlock";
+import OverrideModal from "../OverideModal";
+import Title from "components/text/Title";
+import Caption from "components/text/Caption";
+import Alert from "components/common/Alert";
 // APOLLO
-import {graphql} from 'react-apollo';
-import client from 'ApolloClient/index.js';
-import customerReportQuery from 'ApolloClient/Queries/customerReport';
-import customerTotalsUpload from 'ApolloClient/Mutations/customerTotalsUpload';
-import customerReportsByCustomerId from 'ApolloClient/Queries/customerReportsByCustomerId';
-import compose from 'lodash/flowRight';
+import { graphql } from "react-apollo";
+import client from "ApolloClient/index.js";
+import customerReportQuery from "ApolloClient/Queries/customerReport";
+import customerTotalsUpload from "ApolloClient/Mutations/customerTotalsUpload";
+import customerReportsByCustomerId from "ApolloClient/Queries/customerReportsByCustomerId";
+import compose from "lodash/flowRight";
 
 const UploadButton = styled.input`
   width: 0.1px;
@@ -30,16 +30,16 @@ const UploadButton = styled.input`
 
 const Label = styled.label`
   font-weight: 600;
-  color: ${p => p.theme.colors.support2};
+  color: ${(p) => p.theme.colors.support2};
   padding: 6px 10px;
   border-radius: 25px;
-  border: 2px solid ${p => p.theme.colors.support2};
+  border: 2px solid ${(p) => p.theme.colors.support2};
   background: transparent;
   display: inline-block;
   cursor: pointer;
   &:hover {
-    border: 2px solid ${p => p.theme.colors.support1};
-    color: ${p => p.theme.colors.support1};
+    border: 2px solid ${(p) => p.theme.colors.support1};
+    color: ${(p) => p.theme.colors.support1};
   }
 `;
 
@@ -48,7 +48,7 @@ const SectionTitle = styled.div`
   padding: 8px 16px;
   border-radius: 25px;
   margin-bottom: 24px;
-  background: ${p => p.theme.colors.primary1};
+  background: ${(p) => p.theme.colors.primary1};
 `;
 
 class CustomerOverride extends React.PureComponent {
@@ -106,13 +106,13 @@ class CustomerOverride extends React.PureComponent {
   onCustomerUpload = async (results, file) => {
     try {
       // set to loading
-      this.setState({loading: true});
+      this.setState({ loading: true });
 
       // check the length and throw an error if we have the incorrect number of columns we were expecting
       if (results.data[1].length !== 32) {
         return this.setState({
           companyErrors: [
-            'This sheet does not have the correct number of columns',
+            "This sheet does not have the correct number of columns",
           ],
           loading: false,
         });
@@ -126,7 +126,7 @@ class CustomerOverride extends React.PureComponent {
 
       data.eligibility.forEach((item, i) => {
         let activeIsMore =
-          parseInt(data.activeThisMonth, 10) >
+          parseInt(data.activeThisMonth, 10) >=
           parseInt(data.eligibility[i].employees, 10);
 
         // throw error if activeThisMonth is smaller than employees in eligibility
@@ -147,7 +147,7 @@ class CustomerOverride extends React.PureComponent {
       // verify if we already have data for this month
       const reportExists = await client.query({
         query: customerReportQuery,
-        fetchPolicy: 'network-only',
+        fetchPolicy: "network-only",
         variables: {
           customerId: this.props.customer.id,
           month: data.month,
@@ -208,7 +208,7 @@ class CustomerOverride extends React.PureComponent {
             <React.Fragment>
               <Title>A report already exists</Title>
               <Caption>
-                A report already exists for{' '}
+                A report already exists for{" "}
                 {this.state.companyData &&
                   `${this.state.companyData.month}/${this.state.companyData.year}`}
                 , would you like to override the entire month and generate a new
@@ -221,15 +221,15 @@ class CustomerOverride extends React.PureComponent {
         {/* SHOW PAST UPLOADS */}
         {/* SHOW ERRORS IF THEY EXIST */}
         {this.state.companyErrors && this.state.companyErrors.length > 0 && (
-          <div style={{marginTop: 16, width: 500, maxWidth: '100%'}}>
+          <div style={{ marginTop: 16, width: 500, maxWidth: "100%" }}>
             <ErrorBlock errors={this.state.companyErrors} />
           </div>
         )}
         {this.state.customerSuccess && (
           <Alert
-            message="Upload Success"
-            description="Your customer totals were successfully uploaded"
-            type="success"
+            message='Upload Success'
+            description='Your customer totals were successfully uploaded'
+            type='success'
             closable
             showIcon
           />
@@ -248,7 +248,7 @@ class CustomerOverride extends React.PureComponent {
         {/* COMPANY CONFIRM UPLOAD BUTTON */}
         {this.state.companyFile && !this.state.loading && (
           <Button
-            style={{marginTop: 32, marginLeft: 16, width: 100}}
+            style={{ marginTop: 32, marginLeft: 16, width: 100 }}
             onClick={() =>
               this.handleUpload(this.state.companyFile, this.onCustomerUpload)
             }
@@ -257,22 +257,22 @@ class CustomerOverride extends React.PureComponent {
           </Button>
         )}
         {this.state.companyFile && this.state.loading && (
-          <Icon type="loading" style={{marginLeft: 4}} />
+          <Icon type='loading' style={{ marginLeft: 4 }} />
         )}
         {/* COMPANY SELECT FILE BUTTON */}
         {!this.state.companyFile && (
-          <div style={{marginTop: 32}}>
+          <div style={{ marginTop: 32 }}>
             <UploadButton
-              name="file"
-              type="file"
-              id="file"
-              onChange={event => {
+              name='file'
+              type='file'
+              id='file'
+              onChange={(event) => {
                 this.setState({
                   companyFile: event.target.files[0],
                 });
               }}
-            />{' '}
-            <Label htmlFor="file">Select New File</Label>
+            />{" "}
+            <Label htmlFor='file'>Select New File</Label>
           </div>
         )}
       </React.Fragment>
@@ -281,5 +281,5 @@ class CustomerOverride extends React.PureComponent {
 }
 
 export default compose(
-  graphql(customerTotalsUpload, {name: 'customerTotalsUpload'})
+  graphql(customerTotalsUpload, { name: "customerTotalsUpload" })
 )(CustomerOverride);
