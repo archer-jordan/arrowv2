@@ -1,5 +1,5 @@
-import EmployeeReports from "collections/EmployeeReports/model";
-import Employees from "collections/Employees/model";
+import EmployeeReports from 'collections/EmployeeReports/model';
+import Employees from 'collections/Employees/model';
 
 const checkIfEmployeeTotalsExist = async (root, args, context) => {
   try {
@@ -7,13 +7,35 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
     let i;
 
     if (!args.employeeAssignedIds || !args.employeeAssignedIds.length) {
-      throw new Error("No data provided to checkIfEmployeeTotalsExist");
+      throw new Error('No data provided to checkIfEmployeeTotalsExist');
     }
 
     for (i = 0; i < args.employeeAssignedIds.length; i++) {
       // find the employee so we can get their database ID
+      let formattedEmployeeAssignedId = args.employeeAssignedIds[i];
+
+      if (args.employeeAssignedIds[i].length !== 12) {
+        if (args.employeeAssignedIds[i].length === 11) {
+          formattedEmployeeAssignedId = `0${args.employeeAssignedIds[i]}`;
+        }
+        if (args.employeeAssignedIds[i].length === 10) {
+          formattedEmployeeAssignedId = `00${args.employeeAssignedIds[i]}`;
+        }
+        if (args.employeeAssignedIds[i].length === 9) {
+          formattedEmployeeAssignedId = `000${args.employeeAssignedIds[i]}`;
+        }
+        let employee = await Employees.findOne({
+          assignedId: formattedEmployeeAssignedId,
+          customerId: customer._id,
+        });
+        if (!employee || !employee._id) {
+          errors.push(
+            `Employee with id ${args.employeeAssignedIds[i]} / ${formattedEmployeeAssignedId} does not exist`
+          );
+        }
+      }
       let employee = await Employees.findOne({
-        assignedId: args.employeeAssignedIds[i],
+        assignedId: formattedEmployeeAssignedId,
         customerId: args.customerId,
       });
 
