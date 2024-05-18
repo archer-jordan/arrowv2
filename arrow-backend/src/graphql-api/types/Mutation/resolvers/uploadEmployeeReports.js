@@ -72,11 +72,13 @@ const uploadEmployeeReports = async (root, args, context) => {
           formattedEAID = `000${item.assignedId}`;
         }
         let employee = await Employees.findOne({
-          assignedId: item.assignedId,
+          assignedId: formattedEAID,
           customerId: customer._id,
         });
         if (!employee || !employee._id) {
-          errors.push(`Employee with id ${item.assignedId} does not exist`);
+          errors.push(
+            `Employee with id ${item.assignedId} / ${formattedEAID} does not exist`
+          );
         }
       }
       if (item.assignedId.length === 12) {
