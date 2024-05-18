@@ -60,38 +60,17 @@ const uploadEmployeeReports = async (root, args, context) => {
 
     for (i = 0; i < args.values.length; i++) {
       let item = args.values[i];
-      let formattedEAID = item.assignedId;
 
-      if (item.assignedId.length !== 12) {
-        if (item.assignedId.length === 11) {
-          formattedEAID = `0${item.assignedId}`;
-        }
-        if (item.assignedId.length === 10) {
-          formattedEAID = `00${item.assignedId}`;
-        }
-        if (item.assignedId.length === 9) {
-          formattedEAID = `000${item.assignedId}`;
-        }
-        let employee = await Employees.findOne({
-          assignedId: formattedEAID,
-          customerId: customer._id,
-        });
-        if (!employee || !employee._id) {
-          errors.push(
-            `Employee with id ${item.assignedId} / ${formattedEAID} does not exist`
-          );
-        }
-      }
-      if (item.assignedId.length === 12) {
-        let employee = await Employees.findOne({
-          assignedId: item.assignedId,
-          customerId: customer._id,
-        });
-        if (!employee || !employee._id) {
-          errors.push(`Employee with id ${item.assignedId} does not exist`);
-        }
+      // if (item.assignedId.length === 12) {
+      let employee = await Employees.findOne({
+        assignedId: item.assignedId,
+        customerId: customer._id,
+      });
+      if (!employee || !employee._id) {
+        errors.push(`Employee with id ${item.assignedId} does not exist`);
       }
     }
+    // }
 
     if (errors.length > 0) {
       return {
