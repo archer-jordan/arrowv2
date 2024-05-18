@@ -37,6 +37,7 @@ const runReferralPartnerReports = async ({ dataRows, customer }) => {
 // fringeDollarsLabel: String
 // healthAndWelfareLabel: String
 // retirementLabel: String
+// benefits: [EmployeeReportBenefitInput]
 
 const uploadEmployeeReports = async (root, args, context) => {
   console.log(args);
