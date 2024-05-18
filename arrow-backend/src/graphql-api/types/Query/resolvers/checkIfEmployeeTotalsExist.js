@@ -24,15 +24,6 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
         if (args.employeeAssignedIds[i].length === 9) {
           formattedEmployeeAssignedId = `000${args.employeeAssignedIds[i]}`;
         }
-        let employee = await Employees.findOne({
-          assignedId: formattedEmployeeAssignedId,
-          customerId: customer._id,
-        });
-        if (!employee || !employee._id) {
-          errors.push(
-            `Employee with id ${args.employeeAssignedIds[i]} / ${formattedEmployeeAssignedId} does not exist`
-          );
-        }
       }
       let employee = await Employees.findOne({
         assignedId: formattedEmployeeAssignedId,
@@ -43,7 +34,11 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
       if (!employee || !employee._id) {
         return {
           exists: false,
-          errors: [`Employee in row  ${i + 1} does not exist for this company`],
+          errors: [
+            `Employee in row  ${
+              i + 1
+            } / ${formattedEmployeeAssignedId} does not exist for this company`,
+          ],
         };
       }
 
