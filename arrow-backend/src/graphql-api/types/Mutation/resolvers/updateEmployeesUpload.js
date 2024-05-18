@@ -1,6 +1,5 @@
 import Employees from 'collections/Employees/model';
 import Customers from 'collections/Customers/model';
-import Users from 'collections/Users/model';
 import moment from 'moment';
 import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 import updateUserOnEmployeeChange from 'modules/helpers/updateUserOnEmployeeChange';
@@ -83,7 +82,13 @@ const updateEmployeesUpload = async (root, args, context) => {
         }
       );
 
-      // run some code to see if we have to update any user records
+      /**
+       * updateUserOnEmployeeChange
+       * run some code to see if we have to update any user records since employees
+       * have two related tables... their record in the Employees collection/table
+       * and their Users table/collcetion record... the User record is for authentication
+       * but we need to keep their user record email in sync with their employee email
+       */
       await updateUserOnEmployeeChange({currentEmployee, employee});
 
       // **** END FOR LOOP ****

@@ -64,7 +64,7 @@ const AppNav = ({pathname}) => {
                 to={`/admin/users`}
                 active={pathname && pathname.includes('/users')}
               >
-                USERS
+                SUPERADMINS
               </NavItem>
             </MobileCol>
             <MobileCol>
@@ -83,14 +83,14 @@ const AppNav = ({pathname}) => {
                 ACT DOCS
               </NavItem>
             </MobileCol>
-            {/* <MobileCol>
+            <MobileCol>
               <NavItem
                 to={`/admin/partners`}
                 active={pathname && pathname.includes('/partners')}
               >
                 REFERRAL PARTNERS
               </NavItem>
-            </MobileCol> */}
+            </MobileCol>
           </RightContainer>
         </div>
         {/* */}

@@ -22,6 +22,7 @@ import adminDocs from './resolvers/adminDocs';
 import getCustomerAttachments from './resolvers/getCustomerAttachments';
 import systemSettings from './resolvers/systemSettings';
 import referralPartnerById from './resolvers/referralPartnerById';
+import referralReports from './resolvers/referralReports';
 
 // if your query has a resolver, list it here
 export const QueryResolvers = {
@@ -49,6 +50,7 @@ export const QueryResolvers = {
     getCustomerAttachments,
     systemSettings,
     referralPartnerById,
+    referralReports,
   },
 };
 
@@ -108,12 +110,18 @@ export const QuerySchema = gql`
   }
 
   extend type Query {
+    referralReports(
+      partnerId: ID!
+      month: String
+      year: String
+    ): [ReferralReport]
     referralPartnerById(id: ID!): ReferralPartner
     systemSettings: SystemSetting
     getCustomerAttachments(type: AttachmentType!): [Attachment]
 
     "Search through admin uploads. Must be a super admin."
     adminDocs(searchText: String, sortBy: DocSortByEnum): [AdminDoc]
+
     "Returns the currently signed in user or null if user is not signed in"
     currentUser: UserProfile
 
@@ -176,6 +184,7 @@ export const QuerySchema = gql`
       limit: Int
     ): UsersResponse
     adminUsers(searchText: String): UsersResponse
+
     "Returns a single attachment"
     getAttachment(customerId: ID, type: AttachmentType): Attachment
 

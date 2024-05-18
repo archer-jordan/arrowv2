@@ -37,10 +37,14 @@ const setValuestoSave = (params, user) => {
 };
 
 const setUserValues = (params) => {
-  let userValues = {
-    firstName: params.firstName,
-    lastName: params.lastName,
-  };
+  let userValues = {};
+
+  if (params.firstName) {
+    userValues.firstName = params.firstName;
+  }
+  if (params.lastName) {
+    userValues.lastName = params.lastName;
+  }
 
   if (params.email) {
     userValues.values = [

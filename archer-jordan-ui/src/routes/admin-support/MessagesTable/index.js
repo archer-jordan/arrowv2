@@ -1,10 +1,11 @@
 import React from 'react';
-import Table from 'antd/lib/table';
-import Popover from 'components/common/Popover';
-import Icon from 'components/common/Icon';
-import 'antd/lib/table/style/css';
 import styled from 'styled-components';
 import moment from 'moment';
+// COMPONENTS
+import Popover from 'components/common/Popover';
+import ButtonLink from 'components/common/ButtonLink';
+import Table from 'components/common/Table';
+import Icon from 'components/common/Icon';
 // APOLLO
 import updateSupportStatus from 'ApolloClient/Mutations/updateSupportStatus';
 import {graphql} from 'react-apollo';
@@ -12,18 +13,18 @@ import {graphql} from 'react-apollo';
 const Text = styled.div`
   font-weight: 600;
   color: #0f466a;
-  font-family: ${p => p.theme.fontFamily};
+  font-family: ${(p) => p.theme.fontFamily};
 `;
 
 const StatusText = styled(Text)`
-  color: ${p => (p.open ? '#0f466a' : p.theme.colors.neutral6)};
+  color: ${(p) => (p.open ? '#0f466a' : p.theme.colors.neutral6)};
 `;
 
 const Option = styled.div`
   font-weight: 600;
   margin-top: 8px;
   color: #0f466a;
-  font-family: ${p => p.theme.fontFamily};
+  font-family: ${(p) => p.theme.fontFamily};
   cursor: pointer;
 `;
 
@@ -31,7 +32,7 @@ const ActiveDot = styled.span`
   height: 10px;
   width: 10px;
   display: inline-block;
-  background: ${p => (p.active ? p.theme.colors.support2 : '#fff')};
+  background: ${(p) => (p.active ? p.theme.colors.support2 : '#fff')};
   border-radius: 50%;
   margin-right: 4px;
 `;
@@ -50,7 +51,14 @@ class MessagesTable extends React.PureComponent {
     }
   };
   render() {
-    const {loading, dataSource, total, current, onPageChange} = this.props;
+    const {
+      loading,
+      dataSource,
+      total,
+      current,
+      onPageChange,
+      onSelect,
+    } = this.props;
     const columns = [
       {
         title: 'Email',
@@ -59,16 +67,11 @@ class MessagesTable extends React.PureComponent {
       },
       {
         title: 'REQUEST ID',
-        render: (text, record) => <Text>{record.id}</Text>,
+        render: (text, record) => (
+          <ButtonLink onClick={() => onSelect(record)}>{record.id}</ButtonLink>
+        ),
       },
-      // {
-      //   title: 'Subject',
-      //   render: (text, record) => <Text>{record.subject}</Text>,
-      // },
-      // {
-      //   title: 'Message',
-      //   render: (text, record) => <Text>{record.message}</Text>,
-      // },
+
       {
         title: 'Type',
         render: (text, record) => <Text>{record.messageType}</Text>,

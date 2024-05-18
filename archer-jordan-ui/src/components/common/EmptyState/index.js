@@ -4,7 +4,7 @@ import empty from './empty.svg';
 
 const Container = styled.div`
   margin-top: 48px;
-  width: 400px;
+  width: 425px;
   max-width: 100%;
   text-align: center;
 `;

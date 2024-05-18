@@ -1,9 +1,10 @@
 import {gql} from 'apollo-server';
+import Customers from 'collections/Customers/model';
 
 export const EmployeeResolvers = {
   Employee: {
     // mongo uses _id as the primary key field, for simplifying the UI we change this to be just id
-    id: root => root._id,
+    id: (root) => root._id,
     ssn: (root, args, context) => {
       if (!context.user) return null;
       if (!context.user.roles) return null;
@@ -13,6 +14,9 @@ export const EmployeeResolvers = {
       if (context.user.roles.includes('superAdmin')) return root.ssn;
       // default is to return null
       return null;
+    },
+    customer: async (root) => {
+      return await Customers.findOne({_id: root.customerId});
     },
   },
 };
@@ -67,5 +71,6 @@ export const EmployeeSchema = gql`
     status: EmployeeStatusEnum
     "This is the user-generated ID for the company/customer this user belongs to"
     assignedCustomerId: String
+    customer: Customer
   }
 `;

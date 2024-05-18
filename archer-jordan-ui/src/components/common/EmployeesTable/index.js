@@ -26,7 +26,7 @@ class EmployeesTable extends React.PureComponent {
       dataSource,
       extraColumns,
       onPageChange,
-      onClickEmployee,
+      onClickEmployee = () => {},
     } = this.props;
 
     const columns = [

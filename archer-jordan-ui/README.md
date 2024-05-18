@@ -144,6 +144,40 @@ The general structure is:
 - **lib**: lib is a sort of catch-all folder for constants, helper function, media (images), and so on. If it's not a route and it's not a component and it's not something related to apollo-client-- stick it somewhere in the lib folder
 - **ApolloClient**: everything apollo/graphql. Define fragments, queries and mutations here. This is also where you'll find the apollo-client instance being defined (links, etc).
 
+# LICENSES
+
+last updated Sept 26, 2020
+
+- antd
+- apollo-cache-inmemory
+- apollo-client
+- apollo-link
+- apollo-link-error
+- apollo-link-logger
+- apollo-upload-client
+- babel-plugin-import
+- chart.js
+- customize-cra
+- email-validator
+- graphql [MIT License](https://github.com/graphql/graphql-js/blob/master/LICENSE)
+- graphql-tag
+- jwt-decode
+- moment [MIT License](https://www.npmjs.com/package/moment)
+- numeral [MIT License](https://www.npmjs.com/package/numeral)
+- papaparse [MIT License](https://www.npmjs.com/package/papaparse)
+- query-string [MIT License](https://www.npmjs.com/package/query-string)
+- react [MIT License](https://www.npmjs.com/package/react)
+- react-apollo [MIT License](https://www.npmjs.com/package/react-apollo)
+- react-app-rewired [MIT License](https://www.npmjs.com/package/react-app-rewired)
+- react-chartjs-2 [MIT License](https://www.npmjs.com/package/react-chartjs-2)
+- react-chartjs-2
+- react-document-title
+- react-dom
+- react-router-dom
+- react-scripts
+- styled-components
+- uid-safe
+
 ### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br />

@@ -9,6 +9,12 @@ export default gql`
       __typename
       referralProfile {
         ...referralPartnerFragment
+        customers {
+          id
+          title
+          referralStartDate
+          referralEndDate
+        }
       }
     }
   }

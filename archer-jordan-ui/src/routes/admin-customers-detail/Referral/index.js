@@ -5,12 +5,17 @@ import PartnersSearchInput from './PartnersSearchInput';
 import Row from 'components/common/Row';
 import DatePicker from 'components/inputs/DatePicker';
 import Col from 'components/common/Col';
+import message from 'components/common/message';
+import FormItem from 'components/common/FormItem';
 import Button from 'components/common/Button';
 import ErrorBlock from 'components/common/ErrorBlock';
+import CurrencyInput from 'components/inputs/CurrencyInput';
+import NumberInput from 'components/inputs/Input';
 // APOLLO
 import {useMutation, useQuery} from 'react-apollo';
 import UPDATE_CUSTOMER_REFERRAL_PARTNER from 'ApolloClient/Mutations/updateCustomerReferralPartner';
 import REFERRAL_PARTNER_BY_ID from 'ApolloClient/Queries/referralPartnerById';
+import CUSTOMER_BY_ID from 'ApolloClient/Queries/customerById';
 
 export default ({customer}) => {
   const [saving, setSaving] = useState(false);
@@ -26,17 +31,27 @@ export default ({customer}) => {
     },
     skip: !customer.referralPartnerId,
     onCompleted: (data) => {
-      if (data.referralPartnerById && data.referralPartnerById.customers) {
+      let partner = data.referralPartnerById && data.referralPartnerById;
+
+      if (partner && partner.customers) {
         // A referral partner may have multiple customers/companies assocaited with them.
         // Here we filter through the list and find the customer we're currently viewing
-        let customerObj = data.referralPartnerById.customers.filter(
+        let customerObj = partner.customers.filter(
           (item) => item.id === customer.id
         )[0];
         setValues({
-          referralPartnerId: data.referralPartnerById.id,
+          referralPartnerId: partner.id,
           referralStartDate: moment(parseInt(customerObj.referralStartDate)),
           referralEndDate: moment(parseInt(customerObj.referralEndDate)),
-          defaultReferralPartner: `${data.referralPartnerById.email}`,
+          minimumReferralHours: customerObj.minimumReferralHours,
+          referralRate: customerObj.referralRate,
+          defaultReferralPartner: `${partner.email}`,
+          defaultReferral: {
+            id: partner.id,
+            email: `${partner.email}`,
+            firstName: `${partner.firstName}`,
+            lastName: `${partner.lastName}`,
+          },
         });
       }
     },
@@ -60,6 +75,8 @@ export default ({customer}) => {
           referralPartnerId: values.referralPartnerId,
           referralStartDate: values.referralStartDate.valueOf().toString(),
           referralEndDate: values.referralEndDate.valueOf().toString(),
+          minimumReferralHours: values.minimumReferralHours,
+          referralRate: values.referralRate,
         },
         refetchQueries: [
           {
@@ -68,9 +85,16 @@ export default ({customer}) => {
               id: values.referralPartnerId,
             },
           },
+          {
+            query: CUSTOMER_BY_ID,
+            variables: {
+              id: customer.id,
+            },
+          },
         ],
       });
       setSaving(false);
+      message.success(`Setting saved`);
     } catch (err) {
       setSaving(false);
       console.log(err);
@@ -83,12 +107,13 @@ export default ({customer}) => {
       <PartnersSearchInput
         value={values.referralPartnerId}
         defaultSearch={values.defaultReferralPartner}
+        defaultValue={values.defaultReferral}
         onChange={(newValue) =>
           setValues({...values, referralPartnerId: newValue})
         }
       />
       <Row style={{marginTop: 24}}>
-        <Col xs={12}>
+        <Col xs={10}>
           <DatePicker
             placeholder="Payment start date"
             value={values.referralStartDate}
@@ -96,8 +121,11 @@ export default ({customer}) => {
               setValues({...values, referralStartDate: newValue})
             }
           />
+        </Col>{' '}
+        <Col xs={2} style={{paddingTop: 8}}>
+          to
         </Col>
-        <Col xs={12}>
+        <Col xs={10}>
           <DatePicker
             placeholder="Payment end date"
             value={values.referralEndDate}
@@ -107,7 +135,32 @@ export default ({customer}) => {
           />
         </Col>
       </Row>
-
+      <Row style={{marginTop: 24}}>
+        <Col xs={12}>
+          <FormItem label="Employee Eligibility (hrs/mo)">
+            <NumberInput
+              value={values.minimumReferralHours}
+              type="number"
+              style={{width: 95}}
+              onChange={(e) =>
+                setValues({
+                  ...values,
+                  minimumReferralHours: parseInt(e.target.value),
+                })
+              }
+            />
+          </FormItem>
+        </Col>{' '}
+        <Col xs={12}>
+          <FormItem label="Rate (per eligible employee)">
+            <CurrencyInput
+              value={values.referralRate}
+              style={{width: 95}}
+              onChange={(referralRate) => setValues({...values, referralRate})}
+            />
+          </FormItem>
+        </Col>
+      </Row>
       <Button
         disabled={saving}
         onClick={onSaveChanges}

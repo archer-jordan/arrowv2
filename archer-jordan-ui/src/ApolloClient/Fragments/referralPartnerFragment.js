@@ -16,23 +16,30 @@ export default gql`
     city
     state
     zip
-    w9Doc {
+    attachments {
       id: filename
       filename
       mimetype
       url
+      key
     }
-    achDoc {
-      id: filename
-      filename
-      mimetype
-      url
-    }
-    parterAgreementDoc {
-      id: filename
-      filename
-      mimetype
-      url
-    }
+    # w9Doc {
+    #   id: filename
+    #   filename
+    #   mimetype
+    #   url
+    # }
+    # achDoc {
+    #   id: filename
+    #   filename
+    #   mimetype
+    #   url
+    # }
+    # parterAgreementDoc {
+    #   id: filename
+    #   filename
+    #   mimetype
+    #   url
+    # }
   }
 `;

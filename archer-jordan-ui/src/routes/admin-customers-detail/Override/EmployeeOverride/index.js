@@ -302,7 +302,7 @@ class EmployeeOverride extends React.PureComponent {
   };
   render() {
     return (
-      <React.Fragment>
+      <>
         <OverrideModal
           visible={this.state.confirmUpdateModal}
           onUpdate={() => {
@@ -403,7 +403,7 @@ class EmployeeOverride extends React.PureComponent {
             <Label htmlFor="employee-file">Select New File</Label>
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

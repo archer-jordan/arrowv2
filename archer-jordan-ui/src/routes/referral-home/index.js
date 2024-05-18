@@ -32,6 +32,7 @@ export default () => {
       // we'll need to delete some fields from our params, otherwise the mutation will spit an error for unknown values
       delete params.id;
       delete params.__typename;
+      delete params.customers;
 
       if (params.w9Doc && params.w9Doc.key) {
         delete params.w9Doc.__typename;

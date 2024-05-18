@@ -28,14 +28,16 @@ const Container = styled.div`
 `;
 
 export default ({values, loading, onChange, onSubmit}) => {
+  if (!values) return null;
   return (
     <Container>
       <DataBold>
         Application Submitted:{' '}
         <DataThin>
-          {moment(parseInt(values.applicationSubmittedDate)).format(
-            'MM/DD/YYYY'
-          )}
+          {values.applicationSubmittedDate &&
+            moment(parseInt(values.applicationSubmittedDate)).format(
+              'MM/DD/YYYY'
+            )}
         </DataThin>
       </DataBold>
       <DataBold>
@@ -109,16 +111,17 @@ export default ({values, loading, onChange, onSubmit}) => {
         <FormItem required>
           <ParterTypeInput
             value={values.partnerType}
+            placeholder={`What type of partner are you?`}
             onChange={(newValue) => onChange({partnerType: newValue})}
           />
         </FormItem>
-        <UploadInput
+        {/*  <UploadInput
           label="W9"
           onChange={(newValue) => onChange({w9Doc: newValue})}
           file={values.w9Doc}
           templateUrl="https://www.irs.gov/pub/irs-pdf/fw9.pdf"
         />
-        <UploadInput
+     <UploadInput
           label="ACH Authorization Form"
           file={values.achDoc}
           onChange={(newValue) => onChange({achDoc: newValue})}
@@ -127,7 +130,7 @@ export default ({values, loading, onChange, onSubmit}) => {
           label="Partner Agreement"
           file={values.parterAgreementDoc}
           onChange={(newValue) => onChange({parterAgreementDoc: newValue})}
-        />
+        /> */}
         <FormItem>
           <Button
             disabled={loading}

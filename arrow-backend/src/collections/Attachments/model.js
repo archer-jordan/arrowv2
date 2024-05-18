@@ -1,11 +1,10 @@
+/**
+ * ATTACHMENTS
+ * This is a collection holds
+ */
+
 import Mongo from 'modules/mongodb';
 import baseFields from '../shared-models/base-fields';
-
-// EmployeeUploads: the source csv after you add or update employee uploads
-// CustomerReportUploads: the source csv after you update customer reports
-// EmployeeReportsUploads: the source csv after you update employee reports
-// CustomerUpload: general uploads for a customer… CRM-esque feature
-// CustomerPlan:
 
 const schema = new Mongo.Schema({
   ...baseFields,
@@ -18,13 +17,15 @@ const schema = new Mongo.Schema({
   type: {
     type: String,
     enum: [
-      // 'EmployeeUploads',
-      // 'CustomerReportUploads',
-      // 'EmployeeReportsUploads',
+      // CustomerUpload:
+      // a basic attachment that is associated with a given company... typicaly a AJ superAdmin will
+      // upload an attachment to a customer for record keeping purposes/for posterity/... these files are
+      // only viewable by AJ employees and are not going to show up on the frontend where company
+      // emloyees/admin would see them
       'CustomerUpload',
-      // 'CustomerPlan',
-      // 'EmployeePlan',
+      // EmployeeDoc:  a document viewable by employees or company admins (coAdmins)
       'EmployeeDoc',
+      // CompanyAdminDoc: a document only viewable by a customer's coAdmin (ie company admin) user roles
       'CompanyAdminDoc',
     ],
   },

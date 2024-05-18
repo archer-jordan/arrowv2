@@ -1,16 +1,21 @@
 import Customers from 'collections/Customers/model';
+import userIsSuperAdmin from 'modules/helpers/userIsSuperAdmin';
 
 export default async (
   root,
-  {customerId, referralPartnerId, referralStartDate, referralEndDate}
+  {
+    customerId,
+    referralPartnerId,
+    referralStartDate,
+    referralEndDate,
+    minimumReferralHours,
+    referralRate,
+  },
+  context
 ) => {
   try {
-    console.log({
-      customerId,
-      referralPartnerId,
-      referralStartDate,
-      referralEndDate,
-    });
+    // check if user is a super admin
+    userIsSuperAdmin(context.user);
 
     await Customers.updateOne(
       {
@@ -20,6 +25,8 @@ export default async (
         referralPartnerId, // the ReferralPartner _id for this customer (if one exists)
         referralStartDate,
         referralEndDate,
+        minimumReferralHours,
+        referralRate,
       }
     );
 

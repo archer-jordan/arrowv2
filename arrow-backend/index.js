@@ -3,7 +3,7 @@ import MongoDBInterface from '@accounts/mongo';
 import AccountsServer, {ServerHooks} from '@accounts/server';
 import {AccountsModule} from '@accounts/graphql-api';
 import {ApolloServer} from 'apollo-server';
-import {merge} from 'lodash';
+import merge from 'lodash.merge';
 import {typeDefs, CustomResolvers} from './src/graphql-api/index';
 import UserProfileHelpers from 'collections/Users/helpers';
 // modules

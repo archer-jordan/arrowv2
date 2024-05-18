@@ -50,6 +50,7 @@ export const ReferralPartnerSchema = gql`
     partnerType: ReferralPartnerType
     w9Doc: AttachmentParams
     achDoc: AttachmentParams
+    attachments: [AttachmentParams]
     parterAgreementDoc: AttachmentParams
     status: ReferralPartnerStatus
     address: String
@@ -69,11 +70,10 @@ export const ReferralPartnerSchema = gql`
     w9Doc: Attachment
     achDoc: Attachment
     parterAgreementDoc: Attachment
+    attachments: [Attachment]
     status: ReferralPartnerStatus
     address: String
     city: String
-    minimumReferralHours: Int
-    referralRate: Int
     state: String
     zip: String
     customers: [Customer]
