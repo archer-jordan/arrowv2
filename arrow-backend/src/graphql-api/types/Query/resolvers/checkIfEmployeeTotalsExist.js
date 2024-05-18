@@ -12,21 +12,12 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
 
     for (i = 0; i < args.employeeAssignedIds.length; i++) {
       // find the employee so we can get their database ID
-      let formattedEmployeeAssignedId = args.employeeAssignedIds[i];
 
-      if (args.employeeAssignedIds[i].length !== 12) {
-        if (args.employeeAssignedIds[i].length === 11) {
-          formattedEmployeeAssignedId = `0${args.employeeAssignedIds[i]}`;
-        }
-        if (args.employeeAssignedIds[i].length === 10) {
-          formattedEmployeeAssignedId = `00${args.employeeAssignedIds[i]}`;
-        }
-        if (args.employeeAssignedIds[i].length === 9) {
-          formattedEmployeeAssignedId = `000${args.employeeAssignedIds[i]}`;
-        }
-      }
       let employee = await Employees.findOne({
-        assignedId: formattedEmployeeAssignedId,
+        assignedId:
+          args.employeeAssignedIds[i].length === 12
+            ? args.employeeAssignedIds[i]
+            : `000${args.employeeAssignedIds[i]}`,
         customerId: args.customerId,
       });
 
@@ -35,9 +26,9 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
         return {
           exists: false,
           errors: [
-            `Employee in row  ${
-              i + 1
-            } / ${formattedEmployeeAssignedId} does not exist for this company`,
+            `Employee in row  ${i + 1} / 000${
+              args.employeeAssignedIds[i]
+            } does not exist for this company`,
           ],
         };
       }
