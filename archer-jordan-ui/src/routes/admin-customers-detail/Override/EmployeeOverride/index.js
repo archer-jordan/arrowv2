@@ -259,14 +259,22 @@ class EmployeeOverride extends React.PureComponent {
       });
 
       // if exists true, we already have data for this month and we need to show the confirmation modal
-      if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
-        return this.setState({
-          confirmUpdateModal: true,
-          employeeData: formattedData,
-          employeeErrors:
-            employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
+      if (employeeTotalsExist && employeeTotalsExist.data && employeeTotalsExist.data.checkIfEmployeeTotalsExist) {
+        if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
+          this.setState({
+            confirmUpdateModal: true,
+            employeeData: formattedData,
+            employeeErrors: employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
+          });
+        }
+      } else {
+        // Handle the case where the data is not available
+        console.error('Error: Unable to fetch employee totals data');
+        this.setState({
+          employeeErrors: ['Unable to fetch employee totals data. Please try again.'],
         });
       }
+      
 
       // if we got other errors back, show those
       if (
