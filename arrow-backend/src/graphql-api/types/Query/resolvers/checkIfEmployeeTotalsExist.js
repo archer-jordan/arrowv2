@@ -32,6 +32,8 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
       if (legacyEmployee && legacyEmployee._id) {
         employee = "000"+legacyEmployee;
       }
+console.log("leg", legacyEmployee);
+
       if(!legacyEmployee && !legacyEmployee._id) {
         return {
           exists: false,
@@ -42,7 +44,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
           ],
         };
       }
-
+console.log("employee", employee);
       // if no employee exists for the given record, return errors
       if (!employee || !employee._id) {
         return {
