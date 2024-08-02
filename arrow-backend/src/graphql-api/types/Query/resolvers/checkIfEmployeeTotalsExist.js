@@ -32,8 +32,8 @@ console.log("employee", employee);
           exists: false,
           errors: [
             `Employee in row  ${i + 1} / 000${
-              args.employeeAssignedIds[i]
-            } does not exist for this company`,
+              args.employeeAssignedIds[i] 
+            } does not exist for this company ${args.employeeAssignedIds[i].replace(/^000/, '')}`,
           ],
         };
       }
