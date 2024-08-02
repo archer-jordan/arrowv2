@@ -19,7 +19,12 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
         customerId: args.customerId,
       });
 
+      let lol = await Employees.find({
+        assignedId: args.employeeAssignedIds[i].replace(/^000/, ''),
+        customerId: args.customerId,
+      })
 
+      console.log("lol", lol);
 console.log("employee", employee);
       // if no employee exists for the given record, return errors
       if (!employee || !employee._id) {

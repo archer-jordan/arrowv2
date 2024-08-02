@@ -259,7 +259,7 @@ class EmployeeOverride extends React.PureComponent {
           year: formattedData[0].year,
           customerId: this.props.customer.id,
         },
-      });
+      }).then((res) => {console.log(res)});
       
 
       // if exists true, we already have data for this month and we need to show the confirmation modal
