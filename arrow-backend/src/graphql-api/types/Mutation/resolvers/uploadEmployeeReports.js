@@ -161,9 +161,15 @@ const uploadEmployeeReports = async (root, args, context) => {
     return {
       success: true,
     };
-  } catch (err) {
-    console.log(err);
+
+};}
+catch (error) {
+  console.log(error);
+  return {
+    success: false,
+    errors: [error.message],
+  };
+}
   }
-};
 
 export default uploadEmployeeReports;
