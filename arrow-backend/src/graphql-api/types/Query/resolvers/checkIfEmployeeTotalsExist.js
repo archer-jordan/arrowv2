@@ -1,10 +1,6 @@
 import EmployeeReports from 'collections/EmployeeReports/model';
 import Employees from 'collections/Employees/model';
 
-
-import EmployeeReports from 'collections/EmployeeReports/model';
-import Employees from 'collections/Employees/model';
-
 const checkIfEmployeeTotalsExist = async (root, args, context) => {
   try {
     let errors = [];
