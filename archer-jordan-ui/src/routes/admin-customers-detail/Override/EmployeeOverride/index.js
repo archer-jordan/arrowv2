@@ -251,16 +251,12 @@ class EmployeeOverride extends React.PureComponent {
         query: checkIfEmployeeTotalsExist,
         fetchPolicy: 'network-only',
         variables: {
-          employeeAssignedIds: formattedData.flatMap((item) => [
-            item.assignedId,
-            item.assignedId.replace(/^000/, ''), // Remove only prefixed "000"
-          ]),
+          employeeAssignedIds: formattedData.map((item) => item.assignedId),
           month: formattedData[0].month,
           year: formattedData[0].year,
           customerId: this.props.customer.id,
         },
-      }).then((res) => {console.log(res)});
-      
+      });
 
       // if exists true, we already have data for this month and we need to show the confirmation modal
       if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
