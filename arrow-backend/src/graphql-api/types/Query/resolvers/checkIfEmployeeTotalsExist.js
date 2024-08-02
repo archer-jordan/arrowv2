@@ -21,6 +21,28 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
         customerId: args.customerId,
       });
 
+
+      let legacyEmployee = await Employees.findOne({
+        assignedId: {
+          $regex: new RegExp(`^0*${args.employeeAssignedIds[i].replace(/^000/, '')}$`),
+        },
+        customerId: args.customerId,
+      });
+
+      if (legacyEmployee && legacyEmployee._id) {
+        employee = "000"+legacyEmployee;
+      }
+      if(!legacyEmployee && !legacyEmployee._id) {
+        return {
+          exists: false,
+          errors: [
+            `Employee in row  ${i + 1} / 000${
+              args.employeeAssignedIds[i]
+            } does not exist for this company`,
+          ],
+        };
+      }
+
       // if no employee exists for the given record, return errors
       if (!employee || !employee._id) {
         return {
@@ -32,6 +54,8 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
           ],
         };
       }
+
+
 
       // lookup the reports
       let report = await EmployeeReports.findOne({
