@@ -54,47 +54,39 @@ const Content = ({ month, year }) => (
   <React.Fragment>
     <Title>A report already exists</Title>
     <Caption>
-      At least one employee already has a report for {month}/{year}, would you
-      like to override each employees report with the current CSV?
+      At least one employee already has a report for {month}/{year}. Would you
+      like to override each employee's report with the current CSV?
     </Caption>
   </React.Fragment>
 );
+
 class EmployeeOverride extends React.PureComponent {
   state = {
     loading: false,
     employeeErrors: [],
+    employeeFile: null,
+    employeeData: null,
+    confirmUpdateModal: false,
+    employeeSuccess: false,
   };
+
   onCompleteUpload = async (values = this.state.employeeData) => {
+    if (!values) {
+      this.setState({ employeeErrors: ['No data found...'], loading: false });
+      return;
+    }
+
     try {
-      // make sure we have a value parameter
-      if (!values) {
-        throw new Error('No data found...');
-      }
-      // update data
       let result = await this.props.uploadEmployeeReports({
-        variables: {
-          values,
-        },
+        variables: { values },
       });
 
-      if (!result.data.uploadEmployeeReports.success) {
-        return this.setState({
-          companyErrors: result.data.uploadEmployeeReports.errors,
-          loading: false,
-        });
+      const { success, errors } = result.data.uploadEmployeeReports;
+      if (!success) {
+        this.setState({ employeeErrors: errors, loading: false });
+        return;
       }
 
-      if (
-        result.data.uploadEmployeeReports.errors &&
-        result.data.uploadEmployeeReports.errors.length > 0
-      ) {
-        return this.setState({
-          companyErrors: result.data.uploadEmployeeReports.errors,
-          loading: false,
-        });
-      }
-
-      // reset all state
       this.setState({
         loading: false,
         employeeFile: null,
@@ -108,146 +100,100 @@ class EmployeeOverride extends React.PureComponent {
       });
     }
   };
-  getInvalidFields = (results) => {
-    let invalidFields = [];
-    results.forEach((item, i) => {
-      if (
-        !item.assignedId ||
-        item.assignedId === '' ||
-        item.assignedId === 'NULL' ||
-        item.assignedId === 'Null' ||
-        item.assignedId === 'null' ||
-        item.assignedId === ' '
-      ) {
-        invalidFields.push(`EAID does not exist for row ${i + 1}`);
-      }
-    });
-    return invalidFields;
-  };
-  getMissingCOIDS = (results) => {
-    let invalidFields = [];
-    results.forEach((item, i) => {
-      if (
-        !item.companyAssignedId ||
-        item.companyAssignedId === '' ||
-        item.companyAssignedId === 'NULL' ||
-        item.companyAssignedId === 'Null' ||
-        item.companyAssignedId === 'null' ||
-        item.companyAssignedId === ' '
-      ) {
-        invalidFields.push(`COID does not exist for row ${i + 1}`);
-      }
-    });
-    return invalidFields;
-  };
+
+  getInvalidFields = (results) => results.reduce((acc, item, i) => {
+    if (!item.assignedId || !item.assignedId.trim()) {
+      acc.push(`EAID does not exist for row ${i + 1}`);
+    }
+    return acc;
+  }, []);
+
+  getMissingCOIDS = (results) => results.reduce((acc, item, i) => {
+    if (!item.companyAssignedId || !item.companyAssignedId.trim()) {
+      acc.push(`COID does not exist for row ${i + 1}`);
+    }
+    return acc;
+  }, []);
+
   checkForDuplicateIDs = (formattedData) => {
-    let allIds = formattedData.map((item) => item.assignedId);
-    const checkIfArrayIsUnique = (myArray) => {
-      return myArray.length === new Set(myArray).size;
-    };
-    // check for duplicates
-    return checkIfArrayIsUnique(allIds);
+    const allIds = formattedData.map((item) => item.assignedId);
+    return new Set(allIds).size !== allIds.length;
   };
 
-  onEmployeeUpload = async (results, file) => {
+  onEmployeeUpload = async (results) => {
     this.setState({ loading: true });
+
     try {
-      let headersArray = results.data[0];
-      let formattedData = [];
-
-      // make sure we have the right number of columns
+      const headersArray = results.data[0];
       if (headersArray.length !== 36) {
-        return this.setState({
-          employeeErrors: [
-            'This CSV does not have the correct number of columns',
-          ],
+        this.setState({
+          employeeErrors: ['This CSV does not have the correct number of columns'],
           loading: false,
         });
+        return;
       }
 
-      results.data.forEach((item, i) => {
-        // 0 index item is the header row, which we don't want to include in formatted data
-        if (i !== 0 && item[0] !== null && item[0] !== '') {
-          let formattedItem = formatEmployeeRow(headersArray, item);
-          formattedData.push(formattedItem);
-        }
-      });
+      const formattedData = results.data
+        .slice(1) // Skip header
+        .filter((item) => item[0] !== null && item[0] !== '')
+        .map((item) => formatEmployeeRow(headersArray, item));
 
-      // 2. Make sure there are no null employee IDs
-      let invalidFields = this.getInvalidFields(formattedData);
-
+      const invalidFields = this.getInvalidFields(formattedData);
       if (invalidFields.length > 0) {
-        return this.setState({
-          loading: false,
-          employeeErrors: invalidFields,
-        });
+        this.setState({ employeeErrors: invalidFields, loading: false });
+        return;
       }
 
-      // Make sure there are no null company/customer IDs
-      let missingCOIDS = this.getMissingCOIDS(formattedData);
-
+      const missingCOIDS = this.getMissingCOIDS(formattedData);
       if (missingCOIDS.length > 0) {
-        return this.setState({
-          loading: false,
-          employeeErrors: missingCOIDS,
-        });
+        this.setState({ employeeErrors: missingCOIDS, loading: false });
+        return;
       }
 
-      // 3. make sure we don't have any duplicate employee IDs
-      let isUniqueArray = this.checkForDuplicateIDs(formattedData);
-
-      if (!isUniqueArray) {
-        return this.setState({
-          loading: false,
-          employeeErrors: ['This spreadsheet has dupliate employee IDs'],
-        });
+      if (this.checkForDuplicateIDs(formattedData)) {
+        this.setState({ employeeErrors: ['This spreadsheet has duplicate employee IDs'], loading: false });
+        return;
       }
 
-      // 4. make sure each row has the same month/year
-      const allEqual = (arr) => arr.every((v) => v === arr[0]); // https://stackoverflow.com/questions/14832603/check-if-all-values-of-array-are-equal
-      let months = formattedData.map((item) => item.month); // create an aray of all the months so we can see if they're the same
-      let years = formattedData.map((item) => item.year); // create an aray of all the years so we can see if they're the same
+      const months = formattedData.map((item) => item.month);
+      const years = formattedData.map((item) => item.year);
+      const coids = formattedData.map((item) => item.companyAssignedId);
+
+      const allEqual = (arr) => arr.every((v) => v === arr[0]);
 
       if (!allEqual(months)) {
-        return this.setState({
+        this.setState({
+          employeeErrors: ['Not all months match in each row of your CSV. Please make sure all rows use the same month.'],
           loading: false,
-          employeeErrors: [
-            'Not all months match in each row of your CSV. Please make sure all rows use the same month.',
-          ],
         });
+        return;
       }
+
       if (!allEqual(years)) {
-        return this.setState({
+        this.setState({
+          employeeErrors: ['Not all years match in each row of your CSV. Please make sure all rows use the same year.'],
           loading: false,
-          employeeErrors: [
-            'Not all years match in each row of your CSV. Please make sure all rows use the same year.',
-          ],
         });
+        return;
       }
 
-      // 5. make sure the COIDs are all equal
-      let coids = formattedData.map((item) => item.companyAssignedId);
       if (!allEqual(coids)) {
-        return this.setState({
+        this.setState({
+          employeeErrors: ['The company IDs (COID) do not all match for this CSV.'],
           loading: false,
-          employeeErrors: [
-            'The company ids (COID) do not all match for this CSV',
-          ],
         });
+        return;
       }
 
-      // 6. Make sure the COID in the CSV matches the customer we're currently on (the page we're on)
       if (coids[0] !== this.props.customer.assignedId) {
-        return this.setState({
+        this.setState({
+          employeeErrors: ['The company ID you are trying to upload does not match the COID in the CSV.'],
           loading: false,
-          employeeErrors: [
-            'The company ID you are trying to upload does not match the COID in the CSV',
-          ],
         });
+        return;
       }
 
-      // we want to query and see if any of these employees already have reports for this month
-      let employeeTotalsExist = await client.query({
+      const { data } = await client.query({
         query: checkIfEmployeeTotalsExist,
         fetchPolicy: 'network-only',
         variables: {
@@ -258,67 +204,59 @@ class EmployeeOverride extends React.PureComponent {
         },
       });
 
-      // if exists true, we already have data for this month and we need to show the confirmation modal
-      if (employeeTotalsExist && employeeTotalsExist.data && employeeTotalsExist.data.checkIfEmployeeTotalsExist) {
-        if (employeeTotalsExist.data.checkIfEmployeeTotalsExist.exists) {
-          this.setState({
-            confirmUpdateModal: true,
-            employeeData: formattedData,
-            employeeErrors: employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
-          });
-        }
-      } else {
-        // Handle the case where the data is not available
-        console.error('Error: Unable to fetch employee totals data');
+      if (data.checkIfEmployeeTotalsExist?.exists) {
         this.setState({
-          employeeErrors: ['Unable to fetch employee totals data. Please try again.'],
+          confirmUpdateModal: true,
+          employeeData: formattedData,
+          employeeErrors: data.checkIfEmployeeTotalsExist.errors,
         });
+        return;
       }
-      
 
-      // if we got other errors back, show those
-      if (
-        employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors &&
-        employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors.length > 0
-      ) {
-        return this.setState({
-          employeeErrors:
-            employeeTotalsExist.data.checkIfEmployeeTotalsExist.errors,
+      if (data.checkIfEmployeeTotalsExist.errors.length > 0) {
+        this.setState({
+          employeeErrors: data.checkIfEmployeeTotalsExist.errors,
           loading: false,
         });
+        return;
       }
 
-      // if we get to this point without errors, it's safe to run the upload
-      return this.onCompleteUpload(formattedData);
+      this.onCompleteUpload(formattedData);
     } catch (err) {
-      console.log(err);
+      console.error('Error during upload:', err);
       this.setState({
         employeeErrors: [err.message],
+        loading: false,
       });
     }
   };
-  handleUpload = (
-    file = this.state.employeeFile,
-    complete = this.onCustomerUpload
-  ) => {
-    if (file && complete) {
+
+  handleUpload = (file = this.state.employeeFile) => {
+    if (file) {
       Papa.parse(file, {
         header: false,
         skipEmptyLines: true,
-        complete,
+        complete: this.onEmployeeUpload,
       });
     }
   };
+
   render() {
+    const {
+      confirmUpdateModal,
+      employeeFile,
+      employeeErrors,
+      employeeSuccess,
+      loading,
+    } = this.state;
+
     return (
       <React.Fragment>
         <OverrideModal
-          visible={this.state.confirmUpdateModal}
+          visible={confirmUpdateModal}
           onUpdate={() => {
             this.onCompleteUpload(this.state.employeeData);
-            this.setState({
-              confirmUpdateModal: false,
-            });
+            this.setState({ confirmUpdateModal: false });
           }}
           onCancel={() => {
             this.setState({
@@ -330,22 +268,13 @@ class EmployeeOverride extends React.PureComponent {
           }}
           content={
             <Content
-              month={
-                this.state.employeeData &&
-                this.state.employeeData[0] &&
-                this.state.employeeData[0].month
-              }
-              year={
-                this.state.employeeData &&
-                this.state.employeeData[0] &&
-                this.state.employeeData[0].year
-              }
+              month={this.state.employeeData?.[0]?.month}
+              year={this.state.employeeData?.[0]?.year}
             />
           }
         />
-        {/* EMPLOYEE TOTALS  */}
-        <SectionTitle style={{ marginTop: 40 }}>Emloyee Totals</SectionTitle>
-        {this.state.employeeSuccess && (
+        <SectionTitle style={{ marginTop: 40 }}>Employee Totals</SectionTitle>
+        {employeeSuccess && (
           <Alert
             message="Upload Success"
             description="Your employee totals were successfully uploaded"
@@ -354,69 +283,46 @@ class EmployeeOverride extends React.PureComponent {
             showIcon
           />
         )}
-        {/* SHOW EMPLOYEE TOTALS FILE NAME */}
-        {this.state.employeeFile && (
+        {employeeFile && (
           <Filename
-            name={this.state.employeeFile.name}
+            name={employeeFile.name}
             onClick={() =>
               this.setState({
                 employeeFile: null,
                 employeeErrors: [],
-                loading: false,
+                employeeSuccess: false,
               })
             }
           />
         )}
-        {/* LOADING SPINNER */}
-        {this.state.loading && <Icon type="loading" />}
-        {/* EMPLOYEE CONFIRM UPLOAD BUTTON */}
-        {this.state.employeeFile && !this.state.loading && (
-          <Button
-            style={{ marginTop: 32, marginLeft: 16, width: 100 }}
-            onClick={() =>
-              this.handleUpload(this.state.employeeFile, this.onEmployeeUpload)
-            }
-          >
-            Upload File
-          </Button>
-        )}
-        {this.state.employeeErrors && this.state.employeeErrors.length > 0 && (
-          <div style={{ marginTop: 16, width: 500, maxWidth: '100%' }}>
-            {this.state.employeeErrors.slice(0, 4).map((item) => (
-              <ErrorBlock key={item} error={item} />
-            ))}
-            {/* We don't want to render 1,000 error blocks if there were many errors. So show the first 4 and tell how many are left over */}
-            {this.state.employeeErrors.length > 4 && (
-              <ErrorBlock
-                error={`And ${
-                  this.state.employeeErrors.length - 4
-                } more errors`}
-              />
-            )}
-          </div>
-        )}
-        {/* EMPLOYEE SELECT FILE BUTTON */}
-        {!this.state.employeeFile && (
-          <div style={{ marginTop: 32 }}>
-            <UploadButton
-              name="employee-file"
-              type="file"
-              id="employee-file"
-              onChange={(event) => {
-                this.setState({
-                  employeeFile: event.target.files[0],
-                  employeeErrors: [],
-                });
-              }}
-            />{' '}
-            <Label htmlFor="employee-file">Select New File</Label>
-          </div>
-        )}
+        {employeeErrors.length > 0 && <ErrorBlock errors={employeeErrors} />}
+        <UploadButton
+          type="file"
+          id="employee-upload"
+          accept=".csv"
+          disabled={loading}
+          onChange={(e) => {
+            this.setState({
+              employeeFile: e.target.files[0],
+              employeeErrors: [],
+              employeeSuccess: false,
+            });
+          }}
+        />
+        <Label htmlFor="employee-upload">
+          <Icon icon="upload" size={18} />
+          &nbsp;Upload CSV
+        </Label>
+        <Button
+          type="primary"
+          text="Upload Employee CSV"
+          onClick={() => this.handleUpload()}
+          loading={loading}
+          style={{ marginLeft: 8 }}
+        />
       </React.Fragment>
     );
   }
 }
 
-export default compose(
-  graphql(uploadEmployeeReports, { name: 'uploadEmployeeReports' })
-)(EmployeeOverride);
+export default compose(graphql(uploadEmployeeReports, { name: 'uploadEmployeeReports' }))(EmployeeOverride);
