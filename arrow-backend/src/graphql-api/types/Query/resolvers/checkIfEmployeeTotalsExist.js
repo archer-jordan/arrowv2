@@ -35,7 +35,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
         return {
           exists: false,
           errors: [
-            `Employee in row ${i + 1} / 000${originalId} does not exist for this company (checked as ${modifiedId}).`,
+            `Employee in row ${i + 1} / 000${originalId} does not exist for this company (checked as ${modifiedId}). tbm ${toBeModifiedId}`,
           ],
         };
       }
