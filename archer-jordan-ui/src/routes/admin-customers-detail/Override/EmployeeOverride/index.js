@@ -75,24 +75,26 @@ class EmployeeOverride extends React.PureComponent {
       this.setState({ employeeErrors: ['No data found...'], loading: false });
       return;
     }
-
+  
     try {
       let result = await this.props.uploadEmployeeReports({
         variables: { values },
       });
-
+  
       const { success, errors } = result.data.uploadEmployeeReports;
+      console.log('Upload result:', success, errors);  // Add debugging info
       if (!success) {
         this.setState({ employeeErrors: errors, loading: false });
         return;
       }
-
+  
       this.setState({
         loading: false,
         employeeFile: null,
         employeeSuccess: true,
         employeeErrors: [],
       });
+      console.log('State after upload:', this.state);  // Check state here
     } catch (err) {
       this.setState({
         loading: false,
@@ -100,6 +102,7 @@ class EmployeeOverride extends React.PureComponent {
       });
     }
   };
+  
 
   getInvalidFields = (results) => results.reduce((acc, item, i) => {
     if (!item.assignedId || !item.assignedId.trim()) {
