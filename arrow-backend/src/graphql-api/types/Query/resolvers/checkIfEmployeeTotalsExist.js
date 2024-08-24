@@ -11,24 +11,27 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
 
     for (let i = 0; i < args.employeeAssignedIds.length; i++) {
       const originalId = args.employeeAssignedIds[i];
-      const modifiedId = originalId.replace(/^000/, '');
+      let toBeModifiedId = originalId;
+      const modifiedId = toBeModifiedId.replace(/^000/, '');
 
       // Find employee using the original assignedId
-      let employee = await Employees.findOne({
+      let employee
+      employee = await Employees.findOne({
         assignedId: originalId,
         customerId: args.customerId,
       });
 
+      let modifiedEmployee;
       // If not found, try with the modified assignedId
       if (!employee || !employee._id) {
-        employee = await Employees.findOne({
+        modifiedEmployee = await Employees.findOne({
           assignedId: modifiedId,
           customerId: args.customerId,
         });
       }
 
       // If no employee exists for the given record, return errors
-      if (!employee || !employee._id) {
+      if (!employee || !modifiedEmployee) {
         return {
           exists: false,
           errors: [
@@ -39,7 +42,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
 
       // Lookup the reports
       let report = await EmployeeReports.findOne({
-        employeeId: employee._id,
+        employeeId: !employee._id ? modifiedEmployee._id : employee._id,
         customerId: args.customerId,
         month: args.month,
         year: args.year,
