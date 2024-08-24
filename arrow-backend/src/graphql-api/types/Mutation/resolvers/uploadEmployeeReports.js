@@ -47,11 +47,17 @@ const uploadEmployeeReports = async (root, args, context) => {
 
       // Try to find the employee with the original assignedId
       let employee = await Employees.findOne({
-        $or: [
-          { assignedId: item.assignedId, customerId: args.customerId },
-          { assignedId: `000${item.assignedId}`, customerId: args.customerId }
-        ]
+        assignedId: item.assignedId,
+        customerId: customer._id,
       });
+
+      // If not found, try with the assignedId with "000" prefix removed
+      if (!employee || !employee._id) {
+        employee = await Employees.findOne({
+          assignedId: `000${item.assignedId}`,
+          customerId: customer._id,
+        });
+      }
 
       // If employee still doesn't exist, push an error
       if (!employee || !employee._id) {
