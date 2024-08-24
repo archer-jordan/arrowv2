@@ -5,59 +5,23 @@ import userIsSuperAdmin from "modules/helpers/userIsSuperAdmin";
 import moment from "moment";
 import ReferralPartners from "collections/ReferralPartners/model";
 
-// Refactor runReferralPartnerReports for modularity and clarity (if needed)
 const runReferralPartnerReports = async ({ dataRows, customer }) => {
-  const start = moment(parseInt(customer.referralStartDate, 10)).valueOf();
-  const end = moment(parseInt(customer.referralEndDate, 10)).valueOf();
+  let start = moment(parseInt(customer.referralStartDate)).valueOf();
+  let end = moment(parseInt(customer.referralEndDate)).valueOf();
+  // 1. See if we are still inside the referral period (ie we still owe the referral partner money)
 
-  // Find the referral partner
-  const partner = await ReferralPartners.findOne({ _id: customer.referralPartnerId });
+  // 2. Find the referral partner
+  let partner = await ReferralPartners.findOne({
+    _id: customer.referralPartnerId,
+  });
+  // 3. Figure out how many employees qualify
+  let qualifiedEmployees = [];
 
-  // Determine qualified employees (add your logic here)
-  const qualifiedEmployees = dataRows.filter((item) => item.hours);
-
-  // Further processing...
-};
-
-const findEmployee = async (assignedId, customerId) => {
-  // Check if employee exists with or without the "000" prefix
-  return (
-    await Employees.findOne({ assignedId, customerId }) ||
-    Employees.findOne({ assignedId: assignedId.replace(/^000/, ''), customerId })
-  );
-};
-
-const processEmployeeReports = async (employee, item, customerId) => {
-  const report = {
-    employeeId: employee._id,
-    customerId,
-    month: item.month,
-    year: item.year,
-    hours: item.hours,
-    fringeDollars: item.fringeDollars,
-    healthAndWelfare: item.healthAndWelfare,
-    retirement: item.retirement,
-    fringeDollarsLabel: item.fringeDollarsLabel,
-    healthAndWelfareLabel: item.healthAndWelfareLabel,
-    retirementLabel: item.retirementLabel,
-    benefits: item.benefits,
-  };
-
-  const query = {
-    employeeId: employee._id,
-    customerId,
-    month: item.month,
-    year: item.year,
-  };
-
-  // Check if the report exists and update or insert accordingly
-  const reportExists = await EmployeeReports.findOne(query);
-  if (reportExists) {
-    await EmployeeReports.updateOne(query, { $set: report });
-  } else {
-    const newReport = new EmployeeReports(report);
-    await newReport.save();
-  }
+  dataRows.forEach((item) => {
+    if (item.hours) {
+      // Logic to determine qualified employees
+    }
+  });
 };
 
 const uploadEmployeeReports = async (root, args, context) => {
@@ -66,7 +30,7 @@ const uploadEmployeeReports = async (root, args, context) => {
     // Check if user is a super admin
     userIsSuperAdmin(context.user);
 
-    const customer = await Customers.findOne({
+    let customer = await Customers.findOne({
       assignedId: args.values[0].companyAssignedId,
     });
 
@@ -76,40 +40,94 @@ const uploadEmployeeReports = async (root, args, context) => {
       );
     }
 
-    const errors = [];
-    const employeeMap = new Map();
+    let errors = [];
 
-    // Concurrently find all employees and check existence
-    await Promise.all(
-      args.values.map(async (item) => {
-        const employee = await findEmployee(item.assignedId, customer._id);
-        if (!employee) {
-          errors.push(`Employee with id ${item.assignedId} does not exist`);
-        } else {
-          employeeMap.set(item.assignedId, employee);
-        }
-      })
-    );
+    for (let i = 0; i < args.values.length; i++) {
+      let item = args.values[i];
 
-    if (errors.length > 0) {
-      return { success: false, errors };
+      // Try to find the employee with the original assignedId
+      let employee = await Employees.findOne({
+        $or: [
+          { assignedId: originalId, customerId: args.customerId },
+          { assignedId: modifiedId, customerId: args.customerId }
+        ]
+      });
+
+      // If employee still doesn't exist, push an error
+      if (!employee || !employee._id) {
+        errors.push(`Employee with id ${item.assignedId} does not exist`);
+      }
     }
 
-    // Process employee reports concurrently
-    await Promise.all(
-      args.values.map(async (item) => {
-        const employee = employeeMap.get(item.assignedId);
-        await processEmployeeReports(employee, item, customer._id);
-      })
-    );
+    if (errors.length > 0) {
+      return {
+        success: false,
+        errors,
+      };
+    }
+
+    for (let i = 0; i < args.values.length; i++) {
+      let item = args.values[i];
+
+      // Find employee again as it might have been modified previously
+      let employee = await Employees.findOne({
+        assignedId: item.assignedId,
+        customerId: customer._id,
+      });
+
+      if (!employee || !employee._id) {
+        employee = await Employees.findOne({
+          assignedId: item.assignedId.replace(/^000/, ''),
+          customerId: customer._id,
+        });
+      }
+
+      // Build the report object
+      let report = {
+        employeeId: employee._id,
+        customerId: customer._id,
+        month: item.month,
+        year: item.year,
+        hours: item.hours,
+        fringeDollars: item.fringeDollars,
+        healthAndWelfare: item.healthAndWelfare,
+        retirement: item.retirement,
+        fringeDollarsLabel: item.fringeDollarsLabel,
+        healthAndWelfareLabel: item.healthAndWelfareLabel,
+        retirementLabel: item.retirementLabel,
+        benefits: item.benefits,
+      };
+
+      // Setup query to check if report already exists
+      let query = {
+        employeeId: employee._id,
+        customerId: customer._id,
+        month: item.month,
+        year: item.year,
+      };
+
+      // Search for report
+      let reportExists = await EmployeeReports.findOne(query);
+
+      // If it exists, update it
+      if (reportExists && reportExists._id) {
+        await EmployeeReports.updateOne(query, { $set: report });
+      } else {
+        // Else, insert a new one
+        let doc = new EmployeeReports(report);
+        await doc.save();
+      }
+    }
 
     // Optionally, run referral partner reports if needed
     // if (customer.referralPartnerId) {
-    //   await runReferralPartnerReports({ dataRows: args.values, customer });
+    //   runReferralPartnerReports({ dataRows: args.values, customer });
     // }
 
     // Return success if everything went smoothly
-    return { success: true };
+    return {
+      success: true,
+    };
   } catch (err) {
     console.error(err);
     return {
