@@ -48,8 +48,8 @@ const uploadEmployeeReports = async (root, args, context) => {
       // Try to find the employee with the original assignedId
       let employee = await Employees.findOne({
         $or: [
-          { assignedId: originalId, customerId: args.customerId },
-          { assignedId: modifiedId, customerId: args.customerId }
+          { assignedId: item.assignedId, customerId: args.customerId },
+          { assignedId: `000${item.assignedId}`, customerId: args.customerId }
         ]
       });
 
