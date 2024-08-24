@@ -12,7 +12,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
     for (let i = 0; i < args.employeeAssignedIds.length; i++) {
       const originalId = args.employeeAssignedIds[i];
       let toBeModifiedId = originalId;
-      let modifiedId = toBeModifiedId.replace(/^000/, '');
+      let modifiedId = `000${toBeModifiedId}`;
 
       // Find employee using the original assignedId
       let employee
@@ -35,7 +35,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
         return {
           exists: false,
           errors: [
-            `Employee in row ${i + 1} / 000${originalId} does not exist for this company (checked as ${modifiedId}). tbm ${toBeModifiedId.replace(/^000/, '')}`,
+            `Employee in row ${i + 1} / 000${originalId} does not exist for this company (checked as ${modifiedId}). tbm ${toBeModifiedId}`,
           ],
         };
       }
