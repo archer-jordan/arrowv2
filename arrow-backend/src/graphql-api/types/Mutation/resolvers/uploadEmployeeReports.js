@@ -83,7 +83,7 @@ const uploadEmployeeReports = async (root, args, context) => {
 
       if (!employee || !employee._id) {
         employee = await Employees.findOne({
-          assignedId: item.assignedId.replace(/^000/, ''),
+          assignedId: `000${item.assignedId}`,
           customerId: customer._id,
         });
       }
