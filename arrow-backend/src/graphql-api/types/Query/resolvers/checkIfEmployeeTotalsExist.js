@@ -12,7 +12,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
     for (let i = 0; i < args.employeeAssignedIds.length; i++) {
       const originalId = args.employeeAssignedIds[i];
       let toBeModifiedId = originalId;
-      const modifiedId = toBeModifiedId.replace(/^000/, '');
+      let modifiedId = toBeModifiedId.replace(/^000/, '');
 
       // Find employee using the original assignedId
       let employee
