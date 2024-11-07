@@ -27,7 +27,7 @@ const UploadButton = styled.input`
   position: absolute;
   z-index: -1;
 `;
-
+//re
 const Label = styled.label`
   font-weight: 600;
   color: ${(p) => p.theme.colors.support2};
