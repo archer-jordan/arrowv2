@@ -161,7 +161,7 @@ class EmployeeOverride extends React.PureComponent {
       const months = formattedData.map((item) => item.month);
       const years = formattedData.map((item) => item.year);
       const coids = formattedData.map((item) => item.companyAssignedId);
-
+console.log('Months:', months);  // Add debugging info
       const allEqual = (arr) => arr.every((v) => v === arr[0]);
 
       if (!allEqual(months)) {
