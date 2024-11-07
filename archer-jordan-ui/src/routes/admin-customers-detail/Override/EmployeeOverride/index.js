@@ -207,7 +207,7 @@ class EmployeeOverride extends React.PureComponent {
         },
       });
 
-      if (data.checkIfEmployeeTotalsExist.exists) {
+      if (data.checkIfEmployeeTotalsExist?.exists) {
         this.setState({
           confirmUpdateModal: true,
           employeeData: formattedData,
