@@ -322,6 +322,8 @@ let options = () => ({
   pollInterval: 200000, // rerun currentUser every X milliseconds
 });
 
+//
+
 // EXPORT
 // ==============================
 export default compose(
