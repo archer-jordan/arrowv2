@@ -128,7 +128,7 @@ class EmployeeOverride extends React.PureComponent {
 
     try {
       const headersArray = results.data[0];
-      if (headersArray.length !== 36) {
+      if (headersArray.length < 14 ) {
         this.setState({
           employeeErrors: ['This CSV does not have the correct number of columns'],
           loading: false,
@@ -313,8 +313,7 @@ class EmployeeOverride extends React.PureComponent {
           }}
         />
         <Label htmlFor="employee-upload">
-          <Icon icon="upload" size={18} />
-          &nbsp;Upload CSV
+         Upload CSV
         </Label>
         <Button
           type="primary"
