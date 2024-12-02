@@ -39,7 +39,9 @@ const checkEmployeesCSV = async (root, args, context) => {
     // if the user is found/exists, then we'll add an error to the array of errors.
     // Later on in this resovler we return this array of errors to let the user know how many users already exist in the database
     if (result && result._id) {
+      console.log('Employee already exists', result, args.values[i].employeeAssignedId, customer._id, result._id);
       errors.push(`Employee in row ${i + 1} already exists in the database`);
+
     }
   }
 

@@ -1,18 +1,18 @@
 import AccountsPassword from '@accounts/password';
 import MongoDBInterface from '@accounts/mongo';
-import AccountsServer, {ServerHooks} from '@accounts/server';
-import {AccountsModule} from '@accounts/graphql-api';
-import {ApolloServer} from 'apollo-server';
-import {merge} from 'lodash';
-import {typeDefs, CustomResolvers} from './src/graphql-api/index';
+import AccountsServer, { ServerHooks } from '@accounts/server';
+import { AccountsModule } from '@accounts/graphql-api';
+import { ApolloServer } from 'apollo-server';
+import { merge } from 'lodash';
+import { typeDefs, CustomResolvers } from './src/graphql-api/index';
 import UserProfileHelpers from 'collections/Users/helpers';
 // modules
-import {db} from './src/modules/mongodb.js';
+import { db } from './src/modules/mongodb.js';
 import emailTransporter from './src/modules/email.js';
 import './src/modules/cron';
 // modules
 import accountsHelpers from './src/modules/accounts';
-
+// 
 // Setup password
 const password = new AccountsPassword({
   returnTokensAfterResetPassword: true,
@@ -69,7 +69,7 @@ accountsServer.on(ServerHooks.LoginError, accountsHelpers.loginError);
 accountsServer.on(ServerHooks.ValidateLogin, accountsHelpers.validateLogin);
 
 // init accounts module
-export const accountsGraphQL = AccountsModule.forRoot({accountsServer});
+export const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
 
 // merge all of our Graphql type defs with the accountsjs type defs, before passing to apollo-server
 const typeDefsWithAccounts = [typeDefs, accountsGraphQL.typeDefs];
@@ -114,6 +114,6 @@ const server = new ApolloServer({
 });
 
 // This `listen` method launches a web-server.
-server.listen({port: process.env.PORT || 8080}).then(({url}) => {
+server.listen({ port: process.env.PORT || 8080 }).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });

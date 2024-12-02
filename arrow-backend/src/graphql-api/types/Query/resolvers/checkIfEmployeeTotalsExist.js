@@ -1,5 +1,6 @@
 import EmployeeReports from 'collections/EmployeeReports/model';
 import Employees from 'collections/Employees/model';
+import { assign } from 'lodash';
 
 const checkIfEmployeeTotalsExist = async (root, args, context) => {
   try {
@@ -9,24 +10,27 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
 
     const errors = [];
 
-    for (let i = 0; i < args.employeeAssignedIds.length; i++) {
-      const originalId = args.employeeAssignedIds[i];
-      const modifiedId = `000${originalId}`;
+    const getAssignedIdVariations = (id) => {
+      const modifiedId = `000${id}`;
+      return [
+        { assignedId: id, customerId: args.customerId },
+        { assignedId: modifiedId, customerId: args.customerId },
+        { assignedId: id.substring(3), customerId: args.customerId }
+      ];
+    };
 
-      // Attempt to find the employee using either the original or modified assignedId
+    for (let i = 0; i < args.employeeAssignedIds.length; i++) {
+
+
+      // Attempt to find the employee using ID variations
       const employee = await Employees.findOne({
-        $or: [
-          { assignedId: originalId, customerId: args.customerId },
-          { assignedId: modifiedId, customerId: args.customerId }
-        ]
+        $or: getAssignedIdVariations(args.employeeAssignedIds[i])
       });
 
       // If no employee exists, add an error and continue to the next iteration
       if (!employee) {
-        errors.push(
-          `Employee in row ${i + 1} / ${originalId} does not exist for this company (checked as ${modifiedId}).`
-        );
-        continue;  // Skip to the next employeeAssignedId
+        errors.push(`No employee found for row ${i + 1} with ID ${args.employeeAssignedIds[i]}.`);
+        continue;
       }
 
       // Lookup the report for the found employee
@@ -39,9 +43,7 @@ const checkIfEmployeeTotalsExist = async (root, args, context) => {
 
       // If a report exists, add an error
       if (report) {
-        errors.push(
-          `The employee in row ${i + 1} already has a report for this month.`
-        );
+        errors.push(`The employee in row ${i + 1} with ID ${args.employeeAssignedIds[i]} already has a report for this month.`);
       }
     }
 

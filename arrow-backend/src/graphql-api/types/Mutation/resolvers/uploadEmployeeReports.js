@@ -4,19 +4,33 @@ import Employees from "collections/Employees/model";
 import userIsSuperAdmin from "modules/helpers/userIsSuperAdmin";
 import moment from "moment";
 import ReferralPartners from "collections/ReferralPartners/model";
+// Helper function to query Employee by assignedId variations
+const getEmployeeByIdVariations = async (assignedId, customerId) => {
+  const idVariations = [
+    assignedId,
+    `000${assignedId}`,
+    assignedId.toString().padStart(3, '0'),
+    assignedId,
+  ];
+
+  for (let id of idVariations) {
+    const employee = await Employees.findOne({ assignedId: id, customerId });
+    if (employee) return employee;
+  }
+
+  return null;
+};
 
 const runReferralPartnerReports = async ({ dataRows, customer }) => {
   let start = moment(parseInt(customer.referralStartDate)).valueOf();
   let end = moment(parseInt(customer.referralEndDate)).valueOf();
-  // 1. See if we are still inside the referral period (ie we still owe the referral partner money)
 
-  // 2. Find the referral partner
+  // Find the referral partner
   let partner = await ReferralPartners.findOne({
     _id: customer.referralPartnerId,
   });
-  // 3. Figure out how many employees qualify
-  let qualifiedEmployees = [];
 
+  let qualifiedEmployees = [];
   dataRows.forEach((item) => {
     if (item.hours) {
       // Logic to determine qualified employees
@@ -27,10 +41,9 @@ const runReferralPartnerReports = async ({ dataRows, customer }) => {
 const uploadEmployeeReports = async (root, args, context) => {
   console.log(args);
   try {
-    // Check if user is a super admin
     userIsSuperAdmin(context.user);
 
-    let customer = await Customers.findOne({
+    const customer = await Customers.findOne({
       assignedId: args.values[0].companyAssignedId,
     });
 
@@ -43,53 +56,16 @@ const uploadEmployeeReports = async (root, args, context) => {
     let errors = [];
 
     for (let i = 0; i < args.values.length; i++) {
-      let item = args.values[i];
+      const item = args.values[i];
+      const employee = await getEmployeeByIdVariations(item.assignedId, customer._id);
 
-      // Try to find the employee with the original assignedId
-      let employee = await Employees.findOne({
-        assignedId: item.assignedId,
-        customerId: customer._id,
-      });
-
-      // If not found, try with the assignedId with "000" prefix removed
-      if (!employee || !employee._id) {
-        employee = await Employees.findOne({
-          assignedId: `000${item.assignedId}`,
-          customerId: customer._id,
-        });
-      }
-
-      // If employee still doesn't exist, push an error
-      if (!employee || !employee._id) {
+      if (!employee) {
         errors.push(`Employee with id ${item.assignedId} does not exist`);
-      }
-    }
-
-    if (errors.length > 0) {
-      return {
-        success: false,
-        errors,
-      };
-    }
-
-    for (let i = 0; i < args.values.length; i++) {
-      let item = args.values[i];
-
-      // Find employee again as it might have been modified previously
-      let employee = await Employees.findOne({
-        assignedId: item.assignedId,
-        customerId: customer._id,
-      });
-
-      if (!employee || !employee._id) {
-        employee = await Employees.findOne({
-          assignedId: `000${item.assignedId}`,
-          customerId: customer._id,
-        });
+        continue;
       }
 
       // Build the report object
-      let report = {
+      const report = {
         employeeId: employee._id,
         customerId: customer._id,
         month: item.month,
@@ -105,24 +81,28 @@ const uploadEmployeeReports = async (root, args, context) => {
       };
 
       // Setup query to check if report already exists
-      let query = {
+      const query = {
         employeeId: employee._id,
         customerId: customer._id,
         month: item.month,
         year: item.year,
       };
 
-      // Search for report
-      let reportExists = await EmployeeReports.findOne(query);
-
-      // If it exists, update it
-      if (reportExists && reportExists._id) {
+      // Search for report and update if it exists, else insert a new one
+      const reportExists = await EmployeeReports.findOne(query);
+      if (reportExists) {
         await EmployeeReports.updateOne(query, { $set: report });
       } else {
-        // Else, insert a new one
-        let doc = new EmployeeReports(report);
+        const doc = new EmployeeReports(report);
         await doc.save();
       }
+    }
+
+    if (errors.length > 0) {
+      return {
+        success: false,
+        errors,
+      };
     }
 
     // Optionally, run referral partner reports if needed
@@ -130,7 +110,6 @@ const uploadEmployeeReports = async (root, args, context) => {
     //   runReferralPartnerReports({ dataRows: args.values, customer });
     // }
 
-    // Return success if everything went smoothly
     return {
       success: true,
     };
