@@ -130,11 +130,11 @@ class CustomerOverride extends React.PureComponent {
           parseInt(data.eligibility[i].employees, 10);
 
         // throw error if activeThisMonth is smaller than employees in eligibility
-        if (!activeIsMore) {
-          activeThisMonthErrors.push(
-            `Active employees this month (${data.activeThisMonth}) is lower than employees eligible for ${data.eligibility[i].label} (${data.eligibility[i].employees}). Please check your CSV.`
-          );
-        }
+        // if (!activeIsMore) {
+        //   activeThisMonthErrors.push(
+        //     `Active employees this month (${data.activeThisMonth}) is lower than employees eligible for ${data.eligibility[i].label} (${data.eligibility[i].employees}). Please check your CSV.`
+        //   );
+        // }
       });
 
       if (activeThisMonthErrors && activeThisMonthErrors.length > 0) {
